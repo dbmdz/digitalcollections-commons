@@ -11,4 +11,12 @@
   <artifactId>mdz-dzp-commons-xml</artifactId>
   <packaging>jar</packaging>
   <name>MDZ DZP Commons XML</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
