@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.mdz.dzp</groupId>
+    <artifactId>mdz-dzp-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>org.mdz.dzp.commons</groupId>
+  <artifactId>mdz-dzp-commons</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+    
+  <name>MDZ DZP Commons (Parent)</name>
+  <description>
+    Parent für alle DZP Commons Projekte.
+  </description>
+  <url>http://bsbrepo.bsb.lrz.de/projects/mdz-dzp-commons</url>
+
+  <modules>
+    <module>mdz-dzp-commons-xml</module>
+  </modules>
+  
+  <distributionManagement>
+    <site>
+      <id>website-projects</id>
+      <url>scp://bsbrepo.bsb.lrz.de/srv/www/htdocs/projects/mdz-dzp-commons</url>
+    </site>
+  </distributionManagement>
+
+  <scm>
+    <connection>scm:git:git@gitlab.lrz.de:mdz-dzp/mdz-dzp-commons.git</connection>
+    <developerConnection>scm:git:git@gitlab.lrz.de:mdz-dzp/mdz-dzp-commons.git</developerConnection>
+    <url>https://gitlab.lrz.de/mdz-dzp/mdz-dzp-commons</url>
+  </scm>
+  
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://bsbrepo.bsb.lrz.de/jira/browse/DZP-108</url>
+  </issueManagement>
+  
+  <ciManagement>
+    <system>Jenkins CI</system>
+    <url>TODO</url>
+  </ciManagement>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${version.checkstyle-plugin}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.mdz.dzp</groupId>
+            <artifactId>dzp-buildtools</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <configLocation>dzp/buildtools/checkstyle.xml</configLocation>
+          <failOnViolation>false</failOnViolation>
+        </configuration>
+        <executions>
+          <execution>
+            <id>checkstyle</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+              <goal>checkstyle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${version.checkstyle-plugin}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+        <configuration>
+          <configLocation>dzp/checkstyle/checkstyle.xml</configLocation>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
