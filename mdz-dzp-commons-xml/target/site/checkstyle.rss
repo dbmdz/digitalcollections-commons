@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2016</copyright>
     <item>
-      <title>File: 2,
+      <title>File: 3,
              Errors: 0,
-             Warnings: 7,
+             Warnings: 4,
              Infos: 0
       </title>
             <link>http://bsbrepo.bsb.lrz.de/projects/mdz-dzp-commons/mdz-dzp-commons-xml/checkstyle.html</link>
@@ -46,13 +46,27 @@ under the License.
           <tbody>
                           <tr>
                 <td>
+                  <a href="http://bsbrepo.bsb.lrz.de/projects/mdz-dzp-commons/mdz-dzp-commons-xml/checkstyle.html#org.mdz.dzp.commons.xml.converter.PrettyPrinter.java">org/mdz/dzp/commons/xml/converter/PrettyPrinter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://bsbrepo.bsb.lrz.de/projects/mdz-dzp-commons/mdz-dzp-commons-xml/checkstyle.html#org.mdz.dzp.commons.xml.xpath.XPathWrapper.java">org/mdz/dzp/commons/xml/xpath/XPathWrapper.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  6
+                  2
                 </td>
                 <td>
                   0

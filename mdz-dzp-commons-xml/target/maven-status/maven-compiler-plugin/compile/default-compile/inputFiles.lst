@@ -1,2 +1,3 @@
 /home/ralf/DEV/SOURCES/mdz-dzp-commons/mdz-dzp-commons-xml/src/main/java/org/mdz/dzp/commons/xml/namespaces/MdzNamespaceContext.java
 /home/ralf/DEV/SOURCES/mdz-dzp-commons/mdz-dzp-commons-xml/src/main/java/org/mdz/dzp/commons/xml/xpath/XPathWrapper.java
+/home/ralf/DEV/SOURCES/mdz-dzp-commons/mdz-dzp-commons-xml/src/main/java/org/mdz/dzp/commons/xml/converter/PrettyPrinter.java

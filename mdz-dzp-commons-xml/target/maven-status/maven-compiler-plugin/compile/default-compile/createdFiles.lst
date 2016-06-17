@@ -1,3 +1,4 @@
 org/mdz/dzp/commons/xml/xpath/XPathWrapper.class
 org/mdz/dzp/commons/xml/namespaces/MdzNamespaceContext.class
 org/mdz/dzp/commons/xml/xpath/XPathWrapper$LruCache.class
+org/mdz/dzp/commons/xml/converter/PrettyPrinter.class

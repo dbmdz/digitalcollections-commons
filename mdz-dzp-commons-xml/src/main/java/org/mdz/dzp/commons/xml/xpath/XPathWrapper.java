@@ -1,7 +1,5 @@
 package org.mdz.dzp.commons.xml.xpath;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -10,9 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.NamespaceContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -28,7 +23,6 @@ import org.mdz.dzp.commons.xml.namespaces.MdzNamespaceContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * Provides a lightweight wrapper around the Document class to make XPath queries less painful and verbose.
@@ -37,10 +31,8 @@ public class XPathWrapper {
 
   private Document document;
 
-  private DocumentBuilder parser;
-
-  private DocumentBuilderFactory domFactory;
-
+//  private DocumentBuilder parser;
+//  private DocumentBuilderFactory domFactory;
   private XPath xpath;
 
   private static Map<String, XPathExpression> xpathExpressions = Collections.synchronizedMap(new LruCache());
@@ -55,21 +47,20 @@ public class XPathWrapper {
     }
   }
 
-  public DocumentBuilder getParser() throws ParserConfigurationException {
-    if (this.parser == null) {
-      this.parser = this.getDomFactory().newDocumentBuilder();
-    }
-    return parser;
-  }
-
-  public DocumentBuilderFactory getDomFactory() {
-    if (this.domFactory == null) {
-      this.domFactory = DocumentBuilderFactory.newInstance();
-      this.domFactory.setNamespaceAware(true);
-    }
-    return domFactory;
-  }
-
+//  public DocumentBuilder getParser() throws ParserConfigurationException {
+//    if (this.parser == null) {
+//      this.parser = this.getDomFactory().newDocumentBuilder();
+//    }
+//    return parser;
+//  }
+//
+//  public DocumentBuilderFactory getDomFactory() {
+//    if (this.domFactory == null) {
+//      this.domFactory = DocumentBuilderFactory.newInstance();
+//      this.domFactory.setNamespaceAware(true);
+//    }
+//    return domFactory;
+//  }
   public XPath getXpath() {
     if (this.xpath == null) {
       this.xpath = XPathFactory.newInstance().newXPath();
@@ -82,12 +73,11 @@ public class XPathWrapper {
     this.xpath = xpath;
   }
 
-  public XPathWrapper(XPathWrapper xPathWrapper) throws ParserConfigurationException {
-    this.setXpathExpressions(xPathWrapper.getXpathExpressions());
-    this.setXpath(xPathWrapper.getXpath());
-    this.setDomFactory(xPathWrapper.getDomFactory());
-  }
-
+//  public XPathWrapper(XPathWrapper xPathWrapper) throws ParserConfigurationException {
+//    this.setXpathExpressions(xPathWrapper.getXpathExpressions());
+//    this.setXpath(xPathWrapper.getXpath());
+//    this.setDomFactory(xPathWrapper.getDomFactory());
+//  }
   public XPathWrapper() {
   }
 
@@ -96,20 +86,17 @@ public class XPathWrapper {
     this.document = document;
   }
 
-  public XPathWrapper(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
-    this();
-    this.loadDocument(inputStream);
-  }
-
-  public XPathWrapper(Node node) throws ParserConfigurationException {
-    this();
-    this.document = this.getNodeAsDocument(node);
-  }
-
-  public void loadDocument(InputStream inputStream) throws SAXException, IOException, ParserConfigurationException {
-    this.document = this.getParser().parse(inputStream);
-  }
-
+//  public XPathWrapper(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
+//    this();
+//    this.loadDocument(inputStream);
+//  }
+//  public XPathWrapper(Node node) throws ParserConfigurationException {
+//    this();
+//    this.document = this.getNodeAsDocument(node);
+//  }
+//  public void loadDocument(InputStream inputStream) throws SAXException, IOException, ParserConfigurationException {
+//    this.document = this.getParser().parse(inputStream);
+//  }
   /**
    * Get the result of the XPath query xpath as a new Document object.
    *
@@ -118,11 +105,10 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    * @throws ParserConfigurationException the parser configuration exception
    */
-  public Document asDocument(String xpath) throws XPathExpressionException, ParserConfigurationException {
-    Node node = (Node) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.NODE);
-    return this.getNodeAsDocument(node);
-  }
-
+//  public Document asDocument(String xpath) throws XPathExpressionException, ParserConfigurationException {
+//    Node node = (Node) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.NODE);
+//    return this.getNodeAsDocument(node);
+//  }
   /**
    * Converts a Node into a Document.
    *
@@ -130,16 +116,15 @@ public class XPathWrapper {
    * @return node as Document
    * @throws ParserConfigurationException the parser configuration exception
    */
-  public Document getNodeAsDocument(Node node) throws ParserConfigurationException {
-    Document newDocument = this.getDomFactory().newDocumentBuilder().newDocument();
-    // To avoid a NullPointerException when the XPath-expression returns no nodes.
-    if (node != null) {
-      Node importedNode = newDocument.importNode(node, true);
-      newDocument.appendChild(importedNode);
-    }
-    return newDocument;
-  }
-
+//  public Document getNodeAsDocument(Node node) throws ParserConfigurationException {
+//    Document newDocument = this.getDomFactory().newDocumentBuilder().newDocument();
+//    // To avoid a NullPointerException when the XPath-expression returns no nodes.
+//    if (node != null) {
+//      Node importedNode = newDocument.importNode(node, true);
+//      newDocument.appendChild(importedNode);
+//    }
+//    return newDocument;
+//  }
   /**
    * Get the result of the XPath query as a new XPathWrapper object.
    *
@@ -148,13 +133,12 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    * @throws ParserConfigurationException the parser configuration exception
    */
-  public XPathWrapper asXPathWrapper(String xpath) throws XPathExpressionException, ParserConfigurationException {
-    XPathWrapper xPathWrapper = new XPathWrapper(this.asDocument(xpath));
-    xPathWrapper.setXpath(this.getXpath());
-    xPathWrapper.setDomFactory(this.getDomFactory());
-    return xPathWrapper;
-  }
-
+//  public XPathWrapper asXPathWrapper(String xpath) throws XPathExpressionException, ParserConfigurationException {
+//    XPathWrapper xPathWrapper = new XPathWrapper(this.asDocument(xpath));
+//    xPathWrapper.setXpath(this.getXpath());
+//    xPathWrapper.setDomFactory(this.getDomFactory());
+//    return xPathWrapper;
+//  }
   /**
    * Get the results of the XPath query as a List of new XPathWrapper objects.
    *
@@ -163,15 +147,14 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    * @throws ParserConfigurationException the parser configuration exception
    */
-  public List<XPathWrapper> asListOfXPathWrappers(String xpath) throws XPathExpressionException, ParserConfigurationException {
-    NodeList nodeList = this.asNodeList(xpath);
-    List<XPathWrapper> list = new ArrayList<>(nodeList.getLength());
-    for (int i = 0, l = nodeList.getLength(); i < l; i++) {
-      list.add(new XPathWrapper(this.getNodeAsDocument(nodeList.item(i))));
-    }
-    return list;
-  }
-
+//  public List<XPathWrapper> asListOfXPathWrappers(String xpath) throws XPathExpressionException, ParserConfigurationException {
+//    NodeList nodeList = this.asNodeList(xpath);
+//    List<XPathWrapper> list = new ArrayList<>(nodeList.getLength());
+//    for (int i = 0, l = nodeList.getLength(); i < l; i++) {
+//      list.add(new XPathWrapper(this.getNodeAsDocument(nodeList.item(i))));
+//    }
+//    return list;
+//  }
   /**
    * Like {@link #asDocument(String xpath)} but overwrites the original document.
    *
@@ -179,10 +162,9 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    * @throws ParserConfigurationException the parser configuration exception
    */
-  public void createSubset(String xpath) throws XPathExpressionException, ParserConfigurationException {
-    this.document = this.asDocument(xpath);
-  }
-
+//  public void createSubset(String xpath) throws XPathExpressionException, ParserConfigurationException {
+//    this.document = this.asDocument(xpath);
+//  }
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as Node. If the xPath results in more than one Node,
    * the first one is returned.
@@ -262,6 +244,10 @@ public class XPathWrapper {
     return (String) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.STRING);
   }
 
+  public String asString(Node node, String xpath) throws XPathExpressionException {
+    return (String) this.getXpathExpression(xpath).evaluate(node, XPathConstants.STRING);
+  }
+
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as boolean.
    *
@@ -320,16 +306,14 @@ public class XPathWrapper {
     this.getXpath().setNamespaceContext(namespaceContext);
   }
 
-  public void setNamespaceAware(boolean namespaceAware) {
-    this.getDomFactory().setNamespaceAware(namespaceAware);
-  }
-
-  public void setDomFactory(DocumentBuilderFactory domFactory) throws ParserConfigurationException {
-    this.domFactory = domFactory;
-    this.domFactory.setNamespaceAware(true);
-    this.parser = this.domFactory.newDocumentBuilder();
-  }
-
+//  public void setNamespaceAware(boolean namespaceAware) {
+//    this.getDomFactory().setNamespaceAware(namespaceAware);
+//  }
+//  public void setDomFactory(DocumentBuilderFactory domFactory) throws ParserConfigurationException {
+//    this.domFactory = domFactory;
+//    this.domFactory.setNamespaceAware(true);
+//    this.parser = this.domFactory.newDocumentBuilder();
+//  }
   public void setXpathFactory(XPathFactory factory) {
     this.xpath = factory.newXPath();
   }
