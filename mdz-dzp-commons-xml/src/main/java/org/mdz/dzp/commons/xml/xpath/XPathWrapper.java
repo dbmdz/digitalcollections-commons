@@ -201,6 +201,10 @@ public class XPathWrapper {
     return (NodeList) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.NODESET);
   }
 
+  public NodeList asNodeList(Node node, String xpath) throws XPathExpressionException {
+    return (NodeList) this.getXpathExpression(xpath).evaluate(node, XPathConstants.NODESET);
+  }
+
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as a List of Nodes.
    *
@@ -226,6 +230,15 @@ public class XPathWrapper {
    */
   public List<String> asListOfStrings(String xpath) throws XPathExpressionException {
     NodeList nodeList = this.asNodeList(xpath);
+    List<String> list = new ArrayList<>(nodeList.getLength());
+    for (int i = 0, l = nodeList.getLength(); i < l; i++) {
+      list.add(nodeList.item(i).getTextContent());
+    }
+    return list;
+  }
+
+  public List<String> asListOfStrings(Node node, String xpath) throws XPathExpressionException {
+    NodeList nodeList = this.asNodeList(node, xpath);
     List<String> list = new ArrayList<>(nodeList.getLength());
     for (int i = 0, l = nodeList.getLength(); i < l; i++) {
       list.add(nodeList.item(i).getTextContent());
