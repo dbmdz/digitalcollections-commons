@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.mdz.dzp.commons.xml.namespaces.MdzNamespaceContext;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -230,18 +231,22 @@ public class XPathWrapper {
    */
   public List<String> asListOfStrings(String xpath) throws XPathExpressionException {
     NodeList nodeList = this.asNodeList(xpath);
-    List<String> list = new ArrayList<>(nodeList.getLength());
-    for (int i = 0, l = nodeList.getLength(); i < l; i++) {
-      list.add(nodeList.item(i).getTextContent());
-    }
+    List<String> list = nodeListContentsToListOfStrings(nodeList);
     return list;
   }
 
   public List<String> asListOfStrings(Node node, String xpath) throws XPathExpressionException {
     NodeList nodeList = this.asNodeList(node, xpath);
+    List<String> list = nodeListContentsToListOfStrings(nodeList);
+    return list;
+  }
+
+  private List<String> nodeListContentsToListOfStrings(NodeList nodeList) throws DOMException {
     List<String> list = new ArrayList<>(nodeList.getLength());
     for (int i = 0, l = nodeList.getLength(); i < l; i++) {
-      list.add(nodeList.item(i).getTextContent());
+      String textContent = nodeList.item(i).getTextContent();
+      textContent = textContent.trim();
+      list.add(textContent);
     }
     return list;
   }
@@ -254,11 +259,13 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    */
   public String asString(String xpath) throws XPathExpressionException {
-    return (String) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.STRING);
+    final String rawString = (String) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.STRING);
+    return rawString.trim();
   }
 
   public String asString(Node node, String xpath) throws XPathExpressionException {
-    return (String) this.getXpathExpression(xpath).evaluate(node, XPathConstants.STRING);
+    final String rawString = (String) this.getXpathExpression(xpath).evaluate(node, XPathConstants.STRING);
+    return rawString.trim();
   }
 
   /**
