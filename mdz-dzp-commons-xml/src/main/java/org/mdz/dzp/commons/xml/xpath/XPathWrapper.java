@@ -245,6 +245,9 @@ public class XPathWrapper {
     List<String> list = new ArrayList<>(nodeList.getLength());
     for (int i = 0, l = nodeList.getLength(); i < l; i++) {
       String textContent = nodeList.item(i).getTextContent();
+      if (textContent == null) {
+        textContent = "";
+      }
       textContent = textContent.trim();
       list.add(textContent);
     }
@@ -260,11 +263,17 @@ public class XPathWrapper {
    */
   public String asString(String xpath) throws XPathExpressionException {
     final String rawString = (String) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.STRING);
+    if (rawString == null) {
+      return "";
+    }
     return rawString.trim();
   }
 
   public String asString(Node node, String xpath) throws XPathExpressionException {
     final String rawString = (String) this.getXpathExpression(xpath).evaluate(node, XPathConstants.STRING);
+    if (rawString == null) {
+      return "";
+    }
     return rawString.trim();
   }
 
