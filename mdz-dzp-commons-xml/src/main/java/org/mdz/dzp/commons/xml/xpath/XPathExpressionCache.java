@@ -1,20 +1,38 @@
 package org.mdz.dzp.commons.xml.xpath;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.mdz.dzp.commons.xml.namespaces.MdzNamespaceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-class XPathExpressionCache extends LinkedHashMap<String, XPathExpression> {
+public class XPathExpressionCache {
 
-  private static final Integer MAX_ENTRIES = 128;
+  private static final Logger LOGGER = LoggerFactory.getLogger(XPathExpressionCache.class);
+
+  private final ConcurrentHashMap<String, XPathExpression> cache;
+
+  private final XPath xpath;
 
   public XPathExpressionCache() {
-    super(MAX_ENTRIES, 0.75f, true);
+    cache = new ConcurrentHashMap();
+    xpath = XPathFactory.newInstance().newXPath();
+    xpath.setNamespaceContext(new MdzNamespaceContext());
   }
 
-  @Override
-  protected boolean removeEldestEntry(Map.Entry<String, XPathExpression> eldest) {
-    return size() > MAX_ENTRIES;
+  public XPathExpression get(String expression) {
+    return cache.computeIfAbsent(expression, (x) -> {
+      XPathExpression result = null;
+      try {
+        result = xpath.compile(x);
+      } catch (XPathExpressionException exception) {
+        LOGGER.error("Could not compile XPathExpression.", exception);
+      }
+      return result;
+    });
   }
 
 }

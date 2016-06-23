@@ -4,21 +4,15 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.mdz.dzp.commons.xml.namespaces.MdzNamespaceContext;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -31,46 +25,18 @@ public class XPathWrapper {
 
   private Document document;
 
-  private XPath xpath;
-
-  private Map<String, XPathExpression> xpathExpressions;
-
-  public Map<String, XPathExpression> getXpathExpressions() {
-    return xpathExpressions;
-  }
-
-  public void setXpathExpressions(Map<String, XPathExpression> map) {
-    Objects.requireNonNull(map);
-    synchronized (xpathExpressions) {
-      xpathExpressions.clear();
-      xpathExpressions.putAll(map);
-    }
-  }
-
-  public XPath getXpath() {
-    if (this.xpath == null) {
-      this.xpath = XPathFactory.newInstance().newXPath();
-      this.xpath.setNamespaceContext(new MdzNamespaceContext());
-    }
-    return xpath;
-  }
-
-  public void setXpath(XPath xpath) {
-    this.xpath = xpath;
-  }
+  private XPathExpressionCache expressionCache;
 
   private XPathWrapper() {}
 
-  public XPathWrapper(Document document, XPathExpressionCache xPathExpressionCache) {
-    this();
+  public XPathWrapper(Document document, XPathExpressionCache expressionCache) {
     this.document = document;
-    this.xpathExpressions = xPathExpressionCache;
+    this.expressionCache = expressionCache;
   }
 
   public XPathWrapper(Document document) {
     this(document, new XPathExpressionCache());
   }
-
 
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as Node. If the xPath results in more than one Node,
@@ -229,20 +195,7 @@ public class XPathWrapper {
   }
 
   private XPathExpression getXpathExpression(String xpath) throws XPathExpressionException {
-    synchronized (xpathExpressions) {
-      if (!xpathExpressions.containsKey(xpath)) {
-        xpathExpressions.put(xpath, this.getXpath().compile(xpath));
-      }
-    }
-    return xpathExpressions.get(xpath);
-  }
-
-  public void setNamespaceContext(NamespaceContext namespaceContext) {
-    this.getXpath().setNamespaceContext(namespaceContext);
-  }
-
-  public void setXpathFactory(XPathFactory factory) {
-    this.xpath = factory.newXPath();
+    return expressionCache.get(xpath);
   }
 
 }
