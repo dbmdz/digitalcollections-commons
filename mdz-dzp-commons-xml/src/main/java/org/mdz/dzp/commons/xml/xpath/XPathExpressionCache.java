@@ -35,4 +35,8 @@ public class XPathExpressionCache {
     });
   }
 
+  public int getSize() {
+    return cache.size();
+  }
+
 }
