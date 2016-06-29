@@ -93,6 +93,23 @@ public class XPathWrapper {
     }
     return list;
   }
+  
+  /**
+   * Gets a fraction of the document by a xPath-Expression xpath as a List of Nodes of a subnode
+   *
+   * @param node the subnode
+   * @param xpath the xpath
+   * @return the list
+   * @throws XPathExpressionException the x path expression exception
+   */
+  public List<Node> asListOfNodes(Node node, String xpath) throws XPathExpressionException {
+    NodeList nodeList = this.asNodeList(node, xpath);
+    List<Node> list = new ArrayList<>(nodeList.getLength());
+    for (int i = 0, l = nodeList.getLength(); i < l; i++) {
+      list.add(nodeList.item(i));
+    }
+    return list;
+  }
 
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as a List of Strings.
