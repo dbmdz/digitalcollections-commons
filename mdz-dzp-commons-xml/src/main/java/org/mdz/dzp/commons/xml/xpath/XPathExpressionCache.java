@@ -1,5 +1,7 @@
 package org.mdz.dzp.commons.xml.xpath;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
@@ -37,6 +39,10 @@ public class XPathExpressionCache {
 
   public int getSize() {
     return cache.size();
+  }
+  
+  public List<String> getExpressions() {
+    return Collections.list(cache.keys());
   }
 
 }
