@@ -14,6 +14,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -25,7 +27,8 @@ import org.w3c.dom.NodeList;
  * Provides a lightweight wrapper around the Document class to make XPath queries less painful and verbose.
  */
 public class XPathWrapper {
-
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger(XPathWrapper.class);
   private Document document;
 
   private XPathExpressionCache expressionCache;
@@ -207,7 +210,8 @@ public class XPathWrapper {
     List<Node> nodes = asListOfNodes(node, relativeXpath);
 
     if (nodes == null || nodes.isEmpty()) {
-      throw new XPathExpressionException("No relative node found for " + getFullXPath(node) + " and relative path=" + relativeXpath);
+      LOGGER.info("No relative node found for " + getFullXPath(node) + " and relative path=" + relativeXpath);
+      return null;
     }
     return nodes.get(0);
   }
