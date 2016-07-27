@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -13,8 +14,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
+import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -188,6 +191,26 @@ public class XPathWrapper {
   public Number asNumber(String xpath) throws XPathExpressionException {
     return (Number) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.NUMBER);
   }
+  
+  /**
+   * Returns a node, starting for a start node, identified by a relative path
+   * @param node the start node
+   * @param relativeXpath the relative xpath
+   * @return
+   * @throws XPathExpressionException 
+   */
+  public Node getRelativeNode(Node node, String relativeXpath) throws XPathExpressionException {
+    if (!relativeXpath.startsWith(".")) {
+      throw new XPathExpressionException("Relative node '" + relativeXpath + "' below '" + getFullXPath(node) + "' must start with a period! ");
+    }
+
+    List<Node> nodes = asListOfNodes(node, relativeXpath);
+
+    if (nodes == null || nodes.isEmpty()) {
+      throw new XPathExpressionException("No relative node found for " + getFullXPath(node) + " and relative path=" + relativeXpath);
+    }
+    return nodes.get(0);
+  }
 
   /**
    * Serialize to string.
@@ -214,5 +237,104 @@ public class XPathWrapper {
   private XPathExpression getXpathExpression(String xpath) throws XPathExpressionException {
     return expressionCache.get(xpath);
   }
+  
+  
+  /**
+   * Helper method to dump the full xpath of a node
+   * @param n The node
+   * @return String represenation of the full xpath of the node
+   */
+  public String getFullXPath(Node n) {
+    // abort early
+    if (null == n)
+      return null;
+
+    // declarations
+    Node parent = null;
+    Stack<Node> hierarchy = new Stack<Node>();
+    StringBuffer buffer = new StringBuffer();
+
+    // push element on stack
+    hierarchy.push(n);
+
+    switch (n.getNodeType()) {
+      case Node.ATTRIBUTE_NODE:
+        parent = ((Attr) n).getOwnerElement();
+        break;
+      case Node.ELEMENT_NODE:
+        parent = n.getParentNode();
+        break;
+      case Node.DOCUMENT_NODE:
+        parent = n.getParentNode();
+        break;
+      default:
+        throw new IllegalStateException("Unexpected Node type" + n.getNodeType());
+    }
+
+    while (null != parent && parent.getNodeType() != Node.DOCUMENT_NODE) {
+      // push on stack
+      hierarchy.push(parent);
+
+      // get parent of parent
+      parent = parent.getParentNode();
+    }
+
+    // construct xpath
+    Object obj = null;
+    while (!hierarchy.isEmpty() && null != (obj = hierarchy.pop())) {
+      Node node = (Node) obj;
+      boolean handled = false;
+
+      if (node.getNodeType() == Node.ELEMENT_NODE) {
+        Element e = (Element) node;
+
+        // is this the root element?
+        if (buffer.length() == 0) {
+          // root element - simply append element name
+          buffer.append(node.getNodeName());
+        } else {
+          // child element - append slash and element name
+          buffer.append("/");
+          buffer.append(node.getNodeName());
+
+          if (node.hasAttributes()) {
+            // see if the element has a name or id attribute
+            if (e.hasAttribute("id")) {
+              // id attribute found - use that
+              buffer.append("[@id='" + e.getAttribute("id") + "']");
+              handled = true;
+            } else if (e.hasAttribute("name")) {
+              // name attribute found - use that
+              buffer.append("[@name='" + e.getAttribute("name") + "']");
+              handled = true;
+            }
+          }
+
+          if (!handled) {
+            // no known attribute we could use - get sibling index
+            int prev_siblings = 1;
+            Node prev_sibling = node.getPreviousSibling();
+            while (null != prev_sibling) {
+              if (prev_sibling.getNodeType() == node.getNodeType()) {
+                if (prev_sibling.getNodeName().equalsIgnoreCase(
+                    node.getNodeName())) {
+                  prev_siblings++;
+                }
+              }
+              prev_sibling = prev_sibling.getPreviousSibling();
+            }
+            buffer.append("[" + prev_siblings + "]");
+          }
+        }
+      } else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
+        buffer.append("/@");
+        buffer.append(node.getNodeName());
+      }
+    }
+    // return buffer
+    return buffer.toString();
+  }
+
+
 
 }
