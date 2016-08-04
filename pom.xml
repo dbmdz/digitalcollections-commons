@@ -21,7 +21,6 @@
 
   <modules>
     <module>mdz-dzp-commons-xml</module>
-    <module>mdz-dzp-commons-io</module>
   </modules>
   
   <distributionManagement>
