@@ -54,14 +54,14 @@ public class MdzNamespaceContext implements NamespaceContext {
   private final Map<String, String> namespaces;
 
   public MdzNamespaceContext() {
-    this(XMLConstants.DEFAULT_NS_PREFIX, XMLConstants.NULL_NS_URI);
+    this(XMLConstants.NULL_NS_URI);
   }
 
-  public MdzNamespaceContext(String defaultPrefix, String defaultURI) {
+  public MdzNamespaceContext(String defaultURI) {
 
     Map<String, String> map = new HashMap<>();
 
-    map.put(defaultPrefix, defaultURI);
+    map.put(XMLConstants.DEFAULT_NS_PREFIX, defaultURI);
     map.put(XMLConstants.XMLNS_ATTRIBUTE, XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
     map.put(XMLConstants.XML_NS_PREFIX, XMLConstants.XML_NS_URI);
     map.put(MdzNamespaceContext.TEI_NS_PREFIX, MdzNamespaceContext.TEI_NS_URI);
@@ -127,4 +127,6 @@ public class MdzNamespaceContext implements NamespaceContext {
     }
     return Collections.unmodifiableList(prefixes).iterator();
   }
+
+
 }

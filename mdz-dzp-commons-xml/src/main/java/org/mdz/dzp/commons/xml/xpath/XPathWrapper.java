@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
+import javax.xml.namespace.QName;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -14,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
@@ -44,6 +47,10 @@ public class XPathWrapper {
     this(document, new XPathExpressionCache());
   }
 
+  public void setDefaultNamespace(String namespaceUrl) {
+    this.expressionCache.setDefaultNamespace(namespaceUrl);
+  }
+
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as Node. If the xPath results in more than one Node,
    * the first one is returned.
@@ -65,7 +72,7 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    */
   public Node asNode(String xpath, int index) throws XPathExpressionException {
-    NodeList nodeList = (NodeList) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.NODESET);
+    NodeList nodeList = (NodeList) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NODESET);
     return nodeList.item(index);
   }
 
@@ -77,11 +84,11 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    */
   public NodeList asNodeList(String xpath) throws XPathExpressionException {
-    return (NodeList) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.NODESET);
+    return (NodeList) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NODESET);
   }
 
   public NodeList asNodeList(Node node, String xpath) throws XPathExpressionException {
-    return (NodeList) this.getXpathExpression(xpath).evaluate(node, XPathConstants.NODESET);
+    return (NodeList) this.evaluateXpath(node, xpath, XPathConstants.NODESET);
   }
 
   /**
@@ -157,7 +164,7 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    */
   public String asString(String xpath) throws XPathExpressionException {
-    final String rawString = (String) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.STRING);
+    final String rawString = (String) evaluateXpath(this.getDocument(), xpath, XPathConstants.STRING);
     if (rawString == null) {
       return "";
     }
@@ -165,11 +172,15 @@ public class XPathWrapper {
   }
 
   public String asString(Node node, String xpath) throws XPathExpressionException {
-    final String rawString = (String) this.getXpathExpression(xpath).evaluate(node, XPathConstants.STRING);
+    final String rawString = (String) evaluateXpath(node, xpath, XPathConstants.STRING);
     if (rawString == null) {
       return "";
     }
     return rawString.trim();
+  }
+
+  private Object evaluateXpath(Node node, String xpath, QName returnType) throws XPathExpressionException {
+    return this.getXpathExpression(xpath).evaluate(node, returnType);
   }
 
   /**
@@ -180,7 +191,7 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    */
   public Boolean asBoolean(String xpath) throws XPathExpressionException {
-    final String value = (String) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.STRING);
+    final String value = (String) evaluateXpath(this.getDocument(), xpath, XPathConstants.STRING);
     return Boolean.parseBoolean(value);
   }
 
@@ -192,7 +203,7 @@ public class XPathWrapper {
    * @throws XPathExpressionException the x path expression exception
    */
   public Number asNumber(String xpath) throws XPathExpressionException {
-    return (Number) this.getXpathExpression(xpath).evaluate(this.getDocument(), XPathConstants.NUMBER);
+    return (Number) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NUMBER);
   }
   
   /**

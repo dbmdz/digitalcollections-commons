@@ -45,4 +45,18 @@ public class XPathExpressionCache {
     return Collections.list(cache.keys());
   }
 
+  /**
+   * Change the default namespace for all XPath expressions.
+   *
+   * <strong>CAREFUL:</strong> If the new default namespace is different from the current one, the complete cache will be
+   * reset, so use with caution in performance-sensitive areas.
+   *
+   * @param namespaceUri The new default namespace URI
+   */
+  public void setDefaultNamespace(String namespaceUri) {
+    if (!xpath.getNamespaceContext().getNamespaceURI("").equals(namespaceUri)) {
+      this.cache.clear();
+      xpath.setNamespaceContext(new MdzNamespaceContext(namespaceUri));
+    }
+  }
 }
