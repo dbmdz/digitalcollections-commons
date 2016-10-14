@@ -59,6 +59,11 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
           </dependency>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>${version.checkstyle}</version>
+          </dependency>
         </dependencies>
         <configuration>
           <configLocation>dzp/buildtools/checkstyle.xml</configLocation>
