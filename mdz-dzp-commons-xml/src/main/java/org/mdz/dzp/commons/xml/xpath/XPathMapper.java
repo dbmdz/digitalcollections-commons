@@ -110,7 +110,9 @@ public class XPathMapper implements InvocationHandler {
       templateString = templateString.replace(matcher.group(), resolvedVariables.get(varName).get(0));
       matcher = variablePattern.matcher(templateString);
     }
-    return templateString;
+
+    // And un-escape the pointy brackets
+    return templateString.replace("\\<", "<").replace("\\>", ">");
   }
 
   private String extractContext(String template) throws XPathExpressionException {
