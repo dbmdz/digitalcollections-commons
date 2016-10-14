@@ -23,7 +23,6 @@ public class XPathMapper implements InvocationHandler {
 
 
   private final XPathWrapper xpw;
-  private Document doc;
 
   @SuppressWarnings("unchecked")
   public static <T> T makeProxy(Document doc, Class<? extends T> iface, Class<?>... otherIfaces) {
@@ -38,7 +37,6 @@ public class XPathMapper implements InvocationHandler {
   }
 
   private XPathMapper(Document doc) {
-    this.doc = doc;
     this.xpw = new XPathWrapper(doc);
   }
 
@@ -150,7 +148,7 @@ public class XPathMapper implements InvocationHandler {
     }
     if (wasOpened) {
       throw new XPathExpressionException(String.format(
-          "Mismatched context delimiters, % were unclosed at the end of parsing.", numOpen));
+          "Mismatched context delimiters, %s were unclosed at the end of parsing.", numOpen));
     } else {
       return null;
     }

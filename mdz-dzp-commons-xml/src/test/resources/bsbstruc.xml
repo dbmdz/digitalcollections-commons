@@ -30,6 +30,7 @@
           <biblStruct ana="#bsbStandard">
             <monogr>
               <title level="m" type="main">Ein Titel</title>
+              <title level="m" type="sub">Ein Untertitel</title>
               <author>
                 <persName>Kugelmann, Hans</persName>
               </author>
