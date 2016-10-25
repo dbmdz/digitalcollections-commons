@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -19,7 +21,7 @@ import org.w3c.dom.Document;
 
 
 public class XPathMapper implements InvocationHandler {
-  private static final Pattern variablePattern = Pattern.compile("\\{([a-zA-Z_-]+?)\\}");
+  private static final Pattern variablePattern = Pattern.compile("\\{([a-zA-Z0-9_-]+?)\\}");
 
 
   private final XPathWrapper xpw;
@@ -40,9 +42,9 @@ public class XPathMapper implements InvocationHandler {
     this.xpw = new XPathWrapper(doc);
   }
 
-  public List<String> getVariables(String templateString) {
+  public Set<String> getVariables(String templateString) {
     Matcher matcher = variablePattern.matcher(templateString);
-    List<String> variables = new ArrayList<>();
+    Set<String> variables = new HashSet<>();
     while (matcher.find()) {
       variables.add(matcher.group(1));
     }
@@ -56,8 +58,8 @@ public class XPathMapper implements InvocationHandler {
       throw new XPathMappingException("No @XPathBinding annotation was found on the specified method!");
     }
 
-    // List of variable names from the template string
-    List<String> variables = getVariables(binding.valueTemplate());
+    // Set of variable names from the template string
+    Set<String> variables = getVariables(binding.valueTemplate());
 
     // Sanity checks
     if (binding.multiValued()) {
@@ -107,6 +109,9 @@ public class XPathMapper implements InvocationHandler {
     Matcher matcher = variablePattern.matcher(templateString);
     while (matcher.find()) {
       String varName = matcher.group(1);
+      if (resolvedVariables.get(varName).isEmpty()) {
+        return null;
+      }
       templateString = templateString.replace(matcher.group(), resolvedVariables.get(varName).get(0));
       matcher = variablePattern.matcher(templateString);
     }
@@ -123,9 +128,11 @@ public class XPathMapper implements InvocationHandler {
     for (char c : template.toCharArray()) {
       if (c == '\\') {
         isEscaped = true;
-        ctx.append(c);
+        if (numOpen > 0) {
+          ctx.append(c);
+        }
       } else if (c == '<') {
-        if (isEscaped || numOpen > 0) {
+        if (numOpen > 0) {
           ctx.append(c);
         }
         if (!isEscaped) {
@@ -133,9 +140,11 @@ public class XPathMapper implements InvocationHandler {
           if (!wasOpened) {
             wasOpened = true;
           }
+        } else {
+          isEscaped = false;
         }
       } else if (c == '>') {
-        if (isEscaped || numOpen > 1) {
+        if ((numOpen > 0 && isEscaped) || numOpen > 1) {
           ctx.append(c);
         }
         if (!isEscaped) {
@@ -143,6 +152,8 @@ public class XPathMapper implements InvocationHandler {
           if (numOpen == 0) {
             return ctx.toString();
           }
+        } else {
+          isEscaped = false;
         }
       } else if (wasOpened) {
         ctx.append(c);
