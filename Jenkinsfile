@@ -4,7 +4,7 @@ node {
 
 	stage 'Build'
 	checkout scm
-	sh 'mvn clean install'
+	sh 'mvn -U clean compile'
 
 	stage 'Verify'
 	sh 'mvn verify'
@@ -13,5 +13,5 @@ node {
   sh 'mvn -Dmaven.test.failure.ignore=false -P sonar sonar:sonar'
 
 	stage 'Publish'
-  sh 'mvn -T 6 deploy'
+  sh 'mvn -T 4 deploy -Dmaven.install.skip=true
 }
