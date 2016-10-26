@@ -13,5 +13,5 @@ node {
   sh 'mvn -Dmaven.test.failure.ignore=false -P sonar sonar:sonar'
 
 	stage 'Publish'
-  sh 'mvn -T 4 deploy -Dmaven.install.skip=true
+  sh 'mvn -T 4 deploy -Dmaven.install.skip=true'
 }
