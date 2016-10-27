@@ -16,6 +16,12 @@ public class ToString {
     YAML = new Yaml(new JodaTimeConstructor(), new JodaTimeRepresenter(), options);
   }
 
+  /**
+   * Convert the given object to a string representation using YAML.
+   * 
+   * @param object The object to make a string of.
+   * @return A YAML string representing the object in its current state.
+   */
   public static String stringRepresentationOf(Object object) {
     return YAML.dump(object);
   }
