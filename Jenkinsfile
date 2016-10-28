@@ -1,4 +1,5 @@
-@Library("MDZ DZP Jenkins")
+@org.jenkinsci.plugins.workflow.libs.Library('MDZ DZP Jenkins')
+import notifyBuild
 
 node {
 	env.JAVA_HOME = tool 'jdk-8-oracle'
