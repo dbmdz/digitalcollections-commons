@@ -36,9 +36,18 @@ def notifyBuild(String buildStatus) {
 //    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>
 //    """
 
-  def templateFile = new File('test.template')
-  def template = new groovy.text.StreamingTemplateEngine().createTemplate(templateFile)
-  def details = template.make()
+  def details = """<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Jenkins Build Process</title>
+</head>
+<body>
+<p>${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>
+</body>
+</html>
+"""
 
   if (buildStatus == "FAILED") {
     subject += " 🕱 💀 ☠ 😓 😟"
@@ -54,4 +63,3 @@ def notifyBuild(String buildStatus) {
   )
 
 }
-
