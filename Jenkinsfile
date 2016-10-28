@@ -3,7 +3,7 @@ node {
 	env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
 
   try {
-    notifyBuild("STARTED");
+    notifyBuild "STARTED"
     stage 'Build'
     checkout scm
     sh 'mvn -U clean compile'
@@ -16,10 +16,10 @@ node {
 
     stage 'Publish'
     sh 'mvn -T 4 deploy -Dmaven.install.skip=true'
-    notifyBuild("SUCCESS");
+    notifyBuild "SUCCESS"
   }
   catch (e) {
-    notifyBuild("FAILED");
+    notifyBuild "FAILED"
     throw e
   }
   
