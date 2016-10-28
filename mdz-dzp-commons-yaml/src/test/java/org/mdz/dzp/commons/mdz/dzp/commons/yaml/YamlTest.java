@@ -1,5 +1,6 @@
 package org.mdz.dzp.commons.mdz.dzp.commons.yaml;
 
+import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -25,6 +26,11 @@ public class YamlTest {
   public void shouldSerializeAndDeserializeDateTime() {
     DateTime dateTime = DateTime.now();
     assertThat(yaml.load(yaml.dump(dateTime))).isEqualTo(dateTime);
+  }
+
+  @Test
+  public void shouldFailToTestJenkins() {
+    Assertions.fail("Break test to test Jenkins.");
   }
 
 }
