@@ -27,34 +27,38 @@ node {
 def notifyBuild(String buildStatus) {
 
   // Default values
-  def colorName = 'RED'
-  def colorCode = '#FF0000'
   def subject = "[Jenkins] ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
-  def summary = "${subject} (${env.BUILD_URL})"
-//  def details = """
-//    <p>${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-//    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>
-//    """
+  def symbols = ""
+
+  if (buildStatus == "FAILED") {
+    subject += " 🕱 💀 ☠ 😓 😟"
+    symbols = "🕱 💀 ☠ 😓 😟"
+  }
+  else if (buildStatus == "SUCCESS") {
+    subject += "🙋 🙌"
+    symbols = "🙋 🙌"
+  }
+
 
   def details = """<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>Jenkins Build Process</title>
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+      * {
+        font-family: "Noto Sans";
+      }
+    </style>
 </head>
 <body>
-<p>${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>
+<p>${buildStatus}: Job '${env.JOB_NAME} [<a href='${env.BUILD_URL}'>${env.BUILD_NUMBER}</a>]':</p>
+<p>Check console output at &QUOT;<a href='${env.BUILD_URL}/console'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>
+<p style="font-size: 10em">${symbols}</p>
 </body>
 </html>
 """
-
-  if (buildStatus == "FAILED") {
-    subject += " 🕱 💀 ☠ 😓 😟"
-  }
-  else if (buildStatus == "SUCCESS") {
-    subject += " 🙋 🙌"
-  }
 
   emailext(
       subject: subject,
