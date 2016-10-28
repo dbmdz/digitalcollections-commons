@@ -24,16 +24,21 @@ node {
   
 }
 
-def notifyBuild(String buildStatus = 'UNKNOWN') {
+def notifyBuild(String buildStatus) {
+
   // Default values
   def colorName = 'RED'
   def colorCode = '#FF0000'
   def subject = "[Jenkins] ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
   def summary = "${subject} (${env.BUILD_URL})"
-  def details = """
-    <p>${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>
-    """
+//  def details = """
+//    <p>${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+//    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>
+//    """
+
+  def templateFile = new File('test.template')
+  def template = new groovy.text.StreamingTemplateEngine().createTemplate(templateFile)
+  def details = template.make()
 
   if (buildStatus == "FAILED") {
     subject += " 🕱 💀 ☠ 😓 😟"
@@ -49,3 +54,4 @@ def notifyBuild(String buildStatus = 'UNKNOWN') {
   )
 
 }
+
