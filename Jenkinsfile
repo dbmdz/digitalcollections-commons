@@ -1,3 +1,5 @@
+@Library('notifications')
+
 node {
 	env.JAVA_HOME = tool 'jdk-8-oracle'
 	env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
