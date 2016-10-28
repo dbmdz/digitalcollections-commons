@@ -3,21 +3,26 @@ package org.mdz.dzp.commons.xml.xpath;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 
 public class XPathMapper implements InvocationHandler {
@@ -62,18 +67,14 @@ public class XPathMapper implements InvocationHandler {
     Set<String> variables = getVariables(binding.valueTemplate());
 
     // Sanity checks
-    if (binding.multiValued()) {
-      if (!method.getReturnType().isAssignableFrom(Collection.class)) {
+    if (binding.multiLanguage()) {
+      if (!method.getReturnType().isAssignableFrom(Map.class)) {
         throw new XPathMappingException(
-            "Method return type must be a Collection type if multiValued=true.");
-      }
-      if (variables.size() > 1) {
-        throw new XPathMappingException(
-            "There cannot be more than one variable in the valueTemplate if multiValued=true");
+            "Method return type must be a Map<Locale, String> type if multiLanguage=true.");
       }
     } else {
       if (!method.getReturnType().isAssignableFrom(String.class)) {
-        throw new XPathMappingException("Return type must be String if multiValued=false;");
+        throw new XPathMappingException("Return type must be String if multiLanguage=false;");
       }
     }
 
@@ -83,7 +84,7 @@ public class XPathMapper implements InvocationHandler {
     }
 
     // Resolve variables
-    Map<String, List<String>> resolvedVariables = new HashMap<>();
+    Map<String, Map<Locale, String>> resolvedVariables = new LinkedHashMap<>();
     for (String variableName : variables) {
       XPathVariable var = Arrays.stream(binding.variables())
           .filter(v -> v.name().equals(variableName))
@@ -92,32 +93,54 @@ public class XPathMapper implements InvocationHandler {
       resolvedVariables.put(variableName, this.resolveVariable(var));
     }
 
-    return this.executeTemplate(binding.valueTemplate(), resolvedVariables);
+    Map<Locale, String> resolved = this.executeTemplate(binding.valueTemplate(), resolvedVariables);
+    if (binding.multiLanguage()) {
+      return resolved;
+    } else {
+      return resolved.entrySet().iterator().next().getValue();
+    }
   }
 
-  private String executeTemplate(String templateString, Map<String, List<String>> resolvedVariables) throws XPathExpressionException {
+  private Map<Locale, String> executeTemplate(String templateString, Map<String, Map<Locale, String>> resolvedVariables) throws XPathExpressionException {
+    Set<Locale> langs = resolvedVariables.values()
+        .stream()
+        .map(Map::keySet)  // Get set of languages for each resolved variable
+        .flatMap(Collection::stream)  // Flatten these sets into a single stream
+        .collect(Collectors.toCollection(LinkedHashSet::new));  // Store the stream in a set (thereby pruning duplicates)
+
+    Map<Locale, String> out = new LinkedHashMap<>();
     // Resolve the <...> contexts
-    String context = extractContext(templateString);
-    while (context != null) {
-      templateString = templateString.replace(
-          "<" + context + ">",
-          resolveVariableContext(context, resolvedVariables));
-      context = extractContext(templateString);
-    }
-
-    // Now we just need to resolve top-level variables
-    Matcher matcher = variablePattern.matcher(templateString);
-    while (matcher.find()) {
-      String varName = matcher.group(1);
-      if (resolvedVariables.get(varName).isEmpty()) {
-        return null;
+    for (Locale lang : langs) {
+      String stringRepresentation = templateString;
+      String context = extractContext(stringRepresentation);
+      while (context != null) {
+        stringRepresentation = stringRepresentation.replace(
+            "<" + context + ">",
+            resolveVariableContext(lang, context, resolvedVariables));
+        context = extractContext(stringRepresentation);
       }
-      templateString = templateString.replace(matcher.group(), resolvedVariables.get(varName).get(0));
-      matcher = variablePattern.matcher(templateString);
-    }
 
-    // And un-escape the pointy brackets
-    return templateString.replace("\\<", "<").replace("\\>", ">");
+      // Now we just need to resolve top-level variables
+      Matcher matcher = variablePattern.matcher(stringRepresentation);
+      while (matcher.find()) {
+        String varName = matcher.group(1);
+        if (resolvedVariables.get(varName).isEmpty()) {
+          return null;
+        }
+        Locale langToResolve;
+        if (resolvedVariables.get(varName).containsKey(lang)) {
+          langToResolve = lang;
+        } else {
+          langToResolve = resolvedVariables.get(varName).entrySet().iterator().next().getKey();
+        }
+        stringRepresentation = stringRepresentation.replace(matcher.group(), resolvedVariables.get(varName).get(langToResolve));
+        matcher = variablePattern.matcher(stringRepresentation);
+      }
+
+      // And un-escape the pointy brackets
+      out.put(lang, stringRepresentation.replace("\\<", "<").replace("\\>", ">"));
+    }
+    return out;
   }
 
   private String extractContext(String template) throws XPathExpressionException {
@@ -167,23 +190,35 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
-  private String resolveVariableContext(String variableContext, Map<String, List<String>> resolvedVariables) {
+  private String resolveVariableContext(Locale language, String variableContext, Map<String, Map<Locale, String>> resolvedVariables) {
     Matcher varMatcher = variablePattern.matcher(variableContext);
     varMatcher.find();
     String variableName = varMatcher.group(1);
-    List<String> resolvedValues = resolvedVariables.get(variableName);
+    Map<Locale, String> resolvedValues = resolvedVariables.get(variableName);
     if (resolvedValues == null || resolvedValues.isEmpty()) {
       return "";
+    } else if (resolvedValues.containsKey(language)) {
+      return variableContext.replace(varMatcher.group(), resolvedValues.get(language));
     } else {
-      return variableContext.replace(varMatcher.group(), resolvedValues.get(0));
+      return variableContext.replace(varMatcher.group(), resolvedValues.entrySet().iterator().next().getValue());
     }
   }
 
-  private List<String> resolveVariable(XPathVariable var) throws XPathExpressionException {
-    List<String> result = null;
+  private Map<Locale, String> resolveVariable(XPathVariable var) throws XPathExpressionException {
+    Map<Locale, String> result = new LinkedHashMap<>();
     for (String path : var.paths()) {
-      result = xpw.asListOfStrings(path);
-      if (result != null && !result.isEmpty()) {
+      List<Node> nodes = xpw.asListOfNodes(path);
+      for (Node node : nodes) {
+        Locale locale;
+        Node langCode = node.getAttributes().getNamedItem("xml:lang");
+        if (langCode != null) {
+          locale = Locale.forLanguageTag(langCode.getNodeValue());
+        } else {
+          locale  = Locale.forLanguageTag("");
+        }
+        result.put(locale, node.getTextContent());
+      }
+      if (!result.isEmpty()) {
         break;
       }
     }

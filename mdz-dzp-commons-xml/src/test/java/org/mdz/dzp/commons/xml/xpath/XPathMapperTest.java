@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.InputStream;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,8 +24,9 @@ public class XPathMapperTest {
     @XPathBinding(
         defaultNamespace = TEI_NS,
         valueTemplate = "{author}",
-        variables = {@XPathVariable(name="author", paths = {BIBLSTRUCT_PATH + "/:monogr/:author/:persName"})})
-    String getAuthor() throws XPathMappingException;
+        multiLanguage = true,
+        variables = {@XPathVariable(name="author", paths = {BIBLSTRUCT_PATH + "/:monogr/:author/:persName/:name"})})
+    Map<Locale, String> getAuthor() throws XPathMappingException;
 
     @XPathBinding(
         defaultNamespace = TEI_NS,
@@ -62,7 +65,8 @@ public class XPathMapperTest {
 
   @Test
   public void testTemplateWithSingleVariable() throws Exception {
-    assertThat(mapper.getAuthor()).isEqualTo("Kugelmann, Hans");
+    assertThat(mapper.getAuthor().get(Locale.GERMAN)).isEqualTo("Kugelmann, Hans");
+    assertThat(mapper.getAuthor().get(Locale.ENGLISH)).isEqualTo("Name, English");
   }
 
   @Test

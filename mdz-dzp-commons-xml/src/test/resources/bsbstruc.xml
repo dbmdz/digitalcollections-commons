@@ -32,7 +32,10 @@
               <title level="m" type="main">Ein Titel</title>
               <title level="m" type="sub">Ein Untertitel</title>
               <author>
-                <persName>Kugelmann, Hans</persName>
+                <persName>
+                  <name xml:lang="de">Kugelmann, Hans</name>
+                  <name xml:lang="en">Name, English</name>
+                </persName>
               </author>
               <respStmt xml:id="bsb00050852_resp01">
                 <resp/>

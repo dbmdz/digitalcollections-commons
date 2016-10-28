@@ -5,6 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface XPathVariable {
-  String name() default "[unnamed]";
+  String name();
   String[] paths();
 }

@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 public @interface XPathBinding {
   String valueTemplate() default "";
   String defaultNamespace() default "";
-  boolean multiValued() default false;
+  boolean multiLanguage() default false;
   XPathVariable[] variables();
 }
