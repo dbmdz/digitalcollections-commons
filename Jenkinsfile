@@ -20,6 +20,7 @@ node {
   }
   catch (e) {
     notifyBuild("FAILED");
+    throw e
   }
   
 }
