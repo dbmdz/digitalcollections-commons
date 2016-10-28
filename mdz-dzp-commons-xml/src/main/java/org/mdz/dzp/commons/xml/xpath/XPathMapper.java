@@ -96,8 +96,10 @@ public class XPathMapper implements InvocationHandler {
     Map<Locale, String> resolved = this.executeTemplate(binding.valueTemplate(), resolvedVariables);
     if (binding.multiLanguage()) {
       return resolved;
-    } else {
+    } else if (!resolved.isEmpty()){
       return resolved.entrySet().iterator().next().getValue();
+    } else {
+      return null;
     }
   }
 
@@ -209,11 +211,14 @@ public class XPathMapper implements InvocationHandler {
     for (String path : var.paths()) {
       List<Node> nodes = xpw.asListOfNodes(path);
       for (Node node : nodes) {
-        Locale locale;
-        Node langCode = node.getAttributes().getNamedItem("xml:lang");
-        if (langCode != null) {
-          locale = Locale.forLanguageTag(langCode.getNodeValue());
-        } else {
+        Locale locale = null;
+        if (node.hasAttributes()) {
+          Node langCode = node.getAttributes().getNamedItem("xml:lang");
+          if (langCode != null) {
+            locale = Locale.forLanguageTag(langCode.getNodeValue());
+          }
+        }
+        if (locale == null) {
           locale  = Locale.forLanguageTag("");
         }
         result.put(locale, node.getTextContent());
