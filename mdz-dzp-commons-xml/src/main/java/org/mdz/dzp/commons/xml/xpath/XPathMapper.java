@@ -218,7 +218,7 @@ public class XPathMapper implements InvocationHandler {
             locale = Locale.forLanguageTag(langCode.getNodeValue());
           }
         }
-        if (locale == null) {
+        if (locale == null || locale.getLanguage().isEmpty()) {
           locale  = Locale.forLanguageTag("");
         }
         result.put(locale, node.getTextContent());
