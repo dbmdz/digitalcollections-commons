@@ -28,9 +28,4 @@ public class YamlTest {
     assertThat(yaml.load(yaml.dump(dateTime))).isEqualTo(dateTime);
   }
 
-  @Test
-  public void shouldFailToTestJenkins() {
-    Assertions.fail("Break test to test Jenkins.");
-  }
-
 }
