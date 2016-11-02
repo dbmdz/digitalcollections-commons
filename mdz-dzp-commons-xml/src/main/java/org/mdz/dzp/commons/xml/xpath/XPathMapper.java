@@ -221,7 +221,10 @@ public class XPathMapper implements InvocationHandler {
         if (locale == null || locale.getLanguage().isEmpty()) {
           locale  = Locale.forLanguageTag("");
         }
-        result.put(locale, node.getTextContent());
+        String value = node.getTextContent()
+            .replace("<", "\\<")
+            .replace(">", "\\>");
+        result.put(locale, value);
       }
       if (!result.isEmpty()) {
         break;
