@@ -5,18 +5,22 @@ node {
   notifyBuild "STARTED"
   
   try {
-    stage 'Build'
-    checkout scm
-    sh 'mvn -U clean compile'
+    stage 'Build' {
+      checkout scm
+      sh 'mvn -U -B clean compile'
+    }
 
-    stage 'Verify'
-    sh 'mvn verify'
+    stage 'Verify' {
+      sh 'mvn -B verify'
+    }
+    
+    stage 'Quality' {
+      sh 'mvn -B -Dmaven.test.failure.ignore=false -P sonar sonar:sonar'
+    }
 
-    stage 'Quality'
-    sh 'mvn -Dmaven.test.failure.ignore=false -P sonar sonar:sonar'
-
-    stage 'Publish'
-    sh 'mvn -T 4 deploy -Dmaven.install.skip=true'
+    stage 'Publish' {
+      sh 'mvn -B -T 4 deploy -Dmaven.install.skip=true'
+    }
     
     notifyBuild "SUCCESS"
   }
