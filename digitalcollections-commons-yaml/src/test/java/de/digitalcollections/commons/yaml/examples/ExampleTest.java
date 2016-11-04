@@ -22,7 +22,7 @@ public class ExampleTest {
     System.out.println(roadsidePicknic.toString());
 
     assertThat(roadsidePicknic.toString())
-        .isEqualTo("!!de.digitalcollections.commons.yaml.examples.Book {author: {bornAt: !!timestamp '1925-08-27T23:00:00Z', firstName: Arkadi, lastName: Strugatzki}, published: !!timestamp '1970-12-31T23:00:00Z', title: Roadside Picknic}");
+        .isEqualTo("!!de.digitalcollections.commons.yaml.examples.Book {author: {bornAt: !localTimestamp '1925-08-28T00:00:00.000', firstName: Arkadi, lastName: Strugatzki}, published: !localTimestamp '1971-01-01T00:00:00.000', title: Roadside Picknic}");
   }
 
 }
