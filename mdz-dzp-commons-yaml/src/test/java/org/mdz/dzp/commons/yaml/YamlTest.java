@@ -1,12 +1,12 @@
-package org.mdz.dzp.commons.mdz.dzp.commons.yaml;
+package org.mdz.dzp.commons.yaml;
 
 import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
-import org.mdz.dzp.commons.mdz.dzp.commons.yaml.joda.JodaTimeConstructor;
-import org.mdz.dzp.commons.mdz.dzp.commons.yaml.joda.JodaTimeRepresenter;
+import org.mdz.dzp.commons.yaml.joda.JodaTimeConstructor;
+import org.mdz.dzp.commons.yaml.joda.JodaTimeRepresenter;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 

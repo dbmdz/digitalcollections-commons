@@ -1,4 +1,4 @@
-package org.mdz.dzp.commons.mdz.dzp.commons.yaml.joda;
+package org.mdz.dzp.commons.yaml.joda;
 
 import java.util.Date;
 import org.joda.time.DateTime;
