@@ -2,6 +2,7 @@ package de.digitalcollections.commons.yaml.examples;
 
 import org.joda.time.DateTime;
 import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
+import org.joda.time.LocalDateTime;
 
 public class Book {
 
@@ -9,11 +10,11 @@ public class Book {
 
   private String title;
 
-  private DateTime published;
+  private LocalDateTime published;
 
   private Book() {}
 
-  public Book(Person author, String title, DateTime published) {
+  public Book(Person author, String title, LocalDateTime published) {
     this.author = author;
     this.title = title;
     this.published = published;
@@ -35,11 +36,11 @@ public class Book {
     this.title = title;
   }
 
-  public DateTime getPublished() {
+  public LocalDateTime getPublished() {
     return published;
   }
 
-  public void setPublished(DateTime published) {
+  public void setPublished(LocalDateTime published) {
     this.published = published;
   }
 

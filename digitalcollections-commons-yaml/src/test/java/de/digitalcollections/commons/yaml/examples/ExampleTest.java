@@ -4,14 +4,19 @@ import de.digitalcollections.commons.yaml.examples.Book;
 import de.digitalcollections.commons.yaml.examples.Person;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 
 public class ExampleTest {
 
   @Test
   public void toStringShouldSerializeBook() {
-    Person arkadiStrugatzki = new Person("Arkadi", "Strugatzki", DateTime.parse("1925-08-28"));
-    Book roadsidePicknic = new Book(arkadiStrugatzki, "Roadside Picknic", DateTime.parse("1971"));
+    Person arkadiStrugatzki = new Person("Arkadi", "Strugatzki", LocalDateTime.parse("1925-08-28"));
+    LocalDateTime published = LocalDateTime.parse("1971");
+    Book roadsidePicknic = new Book(arkadiStrugatzki, "Roadside Picknic", published);
 
     System.out.println("roadsidePicknic.toString()");
     System.out.println(roadsidePicknic.toString());

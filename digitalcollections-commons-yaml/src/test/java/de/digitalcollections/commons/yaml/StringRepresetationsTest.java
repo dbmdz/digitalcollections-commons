@@ -8,6 +8,7 @@ import org.junit.Test;
 import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
 import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
 import de.digitalcollections.commons.yaml.examples.Person;
+import org.joda.time.LocalDateTime;
 
 public class StringRepresetationsTest {
 
@@ -15,7 +16,7 @@ public class StringRepresetationsTest {
 
   @Before
   public void setUp() {
-    boris = new Person("Boris", "Strugatzki", DateTime.parse("1933-04-15"));
+    boris = new Person("Boris", "Strugatzki", LocalDateTime.parse("1933-04-15"));
   }
 
   @Test
@@ -25,7 +26,6 @@ public class StringRepresetationsTest {
 
   @Test
   public void shouldSerializeAndDeserialize() {
-    DateTime dateTime = DateTime.now();
     assertThat(fromStringRepresetation(stringRepresentationOf(boris))).isEqualToComparingFieldByField(boris);
   }
 

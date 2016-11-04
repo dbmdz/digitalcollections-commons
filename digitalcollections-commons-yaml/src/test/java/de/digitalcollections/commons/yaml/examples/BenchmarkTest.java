@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import de.digitalcollections.commons.yaml.StringRepresentations;
 import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
+import org.joda.time.LocalDateTime;
 
 public class BenchmarkTest {
 
@@ -13,8 +14,8 @@ public class BenchmarkTest {
 
   @Test
   public void benchmark() {
-    Person arkadiStrugatzki = new Person("Arkadi", "Strugatzki", DateTime.parse("1925-08-28"));
-    Book roadsidePicknic = new Book(arkadiStrugatzki, "Roadside Picknic", DateTime.parse("1971"));
+    Person arkadiStrugatzki = new Person("Arkadi", "Strugatzki", LocalDateTime.parse("1925-08-28"));
+    Book roadsidePicknic = new Book(arkadiStrugatzki, "Roadside Picknic", LocalDateTime.parse("1971"));
 
     int repeats = 3;
     int numberOfIterations = 5000;
