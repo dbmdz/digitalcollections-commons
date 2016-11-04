@@ -2,105 +2,174 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <parent>
-    <groupId>org.mdz.dzp</groupId>
-    <artifactId>mdz-dzp-parent</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
-  </parent>
-  
-  <groupId>org.mdz.dzp.commons</groupId>
-  <artifactId>mdz-dzp-commons</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <groupId>de.digitalcollections.commons</groupId>
+  <artifactId>digitalcollections-commons</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
     
-  <name>MDZ DZP Commons (Parent)</name>
+  <name>DigitalCollections Commons (Parent)</name>
   <description>
-    Parent für alle DZP Commons Projekte.
+    Parent for all DigitalCollections Commons projects.
   </description>
-  <url>http://bsbrepo.bsb.lrz.de/projects/mdz-dzp-commons</url>
+  <url>https://github.com/dbmdz/digitalcollections-commons</url>
 
   <modules>
-    <module>mdz-dzp-commons-xml</module>
-    <module>mdz-dzp-commons-yaml</module>
+    <module>digitalcollections-commons-xml</module>
+    <module>digitalcollections-commons-yaml</module>
   </modules>
   
-  <distributionManagement>
-    <site>
-      <id>website-projects</id>
-      <url>scp://bsbrepo.bsb.lrz.de/srv/www/htdocs/projects/mdz-dzp-commons</url>
-    </site>
-  </distributionManagement>
-
-  <scm>
-    <connection>scm:git:git@gitlab.lrz.de:mdz-dzp/mdz-dzp-commons.git</connection>
-    <developerConnection>scm:git:git@gitlab.lrz.de:mdz-dzp/mdz-dzp-commons.git</developerConnection>
-    <url>https://gitlab.lrz.de/mdz-dzp/mdz-dzp-commons</url>
-  </scm>
-  
-  <issueManagement>
-    <system>Jira</system>
-    <url>http://bsbrepo.bsb.lrz.de/jira/browse/DZP-108</url>
-  </issueManagement>
-  
-  <ciManagement>
-    <system>Jenkins CI</system>
-    <url>TODO</url>
-  </ciManagement>
+  <properties>
+    <!-- Build properties -->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    
+    <!-- Dependency versions -->
+    <version.assertj>3.5.2</version.assertj>
+    <version.joda-time>2.9.4</version.joda-time>
+    <version.junit>4.12</version.junit>
+    <version.slf4j>1.7.21</version.slf4j>
+    <version.snakeyaml>1.17</version.snakeyaml>
+        
+    <!-- Plugin versions -->
+    <version.jacoco-maven-plugin>0.7.7.201606060606</version.jacoco-maven-plugin>
+    <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
+    <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
+    <version.maven-javadoc-plugin>2.10.4</version.maven-javadoc-plugin>
+    <version.maven-source-plugin>3.0.1</version.maven-source-plugin>
+    <version.nexus-staging-maven-plugin>1.6.7</version.nexus-staging-maven-plugin>
+    <version.versions-maven-plugin>2.3</version.versions-maven-plugin>
+  </properties>
   
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${version.checkstyle-plugin}</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.mdz.dzp</groupId>
-            <artifactId>dzp-buildtools</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-          </dependency>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${version.checkstyle}</version>
-          </dependency>
-        </dependencies>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.maven-compiler-plugin}</version>
         <configuration>
-          <configLocation>dzp/buildtools/checkstyle.xml</configLocation>
-          <failOnViolation>false</failOnViolation>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${version.maven-javadoc-plugin}</version>
         <executions>
           <execution>
-            <id>checkstyle</id>
-            <phase>validate</phase>
+            <id>attach-javadocs</id>
             <goals>
-              <goal>check</goal>
-              <goal>checkstyle</goal>
+              <goal>jar</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
-    </plugins>
-  </build>
-
-  <reporting>
-    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${version.checkstyle-plugin}</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>checkstyle</report>
-            </reports>
-          </reportSet>
-        </reportSets>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${version.maven-source-plugin}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${version.versions-maven-plugin}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${version.jacoco-maven-plugin}</version>
+        <executions>
+          <execution>
+            <id>pre-unit-test</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>${version.nexus-staging-maven-plugin}</version>
+        <extensions>true</extensions>
         <configuration>
-          <configLocation>dzp/checkstyle/checkstyle.xml</configLocation>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
     </plugins>
+  </build>
+  
+  <developers>
+    <developer>
+      <name>Christoph Lorenz</name>
+      <email>christoph.lorenz@bsb-muenchen.de</email>
+      <id>clorenz</id>
+    </developer>
+    <developer>
+      <name>Johannes Baiter</name>
+      <email>johannes.baiter@bsb-muenchen.de</email>
+      <id>jbaiter</id>
+    </developer>
+    <developer>
+      <name>Marcus Bitzl</name>
+      <email>marcus@bitzl.me</email>
+      <id>bitzl</id>
+    </developer>
+    <developer>
+      <name>Ralf Eichinger</name>
+      <email>ralf.eichinger@gmail.com</email>
+      <id>datazuul</id>
+    </developer>
+  </developers>
+  
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://github.com/dbmdz/digitalcollections-core/blob/master/LICENSE.md</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${version.jacoco-maven-plugin}</version>
+      </plugin>
+    </plugins>
   </reporting>
+
+  <ciManagement>
+    <url>https://travis-ci.org/dbmdz/digitalcollections-commons</url>
+    <system>Travis CI</system>
+  </ciManagement>
+  <issueManagement>
+    <url>https://github.com/dbmdz/digitalcollections-commons/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
+
+  <scm>
+    <connection>https://github.com/dbmdz/digitalcollections-commons.git</connection>
+    <developerConnection>git@github.com:dbmdz/digitalcollections-commons.git</developerConnection>
+    <url>https://github.com/dbmdz/digitalcollections-commons</url>
+  </scm>  
 </project>
