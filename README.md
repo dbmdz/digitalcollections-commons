@@ -1,4 +1,6 @@
 # DigitalCollections Common Java Libraries
+[![Build Status](https://travis-ci.org/dbmdz/digitalcollections-commons.svg?branch=master)](https://travis-ci.org/dbmdz/digitalcollections-commons)
+
 
 ## DigitalCollections Commons XML
 
