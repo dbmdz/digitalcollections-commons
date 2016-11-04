@@ -19,7 +19,7 @@
     </layout>
   </appender>
   
-<!--  <logger name="org.mdz.dzp.commons.xml" additivity="false">
+<!--  <logger name="de.digitalcollections.commons.xml" additivity="false">
     <level value="info"/>   warn 
     <appender-ref ref="default.console"/>
   </logger>-->

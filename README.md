@@ -54,7 +54,7 @@ System.out.println(roadsidePicknic.toString());
 ```
 
 ```
-!!org.mdz.dzp.commons.yaml.examples.Book {author: {bornAt: !!timestamp '1925-08-27T23:00:00Z', firstName: Arkadi, lastName: Strugatzki}, published: !!timestamp '1970-12-31T23:00:00Z', title: Roadside Picknic}
+!!de.digitalcollections.commons.yaml.examples.Book {author: {bornAt: !!timestamp '1925-08-27T23:00:00Z', firstName: Arkadi, lastName: Strugatzki}, published: !!timestamp '1970-12-31T23:00:00Z', title: Roadside Picknic}
 ```
 
 Some Benchmarks on serialization speed. Shown is mean execution time of one toString() call (see source code for details):
