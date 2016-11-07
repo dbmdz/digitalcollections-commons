@@ -4,7 +4,7 @@
   
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>digitalcollections-commons</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>0-SNAPSHOT</version>
   <packaging>pom</packaging>
     
   <name>DigitalCollections Commons (Parent)</name>
