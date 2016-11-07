@@ -171,5 +171,29 @@
     <connection>https://github.com/dbmdz/digitalcollections-commons.git</connection>
     <developerConnection>git@github.com:dbmdz/digitalcollections-commons.git</developerConnection>
     <url>https://github.com/dbmdz/digitalcollections-commons</url>
-  </scm>  
+  </scm> 
+  
+  <profiles>
+    <profile>
+      <id>deploy</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${version.maven-gpg-plugin}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
