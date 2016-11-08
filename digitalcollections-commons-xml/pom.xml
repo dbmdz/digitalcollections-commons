@@ -10,7 +10,7 @@
   
   <artifactId>digitalcollections-commons-xml</artifactId>
   <packaging>jar</packaging>
-  <name>DigitalCollections Commons XML</name>
+  <name>DigitalCollections: Commons XML</name>
 
   <dependencies>
     <dependency>

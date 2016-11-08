@@ -8,7 +8,7 @@
   </parent>
   <artifactId>digitalcollections-commons-yaml</artifactId>
   <packaging>jar</packaging>
-  <name>DigitalCollections Commons YAML</name>
+  <name>DigitalCollections: Commons YAML</name>
   <dependencies>
     <dependency>
       <groupId>org.assertj</groupId>
