@@ -4,19 +4,17 @@
   
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>digitalcollections-commons</artifactId>
-  <version>0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
     
-  <name>DigitalCollections: Commons (Parent)</name>
-  <description>
-    Parent for all DigitalCollections Commons projects.
-  </description>
-  <url>https://github.com/dbmdz/digitalcollections-commons</url>
-
   <modules>
     <module>digitalcollections-commons-xml</module>
     <module>digitalcollections-commons-yaml</module>
   </modules>
+
+  <name>DigitalCollections: Commons (Parent)</name>
+  <description>Parent for all DigitalCollections Commons projects.</description>
+  <url>https://github.com/dbmdz/digitalcollections-commons</url>
   
   <properties>
     <!-- Build properties -->
@@ -116,7 +114,29 @@
       </plugin>
     </plugins>
   </build>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
   
+  <repositories>
+    <repository>
+      <id>ossrh-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
   <developers>
     <developer>
       <name>Christoph Lorenz</name>
