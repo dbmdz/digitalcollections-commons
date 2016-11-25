@@ -7,7 +7,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import de.digitalcollections.commons.xml.namespaces.MdzNamespaceContext;
+import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class XPathExpressionCache {
   public XPathExpressionCache() {
     cache = new ConcurrentHashMap();
     xpath = XPathFactory.newInstance().newXPath();
-    xpath.setNamespaceContext(new MdzNamespaceContext());
+    xpath.setNamespaceContext(new DigitalCollectionsNamespaceContext());
   }
 
   public XPathExpression get(String expression) {
@@ -56,7 +56,7 @@ public class XPathExpressionCache {
   public void setDefaultNamespace(String namespaceUri) {
     if (!xpath.getNamespaceContext().getNamespaceURI("").equals(namespaceUri)) {
       this.cache.clear();
-      xpath.setNamespaceContext(new MdzNamespaceContext(namespaceUri));
+      xpath.setNamespaceContext(new DigitalCollectionsNamespaceContext(namespaceUri));
     }
   }
 }

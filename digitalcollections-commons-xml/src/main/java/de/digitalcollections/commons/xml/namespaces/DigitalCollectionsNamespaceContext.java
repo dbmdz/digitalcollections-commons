@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
-public class MdzNamespaceContext implements NamespaceContext {
+public class DigitalCollectionsNamespaceContext implements NamespaceContext {
 
   public static final String TEI_NS_PREFIX = "tei";
   public static final String TEI_NS_URI = "http://www.tei-c.org/ns/1.0";
@@ -53,29 +53,29 @@ public class MdzNamespaceContext implements NamespaceContext {
 
   private final Map<String, String> namespaces;
 
-  public MdzNamespaceContext() {
+  public DigitalCollectionsNamespaceContext() {
     this(XMLConstants.NULL_NS_URI);
   }
 
-  public MdzNamespaceContext(String defaultURI) {
+  public DigitalCollectionsNamespaceContext(String defaultURI) {
 
     Map<String, String> map = new HashMap<>();
 
     map.put(XMLConstants.DEFAULT_NS_PREFIX, defaultURI);
     map.put(XMLConstants.XMLNS_ATTRIBUTE, XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
     map.put(XMLConstants.XML_NS_PREFIX, XMLConstants.XML_NS_URI);
-    map.put(MdzNamespaceContext.TEI_NS_PREFIX, MdzNamespaceContext.TEI_NS_URI);
-    map.put(MdzNamespaceContext.DC_NS_PREFIX, MdzNamespaceContext.DC_NS_URI);
-    map.put(MdzNamespaceContext.OAI_DC_NS_PREFIX, MdzNamespaceContext.OAI_DC_NS_URI);
-    map.put(MdzNamespaceContext.OAI_NS_PREFIX, MdzNamespaceContext.OAI_NS_URI);
-    map.put(MdzNamespaceContext.XSI_NS_PREFIX, MdzNamespaceContext.XSI_NS_URI);
-    map.put(MdzNamespaceContext.ATOM_NS_PREFIX, MdzNamespaceContext.ATOM_NS_URI);
-    map.put(MdzNamespaceContext.FOXML_NS_PREFIX, MdzNamespaceContext.FOXML_NS_URI);
-    map.put(MdzNamespaceContext.SVG_NS_PREFIX, MdzNamespaceContext.SVG_NS_URI);
-    map.put(MdzNamespaceContext.XLINK_NS_PREFIX, MdzNamespaceContext.XLINK_NS_URI);
-    map.put(MdzNamespaceContext.MDZ2_NS_PREFIX, MdzNamespaceContext.MDZ2_NS_URI);
-    map.put(MdzNamespaceContext.BAV_NS_PREFIX, MdzNamespaceContext.BAV_NS_URI);
-    map.put(MdzNamespaceContext.RDF_NS_PREFIX, MdzNamespaceContext.RDF_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.TEI_NS_PREFIX, DigitalCollectionsNamespaceContext.TEI_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.DC_NS_PREFIX, DigitalCollectionsNamespaceContext.DC_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.OAI_DC_NS_PREFIX, DigitalCollectionsNamespaceContext.OAI_DC_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.OAI_NS_PREFIX, DigitalCollectionsNamespaceContext.OAI_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.XSI_NS_PREFIX, DigitalCollectionsNamespaceContext.XSI_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.ATOM_NS_PREFIX, DigitalCollectionsNamespaceContext.ATOM_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.FOXML_NS_PREFIX, DigitalCollectionsNamespaceContext.FOXML_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.SVG_NS_PREFIX, DigitalCollectionsNamespaceContext.SVG_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.XLINK_NS_PREFIX, DigitalCollectionsNamespaceContext.XLINK_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.MDZ2_NS_PREFIX, DigitalCollectionsNamespaceContext.MDZ2_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.BAV_NS_PREFIX, DigitalCollectionsNamespaceContext.BAV_NS_URI);
+    map.put(DigitalCollectionsNamespaceContext.RDF_NS_PREFIX, DigitalCollectionsNamespaceContext.RDF_NS_URI);
 
     this.namespaces = Collections.unmodifiableMap(map);
   }
@@ -127,6 +127,5 @@ public class MdzNamespaceContext implements NamespaceContext {
     }
     return Collections.unmodifiableList(prefixes).iterator();
   }
-
 
 }

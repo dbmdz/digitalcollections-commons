@@ -2,7 +2,7 @@ package de.digitalcollections.commons.xml.sax;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.sax.TransformerHandler;
-import de.digitalcollections.commons.xml.namespaces.MdzNamespaceContext;
+import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceContext;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -20,7 +20,7 @@ public class AbstractContentHandler implements ContentHandler {
    * Instantiates a new abstract content handler.
    */
   public AbstractContentHandler() {
-    this.namespaceContext = new MdzNamespaceContext();
+    this.namespaceContext = new DigitalCollectionsNamespaceContext();
   }
 
   /**
