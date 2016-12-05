@@ -76,6 +76,10 @@ public class XPathWrapper {
     return nodeList.item(index);
   }
 
+  public Node asNode(Node node, String xpath) throws XPathExpressionException {
+    return (Node) this.evaluateXpath(node, xpath, XPathConstants.NODE);
+  }
+
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as NodeList.
    *
