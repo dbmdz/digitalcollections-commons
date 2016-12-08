@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import javax.xml.namespace.QName;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -16,7 +15,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
@@ -57,9 +55,8 @@ public class XPathWrapper {
    *
    * @param xpath the xpath
    * @return the node
-   * @throws XPathExpressionException the x path expression exception
    */
-  public Node asNode(String xpath) throws XPathExpressionException {
+  public Node asNode(String xpath) {
     return this.asNode(xpath, 0);
   }
 
@@ -69,14 +66,13 @@ public class XPathWrapper {
    * @param xpath the xpath
    * @param index the index
    * @return the node
-   * @throws XPathExpressionException the x path expression exception
    */
-  public Node asNode(String xpath, int index) throws XPathExpressionException {
+  public Node asNode(String xpath, int index) {
     NodeList nodeList = (NodeList) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NODESET);
     return nodeList.item(index);
   }
 
-  public Node asNode(Node node, String xpath) throws XPathExpressionException {
+  public Node asNode(Node node, String xpath) {
     return (Node) this.evaluateXpath(node, xpath, XPathConstants.NODE);
   }
 
@@ -85,13 +81,12 @@ public class XPathWrapper {
    *
    * @param xpath the xpath
    * @return the node list
-   * @throws XPathExpressionException the x path expression exception
    */
-  public NodeList asNodeList(String xpath) throws XPathExpressionException {
+  public NodeList asNodeList(String xpath) {
     return (NodeList) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NODESET);
   }
 
-  public NodeList asNodeList(Node node, String xpath) throws XPathExpressionException {
+  public NodeList asNodeList(Node node, String xpath) {
     return (NodeList) this.evaluateXpath(node, xpath, XPathConstants.NODESET);
   }
 
@@ -100,9 +95,8 @@ public class XPathWrapper {
    *
    * @param xpath the xpath
    * @return the list
-   * @throws XPathExpressionException the x path expression exception
    */
-  public List<Node> asListOfNodes(String xpath) throws XPathExpressionException {
+  public List<Node> asListOfNodes(String xpath) {
     NodeList nodeList = this.asNodeList(xpath);
     List<Node> list = new ArrayList<>(nodeList.getLength());
     for (int i = 0, l = nodeList.getLength(); i < l; i++) {
@@ -117,9 +111,8 @@ public class XPathWrapper {
    * @param node the subnode
    * @param xpath the xpath
    * @return the list
-   * @throws XPathExpressionException the x path expression exception
    */
-  public List<Node> asListOfNodes(Node node, String xpath) throws XPathExpressionException {
+  public List<Node> asListOfNodes(Node node, String xpath) {
     NodeList nodeList = this.asNodeList(node, xpath);
     List<Node> list = new ArrayList<>(nodeList.getLength());
     for (int i = 0, l = nodeList.getLength(); i < l; i++) {
@@ -133,15 +126,14 @@ public class XPathWrapper {
    *
    * @param xpath the xpath
    * @return the list
-   * @throws XPathExpressionException the x path expression exception
    */
-  public List<String> asListOfStrings(String xpath) throws XPathExpressionException {
+  public List<String> asListOfStrings(String xpath) {
     NodeList nodeList = this.asNodeList(xpath);
     List<String> list = nodeListContentsToListOfStrings(nodeList);
     return list;
   }
 
-  public List<String> asListOfStrings(Node node, String xpath) throws XPathExpressionException {
+  public List<String> asListOfStrings(Node node, String xpath) {
     NodeList nodeList = this.asNodeList(node, xpath);
     List<String> list = nodeListContentsToListOfStrings(nodeList);
     return list;
@@ -165,9 +157,8 @@ public class XPathWrapper {
    *
    * @param xpath the xpath
    * @return the string
-   * @throws XPathExpressionException the x path expression exception
    */
-  public String asString(String xpath) throws XPathExpressionException {
+  public String asString(String xpath) {
     final String rawString = (String) evaluateXpath(this.getDocument(), xpath, XPathConstants.STRING);
     if (rawString == null) {
       return "";
@@ -175,7 +166,7 @@ public class XPathWrapper {
     return rawString.trim();
   }
 
-  public String asString(Node node, String xpath) throws XPathExpressionException {
+  public String asString(Node node, String xpath) {
     final String rawString = (String) evaluateXpath(node, xpath, XPathConstants.STRING);
     if (rawString == null) {
       return "";
@@ -183,8 +174,13 @@ public class XPathWrapper {
     return rawString.trim();
   }
 
-  private Object evaluateXpath(Node node, String xpath, QName returnType) throws XPathExpressionException {
-    return this.getXpathExpression(xpath).evaluate(node, returnType);
+  private Object evaluateXpath(Node node, String xpath, QName returnType)  {
+    XPathExpression expr = this.getXpathExpression(xpath);
+    try {
+      return expr.evaluate(node, returnType);
+    } catch (XPathExpressionException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 
   /**
@@ -192,9 +188,8 @@ public class XPathWrapper {
    *
    * @param xpath the xpath
    * @return the boolean
-   * @throws XPathExpressionException the x path expression exception
    */
-  public Boolean asBoolean(String xpath) throws XPathExpressionException {
+  public Boolean asBoolean(String xpath) {
     final String value = (String) evaluateXpath(this.getDocument(), xpath, XPathConstants.STRING);
     return Boolean.parseBoolean(value);
   }
@@ -204,9 +199,8 @@ public class XPathWrapper {
    *
    * @param xpath the xpath
    * @return the number
-   * @throws XPathExpressionException the x path expression exception
    */
-  public Number asNumber(String xpath) throws XPathExpressionException {
+  public Number asNumber(String xpath) {
     return (Number) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NUMBER);
   }
   
@@ -215,17 +209,16 @@ public class XPathWrapper {
    * @param node the start node
    * @param relativeXpath the relative xpath
    * @return
-   * @throws XPathExpressionException 
    */
-  public Node getRelativeNode(Node node, String relativeXpath) throws XPathExpressionException {
+  public Node getRelativeNode(Node node, String relativeXpath) {
     if (!relativeXpath.startsWith(".")) {
-      throw new XPathExpressionException("Relative node '" + relativeXpath + "' below '" + getFullXPath(node) + "' must start with a period! ");
+      throw new IllegalArgumentException(String.format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
     }
 
     List<Node> nodes = asListOfNodes(node, relativeXpath);
 
     if (nodes == null || nodes.isEmpty()) {
-      LOGGER.info("No relative node found for " + getFullXPath(node) + " and relative path=" + relativeXpath);
+      LOGGER.info("No relative node found for {} and relative path={}", getFullXPath(node), relativeXpath);
       return null;
     }
     return nodes.get(0);
@@ -253,7 +246,7 @@ public class XPathWrapper {
     return document;
   }
 
-  private XPathExpression getXpathExpression(String xpath) throws XPathExpressionException {
+  private XPathExpression getXpathExpression(String xpath) {
     return expressionCache.get(xpath);
   }
   
