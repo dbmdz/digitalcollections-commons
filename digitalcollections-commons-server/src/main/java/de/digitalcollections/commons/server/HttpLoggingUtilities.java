@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import net.logstash.logback.marker.LogstashMarker;
 import static net.logstash.logback.marker.Markers.append;
 import static net.logstash.logback.marker.Markers.appendArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpLoggingUtilities {
+  private static Logger LOGGER = LoggerFactory.getLogger(HttpLoggingUtilities.class);
   private static DatabaseReader geoIpDatabase = null;
 
   static {
@@ -19,11 +22,11 @@ public class HttpLoggingUtilities {
       InputStream dbStream = HttpLoggingUtilities.class.getResourceAsStream("/geolite2/GeoLite2-City.mmdb");
       geoIpDatabase = new DatabaseReader.Builder(dbStream).build();
     } catch (IOException e) {
-      // NOP, Leave at null
+      LOGGER.error("Could not open GeoIP database", e);
     }
   }
 
-  public static LogstashMarker makeRequestLoggingMarker(HttpServletRequest request) throws IOException {
+  public static LogstashMarker makeRequestLoggingMarker(HttpServletRequest request) {
     String protocol = request.getHeader("X-Forwarded-Proto");
     if (protocol == null) {
       protocol = request.getProtocol();
@@ -38,13 +41,13 @@ public class HttpLoggingUtilities {
         .and(append("protocol", protocol))
         .and(append("referer", request.getHeader("Referer")));
 
-    InetAddress clientIp = InetAddress.getByName(ipString);
     try {
+      InetAddress clientIp = InetAddress.getByName(ipString);
       final Location clientLocation = geoIpDatabase.city(clientIp).getLocation();
       marker.and(append("ipLatitude", clientLocation.getLatitude()))
           .and(append("ipLongitude", clientLocation.getLongitude()));
-    } catch (GeoIp2Exception e) {
-      // NOP, do nothing
+    } catch (GeoIp2Exception | IOException e) {
+      LOGGER.error("Could not retrieve geo information for IP {}", ipString, e);
     }
 
     return marker;
