@@ -4,12 +4,13 @@
   
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>digitalcollections-commons</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
     
   <modules>
     <module>digitalcollections-commons-xml</module>
     <module>digitalcollections-commons-yaml</module>
+    <module>digitalcollections-commons-server</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
@@ -25,8 +26,12 @@
     
     <!-- Dependency versions -->
     <version.assertj>3.5.2</version.assertj>
+    <version.geoip>2.8.0</version.geoip>
     <version.joda-time>2.9.4</version.joda-time>
     <version.junit>4.12</version.junit>
+    <version.logback>1.1.7</version.logback>
+    <version.logstash>4.7</version.logstash>
+    <version.servlet-api>3.1.0</version.servlet-api>
     <version.slf4j>1.7.21</version.slf4j>
     <version.snakeyaml>1.17</version.snakeyaml>
         
