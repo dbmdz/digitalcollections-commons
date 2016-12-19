@@ -36,10 +36,10 @@ public class HttpLoggingUtilities {
       ipString = request.getRemoteAddr();
     }
     LogstashMarker marker = appendArray("anonymizedClientIp",
-                                        ipString.replaceAll("(\\d+)\\.(\\d+)\\..*", "\1.\2"))
-        .and(append("userAgent", request.getHeader("User-Agent")))
-        .and(append("protocol", protocol))
-        .and(append("referer", request.getHeader("Referer")));
+        ipString.replaceAll("(\\d+)\\.(\\d+)\\..*", "\1.\2"))
+            .and(append("userAgent", request.getHeader("User-Agent")))
+            .and(append("protocol", protocol))
+            .and(append("referer", request.getHeader("Referer")));
 
     try {
       InetAddress clientIp = InetAddress.getByName(ipString);
@@ -47,7 +47,7 @@ public class HttpLoggingUtilities {
       marker.and(append("ipLatitude", clientLocation.getLatitude()))
           .and(append("ipLongitude", clientLocation.getLongitude()));
     } catch (GeoIp2Exception | IOException e) {
-      LOGGER.error("Could not retrieve geo information for IP {}", ipString, e);
+      LOGGER.warn("Could not retrieve geo information for IP {}", ipString);
     }
 
     return marker;
