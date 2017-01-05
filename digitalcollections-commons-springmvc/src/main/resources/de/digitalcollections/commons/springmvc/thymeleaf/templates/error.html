@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="base">
+  <body>
+    <section layout:fragment="content">
+      <h1 th:text="#{error.title}">Fehler</h1>
+      <div class="well">    
+        <th:block th:if="#{errorCode != null}" >
+          <span th:text="#{error.DEFAULT_MESSAGE}">Error Message</span>
+          <p/>
+          <span th:text="#{error.errorCode}">Error code</span> <b th:if="${errorCode}" th:text="${errorCode}">Error code</b> <span th:text="${timestamp}">13.12.2014 15:30:00.123</span>
+        </th:block>
+        <p th:if="${exception}" th:text="${exception.message}">Exception message</p>
+        <p th:if="${exception}" th:text="${exception.class}">Exception class</p>
+      </div>
+    </section>
+  </body>
+</html>
