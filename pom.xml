@@ -28,6 +28,7 @@
     <!-- Dependency versions -->
     <version.assertj>3.5.2</version.assertj>
     <version.geoip>2.8.0</version.geoip>
+    <version.hamcrest-core>1.3</version.hamcrest-core>
     <version.joda-time>2.9.4</version.joda-time>
     <version.junit>4.12</version.junit>
     <version.logback>1.1.7</version.logback>
@@ -91,6 +92,12 @@
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>${version.assertj}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>${version.hamcrest-core}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.yaml</groupId>
