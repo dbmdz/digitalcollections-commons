@@ -25,8 +25,10 @@ public class CurrentUrlAsModelAttributeHandlerInterceptor extends HandlerInterce
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
           throws Exception {
-    String currentUrl = getCurrentUrl(request);
-    modelAndView.addObject("currentUrl", currentUrl);
+    if (modelAndView != null) {
+      String currentUrl = getCurrentUrl(request);
+      modelAndView.addObject("currentUrl", currentUrl);
+    }
   }
 
   private String getCurrentUrl(HttpServletRequest request) {
