@@ -33,8 +33,9 @@ public class TokenAuthenticationServiceTest {
   }
 
   @Test
-  public void testTimedOutAuthentication() {
+  public void testTimedOutAuthentication() throws InterruptedException {
     TokenAuthenticationService service = new TokenAuthenticationService("this.is.a.test.secret", 50);
+    Thread.sleep(300);
     String token = obtainToken(service);
     HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
     when(mockRequest.getHeader(anyString())).thenReturn(token);
