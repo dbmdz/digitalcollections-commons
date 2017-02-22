@@ -28,13 +28,14 @@ import org.w3c.dom.NodeList;
  * Provides a lightweight wrapper around the Document class to make XPath queries less painful and verbose.
  */
 public class XPathWrapper {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathWrapper.class);
   private Document document;
 
   private XPathExpressionCache expressionCache;
 
-  private XPathWrapper() {}
+  private XPathWrapper() {
+  }
 
   public XPathWrapper(Document document, XPathExpressionCache expressionCache) {
     this.document = document;
@@ -104,7 +105,7 @@ public class XPathWrapper {
     }
     return list;
   }
-  
+
   /**
    * Gets a fraction of the document by a xPath-Expression xpath as a List of Nodes of a subnode
    *
@@ -174,7 +175,7 @@ public class XPathWrapper {
     return rawString.trim();
   }
 
-  private Object evaluateXpath(Node node, String xpath, QName returnType)  {
+  private Object evaluateXpath(Node node, String xpath, QName returnType) {
     XPathExpression expr = this.getXpathExpression(xpath);
     try {
       return expr.evaluate(node, returnType);
@@ -203,16 +204,18 @@ public class XPathWrapper {
   public Number asNumber(String xpath) {
     return (Number) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NUMBER);
   }
-  
+
   /**
    * Returns a node, starting for a start node, identified by a relative path
+   *
    * @param node the start node
    * @param relativeXpath the relative xpath
-   * @return
+   * @return relative node
    */
   public Node getRelativeNode(Node node, String relativeXpath) {
     if (!relativeXpath.startsWith(".")) {
-      throw new IllegalArgumentException(String.format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
+      throw new IllegalArgumentException(String.
+              format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
     }
 
     List<Node> nodes = asListOfNodes(node, relativeXpath);
@@ -249,22 +252,23 @@ public class XPathWrapper {
   private XPathExpression getXpathExpression(String xpath) {
     return expressionCache.get(xpath);
   }
-  
-  
+
   /**
    * Helper method to dump the full xpath of a node
+   *
    * @param n The node
    * @return String represenation of the full xpath of the node
    */
   public String getFullXPath(Node n) {
     // abort early
-    if (null == n)
+    if (null == n) {
       return null;
+    }
 
     // declarations
     Node parent = null;
-    Stack<Node> hierarchy = new Stack<Node>();
-    StringBuffer buffer = new StringBuffer();
+    Stack<Node> hierarchy = new Stack<>();
+    StringBuilder buffer = new StringBuilder();
 
     // push element on stack
     hierarchy.push(n);
@@ -313,11 +317,11 @@ public class XPathWrapper {
             // see if the element has a name or id attribute
             if (e.hasAttribute("id")) {
               // id attribute found - use that
-              buffer.append("[@id='" + e.getAttribute("id") + "']");
+              buffer.append("[@id='").append(e.getAttribute("id")).append("']");
               handled = true;
             } else if (e.hasAttribute("name")) {
               // name attribute found - use that
-              buffer.append("[@name='" + e.getAttribute("name") + "']");
+              buffer.append("[@name='").append(e.getAttribute("name")).append("']");
               handled = true;
             }
           }
@@ -329,13 +333,13 @@ public class XPathWrapper {
             while (null != prev_sibling) {
               if (prev_sibling.getNodeType() == node.getNodeType()) {
                 if (prev_sibling.getNodeName().equalsIgnoreCase(
-                    node.getNodeName())) {
+                        node.getNodeName())) {
                   prev_siblings++;
                 }
               }
               prev_sibling = prev_sibling.getPreviousSibling();
             }
-            buffer.append("[" + prev_siblings + "]");
+            buffer.append("[").append(prev_siblings).append("]");
           }
         }
       } else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
@@ -346,7 +350,5 @@ public class XPathWrapper {
     // return buffer
     return buffer.toString();
   }
-
-
 
 }
