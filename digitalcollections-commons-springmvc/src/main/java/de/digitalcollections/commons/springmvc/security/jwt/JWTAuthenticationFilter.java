@@ -1,8 +1,6 @@
 package de.digitalcollections.commons.springmvc.security.jwt;
 
 import java.io.IOException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -15,12 +13,8 @@ import org.springframework.web.filter.GenericFilterBean;
 public class JWTAuthenticationFilter extends GenericFilterBean {
   private TokenAuthenticationService service;
 
-  public JWTAuthenticationFilter(String secret) {
-    this.service = new TokenAuthenticationService(secret);
-  }
-
-  public JWTAuthenticationFilter(PrivateKey privateKey, PublicKey publicKey) {
-    this.service = new TokenAuthenticationService(privateKey, publicKey);
+  public JWTAuthenticationFilter(TokenAuthenticationService service) {
+    this.service = service;
   }
 
   @Override

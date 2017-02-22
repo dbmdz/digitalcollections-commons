@@ -3,7 +3,6 @@ package de.digitalcollections.commons.springmvc.security.jwt;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.security.PublicKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,16 +17,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
   private TokenAuthenticationService tokenAuthenticationService;
 
-  public JWTLoginFilter(String route, AuthenticationManager authenticationManager, String secret) {
+  public JWTLoginFilter(String route, AuthenticationManager authenticationManager, TokenAuthenticationService service) {
     super(new AntPathRequestMatcher(route));
     setAuthenticationManager(authenticationManager);
-    tokenAuthenticationService = new TokenAuthenticationService(secret);
-  }
-
-  public JWTLoginFilter(String route, AuthenticationManager authenticationManager, PublicKey publicKey) {
-    super(new AntPathRequestMatcher(route));
-    setAuthenticationManager(authenticationManager);
-    tokenAuthenticationService = new TokenAuthenticationService(publicKey);
+    tokenAuthenticationService = service;
   }
 
   @Override
