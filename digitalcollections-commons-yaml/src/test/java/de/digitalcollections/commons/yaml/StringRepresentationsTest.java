@@ -8,7 +8,7 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StringRepresetationsTest {
+public class StringRepresentationsTest {
 
   private Person boris;
 
