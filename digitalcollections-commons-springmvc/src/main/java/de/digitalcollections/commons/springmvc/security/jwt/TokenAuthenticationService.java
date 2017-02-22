@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 
 public class TokenAuthenticationService {
+
   private final String TOKEN_PREFIX = "Bearer";
   private final String HEADER_KEY = "Authorization";
 
@@ -25,15 +26,19 @@ public class TokenAuthenticationService {
 
   /**
    * Configure the service with a string secret.
+   *
+   * @param secret a secret
    */
   public TokenAuthenticationService(String secret) {
     this.secret = secret;
   }
 
   /**
-   *  Configure the service with a public/private key pair.
-   *  The pair must have been generated with the RSA cipher, e.g. with `keytool`:
-   *  $ keytool -keyalg RSA -keystore my-keystore.jks -genkeypair
+   * Configure the service with a public/private key pair. The pair must have been generated with the RSA cipher, e.g.
+   * with `keytool`: $ keytool -keyalg RSA -keystore my-keystore.jks -genkeypair
+   *
+   * @param privateKey the private key
+   * @param publicKey the public key
    */
   public TokenAuthenticationService(PrivateKey privateKey, PublicKey publicKey) {
     this.privateKey = privateKey;
@@ -41,10 +46,11 @@ public class TokenAuthenticationService {
   }
 
   /**
-   * Configure the service with a public key.
-   * This has the effect that the service can no longer issue tokens, but only verify them.
-   * Can be useful in scenarios where a single entity is issuing tokens and services that wish to authenticate users
-   * do not have access to the secret key.
+   * Configure the service with a public key. This has the effect that the service can no longer issue tokens, but only
+   * verify them. Can be useful in scenarios where a single entity is issuing tokens and services that wish to
+   * authenticate users do not have access to the secret key.
+   *
+   * @param publicKey the public key
    */
   public TokenAuthenticationService(PublicKey publicKey) {
     this.publicKey = publicKey;
@@ -61,14 +67,15 @@ public class TokenAuthenticationService {
 
   public void addAuthentication(HttpServletResponse response, String username) {
     if (privateKey != null && !privateKey.getAlgorithm().equals("RSA")) {
-      throw new RuntimeException(String.format("Private Key must use RSA cipher, but uses %s", privateKey.getAlgorithm()));
+      throw new RuntimeException(String.
+              format("Private Key must use RSA cipher, but uses %s", privateKey.getAlgorithm()));
     }
     if ((secret == null || secret.isEmpty()) && privateKey == null) {
       throw new RuntimeException("Cannot issue tokens due to missing secret or private key.");
     }
     JwtBuilder builder = Jwts.builder()
-        .setSubject(username)
-        .setExpiration(Date.from(Instant.now().plusMillis(expirationTime)));
+            .setSubject(username)
+            .setExpiration(Date.from(Instant.now().plusMillis(expirationTime)));
     if (privateKey != null) {
       builder.signWith(SignatureAlgorithm.RS512, privateKey);
     } else {
@@ -92,9 +99,9 @@ public class TokenAuthenticationService {
         parser.setSigningKey(secret);
       }
       username = parser
-          .parseClaimsJws(token)
-          .getBody()
-          .getSubject();
+              .parseClaimsJws(token)
+              .getBody()
+              .getSubject();
     } catch (ExpiredJwtException ignored) {
     }
     if (username != null) {

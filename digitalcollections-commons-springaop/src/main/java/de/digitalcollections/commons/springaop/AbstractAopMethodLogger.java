@@ -90,9 +90,9 @@ public abstract class AbstractAopMethodLogger {
   /**
    * Logs duration of join points. Logging is only active if {@link #logger} is at minimum debug level.
    *
-   * @param call
-   * @return
-   * @throws Throwable
+   * @param call a proceeding joinpoint
+   * @return the next advice or target method invocation
+   * @throws Throwable if error in proceeding
    */
   @Around("methodsToBeLogged()")
   public Object logMethodDuration(ProceedingJoinPoint call) throws Throwable { // NOSONAR
