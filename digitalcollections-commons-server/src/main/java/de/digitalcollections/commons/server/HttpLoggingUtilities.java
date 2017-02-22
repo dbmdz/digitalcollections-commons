@@ -16,7 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpLoggingUtilities {
-  private static Logger LOGGER = LoggerFactory.getLogger(HttpLoggingUtilities.class);
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(HttpLoggingUtilities.class);
   private static DatabaseReader geoIpDatabase = null;
 
   static {
@@ -28,8 +29,13 @@ public class HttpLoggingUtilities {
     }
   }
 
-  /** From http://codereview.stackexchange.com/a/65072 **/
-  private static boolean isValidPublicIp(String ip) {
+  /**
+   * From http://codereview.stackexchange.com/a/65072
+   *
+   * @param ip IP to check
+   * @return true if IP is a valid public IP
+   */
+  public static boolean isValidPublicIp(String ip) {
     Inet4Address address;
     try {
       address = (Inet4Address) InetAddress.getByName(ip);
@@ -37,10 +43,10 @@ public class HttpLoggingUtilities {
       return false; // assuming no logging, exception handling required
     }
     return !(address.isSiteLocalAddress()
-        || address.isAnyLocalAddress()
-        || address.isLinkLocalAddress()
-        || address.isLoopbackAddress()
-        || address.isMulticastAddress());
+            || address.isAnyLocalAddress()
+            || address.isLinkLocalAddress()
+            || address.isLoopbackAddress()
+            || address.isMulticastAddress());
   }
 
   public static LogstashMarker makeRequestLoggingMarker(HttpServletRequest request) {
@@ -53,7 +59,7 @@ public class HttpLoggingUtilities {
       ipString = request.getRemoteAddr();
     }
     LogstashMarker marker = appendArray("anonymizedClientIp",
-        ipString.replaceAll("(\\d+)\\.(\\d+)\\..*", "\1.\2"))
+            ipString.replaceAll("(\\d+)\\.(\\d+)\\..*", "\1.\2"))
             .and(append("userAgent", request.getHeader("User-Agent")))
             .and(append("protocol", protocol))
             .and(append("referer", request.getHeader("Referer")));
@@ -63,7 +69,7 @@ public class HttpLoggingUtilities {
         InetAddress clientIp = InetAddress.getByName(ipString);
         final Location clientLocation = geoIpDatabase.city(clientIp).getLocation();
         marker.and(append("ipLatitude", clientLocation.getLatitude()))
-            .and(append("ipLongitude", clientLocation.getLongitude()));
+                .and(append("ipLongitude", clientLocation.getLongitude()));
       } catch (GeoIp2Exception | IOException e) {
         LOGGER.warn("Could not retrieve geo information for IP {}", ipString);
       }
