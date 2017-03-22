@@ -35,7 +35,7 @@ public class HttpLoggingUtilities {
    * @param ip IP to check
    * @return true if IP is a valid public IP
    */
-  public static boolean isValidPublicIp(String ip) {
+  protected static boolean isValidPublicIp(String ip) {
     Inet4Address address;
     try {
       address = (Inet4Address) InetAddress.getByName(ip);
@@ -49,6 +49,10 @@ public class HttpLoggingUtilities {
             || address.isMulticastAddress());
   }
 
+  protected static String anonymizeIp(String ip) {
+    return ip.replaceAll("(\\d+)\\.(\\d+)\\..*", "$1.$2");
+  }
+
   public static LogstashMarker makeRequestLoggingMarker(HttpServletRequest request) {
     String protocol = request.getHeader("X-Forwarded-Proto");
     if (protocol == null) {
@@ -58,8 +62,7 @@ public class HttpLoggingUtilities {
     if (ipString == null) {
       ipString = request.getRemoteAddr();
     }
-    LogstashMarker marker = appendArray("anonymizedClientIp",
-            ipString.replaceAll("(\\d+)\\.(\\d+)\\..*", "\1.\2"))
+    LogstashMarker marker = appendArray("anonymizedClientIp", anonymizeIp(ipString))
             .and(append("userAgent", request.getHeader("User-Agent")))
             .and(append("protocol", protocol))
             .and(append("referer", request.getHeader("Referer")));
