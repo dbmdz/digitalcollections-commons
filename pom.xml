@@ -36,6 +36,7 @@
     <version.junit>4.12</version.junit>
     <version.logback>1.1.9</version.logback>
     <version.logstash>4.7</version.logstash>
+    <version.mockito-java8>2.0.1</version.mockito-java8>
     <version.servlet-api>3.1.0</version.servlet-api>
     <version.slf4j>1.7.22</version.slf4j>
     <version.snakeyaml>1.17</version.snakeyaml>
@@ -81,7 +82,8 @@
       <dependency>
         <groupId>info.solidsoft.mockito</groupId>
         <artifactId>mockito-java8</artifactId>
-        <version>2.0.1</version>
+        <version>${version.mockito-java8}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>io.jsonwebtoken</groupId>
