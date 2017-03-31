@@ -11,7 +11,6 @@ import java.net.UnknownHostException;
 import javax.servlet.http.HttpServletRequest;
 import net.logstash.logback.marker.LogstashMarker;
 import static net.logstash.logback.marker.Markers.append;
-import static net.logstash.logback.marker.Markers.appendArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +35,9 @@ public class HttpLoggingUtilities {
    * @return true if IP is a valid public IP
    */
   protected static boolean isValidPublicIp(String ip) {
-    Inet4Address address;
+    InetAddress address;
     try {
-      address = (Inet4Address) InetAddress.getByName(ip);
+      address = Inet4Address.getByName(ip);
     } catch (UnknownHostException exception) {
       return false; // assuming no logging, exception handling required
     }
@@ -62,7 +61,7 @@ public class HttpLoggingUtilities {
     if (ipString == null) {
       ipString = request.getRemoteAddr();
     }
-    LogstashMarker marker = appendArray("anonymizedClientIp", anonymizeIp(ipString))
+    LogstashMarker marker = append("anonymizedClientIp", anonymizeIp(ipString))
             .and(append("userAgent", request.getHeader("User-Agent")))
             .and(append("protocol", protocol))
             .and(append("referer", request.getHeader("Referer")));
