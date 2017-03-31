@@ -27,6 +27,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
@@ -38,7 +42,6 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.7.6</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -63,12 +66,6 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.logstash.logback</groupId>
-      <artifactId>logstash-logback-encoder</artifactId>
-      <version>4.8</version>
-      <type>jar</type>
     </dependency>
   </dependencies>
 </project>
