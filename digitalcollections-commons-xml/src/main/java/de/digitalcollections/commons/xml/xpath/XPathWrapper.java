@@ -205,17 +205,10 @@ public class XPathWrapper {
     return (Number) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NUMBER);
   }
 
-  /**
-   * Returns a node, starting for a start node, identified by a relative path
-   *
-   * @param node the start node
-   * @param relativeXpath the relative xpath
-   * @return relative node
-   */
-  public Node getRelativeNode(Node node, String relativeXpath) {
+  public List<Node> getRelativeNodes(Node node, String relativeXpath) {
     if (!relativeXpath.startsWith(".")) {
       throw new IllegalArgumentException(String.
-              format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
+          format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
     }
 
     List<Node> nodes = asListOfNodes(node, relativeXpath);
@@ -224,7 +217,18 @@ public class XPathWrapper {
       LOGGER.info("No relative node found for {} and relative path={}", getFullXPath(node), relativeXpath);
       return null;
     }
-    return nodes.get(0);
+    return nodes;
+  }
+
+  /**
+   * Returns a node, starting for a start node, identified by a relative path
+   *
+   * @param node the start node
+   * @param relativeXpath the relative xpath
+   * @return relative node
+   */
+  public Node getRelativeNode(Node node, String relativeXpath) {
+    return getRelativeNodes(node, relativeXpath).get(0);
   }
 
   /**
