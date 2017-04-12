@@ -5,7 +5,6 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.record.Location;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +36,7 @@ public class HttpLoggingUtilities {
   protected static boolean isValidPublicIp(String ip) {
     InetAddress address;
     try {
-      address = Inet4Address.getByName(ip);
+      address = InetAddress.getByName(ip);
     } catch (UnknownHostException exception) {
       return false; // assuming no logging, exception handling required
     }
