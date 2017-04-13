@@ -27,4 +27,9 @@ public class StringRepresentationsTest {
     assertThat(fromStringRepresetation(stringRepresentationOf(boris))).isEqualToComparingFieldByField(boris);
   }
 
+  @Test
+  public void stringRepresentationOfNullShould() {
+    System.out.println(stringRepresentationOf(null));
+  }
+
 }

@@ -24,8 +24,13 @@ public class StringRepresentations {
    * @return A YAML string representing the object in its current state.
    */
   public static String stringRepresentationOf(Object object) {
-    String string = YAML.dump(object);
-    return string.substring(0, string.length() - 1);
+    try {
+      String string = YAML.dump(object);
+      return string.substring(0, string.length() - 1);
+    }
+    catch (Exception e) {
+      return object.toString();
+    }
   }
 
   public static Object fromStringRepresetation(String string) {
