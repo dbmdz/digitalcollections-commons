@@ -4,6 +4,12 @@
 [![codebeat badge](https://codebeat.co/badges/08e3152b-27a2-46e2-8f3d-23cd3e6e66a2)](https://codebeat.co/projects/github-com-dbmdz-digitalcollections-commons)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+The DigitalCollection Common Java Libraries provide project independent common functionalities and utilities. They are grouped in submodules, depending on main technology focus.
+
+Read modules specific documentations:
+
+- (DigitalCollections Commons XML)[digitalcollections-commons-xml]
+
 ## DigitalCollections Commons XML
 
 Commons XML contains several utilities for processing XML files. Most important is `XPathWrapper`, which allows easy querying of XML files:
