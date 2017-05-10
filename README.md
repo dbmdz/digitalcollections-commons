@@ -6,7 +6,7 @@
 
 The DigitalCollection Common Java Libraries provide project independent common functionalities and utilities. They are grouped in submodules, depending on main technology focus.
 
-Read modules specific documentations:
+Read module specific documentations:
 
 - [DigitalCollections Commons Server](digitalcollections-commons-server)
 - [DigitalCollections Commons Spring AOP](digitalcollections-commons-springaop)
