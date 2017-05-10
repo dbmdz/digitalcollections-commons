@@ -8,7 +8,7 @@ The DigitalCollection Common Java Libraries provide project independent common f
 
 Read modules specific documentations:
 
-- (DigitalCollections Commons XML)[digitalcollections-commons-xml]
+- [DigitalCollections Commons XML](digitalcollections-commons-xml)
 
 ## DigitalCollections Commons XML
 
