@@ -1,7 +1,5 @@
 # DigitalCollections: Commons Spring MVC
 
-<!-- toc -->
-
 Spring MVC related library.
 
 ## Usage
