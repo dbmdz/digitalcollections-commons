@@ -1,5 +1,7 @@
 # DigitalCollections: Commons Spring MVC
 
+<!-- toc -->
+
 Spring MVC related library.
 
 ## Usage
@@ -125,3 +127,12 @@ File "src/main/webapp/WEB-INF/web.xml":
 ```
 
 That's it! The specified HTTP-errors are now forwarded to the error-page surrounded by the webapp-specific design showing timestamp and error code.
+
+## Frontend specific Exceptions
+
+There are usse cases where exceptions in the service layer occur. These service-specific exceptions
+must be catched and translated into frontend specific exceptions.
+
+The package "de.digitalcollections.commons.springmvc.exceptions" contains common frontend exceptions you can use.
+
+- ResourceNotFoundException: used when service can not deliver some resource because it can not be found. It is translated to HTTP-Status 404 (Not Found).
