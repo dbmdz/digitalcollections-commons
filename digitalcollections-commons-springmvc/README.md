@@ -10,7 +10,7 @@ Add dependency to pom.xml:
 <dependency>
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>digitalcollections-commons-springmvc</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.2-SNAPSHOT</version>
 </dependency>
 ```
 
