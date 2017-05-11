@@ -1,5 +1,36 @@
 # DigitalCollections: Commons Spring MVC
 
+Spring MVC related library.
+
+## Usage
+
+Add dependency to pom.xml:
+
+```xml
+<dependency>
+  <groupId>de.digitalcollections.commons</groupId>
+  <artifactId>digitalcollections-commons-springmvc</artifactId>
+  <version>1.2.0</version>
+</dependency>
+```
+
+Add message sources of this library ("messages-commons_....properties") to your messageSource-Bean:
+
+```java
+@Configuration
+public class SpringConfig implements EnvironmentAware {
+  ...
+
+  @Bean(name = "messageSource")
+  public MessageSource configureMessageSource() {
+    ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+    messageSource.setBasenames("classpath:messages", "classpath:messages-overlay", "classpath:messages-commons");
+    messageSource.setCacheSeconds(5);
+    messageSource.setDefaultEncoding("UTF-8");
+    return messageSource;
+  }
+```
+
 ## Global Exception Handling
 
 Spring MVC provides the functionality of central exception handling (see <https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html#boot-features-error-handling>).
@@ -11,16 +42,6 @@ It can handle 404 errors when catching a ResourceNotFoundException (also include
 Additionally it adds and shows the stacktrace if spring.profile.active is not "PROD" (production) to make debugging more comfortable.
 
 ### Configuration
-
-Add dependency to pom.xml:
-
-```xml
-<dependency>
-  <groupId>de.digitalcollections.commons</groupId>
-  <artifactId>digitalcollections-commons-springmvc</artifactId>
-  <version>1.2.0</version>
-</dependency>
-```
 
 To add global exception controller (using view "error") make sure the global exception controller is detected.
 Add ComponentScan to your Spring configuration:
