@@ -1,4 +1,18 @@
-# DigitalCollections Commons Server: Utilities for Server Services
+# DigitalCollections Commons Server
+
+Utilities for Server Services (Servlets).
+
+## Usage
+
+pom.xml:
+
+```xml
+<dependency>
+  <groupId>de.digitalcollections.commons</groupId>
+  <artifactId>digitalcollections-commons-server</artifactId>
+  <version>1.2.2-SNAPSHOT</version>
+</dependency>
+```
 
 ## LogSessionIdFilter
 
