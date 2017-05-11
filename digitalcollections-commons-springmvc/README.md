@@ -4,7 +4,7 @@
 
 Spring MVC provides the functionality of central exception handling (see <https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html#boot-features-error-handling>).
 
-This library provides a preconfigured "GlobalExceptionController" as central location for handling all exceptions in the presentation (Spring MVC) layer.
+This library provides a preconfigured "GlobalExceptionController" as central location for handling all exceptions (usingthe ControllerAdvice functionality) in the presentation (Spring MVC) layer.
 
 It can handle 404 errors when catching a ResourceNotFoundException (also included in this library) or all other exceptions (handled as 500 error): when catching an exception, the view template identified by "error" is returned as view with error code and timestamp as model.
 
@@ -65,3 +65,42 @@ public SpringTemplateEngine templateEngine(ServletContextTemplateResolver servle
 ```
 
 That's it! Now no Exception-Stacktrace should be shown without the design and page-skeleton of your webapp.
+
+## Global Error Handling
+
+After setting up a global exception handling with a "error"-view template, we reuse this error page for global error handling.
+An error is defined as HTTP-error which is not caused by an exception in a mapped request, but e.g. if a request can not be mapped as a webapp request (404).
+
+Follow the above configuration steps for global exception handling, what puts the resolving and error page in place and also the ComponentScan that detects the ErrorController.
+
+Now we just have to tell the webapp to forward specific errors to the ErrorController path ("/error/...").
+This still (Servlet specification 3.0, see also <http://stackoverflow.com/questions/10813993/using-spring-mvc-3-1-webapplicationinitializer-to-programmatically-configure-se>) has to be done in the "/WEB-INF/web.xml" file:
+
+File "src/main/webapp/WEB-INF/web.xml":
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+  <error-page>
+    <error-code>401</error-code>
+    <location>/error/401</location>
+  </error-page>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error/404</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error/500</location>
+  </error-page>
+</web-app>
+```
+
+That's it! The specified HTTP-errors are now forwarded to the error-page surrounded by the webapp-specific design showing timestamp and error code.
