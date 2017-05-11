@@ -20,8 +20,11 @@ import org.springframework.util.StopWatch;
 @Component
 public abstract class AbstractAopMethodLogger {
 
-  private static Logger logger = LoggerFactory.getLogger(AbstractAopMethodLogger.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(AbstractAopMethodLogger.class);
 
+  /**
+   * implement this method in your project specific Aspect, defining method patterns as Pointcuts.
+   */
   public abstract void methodsToBeLogged();
 
   /**
@@ -98,7 +101,7 @@ public abstract class AbstractAopMethodLogger {
   public Object logMethodDuration(ProceedingJoinPoint call) throws Throwable { // NOSONAR
     // proceed benötigt das Weiterreichen der Exception (throws Throwable)...
     Object returnValue;
-    if (logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       String targetClassName = call.getTarget().getClass().getName();
       String targetMethodName = call.getSignature().getName();
       Logger targetLog = LoggerFactory.getLogger(targetClassName);
@@ -135,6 +138,6 @@ public abstract class AbstractAopMethodLogger {
    * @param logger
    */
   static void setLogger(Logger logger) {
-    AbstractAopMethodLogger.logger = logger;
+    AbstractAopMethodLogger.LOGGER = logger;
   }
 }
