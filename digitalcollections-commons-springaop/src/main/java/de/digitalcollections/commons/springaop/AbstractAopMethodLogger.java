@@ -91,7 +91,7 @@ public abstract class AbstractAopMethodLogger {
   }
 
   /**
-   * Logs duration of join points. Logging is only active if {@link #logger} is at minimum debug level.
+   * Logs duration of join points. Logging is only active if {@link #LOGGER} is at minimum debug level.
    *
    * @param call a proceeding joinpoint
    * @return the next advice or target method invocation
