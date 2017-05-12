@@ -35,8 +35,6 @@
     <version.jjwt>0.7.0</version.jjwt>
     <version.joda-time>2.9.4</version.joda-time>
     <version.junit>4.12</version.junit>
-    <version.logback>1.1.9</version.logback>
-    <version.logstash>4.7</version.logstash>
     <version.mockito-java8>2.0.1</version.mockito-java8>
     <version.mockito-core>2.7.6</version.mockito-core>
     <version.servlet-api>3.1.0</version.servlet-api>
@@ -61,16 +59,6 @@
   
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${version.logback}</version>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-core</artifactId>
-        <version>${version.logback}</version>
-      </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
@@ -107,11 +95,6 @@
         <artifactId>junit</artifactId>
         <scope>test</scope>
         <version>${version.junit}</version>
-      </dependency>
-      <dependency>
-        <groupId>net.logstash.logback</groupId>
-        <artifactId>logstash-logback-encoder</artifactId>
-        <version>${version.logstash}</version>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
