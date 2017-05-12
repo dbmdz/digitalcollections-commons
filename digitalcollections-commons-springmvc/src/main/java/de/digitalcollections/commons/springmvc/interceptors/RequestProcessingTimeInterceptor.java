@@ -2,10 +2,9 @@ package de.digitalcollections.commons.springmvc.interceptors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.logstash.logback.marker.LogstashMarker;
-import static net.logstash.logback.marker.Markers.append;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -70,15 +69,17 @@ public class RequestProcessingTimeInterceptor extends HandlerInterceptorAdapter 
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
           throws Exception {
-    long startTime = (Long) request.getAttribute("startTime");
-    LOGGER.debug("request URL={} :: End Time={}",
-            request.getRequestURL().toString(), System.currentTimeMillis());
+    try {
+      long startTime = (Long) request.getAttribute("startTime");
+      LOGGER.debug("request URL={} :: End Time={}", request.getRequestURL().toString(), System.currentTimeMillis());
 
-    final long duration = System.currentTimeMillis() - startTime;
-    LogstashMarker marker = append("request_url", request.getRequestURL().toString())
-            .and(append("processing_time", duration));
-    LOGGER.info(marker, "request URL={} :: processing time={} ms",
-            request.getRequestURL().toString(), duration);
+      final long duration = System.currentTimeMillis() - startTime;
+      MDC.put("request_url", request.getRequestURL().toString());
+      MDC.put("processing_time", String.valueOf(duration));
+      LOGGER.info("request URL={} :: processing time={} ms", request.getRequestURL().toString(), duration);
+    } finally {
+      MDC.clear();
+    }
   }
 
   @Override

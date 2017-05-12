@@ -8,10 +8,9 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import javax.servlet.http.HttpServletRequest;
-import net.logstash.logback.marker.LogstashMarker;
-import static net.logstash.logback.marker.Markers.append;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 public class HttpLoggingUtilities {
 
@@ -51,31 +50,58 @@ public class HttpLoggingUtilities {
     return ip.replaceAll("(\\d+)\\.(\\d+)\\..*", "$1.$2");
   }
 
-  public static LogstashMarker makeRequestLoggingMarker(HttpServletRequest request) {
+  /**
+   * Puts http request infos (client infos) to MDC logging context.
+   * Make sure to clear MDC after logging!
+   * Using MDC instead of LogstashMarker, because otherwise we drag in logging implementation logstash as dependency. We care for having no other logging dependency than slf4j.
+   *
+   * Usage example:
+   * <pre>
+   * <b>HttpLoggingUtilities.addRequestClientInfoToMDC(request);
+   * MDC.put("collection name", name);</b>
+   * try {
+   *   Collection collection = presentationService.getCollection(name);
+   *   LOGGER.info("Serving collection for {}", name);
+   *   return collection;
+   * } catch (NotFoundException e) {
+   *   LOGGER.info("Did not find collection for {}", name);
+   *   throw e;
+   * } catch (InvalidDataException e) {
+   *   LOGGER.info("Bad data for {}", name);
+   *   throw e;
+   * } finally {
+   *   <b>MDC.clear();</b>
+   * }
+   * </pre>
+   *
+   * @param request http request object containing info
+   */
+  public static void addRequestClientInfoToMDC(HttpServletRequest request) {
     String protocol = request.getHeader("X-Forwarded-Proto");
     if (protocol == null) {
       protocol = request.getProtocol();
     }
+    MDC.put("protocol", protocol);
+
     String ipString = request.getHeader("X-Forwarded-For");
     if (ipString == null) {
       ipString = request.getRemoteAddr();
     }
-    LogstashMarker marker = append("anonymizedClientIp", anonymizeIp(ipString))
-            .and(append("userAgent", request.getHeader("User-Agent")))
-            .and(append("protocol", protocol))
-            .and(append("referer", request.getHeader("Referer")));
+    MDC.put("anonymizedClientIp", anonymizeIp(ipString));
+
+    MDC.put("userAgent", request.getHeader("User-Agent"));
+    MDC.put("referer", request.getHeader("Referer"));
 
     if (isValidPublicIp(ipString)) {
       try {
         InetAddress clientIp = InetAddress.getByName(ipString);
         final Location clientLocation = geoIpDatabase.city(clientIp).getLocation();
-        marker.and(append("ipLatitude", clientLocation.getLatitude()))
-                .and(append("ipLongitude", clientLocation.getLongitude()));
+
+        MDC.put("ipLatitude", String.valueOf(clientLocation.getLatitude()));
+        MDC.put("ipLongitude", String.valueOf(clientLocation.getLongitude()));
       } catch (GeoIp2Exception | IOException e) {
         LOGGER.warn("Could not retrieve geo information for IP {}", ipString);
       }
     }
-    return marker;
   }
-
 }
