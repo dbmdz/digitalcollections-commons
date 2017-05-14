@@ -15,16 +15,8 @@ import org.slf4j.MDC;
 public class HttpLoggingUtilities {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HttpLoggingUtilities.class);
-  private static DatabaseReader geoIpDatabase = null;
-
-  static {
-    try {
-      InputStream dbStream = HttpLoggingUtilities.class.getResourceAsStream("/geolite2/GeoLite2-City.mmdb");
-      geoIpDatabase = new DatabaseReader.Builder(dbStream).build();
-    } catch (IOException e) {
-      LOGGER.error("Could not open GeoIP database", e);
-    }
-  }
+  private static boolean LOOKUP_LOCATION = true;
+  private static DatabaseReader GEO_IP_DATABASE = null;
 
   /**
    * From http://codereview.stackexchange.com/a/65072
@@ -51,9 +43,10 @@ public class HttpLoggingUtilities {
   }
 
   /**
-   * Puts http request infos (client infos) to MDC logging context.
-   * Make sure to clear MDC after logging!
-   * Using MDC instead of LogstashMarker, because otherwise we drag in logging implementation logstash as dependency. We care for having no other logging dependency than slf4j.
+   * Puts http request infos (client infos) to MDC logging context. Make sure to
+   * clear MDC after logging! Using MDC instead of LogstashMarker, because
+   * otherwise we drag in logging implementation logstash as dependency. We care
+   * for having no other logging dependency than slf4j.
    *
    * Usage example:
    * <pre>
@@ -92,15 +85,27 @@ public class HttpLoggingUtilities {
     MDC.put("userAgent", request.getHeader("User-Agent"));
     MDC.put("referer", request.getHeader("Referer"));
 
-    if (isValidPublicIp(ipString)) {
-      try {
-        InetAddress clientIp = InetAddress.getByName(ipString);
-        final Location clientLocation = geoIpDatabase.city(clientIp).getLocation();
+    if (LOOKUP_LOCATION) {
+      if (GEO_IP_DATABASE == null) {
+        try {
+          InputStream dbStream = HttpLoggingUtilities.class.getResourceAsStream("/geolite2/GeoLite2-City.mmdb");
+          GEO_IP_DATABASE = new DatabaseReader.Builder(dbStream).build();
+        } catch (Throwable e) {
+          LOOKUP_LOCATION = false;
+          LOGGER.error("Could not open GeoIP database", e);
+        }
+      }
+      if (isValidPublicIp(ipString)) {
+        try {
+          InetAddress clientIp = InetAddress.getByName(ipString);
 
-        MDC.put("ipLatitude", String.valueOf(clientLocation.getLatitude()));
-        MDC.put("ipLongitude", String.valueOf(clientLocation.getLongitude()));
-      } catch (GeoIp2Exception | IOException e) {
-        LOGGER.warn("Could not retrieve geo information for IP {}", ipString);
+          final Location clientLocation = GEO_IP_DATABASE.city(clientIp).getLocation();
+
+          MDC.put("ipLatitude", String.valueOf(clientLocation.getLatitude()));
+          MDC.put("ipLongitude", String.valueOf(clientLocation.getLongitude()));
+        } catch (GeoIp2Exception | IOException e) {
+          LOGGER.warn("Could not retrieve geo information for IP {}", ipString);
+        }
       }
     }
   }
