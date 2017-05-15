@@ -20,13 +20,13 @@ Aspect oriented logging around methods:
 - logs method call with method parameters (if not null), e.g.
 
 ```
-14:16:15.960 [qtp267098351-23] INFO de.alexandria.portal.frontend.webapp.controller.NewsController - viewNews(model=BindingAwareModelMap {menu=news, starsign=Stier, names_of_day=[Ljava.l...)
+14:16:15.960 [qtp267098351-23] INFO de.example.portal.frontend.webapp.controller.NewsController - viewNews(model=BindingAwareModelMap {menu=news, starsign=Stier, names_of_day=[Ljava.l...)
 ```
 
 - logs duration (in ms) of method execution (only if logging is at minimum at debug level), e.g.
 
 ```
-14:16:15.986 [qtp267098351-23] DEBUG de.alexandria.portal.frontend.webapp.controller.NewsController - viewNews(): duration 26 ms
+14:16:15.986 [qtp267098351-23] DEBUG de.example.portal.frontend.webapp.controller.NewsController - viewNews(): duration 26 ms
 ```
 
 ### Configuration
@@ -34,7 +34,7 @@ Aspect oriented logging around methods:
 Extend AbstractAopMethodLogger with your project specific AopMethodLogger and define the method pointcuts to be logged. Example:
 
 ```java
-package de.alexandria.portal.frontend.webapp.aop;
+package de.example.portal.frontend.webapp.aop;
 
 import de.digitalcollections.commons.springaop.AbstractAopMethodLogger;
 import org.aspectj.lang.annotation.Aspect;
@@ -45,9 +45,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AopMethodLogger extends AbstractAopMethodLogger {
 
-  @Pointcut("execution(public * de.alexandria.portal.frontend.webapp.controller..*Controller.*(..)) || "
-          + "execution(public * de.alexandria.portal.business.service..*Service.*(..)) || "
-          + "execution(public * de.alexandria.portal.backend.repository..*.*Repository.*(..))")
+  @Pointcut("execution(public * de.example.portal.frontend.webapp.controller..*Controller.*(..)) || "
+          + "execution(public * de.example.portal.business.service..*Service.*(..)) || "
+          + "execution(public * de.example.portal.backend.repository..*.*Repository.*(..))")
   @Override
   public void methodsToBeLogged() {
   }
@@ -59,7 +59,7 @@ Add package containing your implementation to ComponentScan of your Spring confi
 ```java
 @Configuration
 @ComponentScan(basePackages = {
-  "de.alexandria.portal.frontend.webapp.aop",
+  "de.example.portal.frontend.webapp.aop",
   ...
 })
 @EnableAspectJAutoProxy
