@@ -13,8 +13,21 @@ public class StringRepresentations {
     DumperOptions options = new DumperOptions();
     options.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW);
     options.setSplitLines(false);
+    options.setAllowReadOnlyProperties(true);
     options.setLineBreak(DumperOptions.LineBreak.UNIX);
-    YAML = new Yaml(new JodaTimeConstructor(), new JodaTimeRepresenter(), options);
+    boolean yodaTimeIsPresent;
+    try {
+      Class.forName("org.joda.time.DateTime");
+      yodaTimeIsPresent = true;
+    } catch (ClassNotFoundException e) {
+      yodaTimeIsPresent = false;
+    }
+    if (yodaTimeIsPresent) {
+      YAML = new Yaml(new JodaTimeConstructor(), new JodaTimeRepresenter(), options);
+    }
+    else {
+      YAML = new Yaml(options);
+    }
   }
 
   /**
