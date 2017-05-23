@@ -228,7 +228,11 @@ public class XPathWrapper {
    * @return relative node
    */
   public Node getRelativeNode(Node node, String relativeXpath) {
-    return getRelativeNodes(node, relativeXpath).get(0);
+    List<Node> relativeNodes = getRelativeNodes(node, relativeXpath);
+    if (relativeNodes == null || relativeNodes.isEmpty()) {
+      return null;
+    }
+    return relativeNodes.get(0);
   }
 
   /**
