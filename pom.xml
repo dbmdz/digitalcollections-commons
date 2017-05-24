@@ -8,11 +8,12 @@
   <packaging>pom</packaging>
     
   <modules>
-    <module>digitalcollections-commons-xml</module>
-    <module>digitalcollections-commons-yaml</module>
     <module>digitalcollections-commons-server</module>
     <module>digitalcollections-commons-springmvc</module>
     <module>digitalcollections-commons-springaop</module>
+    <module>digitalcollections-commons-validation</module>
+    <module>digitalcollections-commons-xml</module>
+    <module>digitalcollections-commons-yaml</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
@@ -55,6 +56,7 @@
     <version.maven-source-plugin>3.0.1</version.maven-source-plugin>
     <version.nexus-staging-maven-plugin>1.6.7</version.nexus-staging-maven-plugin>
     <version.versions-maven-plugin>2.3</version.versions-maven-plugin>
+    <version.commons-lang3>3.4</version.commons-lang3>
   </properties>
   
   <dependencyManagement>
@@ -95,6 +97,11 @@
         <artifactId>junit</artifactId>
         <scope>test</scope>
         <version>${version.junit}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${version.commons-lang3}</version>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
