@@ -1,4 +1,4 @@
-package org.mdz.dzp.backend.search.dsl;
+package de.digitalcollections.commons.validation;
 
 import java.util.Objects;
 import java.util.function.BiFunction;

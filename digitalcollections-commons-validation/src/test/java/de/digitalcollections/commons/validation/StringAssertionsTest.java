@@ -1,6 +1,7 @@
-package org.mdz.dzp.backend.search.dsl;
+package de.digitalcollections.commons.validation;
 
 import java.util.Arrays;
+import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class StringAssertionsTest {
 
   @Test
   public void isEmptyShouldBeTrueForEmptyStrings() throws Exception {
-    assertThat(Arrays.asList(null, "")).allSatisfy(s -> new StringAssertions(s).isEmpty());
+    assertThat(Arrays.asList(null, "")).allMatch(s -> new StringAssertions(s).isEmpty());
   }
 
   @Test
@@ -39,7 +40,7 @@ public class StringAssertionsTest {
   @Test
   public void doesNotContainShouldBeTrueIfContainsIsFalse() throws Exception {
     StringAssertions assertion = new StringAssertions("abc");
-    assertThat(Arrays.asList("a", "x")).allMatch(s -> assertion.doesNotContain(s) != assertion.contains((String) s));
+    Assertions.assertThat(Arrays.asList("a", "x")).allMatch(s -> assertion.doesNotContain(s) != assertion.contains((String) s));
   }
 
   @Test
@@ -57,7 +58,7 @@ public class StringAssertionsTest {
   @Test
   public void doesNotContainAsOftenAsShouldBeFalseIfContainsIsTrue() throws Exception {
     StringAssertions assertion = new StringAssertions("abca");
-    assertThat(Arrays.asList("a", "c")).allMatch(
+    Assertions.assertThat(Arrays.asList("a", "c")).allMatch(
         s -> assertion.doesNotContain("b", StringAssertions.AS_OFTEN_AS, s) != assertion.contains("b", StringAssertions.AS_OFTEN_AS, s));
   }
 
