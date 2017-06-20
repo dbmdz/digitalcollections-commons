@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -29,14 +31,17 @@ public class GlobalExceptionController implements EnvironmentAware {
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   public ModelAndView handleResourceNotFoundException(Exception ex) {
     ModelAndView model = new ModelAndView("error");
     model.addObject("timestamp", new Timestamp(new Date().getTime()));
     model.addObject("errorCode", "404");
+
     return model;
   }
 
   @ExceptionHandler(value = {Exception.class})
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ModelAndView handleAllException(Exception ex) {
     LOGGER.error("Internal Error", ex);
     ModelAndView model = new ModelAndView("error");
