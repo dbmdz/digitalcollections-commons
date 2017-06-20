@@ -69,6 +69,10 @@ public class RequestProcessingTimeInterceptor extends HandlerInterceptorAdapter 
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
           throws Exception {
+    // Don't log HEAD requests
+    if (request.getMethod().equals("HEAD")) {
+      return;
+    }
     try {
       long startTime = (Long) request.getAttribute("startTime");
       LOGGER.debug("request URL={} :: End Time={}", request.getRequestURL().toString(), System.currentTimeMillis());
