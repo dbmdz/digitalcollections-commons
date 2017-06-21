@@ -207,8 +207,7 @@ public class XPathWrapper {
 
   public List<Node> getRelativeNodes(Node node, String relativeXpath) {
     if (!relativeXpath.startsWith(".")) {
-      throw new IllegalArgumentException(String.
-          format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
+      throw new IllegalArgumentException(String.format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
     }
 
     List<Node> nodes = asListOfNodes(node, relativeXpath);
@@ -336,18 +335,18 @@ public class XPathWrapper {
 
           if (!handled) {
             // no known attribute we could use - get sibling index
-            int prev_siblings = 1;
-            Node prev_sibling = node.getPreviousSibling();
-            while (null != prev_sibling) {
-              if (prev_sibling.getNodeType() == node.getNodeType()) {
-                if (prev_sibling.getNodeName().equalsIgnoreCase(
+            int prevSiblings = 1;
+            Node prevSibling = node.getPreviousSibling();
+            while (null != prevSibling) {
+              if (prevSibling.getNodeType() == node.getNodeType()) {
+                if (prevSibling.getNodeName().equalsIgnoreCase(
                         node.getNodeName())) {
-                  prev_siblings++;
+                  prevSiblings++;
                 }
               }
-              prev_sibling = prev_sibling.getPreviousSibling();
+              prevSibling = prevSibling.getPreviousSibling();
             }
-            buffer.append("[").append(prev_siblings).append("]");
+            buffer.append("[").append(prevSiblings).append("]");
           }
         }
       } else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {

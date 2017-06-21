@@ -12,20 +12,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javax.xml.xpath.XPathExpressionException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 
 public class XPathMapper implements InvocationHandler {
+
   private static final Pattern variablePattern = Pattern.compile("\\{([a-zA-Z0-9_-]+?)\\}");
 
 
@@ -37,10 +34,7 @@ public class XPathMapper implements InvocationHandler {
         .concat(Stream.of(iface), Stream.of(otherIfaces))
         .distinct()
         .toArray(Class<?>[]::new);
-    return (T) Proxy.newProxyInstance(
-        iface.getClassLoader(),
-        allInterfaces,
-        new XPathMapper(doc));
+    return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc));
   }
 
   private XPathMapper(Document doc) {
@@ -96,7 +90,7 @@ public class XPathMapper implements InvocationHandler {
     Map<Locale, String> resolved = this.executeTemplate(binding.valueTemplate(), resolvedVariables);
     if (binding.multiLanguage()) {
       return resolved;
-    } else if (!resolved.isEmpty()){
+    } else if (!resolved.isEmpty()) {
       return resolved.entrySet().iterator().next().getValue();
     } else {
       return null;
@@ -219,7 +213,7 @@ public class XPathMapper implements InvocationHandler {
           }
         }
         if (locale == null || locale.getLanguage().isEmpty()) {
-          locale  = Locale.forLanguageTag("");
+          locale = Locale.forLanguageTag("");
         }
         String value = node.getTextContent()
             .replace("<", "\\<")
