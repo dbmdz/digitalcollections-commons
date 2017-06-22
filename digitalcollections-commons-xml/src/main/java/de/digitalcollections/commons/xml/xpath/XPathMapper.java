@@ -23,7 +23,7 @@ import org.w3c.dom.Node;
 
 public class XPathMapper implements InvocationHandler {
 
-  private static final Pattern variablePattern = Pattern.compile("\\{([a-zA-Z0-9_-]+?)\\}");
+  private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)\\}");
 
 
   private final XPathWrapper xpw;
@@ -42,7 +42,7 @@ public class XPathMapper implements InvocationHandler {
   }
 
   public Set<String> getVariables(String templateString) {
-    Matcher matcher = variablePattern.matcher(templateString);
+    Matcher matcher = VARIABLE_PATTERN.matcher(templateString);
     Set<String> variables = new HashSet<>();
     while (matcher.find()) {
       variables.add(matcher.group(1));
@@ -117,7 +117,7 @@ public class XPathMapper implements InvocationHandler {
       }
 
       // Now we just need to resolve top-level variables
-      Matcher matcher = variablePattern.matcher(stringRepresentation);
+      Matcher matcher = VARIABLE_PATTERN.matcher(stringRepresentation);
       while (matcher.find()) {
         String varName = matcher.group(1);
         if (resolvedVariables.get(varName).isEmpty()) {
@@ -130,7 +130,7 @@ public class XPathMapper implements InvocationHandler {
           langToResolve = resolvedVariables.get(varName).entrySet().iterator().next().getKey();
         }
         stringRepresentation = stringRepresentation.replace(matcher.group(), resolvedVariables.get(varName).get(langToResolve));
-        matcher = variablePattern.matcher(stringRepresentation);
+        matcher = VARIABLE_PATTERN.matcher(stringRepresentation);
       }
 
       // And un-escape the pointy brackets
@@ -187,7 +187,7 @@ public class XPathMapper implements InvocationHandler {
   }
 
   private String resolveVariableContext(Locale language, String variableContext, Map<String, Map<Locale, String>> resolvedVariables) {
-    Matcher varMatcher = variablePattern.matcher(variableContext);
+    Matcher varMatcher = VARIABLE_PATTERN.matcher(variableContext);
     varMatcher.find();
     String variableName = varMatcher.group(1);
     Map<Locale, String> resolvedValues = resolvedVariables.get(variableName);
