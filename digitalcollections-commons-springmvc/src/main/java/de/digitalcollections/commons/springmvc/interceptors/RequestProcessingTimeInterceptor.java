@@ -37,13 +37,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  */
 public class RequestProcessingTimeInterceptor extends HandlerInterceptorAdapter implements ResponseBodyAdvice<Object> {
 
-  private static final Logger LOGGER = LoggerFactory.
-          getLogger(RequestProcessingTimeInterceptor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RequestProcessingTimeInterceptor.class);
 
   @Override
   public Object beforeBodyWrite(Object body, MethodParameter mp, MediaType mt, Class<? extends HttpMessageConverter<?>> type, ServerHttpRequest request, ServerHttpResponse response) {
-    long startTime = (Long) ((ServletServerHttpRequest) request).getServletRequest().
-            getAttribute("startTime");
+    long startTime = (Long) ((ServletServerHttpRequest) request).getServletRequest().getAttribute("startTime");
     final long duration = System.currentTimeMillis() - startTime;
     response.getHeaders().add("x-execution-duration", duration + " ms");
     return body;

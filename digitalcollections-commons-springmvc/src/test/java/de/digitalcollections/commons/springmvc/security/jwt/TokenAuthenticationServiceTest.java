@@ -7,16 +7,18 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.springframework.security.core.Authentication;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 public class TokenAuthenticationServiceTest {
+
   private static final char[] KEYSTORE_PASSWORD = "testpassword".toCharArray();
 
   private static String obtainToken(TokenAuthenticationService service) {

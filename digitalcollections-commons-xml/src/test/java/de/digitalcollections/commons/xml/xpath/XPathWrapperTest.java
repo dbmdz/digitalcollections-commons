@@ -1,16 +1,16 @@
 package de.digitalcollections.commons.xml.xpath;
 
-import de.digitalcollections.commons.xml.xpath.XPathWrapper;
 import java.io.InputStream;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import static org.junit.Assert.assertEquals;
 
 public class XPathWrapperTest {
 

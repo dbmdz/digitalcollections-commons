@@ -1,12 +1,13 @@
 package de.digitalcollections.commons.yaml;
 
-import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
-import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
 import de.digitalcollections.commons.yaml.examples.Person;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
+
+import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
+import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringRepresentationsTest {
 

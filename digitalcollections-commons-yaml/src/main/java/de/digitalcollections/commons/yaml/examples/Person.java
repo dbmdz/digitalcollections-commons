@@ -1,7 +1,8 @@
 package de.digitalcollections.commons.yaml.examples;
 
-import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
 import org.joda.time.LocalDateTime;
+
+import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
 
 public class Person {
 

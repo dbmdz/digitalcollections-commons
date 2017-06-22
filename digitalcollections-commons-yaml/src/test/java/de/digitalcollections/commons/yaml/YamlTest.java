@@ -2,13 +2,14 @@ package de.digitalcollections.commons.yaml;
 
 import de.digitalcollections.commons.yaml.joda.JodaTimeConstructor;
 import de.digitalcollections.commons.yaml.joda.JodaTimeRepresenter;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class YamlTest {
 
