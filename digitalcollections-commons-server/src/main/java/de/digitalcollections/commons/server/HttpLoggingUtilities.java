@@ -48,7 +48,8 @@ public class HttpLoggingUtilities {
    * otherwise we drag in logging implementation logstash as dependency. We care
    * for having no other logging dependency than slf4j.
    *
-   * Usage example:
+   * <p>Usage example:</p>
+   *
    * <pre>
    * <b>HttpLoggingUtilities.addRequestClientInfoToMDC(request);
    * MDC.put("collection name", name);</b>

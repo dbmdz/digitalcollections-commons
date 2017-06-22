@@ -15,8 +15,8 @@ import org.springframework.security.core.Authentication;
 
 public class TokenAuthenticationService {
 
-  private final String TOKEN_PREFIX = "Bearer";
-  private final String HEADER_KEY = "Authorization";
+  private static final String TOKEN_PREFIX = "Bearer";
+  private static final String HEADER_KEY = "Authorization";
 
   private String secret;
   private PrivateKey privateKey;
@@ -67,8 +67,7 @@ public class TokenAuthenticationService {
 
   public void addAuthentication(HttpServletResponse response, String username) {
     if (privateKey != null && !privateKey.getAlgorithm().equals("RSA")) {
-      throw new RuntimeException(String.
-              format("Private Key must use RSA cipher, but uses %s", privateKey.getAlgorithm()));
+      throw new RuntimeException(String.format("Private Key must use RSA cipher, but uses %s", privateKey.getAlgorithm()));
     }
     if ((secret == null || secret.isEmpty()) && privateKey == null) {
       throw new RuntimeException("Cannot issue tokens due to missing secret or private key.");
@@ -103,6 +102,7 @@ public class TokenAuthenticationService {
               .getBody()
               .getSubject();
     } catch (ExpiredJwtException ignored) {
+      // ignore exception
     }
     if (username != null) {
       return new AuthenticatedUser(username);

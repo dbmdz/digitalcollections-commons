@@ -30,9 +30,9 @@ public abstract class AbstractAopMethodLogger {
   /**
    * Logs the execution of a join point and of its parameters. Parameters are only logged if not null.
    *
-   * In aspect-oriented programming a set of join points is called a pointcut. A join point is a specification of when,
+   * <p>In aspect-oriented programming a set of join points is called a pointcut. A join point is a specification of when,
    * in the corresponding main program, the aspect code should be executed. The join point is a point of execution in
-   * the base code where the advice specified in a corresponding pointcut is applied.
+   * the base code where the advice specified in a corresponding pointcut is applied.</p>
    *
    * @param joinPoint the event of the advice
    */
@@ -135,7 +135,7 @@ public abstract class AbstractAopMethodLogger {
   /**
    * For unit tests to set a logger-mock.
    *
-   * @param logger
+   * @param logger logger instance
    */
   static void setLogger(Logger logger) {
     AbstractAopMethodLogger.LOGGER = logger;

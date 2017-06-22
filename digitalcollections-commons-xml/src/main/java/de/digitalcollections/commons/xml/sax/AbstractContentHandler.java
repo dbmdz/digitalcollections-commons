@@ -1,15 +1,15 @@
 package de.digitalcollections.commons.xml.sax;
 
+import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceContext;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.sax.TransformerHandler;
-import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceContext;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 public class AbstractContentHandler implements ContentHandler {
-  
+
   /** The handler. */
   private TransformerHandler handler;
 

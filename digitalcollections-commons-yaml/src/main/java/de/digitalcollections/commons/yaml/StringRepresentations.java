@@ -24,15 +24,14 @@ public class StringRepresentations {
     }
     if (yodaTimeIsPresent) {
       YAML = new Yaml(new JodaTimeConstructor(), new JodaTimeRepresenter(), options);
-    }
-    else {
+    } else {
       YAML = new Yaml(options);
     }
   }
 
   /**
    * Convert the given object to a string representation using YAML.
-   * 
+   *
    * @param object The object to make a string of.
    * @return A YAML string representing the object in its current state.
    */
@@ -40,8 +39,7 @@ public class StringRepresentations {
     try {
       String string = YAML.dump(object);
       return string.substring(0, string.length() - 1);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       return object.toString();
     }
   }

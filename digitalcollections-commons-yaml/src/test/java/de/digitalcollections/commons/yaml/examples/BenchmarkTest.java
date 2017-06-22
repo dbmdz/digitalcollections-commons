@@ -1,12 +1,7 @@
 package de.digitalcollections.commons.yaml.examples;
 
-import de.digitalcollections.commons.yaml.examples.Book;
-import de.digitalcollections.commons.yaml.examples.Person;
-import org.joda.time.DateTime;
-import org.junit.Test;
-import de.digitalcollections.commons.yaml.StringRepresentations;
-import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
 import org.joda.time.LocalDateTime;
+import org.junit.Test;
 
 public class BenchmarkTest {
 
