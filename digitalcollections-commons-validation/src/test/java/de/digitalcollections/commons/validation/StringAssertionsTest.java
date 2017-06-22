@@ -2,8 +2,9 @@ package de.digitalcollections.commons.validation;
 
 import java.util.Arrays;
 import org.assertj.core.api.Assertions;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringAssertionsTest {
 
@@ -58,8 +59,7 @@ public class StringAssertionsTest {
   @Test
   public void doesNotContainAsOftenAsShouldBeFalseIfContainsIsTrue() throws Exception {
     StringAssertions assertion = new StringAssertions("abca");
-    Assertions.assertThat(Arrays.asList("a", "c")).allMatch(
-        s -> assertion.doesNotContain("b", StringAssertions.AS_OFTEN_AS, s) != assertion.contains("b", StringAssertions.AS_OFTEN_AS, s));
+    Assertions.assertThat(Arrays.asList("a", "c")).allMatch(s -> assertion.doesNotContain("b", StringAssertions.AS_OFTEN_AS, s) != assertion.contains("b", StringAssertions.AS_OFTEN_AS, s));
   }
 
 }

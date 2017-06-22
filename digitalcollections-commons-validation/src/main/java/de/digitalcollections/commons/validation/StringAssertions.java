@@ -8,7 +8,7 @@ public class StringAssertions {
 
   public static final BiFunction<Integer, Integer, Boolean> AS_OFTEN_AS = Objects::equals;
 
-  private String string;
+  private final String string;
 
   public StringAssertions(String value) {
     this.string = value;
@@ -26,15 +26,15 @@ public class StringAssertions {
     return this.string != null && this.string.contains(value);
   }
 
-  public boolean doesNotContain(String value) {
-    return !contains(value);
-  }
-
   public boolean contains(String firstValue, BiFunction<Integer, Integer, Boolean> comparison, String secondValue) {
     return comparison.apply(
-        StringUtils.countMatches(string, firstValue),
-        StringUtils.countMatches(string, secondValue)
+            StringUtils.countMatches(string, firstValue),
+            StringUtils.countMatches(string, secondValue)
     );
+  }
+
+  public boolean doesNotContain(String value) {
+    return !contains(value);
   }
 
   public boolean doesNotContain(String firstValue, BiFunction<Integer, Integer, Boolean> comparison, String secondValue) {
