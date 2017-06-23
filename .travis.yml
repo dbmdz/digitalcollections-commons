@@ -11,6 +11,7 @@ deploy:
   provider: releases
   api_key:
     secure: gy1HRLBT/W75Q2VeK9PVicd0ZjPYifZxUauIqkC6KG2eWpOQ0QG4vCTACIRhHdSa969rWvhg0jYpR22ZQ+Dknv1niHX8QYLo8plyWmmXI6AnZqWIQZBquQ05ku3eMxNCJoLYfBIvCnj9t+/yp0DvU+Ozn3ZVJEIQ0VcTmmoELNiHnUKJC/KDIor/LmApDcHFTgNI5/1uzgwJe6jvfKWc4VLc0bMOELdnHmMH4D3FuYY+uP0nBuppWRZeFn5fU5chRAbM3BVAiQ8yeeB78kbMbrHUGRXqkmqXrfmmx5Vqorx+uLMXmtLrI1zaXlrIq+5hhl0wcn0buJn00l8DO4/jPpJN5n+fzussSoMCbZaTqwHUbF3tw7VrHCSdJuiOhTVo6YcyTqvOy3Lbt0IcfJzVAuy3M8/6BfCgcY0iciVeGMbweyZYNP1E52PB++qaaOzydHo5xsRPzpKBr1MgrOj6YKMOoyQmDCRso9VsMAjKaTL+6bhFAIlI/9xTEKS8GF45/IFvfuMOqWLBHYIK3sBR+DUTIA+VezR05rZBzMwZZZXs2pnFJh+1Tv3mlcmn+SidvJO37jsGHn70BVanJECIK66+mU14qF5fnDaRhMdTeZNx7Fdog4zfZmxmzon6lpPAQXT9YeNDT5ZW7siz8Ro48akBSCo6ZGuHQkGrp+D+IyA=
+  file_glob: true
   file: "**/target/*.jar"
   skip_cleanup: true
   on:
