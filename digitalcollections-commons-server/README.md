@@ -10,7 +10,7 @@ pom.xml:
 <dependency>
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>digitalcollections-commons-server</artifactId>
-  <version>1.2.2-SNAPSHOT</version>
+  <version>{set to current version}</version>
 </dependency>
 ```
 
