@@ -11,7 +11,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - if [[ "${TRAVIS_TAG}" == *"SNAPSHOT" ]] || [[ ${TRAVIS_TAG} == '' ]]; then mvn deploy; fi
+  - if [[ "${TRAVIS_TAG}" == *"SNAPSHOT" ]] || [[ ${TRAVIS_TAG} == '' ]]; then mvn deploy -B -DskipTests=true; fi
 
 deploy:
   provider: releases
