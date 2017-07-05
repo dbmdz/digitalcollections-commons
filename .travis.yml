@@ -6,12 +6,17 @@ jdk:
 before_script:
   - if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$TRAVIS_TAG; fi
 
+env:
+  global:
+  - secure: J/QU3m2OGaz4pOObt/1yWz8S3d3HHYxybhzjoWrn9EkOZ0ieC2zm4vntyt8mrPbUCjq64OmQYL2+3jyTxaYTGzi/NazGtCxhcF6J82XawG6esJJ0dKWzG7sdI68WpkRgFdk+RiLtU8Fpg4apDBWIrQEzQf+Wb9B5A4ofU38S/GAP+Phm+fvjNPpfqjSdBPrGg3OCWmnSvcOLFi8/n5YEaH2ZRhBZzX1f8PR00R7QiErhZSezYdD7Kj0ZML8RziPpej4JNtNsmoEXP/JBoeUsPjdlUF9Lc/b/kAs+xL1nCM/Hr0ZITk7D7Vq5ZdCQRdfm853b6FOu/cIkfsNDP204NWtMFIywgrGMUJPGS8c/pcctYv6K7v446Wyfrurr77o6rSlDt68x1ZR2ZQtMgLUu0R+NbwFH+SrLQZyc2h1Ng9j7dVDJdIk+Cj92AOsN3A/G8GoBQl545GqWS46MwWMsEudbwcOm/0swRnmCRSqO0flyRAfH8CEU4zS505lD0EoA77A9aqaWzrOh1D02T6heSPW8c5S0VUjWuEKOdUvnQJ/HKmRUpItueuklU5lArpTT24kU7DvYEcvo+ZTZOvZJ/7v5aRkRdKh256aQKQ1Cv8nilH4EM4Oxl5KOBnmlpHAGUqk3s2h9nuURYnVnBpdrTzYZ+oL8SpeWZv04S6Nb8TI=
+  - secure: I2VXMQOhDwLr5/8g/rn2AiG4w4svTYEgwpJ2QgV+k/AiV9vsyK2rnaXFdINwdtVBBDCnLh0kfSQhJxz+t8smbgWMOX17NiRiokANf1gabr/5PgxSb+UFGpLTsAJZzTUC8SowmXIdNqLsLI8xX8OjiIq9b11wXLWoLz9VcDEPDdDVcNPCzobiaMOPHm2uXb0I1hCTtj5lvjfBA5X15euX/LngTtDaQ+ue8gqw0lHDxGWRuNhoPi6sx7LzEw28HfS8ruCA4Q5f8En1lWxTR36K8tTKD65wiYM+f8tM6OlsZoBaW23Qb86RJuC+4d7Rfid7GP7XyO57A1Uog9NdUbftLYJKZvDBD5gK1p2f176Q1lkGcrXiIkbOlBhjujhO4GrmKW0xaHrFQtdQKpCISWytlUYzA590MSLUASzeUWZQ0pXH+gvOzQwYf76vnZoZsxejy72VeGRB3SQnOm/UXAFnRciFecR/BGcTFnFyYGczIaMquCMuMeGVwxWt3O6IxBNzameRCDb+sQ4YToeGd/NFwPssYVxgsmegEUJq2SvgH5U+IK+2XGGauaZfkE0OT1Me9SDqxMkFbrBY4CSnbw5Q5eJVLl44itO0danmm6z42HBuMT0Y+UNj3hsWI/l9s+d1W56lKu8ZSFHEh1p12D4u+p96W8gBk/K+P0hmoj60NUM=
+
 script:
   - mvn clean install
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - if [[ "${TRAVIS_TAG}" == *"SNAPSHOT" ]] || [[ ${TRAVIS_TAG} == '' ]]; then mvn deploy -B -DskipTests=true; fi
+  - if [[ "${TRAVIS_TAG}" == *"SNAPSHOT" ]] || [[ ${TRAVIS_TAG} == '' ]]; then mvn deploy -B -DskipTests=true --settings settings.xml; fi
 
 deploy:
   provider: releases
