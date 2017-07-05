@@ -3,6 +3,7 @@ package de.digitalcollections.commons.yaml;
 import de.digitalcollections.commons.yaml.joda.JodaTimeConstructor;
 import de.digitalcollections.commons.yaml.joda.JodaTimeRepresenter;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
 
 public class StringRepresentations {
@@ -11,7 +12,8 @@ public class StringRepresentations {
 
   static {
     DumperOptions options = new DumperOptions();
-    options.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW);
+    options.setDefaultFlowStyle(FlowStyle.FLOW);
+    options.setPrettyFlow(true);
     options.setSplitLines(false);
     options.setAllowReadOnlyProperties(true);
     options.setLineBreak(DumperOptions.LineBreak.UNIX);
