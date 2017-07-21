@@ -5,7 +5,7 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>digitalcollections-commons</artifactId>
-    <version>1.2.3-SNAPSHOT</version>
+    <version>1.2.3</version>
   </parent>
   
   <artifactId>digitalcollections-commons-springmvc</artifactId>
