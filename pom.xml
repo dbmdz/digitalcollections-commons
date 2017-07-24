@@ -14,6 +14,7 @@
     <module>digitalcollections-commons-validation</module>
     <module>digitalcollections-commons-xml</module>
     <module>digitalcollections-commons-yaml</module>
+    <module>digitalcollections-commons-springdata</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
@@ -30,6 +31,8 @@
     <!-- Dependency versions -->
     <version.aspectjweaver>1.8.10</version.aspectjweaver>
     <version.assertj>3.5.2</version.assertj>
+    <version.commons-lang3>3.4</version.commons-lang3>
+    <version.digitalcollections-core-model>1.2.6-SNAPSHOT</version.digitalcollections-core-model>
     <version.geoip>2.8.0</version.geoip>
     <version.hamcrest-core>1.3</version.hamcrest-core>
     <version.jackson-databind>2.8.6</version.jackson-databind>
@@ -43,6 +46,7 @@
     <version.snakeyaml>1.17</version.snakeyaml>
     <version.spring-aop>4.3.6.RELEASE</version.spring-aop>
     <version.spring-context>4.3.6.RELEASE</version.spring-context>
+    <version.spring-data-commons>1.13.4.RELEASE</version.spring-data-commons>
     <version.spring-web>4.3.6.RELEASE</version.spring-web>
     <version.spring-webmvc>4.3.6.RELEASE</version.spring-webmvc>
     <version.spring-security>4.2.1.RELEASE</version.spring-security>
@@ -56,7 +60,6 @@
     <version.maven-source-plugin>3.0.1</version.maven-source-plugin>
     <version.nexus-staging-maven-plugin>1.6.7</version.nexus-staging-maven-plugin>
     <version.versions-maven-plugin>2.3</version.versions-maven-plugin>
-    <version.commons-lang3>3.4</version.commons-lang3>
   </properties>
   
   <dependencyManagement>
@@ -71,6 +74,16 @@
         <artifactId>geoip2</artifactId>
         <version>${version.geoip}</version>
       </dependency>
+      <dependency>
+        <groupId>de.digitalcollections</groupId>
+        <artifactId>digitalcollections-core-model-api</artifactId>
+        <version>${version.digitalcollections-core-model}</version>
+      </dependency>
+      <dependency>
+      <groupId>de.digitalcollections</groupId>
+      <artifactId>digitalcollections-core-model-impl</artifactId>
+      <version>${version.digitalcollections-core-model}</version>
+    </dependency>
       <dependency>
         <groupId>info.solidsoft.mockito</groupId>
         <artifactId>mockito-java8</artifactId>
@@ -154,6 +167,11 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${version.spring-webmvc}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-commons</artifactId>
+        <version>${version.spring-data-commons}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.security</groupId>
