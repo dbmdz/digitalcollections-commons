@@ -4,13 +4,13 @@
   
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
-    <artifactId>digitalcollections-commons</artifactId>
+    <artifactId>dc-commons</artifactId>
     <version>1.2.4-SNAPSHOT</version>
   </parent>
   
-  <artifactId>digitalcollections-commons-server</artifactId>
-  <packaging>jar</packaging>
   <name>DigitalCollections: Commons Server</name>
+  <artifactId>dc-commons-server</artifactId>
+  <packaging>jar</packaging>
   
   <dependencies>
     <dependency>

@@ -4,30 +4,28 @@
   
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
-    <artifactId>digitalcollections-commons</artifactId>
+    <artifactId>dc-commons</artifactId>
     <version>1.2.4-SNAPSHOT</version>
   </parent>
   
-  <name>DigitalCollections: Commons Spring AOP</name>
-  <artifactId>digitalcollections-commons-springaop</artifactId>
+  <name>DigitalCollections: Commons XML</name>
+  <artifactId>dc-commons-xml</artifactId>
   <packaging>jar</packaging>
-  
+
   <dependencies>
     <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjweaver</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-aop</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
     </dependency>
   </dependencies>
 </project>

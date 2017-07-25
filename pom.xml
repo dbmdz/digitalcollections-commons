@@ -3,18 +3,18 @@
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>de.digitalcollections.commons</groupId>
-  <artifactId>digitalcollections-commons</artifactId>
+  <artifactId>dc-commons</artifactId>
   <version>1.2.4-SNAPSHOT</version>
   <packaging>pom</packaging>
     
   <modules>
-    <module>digitalcollections-commons-server</module>
-    <module>digitalcollections-commons-springmvc</module>
-    <module>digitalcollections-commons-springaop</module>
-    <module>digitalcollections-commons-validation</module>
-    <module>digitalcollections-commons-xml</module>
-    <module>digitalcollections-commons-yaml</module>
-    <module>digitalcollections-commons-springdata</module>
+    <module>dc-commons-server</module>
+    <module>dc-commons-springmvc</module>
+    <module>dc-commons-springaop</module>
+    <module>dc-commons-validation</module>
+    <module>dc-commons-xml</module>
+    <module>dc-commons-yaml</module>
+    <module>dc-commons-springdata</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
@@ -32,7 +32,7 @@
     <version.aspectjweaver>1.8.10</version.aspectjweaver>
     <version.assertj>3.5.2</version.assertj>
     <version.commons-lang3>3.4</version.commons-lang3>
-    <version.digitalcollections-core-model>1.2.6-SNAPSHOT</version.digitalcollections-core-model>
+    <version.dc-core-model>2.0.0-SNAPSHOT</version.dc-core-model>
     <version.geoip>2.8.0</version.geoip>
     <version.hamcrest-core>1.3</version.hamcrest-core>
     <version.jackson-databind>2.8.6</version.jackson-databind>
@@ -75,15 +75,10 @@
         <version>${version.geoip}</version>
       </dependency>
       <dependency>
-        <groupId>de.digitalcollections</groupId>
-        <artifactId>digitalcollections-core-model-api</artifactId>
-        <version>${version.digitalcollections-core-model}</version>
+        <groupId>de.digitalcollections.core</groupId>
+        <artifactId>dc-core-model</artifactId>
+        <version>${version.dc-core-model}</version>
       </dependency>
-      <dependency>
-      <groupId>de.digitalcollections</groupId>
-      <artifactId>digitalcollections-core-model-impl</artifactId>
-      <version>${version.digitalcollections-core-model}</version>
-    </dependency>
       <dependency>
         <groupId>info.solidsoft.mockito</groupId>
         <artifactId>mockito-java8</artifactId>

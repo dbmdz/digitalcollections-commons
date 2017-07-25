@@ -4,22 +4,18 @@
   
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
-    <artifactId>digitalcollections-commons</artifactId>
+    <artifactId>dc-commons</artifactId>
     <version>1.2.4-SNAPSHOT</version>
   </parent>
   
   <name>DigitalCollections: Commons Spring Data</name>
-  <artifactId>digitalcollections-commons-springdata</artifactId>
+  <artifactId>dc-commons-springdata</artifactId>
   <packaging>jar</packaging>
   
   <dependencies>
     <dependency>
-      <groupId>de.digitalcollections</groupId>
-      <artifactId>digitalcollections-core-model-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>de.digitalcollections</groupId>
-      <artifactId>digitalcollections-core-model-impl</artifactId>
+      <groupId>de.digitalcollections.core</groupId>
+      <artifactId>dc-core-model</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.data</groupId>
