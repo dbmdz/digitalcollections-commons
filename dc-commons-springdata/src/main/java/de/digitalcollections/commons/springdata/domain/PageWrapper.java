@@ -16,9 +16,9 @@ import org.springframework.data.domain.Page;
 public class PageWrapper<T> {
 
   public static final int MAX_PAGE_ITEM_DISPLAY = 5;
-  private final Page<T> page;
-  private final List<PageItem> items;
   private final int currentNumber;
+  private final List<PageItem> items;
+  private final Page<T> page;
   private final long totalItems;
   private String url;
 
@@ -51,16 +51,8 @@ public class PageWrapper<T> {
     }
   }
 
-  public long getTotalItems() {
-    return totalItems;
-  }
-
-  public String getUrl() {
-    return url;
-  }
-
-  public void setUrl(String url) {
-    this.url = url;
+  public List<T> getContent() {
+    return page.getContent();
   }
 
   public List<PageItem> getItems() {
@@ -71,33 +63,45 @@ public class PageWrapper<T> {
     return currentNumber;
   }
 
-  public List<T> getContent() {
-    return page.getContent();
+  public Page<T> getPage() {
+    return page;
   }
 
   public int getSize() {
     return page.getSize();
   }
 
+  public long getTotalItems() {
+    return totalItems;
+  }
+
   public int getTotalPages() {
     return page.getTotalPages();
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   public boolean isFirstPage() {
     return page.isFirst();
   }
 
-  public boolean isLastPage() {
-    return page.isLast();
+  public boolean isHasNextPage() {
+    return page.hasNext();
+
   }
 
   public boolean isHasPreviousPage() {
     return page.hasPrevious();
   }
 
-  public boolean isHasNextPage() {
-    return page.hasNext();
-
+  public boolean isLastPage() {
+    return page.isLast();
   }
 
   public class PageItem {
