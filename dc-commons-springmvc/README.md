@@ -9,7 +9,7 @@ Add dependency to pom.xml:
 ```xml
 <dependency>
   <groupId>de.digitalcollections.commons</groupId>
-  <artifactId>digitalcollections-commons-springmvc</artifactId>
+  <artifactId>dc-commons-springmvc</artifactId>
   <version>{set to current version}</version>
 </dependency>
 ```
@@ -67,7 +67,7 @@ public class SpringConfigWeb extends WebMvcConfigurerAdapter {
 }
 ```
 
-2. add error template resolver (commonsClasspathThymeleafResolver, before your standard resolver) to your config:
+2. add commons template resolver (commonsClasspathThymeleafResolver, before your standard resolver) to your config:
 
 ```java
 @Autowired
