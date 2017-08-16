@@ -15,6 +15,7 @@
     <module>dc-commons-xml</module>
     <module>dc-commons-yaml</module>
     <module>dc-commons-springdata</module>
+    <module>dc-commons-jdbi</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
