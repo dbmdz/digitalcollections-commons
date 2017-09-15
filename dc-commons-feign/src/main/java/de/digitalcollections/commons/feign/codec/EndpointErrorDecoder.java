@@ -22,48 +22,47 @@ public class EndpointErrorDecoder implements ErrorDecoder {
   public Exception decode(String methodKey, Response response) {
     final int status = response.status();
     final String request = response.request().toString();
-    HttpException httpException = new HttpException(methodKey, status, request);
 
     if (400 <= status && status < 500) {
-      return clientException(httpException);
+      return clientException(methodKey, status, request);
     } else if (500 <= status && status < 600) {
-      return serverException(httpException);
+      return serverException(methodKey, status, request);
     } else {
-      return httpException;
+      return new HttpException(methodKey, status, request);
     }
   }
 
-  private HttpClientException clientException(HttpException httpException) {
-    switch (httpException.getStatus()) {
+  private HttpClientException clientException(String methodKey, int status, String request) {
+    switch (status) {
       case 401:
-        return (UnauthorizedException) httpException;
+        return new UnauthorizedException(methodKey, status, request);
       case 403:
-        return (ForbiddenException) httpException;
+        return new ForbiddenException(methodKey, status, request);
       case 404:
-        return (ResourceNotFoundException) httpException;
+        return new ResourceNotFoundException(methodKey, status, request);
       case 413:
-        return (ImATeapotException) httpException;
+        return new ImATeapotException(methodKey, status, request);
       case 451:
-        return (UnavailableForLegalReasonsException) httpException;
+        return new UnavailableForLegalReasonsException(methodKey, status, request);
       default:
-        return (HttpClientException) httpException;
+        return new HttpClientException(methodKey, status, request);
     }
   }
 
-  private HttpServerException serverException(HttpException httpException) {
-    switch (httpException.getStatus()) {
+  private HttpServerException serverException(String methodKey, int status, String request) {
+    switch (status) {
       case 501:
-        return (NotImplementedException) httpException;
+        return new NotImplementedException(methodKey, status, request);
       case 502:
-        return (BadGatewayException) httpException;
+        return new BadGatewayException(methodKey, status, request);
       case 503:
-        return (ServiceUnavailableException) httpException;
+        return new ServiceUnavailableException(methodKey, status, request);
       case 504:
-        return (GatewayTimeOutException) httpException;
+        return new GatewayTimeOutException(methodKey, status, request);
       case 505:
-        return (HttpVersionNotSupportedException) httpException;
+        return new HttpVersionNotSupportedException(methodKey, status, request);
       default:
-        return (HttpServerException) httpException;
+        return new HttpServerException(methodKey, status, request);
     }
   }
 }
