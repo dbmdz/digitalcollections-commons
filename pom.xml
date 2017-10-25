@@ -4,7 +4,7 @@
   
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>dc-commons</artifactId>
-  <version>1.2.5</version>
+  <version>1.2.6-SNAPSHOT</version>
   <packaging>pom</packaging>
     
   <modules>
