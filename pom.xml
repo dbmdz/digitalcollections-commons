@@ -17,6 +17,7 @@
     <module>dc-commons-springdata</module>
     <module>dc-commons-jdbi</module>
     <module>dc-commons-feign</module>
+    <module>dc-commons-springboot</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
@@ -47,6 +48,7 @@
     <version.slf4j>1.7.22</version.slf4j>
     <version.snakeyaml>1.17</version.snakeyaml>
     <version.spring-aop>4.3.6.RELEASE</version.spring-aop>
+    <version.spring-beans>4.3.6.RELEASE</version.spring-beans>
     <version.spring-context>4.3.6.RELEASE</version.spring-context>
     <version.spring-data-commons>1.13.4.RELEASE</version.spring-data-commons>
     <version.spring-web>4.3.6.RELEASE</version.spring-web>
@@ -149,6 +151,17 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-aop</artifactId>
         <version>${version.spring-aop}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${version.spring-beans}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
@@ -311,7 +324,7 @@
   <licenses>
     <license>
       <name>MIT License</name>
-      <url>https://github.com/dbmdz/digitalcollections-core/blob/master/LICENSE.md</url>
+      <url>https://github.com/dbmdz/digitalcollections-commons/blob/master/LICENSE.md</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
