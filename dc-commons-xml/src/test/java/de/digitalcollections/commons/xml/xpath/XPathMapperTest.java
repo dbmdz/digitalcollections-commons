@@ -19,14 +19,14 @@ public class XPathMapperTest {
   private interface TestMapper {
 
     String TEI_NS = "http://www.tei-c.org/ns/1.0";
-    String BIBLSTRUCT_PATH = "/:TEI/:teiHeader/:fileDesc/:sourceDesc/:listBibl/:biblStruct";
+    String BIBLSTRUCT_PATH = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct";
 
     @XPathBinding(
             defaultNamespace = TEI_NS,
             valueTemplate = "{author}",
             multiLanguage = true,
             variables = {
-              @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/:monogr/:author/:persName/:name"})
+              @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
             }
     )
     Map<Locale, String> getAuthor() throws XPathMappingException;
@@ -35,10 +35,10 @@ public class XPathMapperTest {
             defaultNamespace = TEI_NS,
             valueTemplate = "{title}<: {subtitle}>< [. {partNumber}<, {partTitle}>]>",
             variables = {
-              @XPathVariable(name = "title", paths = {BIBLSTRUCT_PATH + "/:monogr/:title[@type=\"main\"]"}),
-              @XPathVariable(name = "subtitle", paths = {BIBLSTRUCT_PATH + "/:monogr/:title[@type=\"sub\"]"}),
-              @XPathVariable(name = "partNumber", paths = {BIBLSTRUCT_PATH + "/:series/:biblScope[@ana=\"#norm\"]"}),
-              @XPathVariable(name = "partTitle", paths = {BIBLSTRUCT_PATH + "/:monogr/:title[@type=\"part\"]"})
+              @XPathVariable(name = "title", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"main\"]"}),
+              @XPathVariable(name = "subtitle", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"sub\"]"}),
+              @XPathVariable(name = "partNumber", paths = {BIBLSTRUCT_PATH + "/tei:series/tei:biblScope[@ana=\"#norm\"]"}),
+              @XPathVariable(name = "partTitle", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"part\"]"})
             }
     )
     String getTitle() throws XPathMappingException;

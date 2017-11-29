@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>dc-commons</artifactId>
   <version>1.2.6-SNAPSHOT</version>
   <packaging>pom</packaging>
-    
+
   <modules>
     <module>dc-commons-server</module>
     <module>dc-commons-springmvc</module>
@@ -23,14 +23,14 @@
   <name>DigitalCollections: Commons (Parent)</name>
   <description>Parent for all DigitalCollections Commons projects.</description>
   <url>https://github.com/dbmdz/digitalcollections-commons</url>
-  
+
   <properties>
     <!-- Build properties -->
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    
+
     <!-- Dependency versions -->
     <version.aspectjweaver>1.8.10</version.aspectjweaver>
     <version.assertj>3.5.2</version.assertj>
@@ -44,6 +44,7 @@
     <version.junit>4.12</version.junit>
     <version.mockito-java8>2.0.1</version.mockito-java8>
     <version.mockito-core>2.7.6</version.mockito-core>
+    <version.saxon>9.8.0-6</version.saxon>
     <version.servlet-api>3.1.0</version.servlet-api>
     <version.slf4j>1.7.22</version.slf4j>
     <version.snakeyaml>1.17</version.snakeyaml>
@@ -55,7 +56,7 @@
     <version.spring-webmvc>4.3.6.RELEASE</version.spring-webmvc>
     <version.spring-security>4.2.1.RELEASE</version.spring-security>
     <version.thymeleaf>3.0.7.RELEASE</version.thymeleaf>
-        
+
     <!-- Plugin versions -->
     <version.jacoco-maven-plugin>0.7.9</version.jacoco-maven-plugin>
     <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
@@ -65,7 +66,7 @@
     <version.nexus-staging-maven-plugin>1.6.7</version.nexus-staging-maven-plugin>
     <version.versions-maven-plugin>2.3</version.versions-maven-plugin>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -109,6 +110,11 @@
         <artifactId>junit</artifactId>
         <scope>test</scope>
         <version>${version.junit}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>Saxon-HE</artifactId>
+        <version>${version.saxon}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -198,9 +204,9 @@
         <artifactId>thymeleaf</artifactId>
         <version>${version.thymeleaf}</version>
       </dependency>
-    </dependencies>  
+    </dependencies>
   </dependencyManagement>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -283,7 +289,7 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
-  
+
   <repositories>
     <repository>
       <id>ossrh-snapshots</id>
@@ -320,7 +326,7 @@
       <id>datazuul</id>
     </developer>
   </developers>
-  
+
   <licenses>
     <license>
       <name>MIT License</name>
@@ -328,7 +334,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <reporting>
     <plugins>
       <plugin>
@@ -352,8 +358,8 @@
     <connection>https://github.com/dbmdz/digitalcollections-commons.git</connection>
     <developerConnection>git@github.com:dbmdz/digitalcollections-commons.git</developerConnection>
     <url>https://github.com/dbmdz/digitalcollections-commons</url>
-  </scm> 
-  
+  </scm>
+
   <profiles>
     <profile>
       <id>deploy</id>

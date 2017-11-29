@@ -8,15 +8,17 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import net.sf.saxon.xpath.XPathFactoryImpl;
 
 public class XPathExpressionCache {
   private final ConcurrentHashMap<String, XPathExpression> cache;
 
+  private final XPathFactory xPathFactory = new XPathFactoryImpl();
   private final XPath xpath;
 
   public XPathExpressionCache() {
     cache = new ConcurrentHashMap<>();
-    xpath = XPathFactory.newInstance().newXPath();
+    xpath = xPathFactory.newXPath();
     xpath.setNamespaceContext(new DigitalCollectionsNamespaceContext());
   }
 
@@ -35,7 +37,7 @@ public class XPathExpressionCache {
   public int getSize() {
     return cache.size();
   }
-  
+
   public List<String> getExpressions() {
     return Collections.list(cache.keys());
   }
