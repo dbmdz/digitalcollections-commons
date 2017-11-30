@@ -28,10 +28,10 @@ import org.w3c.dom.NodeList;
  * Provides a lightweight wrapper around the Document class to make XPath queries less painful and verbose.
  */
 public class XPathWrapper {
+  private static XPathExpressionCache GLOBAL_CACHE = new XPathExpressionCache();
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathWrapper.class);
   private Document document;
-
   private XPathExpressionCache expressionCache;
 
   private XPathWrapper() {
@@ -43,7 +43,7 @@ public class XPathWrapper {
   }
 
   public XPathWrapper(Document document) {
-    this(document, new XPathExpressionCache());
+    this(document, GLOBAL_CACHE);
   }
 
   public void setDefaultNamespace(String namespaceUrl) {
