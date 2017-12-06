@@ -35,7 +35,7 @@
     <version.aspectjweaver>1.8.10</version.aspectjweaver>
     <version.assertj>3.5.2</version.assertj>
     <version.commons-lang3>3.4</version.commons-lang3>
-    <version.dc-core-model>2.0.0-SNAPSHOT</version.dc-core-model>
+    <version.dc-core-model>2.0.1</version.dc-core-model>
     <version.geoip>2.8.0</version.geoip>
     <version.hamcrest-core>1.3</version.hamcrest-core>
     <version.jackson-databind>2.8.6</version.jackson-databind>
