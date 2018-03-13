@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: default
+
+---
+
+spring:
+  profiles: pathstest
+
+security:
+  access:
+    unsecured:
+      - /foo
+      - /bar
+      - /baz

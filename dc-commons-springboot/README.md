@@ -39,7 +39,8 @@ To use this endpoint, add the following two packages to your Spring Component sc
 You also have to enable the endpoint in your application configuration, e.g. ```application.yml```:
 
 ```yml
-endpoints:
+management:
+  endpoints:
     web:
       exposure:
         include:
@@ -73,7 +74,7 @@ To fill these values, you need the following parts in your ```pom.xml```:
 <properties>
   <timestamp>${maven.build.timestamp}</timestamp>
   <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
-  <versionName>${project.version} manually built by ${user.name} (${maven.build.timestamp}, branch ${scmBranch}, commit ${buildNumber} maybe with modifications)</versionName>
+  <versionName>${project.version} manually built by ${user.name} at ${maven.build.timestamp}</versionName>
 </properties>
 [...]
 <build>

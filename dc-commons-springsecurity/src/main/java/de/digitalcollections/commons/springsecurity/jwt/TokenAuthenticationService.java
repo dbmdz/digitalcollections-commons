@@ -1,4 +1,4 @@
-package de.digitalcollections.commons.springmvc.security.jwt;
+package de.digitalcollections.commons.springsecurity.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;

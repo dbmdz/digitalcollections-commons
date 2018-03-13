@@ -1,4 +1,4 @@
-package de.digitalcollections.commons.springmvc.security.jwt;
+package de.digitalcollections.commons.springsecurity.jwt;
 
 import java.util.Collection;
 import org.springframework.security.core.Authentication;
