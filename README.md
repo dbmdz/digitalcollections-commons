@@ -10,7 +10,9 @@ Read module specific documentations:
 
 - [DigitalCollections Commons Server](digitalcollections-commons-server)
 - [DigitalCollections Commons Spring AOP](digitalcollections-commons-springaop)
+- [DigitalCollections Commons Spring Boot](digitalcollections-commons-springboot)
 - [DigitalCollections Commons Spring MVC](digitalcollections-commons-springmvc)
+- [DigitalCollections Commons Spring Security](digitalcollections-commons-springsecurity)
 - [DigitalCollections Commons Validation](digitalcollections-commons-validation)
 - [DigitalCollections Commons YAML](digitalcollections-commons-yaml)
 - [DigitalCollections Commons XML](digitalcollections-commons-xml)
