@@ -19,6 +19,7 @@
     <module>dc-commons-feign</module>
     <module>dc-commons-springboot</module>
     <module>dc-commons-springsecurity</module>
+    <module>dc-commons-prosemirror</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
@@ -35,6 +36,7 @@
     <!-- Dependency versions -->
     <version.aspectjweaver>1.8.10</version.aspectjweaver>
     <version.assertj>3.5.2</version.assertj>
+    <version.commons-beanutils>1.9.3</version.commons-beanutils>
     <version.commons-lang3>3.4</version.commons-lang3>
     <version.dc-core-model>2.1.0-SNAPSHOT</version.dc-core-model>
     <version.geoip>2.8.0</version.geoip>
@@ -45,6 +47,7 @@
     <version.junit>4.12</version.junit>
     <version.junit5>5.1.0</version.junit5>
     <version.junit5-platform>1.1.0</version.junit5-platform>
+    <version.logback-classic>1.2.3</version.logback-classic>
     <version.mockito-java8>2.0.1</version.mockito-java8>
     <version.mockito-core>2.7.6</version.mockito-core>
     <version.saxon>9.8.0-6</version.saxon>
@@ -71,6 +74,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${version.logback-classic}</version>
+      </dependency>
+      <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
         <version>${version.jackson}</version>
@@ -84,6 +92,12 @@
         <groupId>com.maxmind.geoip2</groupId>
         <artifactId>geoip2</artifactId>
         <version>${version.geoip}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${version.commons-beanutils}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>de.digitalcollections.commons</groupId>
