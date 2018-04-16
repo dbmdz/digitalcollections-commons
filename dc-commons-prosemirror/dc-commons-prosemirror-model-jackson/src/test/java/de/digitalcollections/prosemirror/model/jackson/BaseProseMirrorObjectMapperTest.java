@@ -20,6 +20,7 @@ public class BaseProseMirrorObjectMapperTest {
   }
 
 
+  @SuppressWarnings("unchecked")
   protected <T> void checkSerializeDeserialize(T objectIn) throws Exception {
     T objectOut = (T) serializeDeserialize(objectIn);
 
@@ -45,13 +46,14 @@ public class BaseProseMirrorObjectMapperTest {
      */
     try {
       assertThat(objectOut).isEqualToComparingFieldByFieldRecursively(objectIn);
-      // System.out.println("IN=" + dump(objectIn) + "\nOUT=" + dump(objectOut) + "\n\n");
+      //System.out.println("IN=" + dump(objectIn) + "\nOUT=" + dump(objectOut) + "\n\n");
     } catch (Throwable e) {
       System.err.println("ERR: IN=" + dump(objectIn) + "\nOUT=" + dump(objectOut) + "\n\nERROR=" + e.getClass() + "=" + e.getMessage());
       throw e;
     }
   }
 
+  @SuppressWarnings("unchecked")
   private Object serializeDeserialize(Object o) throws JsonProcessingException, IOException {
     String serializedObject = mapper.writeValueAsString(o);
     Class valueType = o.getClass();

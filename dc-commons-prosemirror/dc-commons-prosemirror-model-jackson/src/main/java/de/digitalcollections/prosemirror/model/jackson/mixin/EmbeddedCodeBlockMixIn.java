@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.digitalcollections.prosemirror.model.api.Content;
-import de.digitalcollections.prosemirror.model.impl.content.ParagraphImpl;
+import de.digitalcollections.prosemirror.model.impl.content.EmbeddedCodeBlockImpl;
 import java.util.List;
 
-@JsonDeserialize(as = ParagraphImpl.class)
+@JsonDeserialize(as = EmbeddedCodeBlockImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface ParagraphMixIn {
+public interface EmbeddedCodeBlockMixIn {
 
   @JsonProperty("content")
   List<Content> getContents();

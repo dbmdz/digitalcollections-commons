@@ -1,11 +1,13 @@
 package de.digitalcollections.prosemirror.model.jackson;
 
-import de.digitalcollections.prosemirror.model.api.Paragraph;
 import de.digitalcollections.prosemirror.model.api.content.HardBreak;
+import de.digitalcollections.prosemirror.model.api.content.Paragraph;
 import de.digitalcollections.prosemirror.model.api.content.Text;
-import de.digitalcollections.prosemirror.model.impl.ParagraphImpl;
 import de.digitalcollections.prosemirror.model.impl.content.HardBreakImpl;
+import de.digitalcollections.prosemirror.model.impl.content.MarkImpl;
+import de.digitalcollections.prosemirror.model.impl.content.ParagraphImpl;
 import de.digitalcollections.prosemirror.model.impl.content.TextImpl;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,4 +71,62 @@ public class ParagraphTest extends BaseProseMirrorObjectMapperTest{
     assertThat(paragraph.getContents()).containsExactly(text1, hardBreak, text2);
   }
 
+  @Test
+  @Disabled("This is not valid JSON!")
+  public void testDeserializationWithContentsWithMarks() throws Exception {
+    String jsonString = "{\n"
+        + "  \"type\": \"paragraph\",\n"
+        + "  \"content\": [\n"
+        + "    {\n"
+        + "      \"type\": \"text\",\n"
+        + "      \"marks\": [\n"
+        + "        {\n"
+        + "          \"type\": \"strong\"\n"
+        + "        }\n"
+        + "      ],\n"
+        + "      \"text\": \"Telefon:\"\n"
+        + "    },\n"
+        + "    {\n"
+        + "      \"type\": \"text\",\n"
+        + "      \"text\": \" +49 89 28638-0\"\n"
+        + "    },\n"
+        + "    {\n"
+        + "      \"type\": \"hard_break\"\n"
+        + "    },\n"
+        + "    {\n"
+        + "      \"type\": \"text\",\n"
+        + "      \"marks\": [\n"
+        + "        {\n"
+        + "          \"type\": \"strong\",\n"
+        + "          \"type\": \"em\"\n"
+        + "        }\n"
+        + "      ],\n"
+        + "      \"text\": \"Fax:\"\n"
+        + "    },\n"
+        + "    {\n"
+        + "      \"type\": \"text\",\n"
+        + "      \"text\": \" +49 89 28638-2200\"\n"
+        + "    }\n"
+        + "  ]\n"
+        + "}";
+
+    Paragraph paragraph = mapper.readValue(jsonString, Paragraph.class);
+
+    assertThat(paragraph.getContents()).hasSize(5);
+
+    Text text1 = new TextImpl("Telefon");
+    text1.addMark(new MarkImpl("strong"));
+
+    Text text2 = new TextImpl(" +49 89 28638-0");
+
+    HardBreak hardBreak = new HardBreakImpl();
+
+    Text text3 = new TextImpl("Fax:");
+    text3.addMark(new MarkImpl("strong"));
+    text3.addMark(new MarkImpl("em"));
+
+    Text text4 = new TextImpl(" +49 89 28638-2200");
+
+    assertThat(paragraph.getContents()).containsExactly(text1, text2, hardBreak, text3, text4);
+  }
 }

@@ -4,21 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.digitalcollections.prosemirror.model.api.Content;
-import de.digitalcollections.prosemirror.model.impl.content.ParagraphImpl;
+import de.digitalcollections.prosemirror.model.api.content.ListItem;
+import de.digitalcollections.prosemirror.model.impl.content.BulletListImpl;
 import java.util.List;
 
-@JsonDeserialize(as = ParagraphImpl.class)
+@JsonDeserialize(as = BulletListImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface ParagraphMixIn {
+public interface BulletListMixIn {
 
   @JsonProperty("content")
-  List<Content> getContents();
+  List<ListItem> getContents();
 
   @JsonProperty("content")
-  void setContents(List<Content> contents);
+  void setContents(List<ListItem> contents);
 
   @JsonIgnore
-  void addContent(Content content);
+  void addContent(ListItem content);
 
 }

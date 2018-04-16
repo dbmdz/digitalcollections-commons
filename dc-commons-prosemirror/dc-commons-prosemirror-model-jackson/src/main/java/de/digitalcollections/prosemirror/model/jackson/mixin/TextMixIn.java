@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.digitalcollections.prosemirror.model.api.Content;
-import de.digitalcollections.prosemirror.model.impl.content.ParagraphImpl;
+import de.digitalcollections.prosemirror.model.api.content.Mark;
+import de.digitalcollections.prosemirror.model.impl.content.TextImpl;
 import java.util.List;
 
-@JsonDeserialize(as = ParagraphImpl.class)
+@JsonDeserialize(as = TextImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface ParagraphMixIn {
+public interface TextMixIn {
 
   @JsonProperty("content")
   List<Content> getContents();
@@ -20,5 +21,14 @@ public interface ParagraphMixIn {
 
   @JsonIgnore
   void addContent(Content content);
+
+  @JsonProperty("marks")
+  List<Mark> getMarks();
+
+  @JsonProperty("marks")
+  void setMarks(List<Mark> marks);
+
+  @JsonIgnore
+  void addMark(Mark mark);
 
 }

@@ -1,11 +1,15 @@
 package de.digitalcollections.prosemirror.model.impl.content;
 
+import de.digitalcollections.prosemirror.model.api.content.Mark;
 import de.digitalcollections.prosemirror.model.api.content.Text;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class TextImpl implements Text {
+public class TextImpl extends ContentImpl implements Text {
 
   private String text;
+  private List<Mark> marks;
 
   public TextImpl() {
   }
@@ -29,7 +33,10 @@ public class TextImpl implements Text {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof TextImpl)) {
+      return false;
+    }
+    if (!super.equals(o)) {
       return false;
     }
     TextImpl text1 = (TextImpl) o;
@@ -37,8 +44,35 @@ public class TextImpl implements Text {
   }
 
   @Override
-  public int hashCode() {
+  public List<Mark> getMarks() {
+    return marks;
+  }
 
-    return Objects.hash(text);
+  @Override
+  public void setMarks(List<Mark> marks) {
+    this.marks = marks;
+  }
+
+  @Override
+  public void addMark(Mark mark) {
+    if ( marks == null ) {
+      marks = new ArrayList<>();
+    }
+
+    marks.add(mark);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), text, marks);
+  }
+
+  @Override
+  public String toString() {
+    return "TextImpl{"
+        + "text='" + text + "\', "
+        + "marks=" + marks + ","
+        + "contents=" + contents
+        + '}';
   }
 }

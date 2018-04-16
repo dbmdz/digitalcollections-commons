@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.digitalcollections.prosemirror.model.api.Content;
-import de.digitalcollections.prosemirror.model.impl.content.HeadingImpl;
+import de.digitalcollections.prosemirror.model.api.content.ListItem;
+import de.digitalcollections.prosemirror.model.impl.content.OrderedListImpl;
 import java.util.List;
 import java.util.Map;
 
-@JsonDeserialize(as = HeadingImpl.class)
+@JsonDeserialize(as = OrderedListImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface HeadingMixIn {
+public interface OrderedListMixIn {
 
   @JsonProperty("attrs")
   Map<String, Object> getAttributes();
@@ -26,12 +26,12 @@ public interface HeadingMixIn {
   Object getAttribute(String key);
 
   @JsonProperty("content")
-  List<Content> getContents();
+  List<ListItem> getContents();
 
   @JsonProperty("content")
-  void setContents(List<Content> contents);
+  void setContents(List<ListItem> contents);
 
   @JsonIgnore
-  void addContent(Content content);
+  void addContent(ListItem content);
 
 }
