@@ -10,6 +10,8 @@ public class DocumentImpl implements Document {
 
   Map<Locale, List<Content>> contentBlocks;
 
+  public DocumentImpl() {}
+
   @Override
   public Map<Locale, List<Content>> getContentBlocks() {
     return contentBlocks;
