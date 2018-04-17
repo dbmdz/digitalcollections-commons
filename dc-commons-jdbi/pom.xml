@@ -23,5 +23,11 @@
       <artifactId>jdbi3-core</artifactId>
       <version>${version.jdbi3}</version>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>3.0.0-SNAPSHOT</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 </project>
