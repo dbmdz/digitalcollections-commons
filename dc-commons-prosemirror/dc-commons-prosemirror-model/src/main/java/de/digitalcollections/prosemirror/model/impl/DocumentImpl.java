@@ -21,4 +21,15 @@ public class DocumentImpl implements Document {
   public void setContentBlocks(Map<Locale, List<Content>> contentBlocks) {
     this.contentBlocks = contentBlocks;
   }
+
+  public List<Content> getContents() {
+    if ( contentBlocks == null || contentBlocks.isEmpty() ) {
+      return null;
+    }
+    if ( contentBlocks.keySet().size() == 1) {
+      return contentBlocks.get(contentBlocks.keySet().iterator().next());
+    }
+
+    throw new RuntimeException("Too many languages to choose from: " + contentBlocks.keySet().iterator());
+  }
 }
