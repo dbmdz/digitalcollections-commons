@@ -14,12 +14,11 @@ import org.jdbi.v3.core.config.ConfigRegistry;
 public class JsonbArgumentFactory<T> implements ArgumentFactory {
 
   private final Class clz;
-
   private final ObjectMapper objectMapper;
 
   public JsonbArgumentFactory(Class<T> clz, ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
     this.clz = clz;
+    this.objectMapper = objectMapper;
   }
 
   protected Argument build(T value, ConfigRegistry config) {
