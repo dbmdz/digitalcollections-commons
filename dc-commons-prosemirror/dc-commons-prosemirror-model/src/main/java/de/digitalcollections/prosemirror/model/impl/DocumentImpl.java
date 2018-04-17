@@ -22,6 +22,7 @@ public class DocumentImpl implements Document {
     this.contentBlocks = contentBlocks;
   }
 
+  @Override
   public List<Content> getContents() {
     if ( contentBlocks == null || contentBlocks.isEmpty() ) {
       return null;

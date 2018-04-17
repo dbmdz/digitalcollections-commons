@@ -23,4 +23,6 @@ public interface Document {
     }
     getContentBlocks().put(locale, contentBlocks);
   }
+
+  List<Content> getContents();
 }
