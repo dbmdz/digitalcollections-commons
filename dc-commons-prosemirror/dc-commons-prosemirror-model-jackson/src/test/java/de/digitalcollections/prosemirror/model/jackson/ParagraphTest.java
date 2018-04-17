@@ -7,7 +7,6 @@ import de.digitalcollections.prosemirror.model.impl.content.HardBreakImpl;
 import de.digitalcollections.prosemirror.model.impl.content.MarkImpl;
 import de.digitalcollections.prosemirror.model.impl.content.ParagraphImpl;
 import de.digitalcollections.prosemirror.model.impl.content.TextImpl;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,7 +71,6 @@ public class ParagraphTest extends BaseProseMirrorObjectMapperTest{
   }
 
   @Test
-  @Disabled("This is not valid JSON!")
   public void testDeserializationWithContentsWithMarks() throws Exception {
     String jsonString = "{\n"
         + "  \"type\": \"paragraph\",\n"
@@ -96,10 +94,8 @@ public class ParagraphTest extends BaseProseMirrorObjectMapperTest{
         + "    {\n"
         + "      \"type\": \"text\",\n"
         + "      \"marks\": [\n"
-        + "        {\n"
-        + "          \"type\": \"strong\",\n"
-        + "          \"type\": \"em\"\n"
-        + "        }\n"
+        + "        {\"type\":\"strong\"},\n"
+        + "        {\"type\":\"em\"}\n"
         + "      ],\n"
         + "      \"text\": \"Fax:\"\n"
         + "    },\n"
@@ -114,7 +110,7 @@ public class ParagraphTest extends BaseProseMirrorObjectMapperTest{
 
     assertThat(paragraph.getContents()).hasSize(5);
 
-    Text text1 = new TextImpl("Telefon");
+    Text text1 = new TextImpl("Telefon:");
     text1.addMark(new MarkImpl("strong"));
 
     Text text2 = new TextImpl(" +49 89 28638-0");

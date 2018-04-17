@@ -4,7 +4,6 @@ import de.digitalcollections.prosemirror.model.api.content.Mark;
 import de.digitalcollections.prosemirror.model.api.content.Text;
 import de.digitalcollections.prosemirror.model.impl.content.MarkImpl;
 import de.digitalcollections.prosemirror.model.impl.content.TextImpl;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,17 +75,14 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
   }
 
   @Test
-  @Disabled("This is not valid JSON!")
   public void testDeserializationWithMarksOnly() throws Exception {
     String jsonString = "{\n"
-        + "          \"type\": \"text\",\n"
-        + "           \"marks\": [\n"
-        + "             {\n"
-        + "                \"type\": \"strong\",\n"
-        + "                \"type\": \"em\"\n"
-        + "             }\n"
-        + "            ]\n"
-        + "        }";
+        + "      \"type\": \"text\",\n"
+        + "      \"marks\": [\n"
+        + "        {\"type\":\"strong\"},\n"
+        + "        {\"type\":\"em\"}\n"
+        + "      ]\n"
+        + "    }";
 
     Text text = mapper.readValue(jsonString, Text.class);
     assertThat(text).isNotNull();
@@ -101,15 +97,12 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
   }
 
   @Test
-  @Disabled("This is not valid JSON!")
   public void testDeserializationWithTextAndMarks() throws Exception {
     String jsonString = "{\n"
         + "      \"type\": \"text\",\n"
         + "      \"marks\": [\n"
-        + "        {\n"
-        + "          \"type\": \"strong\",\n"
-        + "          \"type\": \"em\"\n"
-        + "        }\n"
+        + "        {\"type\":\"strong\"},\n"
+        + "        {\"type\":\"em\"}\n"
         + "      ],\n"
         + "      \"text\": \"Fax:\"\n"
         + "    }";
