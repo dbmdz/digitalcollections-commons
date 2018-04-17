@@ -1,17 +1,50 @@
 package de.digitalcollections.prosemirror.model.impl.content;
 
 import de.digitalcollections.prosemirror.model.api.content.Mark;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MarkImpl implements Mark {
 
   String type;
 
+  Map<String, Object> attributes = null;
+
   public MarkImpl() {}
 
   public MarkImpl(String type ) {
     this.type = type;
   }
+
+  @Override
+  public Map<String, Object> getAttributes() {
+    return attributes;
+  }
+
+  @Override
+  public void setAttributes(Map<String, Object> attributes) {
+    this.attributes = attributes;
+  }
+
+  @Override
+  public void addAttribute(String key, Object value) {
+    if ( attributes == null ) {
+      attributes = new HashMap<>();
+    }
+
+    attributes.put(key, value);
+  }
+
+  @Override
+  public Object getAttribute(String key) {
+    if ( attributes == null ) {
+      return null;
+    }
+
+    return attributes.get(key);
+  }
+
 
   @Override
   public String getType() {

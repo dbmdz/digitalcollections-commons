@@ -18,6 +18,17 @@ public class TextImpl extends ContentImpl implements Text {
     this.text = text;
   }
 
+  public TextImpl(String text, String... marks) {
+    this(text);
+    if ( marks != null ) {
+      for (String markStr : marks) {
+        Mark mark = new MarkImpl(markStr);
+        addMark(mark);
+      }
+    }
+
+  }
+
   @Override
   public String getText() {
     return text;
