@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ContentWithAttributesImpl extends ContentImpl implements Content, Attributes {
+public abstract class ContentWithAttributesImpl extends ContentImpl implements Content, Attributes {
 
   Map<String, Object> attributes = null;
 
@@ -22,7 +22,7 @@ public class ContentWithAttributesImpl extends ContentImpl implements Content, A
 
   @Override
   public void addAttribute(String key, Object value) {
-    if ( attributes == null ) {
+    if (attributes == null) {
       attributes = new HashMap<>();
     }
 
@@ -31,7 +31,7 @@ public class ContentWithAttributesImpl extends ContentImpl implements Content, A
 
   @Override
   public Object getAttribute(String key) {
-    if ( attributes == null ) {
+    if (attributes == null) {
       return null;
     }
 
@@ -62,7 +62,7 @@ public class ContentWithAttributesImpl extends ContentImpl implements Content, A
   @Override
   public String toString() {
     return "ContentWithAttributesImpl{"
-        + "attributes=" + attributes
-        + '}';
+            + "attributes=" + attributes
+            + '}';
   }
 }
