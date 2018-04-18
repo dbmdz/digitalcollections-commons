@@ -48,7 +48,7 @@ public class BaseProseMirrorObjectMapperTest {
       assertThat(objectOut).isEqualToComparingFieldByFieldRecursively(objectIn);
       //System.out.println("IN=" + dump(objectIn) + "\nOUT=" + dump(objectOut) + "\n\n");
     } catch (Throwable e) {
-      System.err.println("ERR: IN=" + dump(objectIn) + "\nOUT=" + dump(objectOut) + "\n\nERROR=" + e.getClass() + "=" + e.getMessage());
+      System.err.println("ERR: IN=" + dump(objectIn) + "\n    OUT=" + dump(objectOut) + "\n\nERROR=" + e.getClass() + "=" + e.getMessage());
       throw e;
     }
   }

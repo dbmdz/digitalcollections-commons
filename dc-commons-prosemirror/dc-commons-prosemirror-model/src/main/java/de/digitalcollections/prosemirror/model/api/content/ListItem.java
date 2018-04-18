@@ -1,7 +1,7 @@
 package de.digitalcollections.prosemirror.model.api.content;
 
-import de.digitalcollections.prosemirror.model.api.Content;
+import de.digitalcollections.prosemirror.model.api.NodeContent;
 
-public interface ListItem extends Content {
+public interface ListItem extends NodeContent {
 
 }

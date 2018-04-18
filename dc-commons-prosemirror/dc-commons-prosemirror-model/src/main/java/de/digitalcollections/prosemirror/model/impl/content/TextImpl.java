@@ -40,21 +40,6 @@ public class TextImpl extends ContentImpl implements Text {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof TextImpl)) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
-    }
-    TextImpl text1 = (TextImpl) o;
-    return Objects.equals(text, text1.text);
-  }
-
-  @Override
   public List<Mark> getMarks() {
     return marks;
   }
@@ -74,16 +59,30 @@ public class TextImpl extends ContentImpl implements Text {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof TextImpl)) {
+      return false;
+    }
+    TextImpl text1 = (TextImpl) o;
+    return Objects.equals(text, text1.text)
+        && Objects.equals(marks, text1.marks);
+  }
+
+  @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), text, marks);
+
+    return Objects.hash(text, marks);
   }
 
   @Override
   public String toString() {
     return "TextImpl{"
         + "text='" + text + "\', "
-        + "marks=" + marks + ","
-        + "contents=" + contents
+        + "marks=" + marks + ", "
+        + "hashCode=" + hashCode()
         + '}';
   }
 }

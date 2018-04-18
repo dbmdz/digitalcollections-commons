@@ -1,12 +1,12 @@
 package de.digitalcollections.prosemirror.model.impl.content;
 
 import de.digitalcollections.prosemirror.model.api.Attributes;
-import de.digitalcollections.prosemirror.model.api.Content;
+import de.digitalcollections.prosemirror.model.api.NodeContent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class ContentWithAttributesImpl extends ContentImpl implements Content, Attributes {
+public abstract class ContentWithAttributesImpl extends NodeContentImpl implements NodeContent, Attributes {
 
   Map<String, Object> attributes = null;
 
