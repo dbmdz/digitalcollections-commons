@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ContentImpl implements Content {
+public abstract class ContentImpl implements Content {
 
   protected List<Content> contents;
 
@@ -21,7 +21,7 @@ public class ContentImpl implements Content {
 
   @Override
   public void addContent(Content content) {
-    if ( contents == null ) {
+    if (contents == null) {
       contents = new ArrayList<>();
     }
 
@@ -49,7 +49,7 @@ public class ContentImpl implements Content {
   @Override
   public String toString() {
     return getClass().getSimpleName() + "{"
-        + "contents=" + contents
-        + '}';
+            + "contents=" + contents
+            + '}';
   }
 }
