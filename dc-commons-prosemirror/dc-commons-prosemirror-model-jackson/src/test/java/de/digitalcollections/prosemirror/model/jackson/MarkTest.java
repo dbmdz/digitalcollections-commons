@@ -1,7 +1,7 @@
 package de.digitalcollections.prosemirror.model.jackson;
 
-import de.digitalcollections.prosemirror.model.api.content.Mark;
-import de.digitalcollections.prosemirror.model.impl.content.MarkImpl;
+import de.digitalcollections.prosemirror.model.api.Mark;
+import de.digitalcollections.prosemirror.model.impl.MarkImpl;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;

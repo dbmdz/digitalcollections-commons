@@ -1,13 +1,16 @@
-package de.digitalcollections.prosemirror.model.jackson.mixin;
+package de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.digitalcollections.prosemirror.model.impl.MarkImpl;
+import de.digitalcollections.prosemirror.model.impl.contentblocks.HeadingImpl;
+import de.digitalcollections.prosemirror.model.jackson.mixin.NodeContentBlockMixin;
 import java.util.Map;
 
-@JsonDeserialize(as = MarkImpl.class)
-public interface MarkMixIn {
+@JsonDeserialize(as = HeadingImpl.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public interface HeadingMixIn extends NodeContentBlockMixin {
 
   @JsonProperty("attrs")
   Map<String, Object> getAttributes();
@@ -20,5 +23,4 @@ public interface MarkMixIn {
 
   @JsonIgnore
   Object getAttribute(String key);
-
 }

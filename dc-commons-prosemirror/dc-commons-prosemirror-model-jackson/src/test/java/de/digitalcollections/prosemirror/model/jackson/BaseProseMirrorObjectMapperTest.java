@@ -12,16 +12,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BaseProseMirrorObjectMapperTest {
 
-  ObjectMapper mapper;
+  public ObjectMapper mapper;
 
   @BeforeEach
   public void setUp() {
     mapper = new ProseMirrorObjectMapper();
   }
 
-
   @SuppressWarnings("unchecked")
-  protected <T> void checkSerializeDeserialize(T objectIn) throws Exception {
+  public <T> void checkSerializeDeserialize(T objectIn) throws Exception {
     T objectOut = (T) serializeDeserialize(objectIn);
 
     try {

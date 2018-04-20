@@ -3,7 +3,7 @@ package de.digitalcollections.prosemirror.model.api;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Document {
+public interface NodeContentBlock extends ContentBlock {
 
   List<ContentBlock> getContentBlocks();
 
@@ -15,4 +15,5 @@ public interface Document {
     }
     getContentBlocks().add(contentBlock);
   }
+
 }
