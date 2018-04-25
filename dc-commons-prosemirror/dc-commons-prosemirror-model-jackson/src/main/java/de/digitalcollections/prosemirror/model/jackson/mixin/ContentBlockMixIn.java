@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.digitalcollections.prosemirror.model.api.ContentBlock;
+import de.digitalcollections.prosemirror.model.impl.contentblocks.BlockquoteImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.BulletListImpl;
+import de.digitalcollections.prosemirror.model.impl.contentblocks.CodeBlockImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.EmbeddedCodeImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.HardBreakImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.HeadingImpl;
@@ -23,7 +25,9 @@ import java.util.List;
         visible = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSubTypes({
+  @JsonSubTypes.Type(value = BlockquoteImpl.class, name = "blockquote"),
   @JsonSubTypes.Type(value = BulletListImpl.class, name = "bullet_list"),
+  @JsonSubTypes.Type(value = CodeBlockImpl.class, name = "code_block"),
   @JsonSubTypes.Type(value = EmbeddedCodeImpl.class, name = "embedded_code"),
   @JsonSubTypes.Type(value = HardBreakImpl.class, name = "hard_break"),
   @JsonSubTypes.Type(value = HeadingImpl.class, name = "heading"),

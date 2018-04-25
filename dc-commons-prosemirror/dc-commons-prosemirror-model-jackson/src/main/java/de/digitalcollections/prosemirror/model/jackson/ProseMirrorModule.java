@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.Module;
 import de.digitalcollections.prosemirror.model.api.ContentBlock;
 import de.digitalcollections.prosemirror.model.api.Document;
 import de.digitalcollections.prosemirror.model.api.Mark;
+import de.digitalcollections.prosemirror.model.api.contentblocks.Blockquote;
 import de.digitalcollections.prosemirror.model.api.contentblocks.BulletList;
+import de.digitalcollections.prosemirror.model.api.contentblocks.CodeBlock;
 import de.digitalcollections.prosemirror.model.api.contentblocks.EmbeddedCode;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Heading;
 import de.digitalcollections.prosemirror.model.api.contentblocks.ListItem;
@@ -15,7 +17,9 @@ import de.digitalcollections.prosemirror.model.api.contentblocks.Text;
 import de.digitalcollections.prosemirror.model.jackson.mixin.ContentBlockMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.DocumentMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.MarkMixIn;
+import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.BlockquoteMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.BulletListMixIn;
+import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.CodeBlockMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.EmbeddedCodeMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.HeadingMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.ListItemMixIn;
@@ -39,7 +43,9 @@ public class ProseMirrorModule extends Module {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Using " + getModuleName());
     }
+    context.setMixInAnnotations(Blockquote.class, BlockquoteMixIn.class);
     context.setMixInAnnotations(BulletList.class, BulletListMixIn.class);
+    context.setMixInAnnotations(CodeBlock.class, CodeBlockMixIn.class);
     context.setMixInAnnotations(ContentBlock.class, ContentBlockMixIn.class);
     context.setMixInAnnotations(Document.class, DocumentMixIn.class);
     context.setMixInAnnotations(EmbeddedCode.class, EmbeddedCodeMixIn.class);
