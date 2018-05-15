@@ -1,11 +1,8 @@
 package de.digitalcollections.prosemirror.model.api.contentblocks;
 
+import de.digitalcollections.prosemirror.model.api.Attributes;
 import de.digitalcollections.prosemirror.model.api.ContentBlock;
 
-public interface EmbeddedCode extends ContentBlock {
-
-  String getCode();
-
-  void setCode(String code);
+public interface IFrame extends ContentBlock, Attributes {
 
 }

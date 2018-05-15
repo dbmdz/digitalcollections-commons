@@ -1,9 +1,9 @@
 package de.digitalcollections.prosemirror.model.impl.contentblocks;
 
 import de.digitalcollections.prosemirror.model.api.contentblocks.Heading;
-import de.digitalcollections.prosemirror.model.impl.ContentBlockWithAttributesImpl;
+import de.digitalcollections.prosemirror.model.impl.NodeContentBlockWithAttributesImpl;
 
-public class HeadingImpl extends ContentBlockWithAttributesImpl implements Heading {
+public class HeadingImpl extends NodeContentBlockWithAttributesImpl implements Heading {
 
   public HeadingImpl() {
   }

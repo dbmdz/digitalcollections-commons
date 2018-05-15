@@ -9,9 +9,9 @@ import de.digitalcollections.prosemirror.model.api.ContentBlock;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.BlockquoteImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.BulletListImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.CodeBlockImpl;
-import de.digitalcollections.prosemirror.model.impl.contentblocks.EmbeddedCodeImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.HardBreakImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.HeadingImpl;
+import de.digitalcollections.prosemirror.model.impl.contentblocks.IFrameImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.ListItemImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.OrderedListImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.ParagraphImpl;
@@ -28,9 +28,9 @@ import java.util.List;
   @JsonSubTypes.Type(value = BlockquoteImpl.class, name = "blockquote"),
   @JsonSubTypes.Type(value = BulletListImpl.class, name = "bullet_list"),
   @JsonSubTypes.Type(value = CodeBlockImpl.class, name = "code_block"),
-  @JsonSubTypes.Type(value = EmbeddedCodeImpl.class, name = "embedded_code"),
   @JsonSubTypes.Type(value = HardBreakImpl.class, name = "hard_break"),
   @JsonSubTypes.Type(value = HeadingImpl.class, name = "heading"),
+  @JsonSubTypes.Type(value = IFrameImpl.class, name = "iframe"),
   @JsonSubTypes.Type(value = ListItemImpl.class, name = "list_item"),
   @JsonSubTypes.Type(value = OrderedListImpl.class, name = "ordered_list"),
   @JsonSubTypes.Type(value = ParagraphImpl.class, name = "paragraph"),

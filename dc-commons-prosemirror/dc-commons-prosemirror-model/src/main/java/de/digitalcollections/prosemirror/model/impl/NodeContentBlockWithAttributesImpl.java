@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class ContentBlockWithAttributesImpl extends ContentBlockImpl implements Attributes {
+public abstract class NodeContentBlockWithAttributesImpl extends NodeContentBlockImpl implements Attributes {
 
   Map<String, Object> attributes = null;
 
@@ -14,9 +14,8 @@ public abstract class ContentBlockWithAttributesImpl extends ContentBlockImpl im
     if (attributes == null) {
       attributes = new HashMap<>();
     }
-    if (value != null && key != null) {
-      attributes.put(key, value);
-    }
+
+    attributes.put(key, value);
   }
 
   @Override
@@ -30,7 +29,7 @@ public abstract class ContentBlockWithAttributesImpl extends ContentBlockImpl im
     if (!super.equals(o)) {
       return false;
     }
-    ContentBlockWithAttributesImpl that = (ContentBlockWithAttributesImpl) o;
+    NodeContentBlockWithAttributesImpl that = (NodeContentBlockWithAttributesImpl) o;
     return Objects.equals(attributes, that.attributes);
   }
 
