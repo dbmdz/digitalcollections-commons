@@ -26,13 +26,13 @@ public class YamlTest {
   @Test
   public void shouldSerializeAndDeserializeDateTime() {
     DateTime dateTime = DateTime.now();
-    assertThat(yaml.load(yaml.dump(dateTime))).isEqualTo(dateTime);
+    assertThat((DateTime) yaml.load(yaml.dump(dateTime))).isEqualTo(dateTime);
   }
 
   @Test
   public void shouldSerializeAndDeserializeLocalDateTime() {
     LocalDateTime dateTime = LocalDateTime.now();
-    assertThat(yaml.load(yaml.dump(dateTime))).isEqualTo(dateTime);
+    assertThat((LocalDateTime) yaml.load(yaml.dump(dateTime))).isEqualTo(dateTime);
   }
 
 }

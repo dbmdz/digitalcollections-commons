@@ -53,12 +53,12 @@
     <version.saxon>9.8.0-6</version.saxon>
     <version.servlet-api>3.1.0</version.servlet-api>
     <version.slf4j>1.7.22</version.slf4j>
-    <version.snakeyaml>1.17</version.snakeyaml>
-    <version.springframework>5.0.4.RELEASE</version.springframework>
-    <version.spring-boot>2.0.0.RELEASE</version.spring-boot>
+    <version.snakeyaml>1.19</version.snakeyaml>
+    <version.springframework>5.0.6.RELEASE</version.springframework>
+    <version.spring-boot>2.0.2.RELEASE</version.spring-boot>
     <version.spring-data-commons>1.13.4.RELEASE</version.spring-data-commons>
-    <version.spring-security>5.0.3.RELEASE</version.spring-security>
-    <version.thymeleaf>3.0.7.RELEASE</version.thymeleaf>
+    <version.spring-security>5.0.5.RELEASE</version.spring-security>
+    <version.thymeleaf>3.0.9.RELEASE</version.thymeleaf>
 
     <!-- Plugin versions -->
     <version.jacoco-maven-plugin>0.7.9</version.jacoco-maven-plugin>
@@ -98,11 +98,6 @@
         <artifactId>commons-beanutils</artifactId>
         <version>${version.commons-beanutils}</version>
         <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>de.digitalcollections.commons</groupId>
-        <artifactId>dc-commons-springsecurity</artifactId>
-        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>de.digitalcollections.core</groupId>

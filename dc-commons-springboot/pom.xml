@@ -17,6 +17,7 @@
     <dependency>
       <groupId>de.digitalcollections.commons</groupId>
       <artifactId>dc-commons-springsecurity</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
