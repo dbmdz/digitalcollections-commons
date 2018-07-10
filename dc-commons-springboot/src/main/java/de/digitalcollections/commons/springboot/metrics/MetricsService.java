@@ -30,17 +30,29 @@ public class MetricsService {
    * @param value Value of the gauge
    */
   public void setGauge(String name, long value) {
-    handleCounter(name, null, null, value, null, false);
+    handleCounter(name, null,null, null, value, null, false);
   }
 
   /**
    * Sets the value of a gauge
    * @param name Name of the gauge, postfixed with <tt>.amount</tt>
-   * @param tag Name of the tag
+   * @param tag Name of the tag (key is <tt>type</tt>)
    * @param value Value of the gauge
    */
   public void setGauge(String name, String tag, long value) {
-    handleCounter(name, tag, null, value, null, false);
+    handleCounter(name, "type", tag, null, value, null, false);
+  }
+
+
+  /**
+   * Sets the value of a gauge
+   * @param name Name of the gauge, postfixed with <tt>.amount</tt>
+   * @param tagKey Name of the tag
+   * @param tagValue Value of the tag
+   * @param value Value of the gauge
+   */
+  public void setGauge(String name, String tagKey, String tagValue, long value) {
+    handleCounter(name, tagKey, tagValue, null, value, null, false);
   }
 
   /**
@@ -49,7 +61,7 @@ public class MetricsService {
    * @param tag Name of the tag
    */
   public void increaseCounter(String name, String tag) {
-    handleCounter(name, tag, 1L,  null, null, false);
+    handleCounter(name, "type", tag, 1L,  null, null, false);
   }
 
   /**
@@ -59,7 +71,7 @@ public class MetricsService {
    * @param increment Increment value
    */
   public void increaseCounter(String name, String tag, long increment) {
-    handleCounter(name, tag, increment, null,null, false);
+    handleCounter(name, "type", tag, increment, null,null, false);
   }
 
   /**
@@ -69,7 +81,7 @@ public class MetricsService {
    * @param durationMillis Duration in milliseconds
    */
   public void increaseCounterWithDuration(String name, String tag, Long durationMillis) {
-    handleCounter(name, tag, 1L, null, durationMillis, false);
+    handleCounter(name, "type", tag, 1L, null, durationMillis, false);
   }
 
   /**
@@ -79,11 +91,11 @@ public class MetricsService {
    * @param durationMillis Duration in milliseconds
    */
   public void increaseCounterWithDurationAndPercentiles(String name, String tag, Long durationMillis) {
-    handleCounter(name, tag, 1L, null, durationMillis, true);
+    handleCounter(name, "type", tag, 1L, null, durationMillis, true);
   }
 
-  private void handleCounter(String name, String tag, Long increment, Long absoluteValue, Long durationMillis, Boolean publishPercentiles) {
-    String key = name + ( tag != null ? "." + tag : "");
+  private void handleCounter(String name, String tagKey, String tagValue, Long increment, Long absoluteValue, Long durationMillis, Boolean publishPercentiles) {
+    String key = name + ( ( tagKey != null && tagValue != null ) ? "." + tagValue : "");
 
     if ( increment != null ) {
       // Increase counter value
@@ -95,19 +107,19 @@ public class MetricsService {
     // Register counter, if it doesn't exist yet
     if (counterTags.get(key) == null) {
       counterTags.put(key, new HashSet<>());
-      if ( tag != null ) {
-        counterTags.get(key).add(new ImmutableTag("type", tag));
+      if ( tagKey != null && tagValue != null ) {
+        counterTags.get(key).add(new ImmutableTag(tagKey, tagValue));
         meterRegistry.gauge(name + ".amount", counterTags.get(key), key, counters::get);
       } else {
         meterRegistry.gauge(name + ".amount", counters.get(key));
       }
     }
 
-    if (durationMillis != null && tag != null) {
+    if (durationMillis != null && tagKey != null && tagValue != null) {
       // Register Timer
       if (timers.get(key) == null) {
         Timer.Builder timerBuilder = Timer.builder(name + ".duration")
-                .tag("type", tag);
+                .tag(tagKey, tagValue);
 
         if ( publishPercentiles ) {
           timerBuilder = timerBuilder.publishPercentiles(0.5, 0.95)

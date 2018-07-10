@@ -84,6 +84,15 @@ public class MetricsServiceTest {
   }
 
   @Test
+  @DisplayName("Gauges with different tag keys")
+  void gaugesWithDifferentTagKeys() {
+    metricsService.setGauge("foo", "bar", "blub", 2);
+    assertThat(metricsService.getCounters().get("foo.blub")).isEqualTo(2);
+    metricsService.setGauge("foo", "two", 42);
+    assertThat(metricsService.getCounters().get("foo.two")).isEqualTo(42);
+  }
+
+  @Test
   @DisplayName("Gauges without tag")
   void gaugeWithoutTag() {
     metricsService.setGauge("foo", 2);
