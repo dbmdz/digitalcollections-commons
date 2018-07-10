@@ -1,6 +1,6 @@
 # Digital Collections Commons Spring Boot
 
-Offer common used endpoints and contributors for Spring Boot 2 applications.
+Offer common used endpoints and contributors for Spring Boot 2 applications as well as monitoring services.
 
 ## Usage
 
@@ -10,7 +10,7 @@ Add the following artifact to your maven ```pom.xml```
 <dependency>
    <groupId>de.digitalcollections.commons</groupId>
    <artifactId>dc-commons-springboot</artifactId>
-   <version>1.3.0-SNAPSHOT</version>
+   <version>1.4.0</version>
 </dependency>
 ```
 
@@ -148,3 +148,35 @@ To enable it, extend your Spring Component scan with the following package:
     "de.digitalcollections.commons.springboot.contributor"
 })
 ```
+
+## Services
+
+### ```MetricsService```
+
+This service offers a lightweight API to *push* data into the ```io.micrometer``` monitoring, which uses the publish-subscribe pattern.
+
+To use it, extend your Spring Component scan with the following package:
+
+```java
+@ComponentScan(basePackages = {
+    "de.digitalcollections.commons.springboot.metrics"
+})
+
+[...]
+
+@Autowired MetricsService metricsService;
+```
+
+Its API is pretty straightforward, ranging from a simple
+
+```java
+setGauge(String name, long value);
+```
+
+method to set the value of a gauge (postfixed with ```.amount``), up to complex methods like
+
+```java
+increaseCounterWithDurationAndPercentiles(String name, String tag, Long durationMillis);
+```
+
+to simultaneously increase a gauge value with a tag and log the duration, e.g. of a previous function call.

@@ -8,11 +8,11 @@ The DigitalCollection Common Java Libraries provide project independent common f
 
 Read module specific documentations:
 
-- [DigitalCollections Commons Server](digitalcollections-commons-server)
-- [DigitalCollections Commons Spring AOP](digitalcollections-commons-springaop)
-- [DigitalCollections Commons Spring Boot](digitalcollections-commons-springboot)
-- [DigitalCollections Commons Spring MVC](digitalcollections-commons-springmvc)
-- [DigitalCollections Commons Spring Security](digitalcollections-commons-springsecurity)
-- [DigitalCollections Commons Validation](digitalcollections-commons-validation)
-- [DigitalCollections Commons YAML](digitalcollections-commons-yaml)
-- [DigitalCollections Commons XML](digitalcollections-commons-xml)
+- [DigitalCollections Commons Server](dc-commons-server)
+- [DigitalCollections Commons Spring AOP](dc-commons-springaop)
+- [DigitalCollections Commons Spring Boot](dc-commons-springboot)
+- [DigitalCollections Commons Spring MVC](dc-commons-springmvc)
+- [DigitalCollections Commons Spring Security](dc-commons-springsecurity)
+- [DigitalCollections Commons Validation](dc-commons-validation)
+- [DigitalCollections Commons YAML](dc-commons-yaml)
+- [DigitalCollections Commons XML](dc-commons-xml)
