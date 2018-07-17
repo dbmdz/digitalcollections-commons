@@ -20,6 +20,7 @@
     <module>dc-commons-springboot</module>
     <module>dc-commons-springsecurity</module>
     <module>dc-commons-prosemirror</module>
+    <module>dc-commons-file</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
