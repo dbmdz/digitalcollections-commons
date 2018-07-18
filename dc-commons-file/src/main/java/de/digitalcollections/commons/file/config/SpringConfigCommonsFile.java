@@ -8,7 +8,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = {
-  "de.digitalcollections.commons.file.backend.impl"
+  "de.digitalcollections.commons.file.backend.impl",
+  "de.digitalcollections.commons.file.business.impl.service"
 })
 @PropertySource(value = {
   "classpath:SpringConfigCommonsFile-${spring.profiles.active}.properties"
