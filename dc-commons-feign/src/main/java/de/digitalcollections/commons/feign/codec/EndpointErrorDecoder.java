@@ -1,18 +1,18 @@
 package de.digitalcollections.commons.feign.codec;
 
-import de.digitalcollections.core.model.api.http.exceptions.HttpException;
-import de.digitalcollections.core.model.api.http.exceptions.client.ForbiddenException;
-import de.digitalcollections.core.model.api.http.exceptions.client.HttpClientException;
-import de.digitalcollections.core.model.api.http.exceptions.client.ImATeapotException;
-import de.digitalcollections.core.model.api.http.exceptions.client.ResourceNotFoundException;
-import de.digitalcollections.core.model.api.http.exceptions.client.UnauthorizedException;
-import de.digitalcollections.core.model.api.http.exceptions.client.UnavailableForLegalReasonsException;
-import de.digitalcollections.core.model.api.http.exceptions.server.BadGatewayException;
-import de.digitalcollections.core.model.api.http.exceptions.server.GatewayTimeOutException;
-import de.digitalcollections.core.model.api.http.exceptions.server.HttpServerException;
-import de.digitalcollections.core.model.api.http.exceptions.server.HttpVersionNotSupportedException;
-import de.digitalcollections.core.model.api.http.exceptions.server.NotImplementedException;
-import de.digitalcollections.core.model.api.http.exceptions.server.ServiceUnavailableException;
+import de.digitalcollections.model.api.http.exceptions.HttpException;
+import de.digitalcollections.model.api.http.exceptions.client.ForbiddenException;
+import de.digitalcollections.model.api.http.exceptions.client.HttpClientException;
+import de.digitalcollections.model.api.http.exceptions.client.ImATeapotException;
+import de.digitalcollections.model.api.http.exceptions.client.ResourceNotFoundException;
+import de.digitalcollections.model.api.http.exceptions.client.UnauthorizedException;
+import de.digitalcollections.model.api.http.exceptions.client.UnavailableForLegalReasonsException;
+import de.digitalcollections.model.api.http.exceptions.server.BadGatewayException;
+import de.digitalcollections.model.api.http.exceptions.server.GatewayTimeOutException;
+import de.digitalcollections.model.api.http.exceptions.server.HttpServerException;
+import de.digitalcollections.model.api.http.exceptions.server.HttpVersionNotSupportedException;
+import de.digitalcollections.model.api.http.exceptions.server.NotImplementedException;
+import de.digitalcollections.model.api.http.exceptions.server.ServiceUnavailableException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 

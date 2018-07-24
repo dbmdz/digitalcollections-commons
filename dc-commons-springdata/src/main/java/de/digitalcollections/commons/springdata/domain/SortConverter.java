@@ -1,8 +1,8 @@
 package de.digitalcollections.commons.springdata.domain;
 
-import de.digitalcollections.core.model.api.paging.Order;
-import de.digitalcollections.core.model.api.paging.Sorting;
-import de.digitalcollections.core.model.impl.paging.SortingImpl;
+import de.digitalcollections.model.api.paging.Order;
+import de.digitalcollections.model.api.paging.Sorting;
+import de.digitalcollections.model.impl.paging.SortingImpl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
