@@ -1,30 +1,25 @@
 language: java
-
 jdk:
-  - oraclejdk8
-  #- oraclejdk9
-
+- oraclejdk8
 before_script:
-  - if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$TRAVIS_TAG; fi
-
-env:
-  global:
-  - secure: J/QU3m2OGaz4pOObt/1yWz8S3d3HHYxybhzjoWrn9EkOZ0ieC2zm4vntyt8mrPbUCjq64OmQYL2+3jyTxaYTGzi/NazGtCxhcF6J82XawG6esJJ0dKWzG7sdI68WpkRgFdk+RiLtU8Fpg4apDBWIrQEzQf+Wb9B5A4ofU38S/GAP+Phm+fvjNPpfqjSdBPrGg3OCWmnSvcOLFi8/n5YEaH2ZRhBZzX1f8PR00R7QiErhZSezYdD7Kj0ZML8RziPpej4JNtNsmoEXP/JBoeUsPjdlUF9Lc/b/kAs+xL1nCM/Hr0ZITk7D7Vq5ZdCQRdfm853b6FOu/cIkfsNDP204NWtMFIywgrGMUJPGS8c/pcctYv6K7v446Wyfrurr77o6rSlDt68x1ZR2ZQtMgLUu0R+NbwFH+SrLQZyc2h1Ng9j7dVDJdIk+Cj92AOsN3A/G8GoBQl545GqWS46MwWMsEudbwcOm/0swRnmCRSqO0flyRAfH8CEU4zS505lD0EoA77A9aqaWzrOh1D02T6heSPW8c5S0VUjWuEKOdUvnQJ/HKmRUpItueuklU5lArpTT24kU7DvYEcvo+ZTZOvZJ/7v5aRkRdKh256aQKQ1Cv8nilH4EM4Oxl5KOBnmlpHAGUqk3s2h9nuURYnVnBpdrTzYZ+oL8SpeWZv04S6Nb8TI=
-  - secure: I2VXMQOhDwLr5/8g/rn2AiG4w4svTYEgwpJ2QgV+k/AiV9vsyK2rnaXFdINwdtVBBDCnLh0kfSQhJxz+t8smbgWMOX17NiRiokANf1gabr/5PgxSb+UFGpLTsAJZzTUC8SowmXIdNqLsLI8xX8OjiIq9b11wXLWoLz9VcDEPDdDVcNPCzobiaMOPHm2uXb0I1hCTtj5lvjfBA5X15euX/LngTtDaQ+ue8gqw0lHDxGWRuNhoPi6sx7LzEw28HfS8ruCA4Q5f8En1lWxTR36K8tTKD65wiYM+f8tM6OlsZoBaW23Qb86RJuC+4d7Rfid7GP7XyO57A1Uog9NdUbftLYJKZvDBD5gK1p2f176Q1lkGcrXiIkbOlBhjujhO4GrmKW0xaHrFQtdQKpCISWytlUYzA590MSLUASzeUWZQ0pXH+gvOzQwYf76vnZoZsxejy72VeGRB3SQnOm/UXAFnRciFecR/BGcTFnFyYGczIaMquCMuMeGVwxWt3O6IxBNzameRCDb+sQ4YToeGd/NFwPssYVxgsmegEUJq2SvgH5U+IK+2XGGauaZfkE0OT1Me9SDqxMkFbrBY4CSnbw5Q5eJVLl44itO0danmm6z42HBuMT0Y+UNj3hsWI/l9s+d1W56lKu8ZSFHEh1p12D4u+p96W8gBk/K+P0hmoj60NUM=
-
+- if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$TRAVIS_TAG; fi
 script:
-  - mvn clean install
-
+- mvn clean install
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-  - if [[ "${TRAVIS_TAG}" == *"SNAPSHOT" ]] || [[ ${TRAVIS_TAG} == '' ]]; then mvn deploy -B -DskipTests=true --settings settings.xml; fi
-
+- bash <(curl -s https://codecov.io/bash)
+- if [ -z "$TRAVIS_TAG" ]; then mvn deploy -B -DskipTests=true --settings settings.xml;
+  fi
 deploy:
   provider: releases
   api_key:
     secure: gy1HRLBT/W75Q2VeK9PVicd0ZjPYifZxUauIqkC6KG2eWpOQ0QG4vCTACIRhHdSa969rWvhg0jYpR22ZQ+Dknv1niHX8QYLo8plyWmmXI6AnZqWIQZBquQ05ku3eMxNCJoLYfBIvCnj9t+/yp0DvU+Ozn3ZVJEIQ0VcTmmoELNiHnUKJC/KDIor/LmApDcHFTgNI5/1uzgwJe6jvfKWc4VLc0bMOELdnHmMH4D3FuYY+uP0nBuppWRZeFn5fU5chRAbM3BVAiQ8yeeB78kbMbrHUGRXqkmqXrfmmx5Vqorx+uLMXmtLrI1zaXlrIq+5hhl0wcn0buJn00l8DO4/jPpJN5n+fzussSoMCbZaTqwHUbF3tw7VrHCSdJuiOhTVo6YcyTqvOy3Lbt0IcfJzVAuy3M8/6BfCgcY0iciVeGMbweyZYNP1E52PB++qaaOzydHo5xsRPzpKBr1MgrOj6YKMOoyQmDCRso9VsMAjKaTL+6bhFAIlI/9xTEKS8GF45/IFvfuMOqWLBHYIK3sBR+DUTIA+VezR05rZBzMwZZZXs2pnFJh+1Tv3mlcmn+SidvJO37jsGHn70BVanJECIK66+mU14qF5fnDaRhMdTeZNx7Fdog4zfZmxmzon6lpPAQXT9YeNDT5ZW7siz8Ro48akBSCo6ZGuHQkGrp+D+IyA=
   file_glob: true
-  file: "**/target/*.jar"
+  file:
+  - "**/target/*.jar"
   skip_cleanup: true
   on:
     tags: true
+env:
+  global:
+  - secure: Ka1xNdTEp7YWGfThQwfr4f7l+TACIEx6YoRKErVMUL+ju7aN4VuEF0YXOwpGXWEuuyae0zUqpCqwnWEj9Is+50wGH0cI56IjdYRHBcIGOwi89CaE1wKUKPee+ddmU19fpNUlAEdm9P9N26uA6paPSioWwTHn9ylfRvXDcVe+titFgYrOrz1+DyVPYrkslvE3BGrO9Vwe6VcFVGhweWJtxa19H32UTX7nmP2iVdlGvqtylbJtZ8W8Q+iDxFxUl/wZx1TRmJa/2SVqKLXrVnfYQ80TOrmdnPWKyjXLCxqpaISNI+FXL+dGwFZKT9D1LT2CFSJD7VFhm0HkVkHzaebmbQ7stX/l2jY0aK6+poDeeNx8AqttfREQz6Lbx2NzA3mTaxxu/J0ryEok2KDVGstQvOyh0EJurHNnv+7NagfK76x9lNOH+n2EbOaD+N1+HLSEu+0smBjq0KojtzW4nbzObI9wU+meq9SItvfIbt+7m8VJC41pmrOQaLfnalFBsuRR1xNcYIwBYJpKsGitHkjLInS4TXbzf77u4QFE0mK9Aq7WHJD1ZjhbqvaEvcTDxTlYPqOkcXNBZ9825KIJR1LPJW+6Dy76orPxS59lkcx85aYG5mibXcRf1HkFs1Le6Gj2gnaEQEU4j+p+q/hbWFqdmhrjkjbH8Oo1ja+kNN0TH8g=
+  - secure: MWWWCHy/qZHKWPwHL6+T8HklPyD2TLHIwVFH21OARgy1S/o/dS6uW6BkGym537RDwOXyZb3avHGXcZNVzFAcf5AccpCScnobwc8T0+SsfDj9zsLogtqKnKL6abYZiPGJ8zeDAUFpxDp4xQakb9/8TrNH3yd5F38NhSty4ficzb2yGn6hnRHaWOxSjBU+WcxWgOh6NNlr8EqZ4Ts+OlZxL1AlHI70hIQrBa4t25yOTbLB90aGa0bwEGqBezWgzgq/5U1n7ey+Eunm0iJIAszrCc899o/0BGKrpWnDRW73I13wiQcSECzaCTaKAjGtseyVs101+eE4NK+Bxw9CXAEtuoRrW/b/J8rX74SVA08blWumq2srZD7Ff9JhB96VEquuvi1IMoEWpVy61PqetUJDRZHBN/2cp/LaKgY41GwPtMrDRnu4nuYcMjF+9uIWO3+RwpvYjmfIeb5bQ89OFybcJBGcvtQK1FZZ+Oik7bzCNFLvqD6XOFMoRE7bHPTZ1fRpKLGCRCJZ4JXy2CWQx8lUWx37aXWTGPFQney3EbUvcjKlS2cTa9BcaR5Uy7/vdckt7cywJ+gea8Yo1w+SqB2nUBdFvwmV3IO0cXrarcb8spEs+p9YyiwCv/UwXm7MMs8y+xBsdPdP+URTNtHjHSnLEWhFGW8ev+KIiNT5mFg0ReY=
