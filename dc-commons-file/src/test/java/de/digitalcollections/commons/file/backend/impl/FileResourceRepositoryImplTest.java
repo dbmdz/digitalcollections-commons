@@ -113,7 +113,7 @@ public class FileResourceRepositoryImplTest {
     Assert.assertEquals(expResult, result);
 
     long expSize = 71;
-    long size = resource.getSize();
+    long size = resource.getSizeInBytes();
     Assert.assertEquals(expSize, size);
 
     LocalDateTime lastModified = resource.getLastModified();

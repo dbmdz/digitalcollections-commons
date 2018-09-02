@@ -12,6 +12,8 @@ public interface FileResourceService {
 
   FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException;
 
+  FileResource create(MimeType mimeType) throws ResourceIOException;
+
   default FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, String fileExtension) throws ResourceIOException {
     return create(key, fileResourcePersistenceType, MimeType.fromExtension(fileExtension));
   }
@@ -34,4 +36,6 @@ public interface FileResourceService {
   InputStream getInputStream(URI resourceUri) throws ResourceIOException;
 
   void write(FileResource fileResource, String input) throws ResourceIOException;
+
+  void write(FileResource fileResource, InputStream inputStream) throws ResourceIOException;
 }

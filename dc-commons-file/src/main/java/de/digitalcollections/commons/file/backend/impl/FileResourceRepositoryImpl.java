@@ -52,6 +52,12 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   ResourceLoader resourceLoader;
 
   @Override
+  public FileResource create(MimeType mimeType) throws ResourceIOException {
+    FileResource resource = getResource(null, null, mimeType);
+    return resource;
+  }
+  
+  @Override
   public FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException {
     FileResource resource = getResource(key, resourcePersistenceType, mimeType);
     List<URI> uris = getUris(key, resourcePersistenceType, mimeType);
@@ -123,7 +129,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     resource.setLastModified(lastModified);
 
     long length = getSize(springResource);
-    resource.setSize(length);
+    resource.setSizeInBytes(length);
 
     return resource;
   }
