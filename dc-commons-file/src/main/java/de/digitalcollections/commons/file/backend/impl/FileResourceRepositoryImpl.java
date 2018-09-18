@@ -37,7 +37,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * A binary repository using filesystem. see http://docs.oracle.com/javase/tutorial/essential/io/fileio.html see https://docs.oracle.com/javase/tutorial/essential/io/file.html see
+ * A binary repository using filesystem. see
+ * http://docs.oracle.com/javase/tutorial/essential/io/fileio.html see
+ * https://docs.oracle.com/javase/tutorial/essential/io/file.html see
  * http://michaelandrews.typepad.com/the_technical_times/2009/10/creating-a-hashed-directory-structure.html
  */
 @Repository
@@ -56,10 +58,13 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     FileResource resource = getResource(null, null, mimeType);
     return resource;
   }
-  
+
   @Override
   public FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException {
     FileResource resource = getResource(key, resourcePersistenceType, mimeType);
+    if (key == null && FileResourcePersistenceType.MANAGED.equals(resourcePersistenceType)) {
+      key = resource.getUuid().toString();
+    }
     List<URI> uris = getUris(key, resourcePersistenceType, mimeType);
     resource.setUri(uris.get(0));
     return resource;
@@ -99,7 +104,11 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       resource.setReadonly(true);
     }
     if (FileResourcePersistenceType.MANAGED.equals(persistenceType)) {
-      resource.setUuid(UUID.fromString(key));
+      if (key != null) {
+        resource.setUuid(UUID.fromString(key));
+      } else {
+        resource.setUuid(UUID.randomUUID());
+      }
     }
     return resource;
   }
@@ -224,9 +233,10 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     }
 
     URI uri = resource.getUri();
+    final String scheme = uri.getScheme();
     try {
-      if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
-        throw new ResourceIOException("Scheme not supported for write-operations: " + uri.getScheme() + " (" + uri + ")");
+      if ("http".equals(scheme) || "https".equals(scheme)) {
+        throw new ResourceIOException("Scheme not supported for write-operations: " + scheme + " (" + uri + ")");
       }
 
       Files.createDirectories(Paths.get(uri).getParent());

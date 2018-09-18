@@ -3,7 +3,7 @@ package de.digitalcollections.commons.springdata.domain;
 import de.digitalcollections.model.api.paging.Order;
 import de.digitalcollections.model.api.paging.enums.Direction;
 import de.digitalcollections.model.api.paging.enums.NullHandling;
-import de.digitalcollections.model.api.paging.impl.OrderImpl;
+import de.digitalcollections.model.impl.paging.OrderImpl;
 import org.springframework.data.domain.Sort;
 
 public class OrderConverter {

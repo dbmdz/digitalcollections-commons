@@ -75,7 +75,7 @@ public class FileResourceRepositoryImplTest {
     String key = "a30cf362-5992-4f5a-8de0-61938134e721";
     FileResourcePersistenceType resourcePersistenceType = FileResourcePersistenceType.MANAGED;
     FileResource resource = resourceRepository.create(key, resourcePersistenceType, "xml");
-    URI expResult = URI.create("/src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721.xml");
+    URI expResult = URI.create("file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721.xml");
     URI result = resource.getUri();
     Assert.assertEquals(expResult, result);
 
