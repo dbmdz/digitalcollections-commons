@@ -18,6 +18,9 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -135,7 +138,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     org.springframework.core.io.Resource springResource = resourceLoader.getResource(uri.toString());
 
     long lastModified = getLastModified(springResource);
-    resource.setLastModified(lastModified);
+    resource.setLastModified(LocalDateTime.ofInstant(Instant.ofEpochMilli(lastModified), ZoneId.systemDefault()));
 
     long length = getSize(springResource);
     resource.setSizeInBytes(length);
