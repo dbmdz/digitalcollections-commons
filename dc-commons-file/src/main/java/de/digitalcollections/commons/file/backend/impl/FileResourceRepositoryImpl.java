@@ -98,9 +98,6 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   private FileResource getResource(String key, FileResourcePersistenceType persistenceType, MimeType mimeType) {
     FileResource resource = new FileResourceImpl();
     if (mimeType != null) {
-      if (mimeType.getExtensions() != null && !mimeType.getExtensions().isEmpty()) {
-        resource.setFilenameExtension(mimeType.getExtensions().get(0));
-      }
       resource.setMimeType(mimeType);
     }
     if (FileResourcePersistenceType.REFERENCED.equals(persistenceType)) {
