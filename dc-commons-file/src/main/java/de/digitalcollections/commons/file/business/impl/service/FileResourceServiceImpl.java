@@ -47,4 +47,14 @@ public class FileResourceServiceImpl implements FileResourceService {
   public void write(FileResource fileResource, String input) throws ResourceIOException {
     fileResourceRepository.write(fileResource, input);
   }
+
+  @Override
+  public void write(FileResource fileResource, InputStream inputStream) throws ResourceIOException {
+    fileResourceRepository.write(fileResource, inputStream);
+  }
+
+  @Override
+  public FileResource create(MimeType mimeType) throws ResourceIOException {
+    return fileResourceRepository.create(mimeType);
+  }
 }

@@ -11,6 +11,8 @@ import org.w3c.dom.Document;
 
 public interface FileResourceRepository<R extends FileResource> {
 
+  FileResource create(MimeType mimeType) throws ResourceIOException;
+
   FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException;
 
   default FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, String filenameExtension) throws ResourceIOException {

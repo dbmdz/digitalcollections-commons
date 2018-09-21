@@ -28,20 +28,21 @@ public class ManagedResourcePersistenceTypeHandler implements ResourcePersistenc
   /**
    * minimum ":"-separators is one, because of namespace in id is required
    *
-   * @param key the resource key (manged resource key is an uuid)
+   * @param key the resource key (managed resource key is an uuid)
    * @param mimeType the MIME type of the resource (e.g. "application/xml")
    * @return All URIs that could be resolved from the parameters
    * @throws ResourceIOException
    */
   // key = c30cf362-5992-4f5a-8de0-61938134e721, mimetype = image/jpeg
-  // /local/repository/bsb/c30c/f362/5992/4f5a/8de0/6193/8134/e721/c30cf362-5992-4f5a-8de0-61938134e721.jpg
+  // file:///local/repository/bsb/c30c/f362/5992/4f5a/8de0/6193/8134/e721/c30cf362-5992-4f5a-8de0-61938134e721.jpg
   @Override
   public List<URI> getUris(String key, MimeType mimeType) throws ResourceIOException {
     String uuidPath = getSplittedUuidPath(key);
     Path path = Paths.get(this.getRepositoryFolderPath(), this.getNamespace(), uuidPath, key);
     String location = path.toString();
-    location = location + "." + mimeType.getExtensions().get(0);
-    return Collections.singletonList(URI.create(location));
+    location = "file://" + location + "." + mimeType.getExtensions().get(0);
+    final URI uri = URI.create(location);
+    return Collections.singletonList(uri);
   }
 
   private String getNamespace() {
