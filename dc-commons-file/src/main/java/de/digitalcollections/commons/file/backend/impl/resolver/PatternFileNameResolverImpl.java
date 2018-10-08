@@ -1,11 +1,14 @@
 package de.digitalcollections.commons.file.backend.impl.resolver;
 
+import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,4 +71,9 @@ public class PatternFileNameResolverImpl implements FileNameResolver {
     return StringRepresentations.stringRepresentationOf(this);
   }
    */
+
+  @Override
+  public Set<Path> getPathsForPattern(String pattern) throws ResourceIOException {
+    return substitutions.stream().map(p -> Paths.get(p)).collect(Collectors.toSet());
+  }
 }

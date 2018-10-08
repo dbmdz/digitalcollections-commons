@@ -2,10 +2,14 @@ package de.digitalcollections.commons.file.backend.impl.resolver;
 
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,4 +97,20 @@ public class MultiPatternsFileNameResolverImpl implements FileNameResolver, Init
             .filter(r -> r.isResolvable(identifier))
             .findFirst().isPresent();
   }
+
+  @Override
+  public Set<Path> getPathsForPattern(String pattern) throws ResourceIOException {
+    Set<String> paths = new HashSet<>();
+
+    for (PatternFileNameResolverImpl resolver : patternFileNameResolvers) {
+      if (resolver.getPattern().equals(pattern)) {
+        // We strip any file: - prefix from the substitutions
+        List<String> substitutions = resolver.getSubstitutions().stream().map(p -> p.replaceAll("^file:","")).collect(Collectors.toList());
+        paths.addAll(substitutions);
+      }
+    }
+
+    return paths.stream().map(p -> Paths.get(p)).collect(Collectors.toSet());
+  }
+
 }
