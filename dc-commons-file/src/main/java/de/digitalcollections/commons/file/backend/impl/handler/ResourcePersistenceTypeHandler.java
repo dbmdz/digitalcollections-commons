@@ -23,5 +23,5 @@ public interface ResourcePersistenceTypeHandler {
 
   default List<URI> getUris(String resolvingKey, String filenameExtension) throws ResourceIOException {
     return getUris(resolvingKey, MimeType.fromExtension(filenameExtension));
-  };
+  }
 }

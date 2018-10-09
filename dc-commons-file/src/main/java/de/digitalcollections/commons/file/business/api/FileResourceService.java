@@ -6,6 +6,7 @@ import de.digitalcollections.model.api.identifiable.resource.enums.FileResourceP
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Set;
 import org.w3c.dom.Document;
 
 public interface FileResourceService {
@@ -38,4 +39,6 @@ public interface FileResourceService {
   void write(FileResource fileResource, String input) throws ResourceIOException;
 
   void write(FileResource fileResource, InputStream inputStream) throws ResourceIOException;
+
+  Set<String> findKeys(String keyPattern, FileResourcePersistenceType fileResourcePersistenceType) throws ResourceIOException;
 }

@@ -6,6 +6,7 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public interface FileNameResolver {
@@ -80,4 +81,11 @@ public interface FileNameResolver {
             .filter(p -> MimeType.fromFilename(p.toString()).matches(mimeType))
             .collect(Collectors.toList());
   }
+
+  /**
+   * Return all paths for a given pattern
+   * @return
+   * @throws ResourceIOException
+   */
+  Set<Path> getPathsForPattern(String pattern) throws ResourceIOException;
 }

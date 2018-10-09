@@ -7,6 +7,7 @@ import de.digitalcollections.model.api.identifiable.resource.exceptions.Resource
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
+import java.util.Set;
 import org.w3c.dom.Document;
 
 public interface FileResourceRepository<R extends FileResource> {
@@ -46,4 +47,5 @@ public interface FileResourceRepository<R extends FileResource> {
 
   void write(FileResource resource, InputStream inputStream) throws ResourceIOException;
 
+  Set<String> findKeys(String keyPattern, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException;
 }

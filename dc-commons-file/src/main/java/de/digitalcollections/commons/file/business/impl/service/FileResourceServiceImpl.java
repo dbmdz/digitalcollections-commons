@@ -1,16 +1,17 @@
 package de.digitalcollections.commons.file.business.impl.service;
 
 import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
-import java.io.InputStream;
-import java.net.URI;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
 import de.digitalcollections.commons.file.business.api.FileResourceService;
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
 
 @Service
 public class FileResourceServiceImpl implements FileResourceService {
@@ -56,5 +57,10 @@ public class FileResourceServiceImpl implements FileResourceService {
   @Override
   public FileResource create(MimeType mimeType) throws ResourceIOException {
     return fileResourceRepository.create(mimeType);
+  }
+
+  @Override
+  public Set<String> findKeys(String keyPattern, FileResourcePersistenceType fileResourcePersistenceType) throws ResourceIOException {
+    return fileResourceRepository.findKeys(keyPattern, fileResourcePersistenceType);
   }
 }

@@ -1,6 +1,7 @@
 package de.digitalcollections.commons.file.backend.impl;
 
 import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
+import de.digitalcollections.commons.file.backend.impl.handler.ResolvedResourcePersistenceTypeHandler;
 import de.digitalcollections.commons.file.backend.impl.handler.ResourcePersistenceTypeHandler;
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
@@ -16,14 +17,23 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,12 +59,16 @@ import org.xml.sax.SAXException;
 public class FileResourceRepositoryImpl implements FileResourceRepository<FileResource> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImpl.class);
-
-  @Autowired
   private List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers;
+  private ResourceLoader resourceLoader;
+  private DirectoryStream<Path> overriddenDirectoryStream;      // only for testing purposes
 
   @Autowired
-  ResourceLoader resourceLoader;
+  public FileResourceRepositoryImpl(List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers, ResourceLoader resourceLoader) {
+    this.resourcePersistenceTypeHandlers = resourcePersistenceTypeHandlers;
+    this.resourceLoader = resourceLoader;
+  }
+
 
   @Override
   public FileResource create(MimeType mimeType) throws ResourceIOException {
@@ -123,7 +137,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     FileResource resource = getResource(key, resourcePersistenceType, mimeType);
     List<URI> candidates = getUris(key, resourcePersistenceType, mimeType);
     if (candidates.isEmpty()) {
-      throw new ResourceIOException("Could not resolve key " + key + "with MIME type " + mimeType.getTypeName() + "to an URI");
+      throw new ResourceIOException("Could not resolve key " + key + " with MIME type " + mimeType.getTypeName() + " to an URI");
     }
     URI uri = candidates.stream()
             .filter(u -> resourceLoader.getResource(u.toString()).isReadable())
@@ -158,7 +172,9 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   public InputStream getInputStream(URI resourceUri) throws ResourceIOException {
     try {
       String location = resourceUri.toString();
-      LOGGER.info("Getting inputstream for location '{}'.", location);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Getting inputstream for location '{}'.", location);
+      }
       return resourceLoader.getResource(location).getInputStream();
     } catch (IOException e) {
       throw new ResourceIOException(e);
@@ -240,7 +256,9 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       }
 
       Files.createDirectories(Paths.get(uri).getParent());
-      LOGGER.info("Writing: " + uri);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Writing: " + uri);
+      }
       IOUtils.copy(payload, new FileOutputStream(Paths.get(uri).toFile()));
     } catch (IOException e) {
       String msg = "Could not write data to uri " + String.valueOf(uri);
@@ -260,4 +278,80 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     }
   }
 
+  @Override
+  public Set<String> findKeys(String keyPattern, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException {
+    if (resourcePersistenceType != FileResourcePersistenceType.RESOLVED) {
+      throw new ResourceIOException("findKeys() is only available for RESOLVED resources");
+    }
+
+    // The pattern for valid keys is the original pattern without any brackets inside, but surrounded with one bracket.
+    Pattern validKeysPattern = Pattern.compile(
+        "("
+            + keyPattern.replace("(","").replace(")","").replace("^","").replace("$","")
+            + ")");
+
+
+    Set<String> keys = new HashSet<>();
+    ResolvedResourcePersistenceTypeHandler handler = (ResolvedResourcePersistenceTypeHandler) getResourcePersistenceTypeHandler(resourcePersistenceType);
+
+    // For all handlers: Retrieve all substition paths for the given key pattern
+    for (Path p : handler.getPathsForPattern(keyPattern)) {
+      Path basePath = p.getParent();    // Only in this directory, we search for the matching keys
+
+      // The pattern for valid filenames is the filename of the path, where all backreferences are replaced by a wildcard regexp.
+      // The whole pattern is finally surrounded by start and end regexp characters.
+      String filenameAsKeyWithWildcards = p.getFileName().toString().replaceAll("\\$\\d+",".*");
+      Pattern validFilenamesPattern = Pattern.compile("^" + filenameAsKeyWithWildcards + "$");
+
+      if (basePath == null || "".equals(basePath)) {
+        basePath = Paths.get("/");
+      }
+
+      // We must stay within the given path. So, no path substitutions outside are allowed!
+      if (basePath.normalize().toString().contains("$")) {
+        throw new ResourceIOException("Cannot find keys for substitutions with references in paths");
+      }
+
+      // Retrieve all files in the substitution path and filter out the non matching ones.
+      // "Matching" means, match the filename of the substitution and match the key pattern
+      // Finally map them onto the keys
+      try (Stream<Path> stream = getDirectoryStream(basePath)) {
+        keys.addAll(stream.map(path -> path.getFileName().normalize().toString())
+            .filter(filename -> matchesPattern(validFilenamesPattern, filename))
+            .filter(filename -> matchesPattern(validKeysPattern, filename))
+            .map(filename -> mapToPattern(validKeysPattern, filename))
+            .collect(Collectors.toSet()));
+      } catch (IOException e) {
+        LOGGER.error("Cannot traverse directory " + basePath + ": " + e, e);
+      }
+    }
+
+    return keys;
+  }
+
+  private boolean matchesPattern(Pattern pattern, String filename) {
+    Matcher m = pattern.matcher(filename);
+    return m.find();
+  }
+
+  private String mapToPattern(Pattern pattern, String filename) {
+    Matcher m = pattern.matcher(filename);
+    if (m.find()) {
+      return m.group(1);
+    } else {
+      return null;
+    }
+  }
+
+  protected void overrideDirectoryStream(DirectoryStream<Path> overriddenDirectoryStream) {
+    this.overriddenDirectoryStream = overriddenDirectoryStream;
+  }
+
+  private Stream<Path> getDirectoryStream(Path basePath) throws IOException {
+    if (overriddenDirectoryStream == null) {
+      return StreamSupport.stream(Files.newDirectoryStream(basePath).spliterator(), false).filter(Files::isRegularFile);
+    } else {
+      return StreamSupport.stream(overriddenDirectoryStream.spliterator(), false);
+    }
+  }
 }
