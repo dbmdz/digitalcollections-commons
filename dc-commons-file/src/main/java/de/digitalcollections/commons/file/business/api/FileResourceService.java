@@ -32,6 +32,20 @@ public interface FileResourceService {
     return getDocument(fileResource);
   }
 
+  void assertReadability(FileResource resource) throws ResourceIOException;
+
+  default void assertReadability(String key, FileResourcePersistenceType resourcePersistenceType, String fileExtension) throws ResourceIOException {
+    try {
+      FileResource resource = get(key, resourcePersistenceType, MimeType.fromExtension(fileExtension));
+      assertReadability(resource);
+    } catch (ResourceIOException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new ResourceIOException(e.getMessage());
+    }
+  }
+
+
   InputStream getInputStream(FileResource fileResource) throws ResourceIOException;
 
   InputStream getInputStream(URI resourceUri) throws ResourceIOException;

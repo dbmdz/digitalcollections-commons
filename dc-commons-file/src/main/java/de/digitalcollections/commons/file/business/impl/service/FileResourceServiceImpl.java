@@ -35,6 +35,11 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
+  public void assertReadability(FileResource resource) throws ResourceIOException {
+    fileResourceRepository.assertReadability(resource);
+  }
+
+  @Override
   public InputStream getInputStream(FileResource fileResource) throws ResourceIOException {
     return fileResourceRepository.getInputStream(fileResource);
   }

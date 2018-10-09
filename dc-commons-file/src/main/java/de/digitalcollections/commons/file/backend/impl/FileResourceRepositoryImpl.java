@@ -50,9 +50,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * A binary repository using filesystem. see
- * http://docs.oracle.com/javase/tutorial/essential/io/fileio.html see
- * https://docs.oracle.com/javase/tutorial/essential/io/file.html see
+ * A binary repository using filesystem. see http://docs.oracle.com/javase/tutorial/essential/io/fileio.html see https://docs.oracle.com/javase/tutorial/essential/io/file.html see
  * http://michaelandrews.typepad.com/the_technical_times/2009/10/creating-a-hashed-directory-structure.html
  */
 @Repository
@@ -140,11 +138,11 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       throw new ResourceIOException("Could not resolve key " + key + " with MIME type " + mimeType.getTypeName() + " to an URI");
     }
     URI uri = candidates.stream()
-            .filter(u -> resourceLoader.getResource(u.toString()).isReadable())
-            .findFirst()
-            .orElseThrow(() -> new ResourceIOException(
+        .filter(u -> resourceLoader.getResource(u.toString()).isReadable())
+        .findFirst()
+        .orElseThrow(() -> new ResourceIOException(
             "Could not resolve key " + key + " with MIME type " + mimeType.getTypeName()
-            + " to a readable Resource. Attempted URIs were " + candidates));
+                + " to a readable Resource. Attempted URIs were " + candidates));
     resource.setUri(uri);
     org.springframework.core.io.Resource springResource = resourceLoader.getResource(uri.toString());
 
@@ -207,7 +205,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   public ResourcePersistenceTypeHandler getResourcePersistenceTypeHandler(FileResourcePersistenceType resourcePersistence)
-          throws ResourceIOException {
+      throws ResourceIOException {
     for (ResourcePersistenceTypeHandler resourcePersistenceTypeHandler : this.getResourcePersistenceTypeHandlers()) {
       if (resourcePersistence.equals(resourcePersistenceTypeHandler.getResourcePersistenceType())) {
         return resourcePersistenceTypeHandler;
@@ -237,6 +235,19 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     ResourcePersistenceTypeHandler handler = getResourcePersistenceTypeHandler(persistenceType);
     return handler.getUris(key, mimeType);
   }
+
+  public void assertReadability(FileResource resource) throws ResourceIOException {
+    try (InputStream is = getInputStream(resource)) {
+      if (is.available() <= 0) {
+        throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
+      }
+    } catch (ResourceIOException e) {
+      throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
+    } catch (Exception e) {
+      throw new ResourceIOException("Cannot read " + resource.getFilename() + ": " + e.getMessage());
+    }
+  }
+
 
   @Override
   public void write(FileResource resource, InputStream payload) throws ResourceIOException {
@@ -287,9 +298,8 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     // The pattern for valid keys is the original pattern without any brackets inside, but surrounded with one bracket.
     Pattern validKeysPattern = Pattern.compile(
         "("
-            + keyPattern.replace("(","").replace(")","").replace("^","").replace("$","")
+            + keyPattern.replace("(", "").replace(")", "").replace("^", "").replace("$", "")
             + ")");
-
 
     Set<String> keys = new HashSet<>();
     ResolvedResourcePersistenceTypeHandler handler = (ResolvedResourcePersistenceTypeHandler) getResourcePersistenceTypeHandler(resourcePersistenceType);
@@ -300,7 +310,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
       // The pattern for valid filenames is the filename of the path, where all backreferences are replaced by a wildcard regexp.
       // The whole pattern is finally surrounded by start and end regexp characters.
-      String filenameAsKeyWithWildcards = p.getFileName().toString().replaceAll("\\$\\d+",".*");
+      String filenameAsKeyWithWildcards = p.getFileName().toString().replaceAll("\\$\\d+", ".*");
       Pattern validFilenamesPattern = Pattern.compile("^" + filenameAsKeyWithWildcards + "$");
 
       if (basePath == null || "".equals(basePath)) {
