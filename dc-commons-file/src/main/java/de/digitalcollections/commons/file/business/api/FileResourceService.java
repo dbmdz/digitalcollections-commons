@@ -18,6 +18,10 @@ public interface FileResourceService {
   default FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, String fileExtension) throws ResourceIOException {
     return create(key, fileResourcePersistenceType, MimeType.fromExtension(fileExtension));
   }
+  
+  default FileResource createManaged(MimeType mimeType) throws ResourceIOException {
+    return create(null, FileResourcePersistenceType.MANAGED, mimeType);
+  }
 
   FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException;
 
