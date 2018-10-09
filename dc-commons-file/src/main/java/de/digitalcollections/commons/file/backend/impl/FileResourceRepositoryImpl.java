@@ -60,7 +60,8 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImpl.class);
   private List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers;
-  ResourceLoader resourceLoader;
+  private ResourceLoader resourceLoader;
+  private DirectoryStream<Path> overriddenDirectoryStream;      // only for testing purposes
 
   @Autowired
   public FileResourceRepositoryImpl(List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers, ResourceLoader resourceLoader) {
@@ -68,8 +69,6 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     this.resourceLoader = resourceLoader;
   }
 
-  /* Only for testing purposes */
-  private DirectoryStream<Path> overriddenDirectoryStream;
 
   @Override
   public FileResource create(MimeType mimeType) throws ResourceIOException {
@@ -281,15 +280,16 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
   @Override
   public Set<String> findKeys(String keyPattern, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException {
+    if (resourcePersistenceType != FileResourcePersistenceType.RESOLVED) {
+      throw new ResourceIOException("findKeys() is only available for RESOLVED resources");
+    }
+
     // The pattern for valid keys is the original pattern without any brackets inside, but surrounded with one bracket.
     Pattern validKeysPattern = Pattern.compile(
         "("
             + keyPattern.replace("(","").replace(")","").replace("^","").replace("$","")
             + ")");
 
-    if (resourcePersistenceType != FileResourcePersistenceType.RESOLVED) {
-      throw new ResourceIOException("findKeys() is only available for RESOLVED resources");
-    }
 
     Set<String> keys = new HashSet<>();
     ResolvedResourcePersistenceTypeHandler handler = (ResolvedResourcePersistenceTypeHandler) getResourcePersistenceTypeHandler(resourcePersistenceType);

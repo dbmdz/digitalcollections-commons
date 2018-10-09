@@ -38,7 +38,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-//@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringConfigCommonsFile.class})
 public class FileResourceRepositoryImplTest {
@@ -164,6 +163,33 @@ public class FileResourceRepositoryImplTest {
 
     resourceRepository.setResourcePersistenceHandlers(resolvers);
     Set<String> keys = resourceRepository.findKeys("news_(\\d{8})", RESOLVED);
+    assertThat(keys).containsExactly("news_12345678","news_23456789");
+  }
+
+  @Test
+  public void findValidKeysForExtendedPattern() throws Exception {
+    List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList();
+    resourcePersistenceTypeHandlers.add(new ResolvedResourcePersistenceTypeHandler());
+
+    FileResourceRepositoryImpl resourceRepository = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
+
+    List<Path> paths = new ArrayList<>();
+    paths.add(Paths.get("/opt/news/news_$1$2.md"));
+
+    List<ResourcePersistenceTypeHandler> resolvers = new ArrayList<>();
+    ResolvedResourcePersistenceTypeHandler mockMultiPatternsFileNameResolver = mock(ResolvedResourcePersistenceTypeHandler.class);
+    when(mockMultiPatternsFileNameResolver.getResourcePersistenceType()).thenReturn(FileResourcePersistenceType.RESOLVED);
+    when(mockMultiPatternsFileNameResolver.getPathsForPattern("news_(\\d{6})(\\d{2})")).thenReturn(paths);
+    resolvers.add(mockMultiPatternsFileNameResolver);
+
+    DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
+    Path[] mockFiles = { Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
+        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
+    when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
+    resourceRepository.overrideDirectoryStream(mockDirectoryStream);
+
+    resourceRepository.setResourcePersistenceHandlers(resolvers);
+    Set<String> keys = resourceRepository.findKeys("news_(\\d{6})(\\d{2})", RESOLVED);
     assertThat(keys).containsExactly("news_12345678","news_23456789");
   }
 }
