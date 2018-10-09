@@ -238,6 +238,19 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     return handler.getUris(key, mimeType);
   }
 
+  public void assertDocument(FileResource resource) throws ResourceIOException {
+    try (InputStream is = getInputStream(resource)) {
+      if ( is.available() <= 0) {
+        throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
+      }
+    } catch ( ResourceIOException e) {
+      throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
+    } catch (Exception e) {
+      throw new ResourceIOException("Cannot read " + resource.getFilename() + ": " + e.getMessage());
+    }
+  }
+
+
   @Override
   public void write(FileResource resource, InputStream payload) throws ResourceIOException {
 

@@ -37,6 +37,8 @@ public interface FileResourceRepository<R extends FileResource> {
     return getDocument((R) resource);
   }
 
+  void assertDocument(R resource) throws ResourceIOException;
+
   InputStream getInputStream(URI resourceUri) throws ResourceIOException;
 
   InputStream getInputStream(R resource) throws ResourceIOException;

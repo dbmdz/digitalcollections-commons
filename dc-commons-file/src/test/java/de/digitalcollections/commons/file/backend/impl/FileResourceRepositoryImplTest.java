@@ -8,7 +8,9 @@ import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -191,5 +193,38 @@ public class FileResourceRepositoryImplTest {
     resourceRepository.setResourcePersistenceHandlers(resolvers);
     Set<String> keys = resourceRepository.findKeys("news_(\\d{6})(\\d{2})", RESOLVED);
     assertThat(keys).containsExactly("news_12345678","news_23456789");
+  }
+
+  @Test(expected = ResourceIOException.class)
+  public void assertNonexistingFile() throws ResourceIOException, URISyntaxException {
+    FileResource nonexistingResource = new FileResourceImpl();
+    nonexistingResource.setUri(new URI("file:/tmp/nonexistant"));
+    nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
+    resourceRepository.assertDocument(nonexistingResource);
+  }
+
+  @Test(expected = ResourceIOException.class)
+  public void assertNonReadableFile() throws ResourceIOException, URISyntaxException {
+    FileResource nonReadableResource = new FileResourceImpl();
+    nonReadableResource.setUri(new URI("file:/vmlinuz"));
+    nonReadableResource.setMimeType(MimeType.MIME_WILDCARD);
+    resourceRepository.assertDocument(nonReadableResource);
+  }
+
+  @Test(expected = ResourceIOException.class)
+  public void assertZeroByteFile() throws ResourceIOException, URISyntaxException {
+    FileResource zeroByteLengthResource = new FileResourceImpl();
+    zeroByteLengthResource.setUri(new URI("file:/proc/uptime"));
+    zeroByteLengthResource.setMimeType(MimeType.MIME_WILDCARD);
+    resourceRepository.assertDocument(zeroByteLengthResource);
+  }
+
+  @Test
+  public void assertExistingFile() throws ResourceIOException, URISyntaxException {
+    FileResource existingResource = new FileResourceImpl();
+    existingResource.setUri(new URI("file:/var/log/wtmp"));
+    existingResource.setMimeType(MimeType.MIME_WILDCARD);
+    resourceRepository.assertDocument(existingResource);
+    assertThat(true).isTrue();
   }
 }
