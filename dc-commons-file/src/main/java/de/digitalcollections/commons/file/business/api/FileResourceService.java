@@ -32,12 +32,12 @@ public interface FileResourceService {
     return getDocument(fileResource);
   }
 
-  void assertDocument(FileResource resource) throws ResourceIOException;
+  void assertReadability(FileResource resource) throws ResourceIOException;
 
-  default void assertDocument(String key, FileResourcePersistenceType resourcePersistenceType, String fileExtension) throws ResourceIOException {
+  default void assertReadability(String key, FileResourcePersistenceType resourcePersistenceType, String fileExtension) throws ResourceIOException {
     try {
       FileResource resource = get(key, resourcePersistenceType, MimeType.fromExtension(fileExtension));
-      assertDocument(resource);
+      assertReadability(resource);
     } catch (ResourceIOException e) {
       throw e;
     } catch (Exception e) {

@@ -200,7 +200,7 @@ public class FileResourceRepositoryImplTest {
     FileResource nonexistingResource = new FileResourceImpl();
     nonexistingResource.setUri(new URI("file:/tmp/nonexistant"));
     nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
-    resourceRepository.assertDocument(nonexistingResource);
+    resourceRepository.assertReadability(nonexistingResource);
   }
 
   @Test(expected = ResourceIOException.class)
@@ -208,7 +208,7 @@ public class FileResourceRepositoryImplTest {
     FileResource nonReadableResource = new FileResourceImpl();
     nonReadableResource.setUri(new URI("file:/vmlinuz"));
     nonReadableResource.setMimeType(MimeType.MIME_WILDCARD);
-    resourceRepository.assertDocument(nonReadableResource);
+    resourceRepository.assertReadability(nonReadableResource);
   }
 
   @Test(expected = ResourceIOException.class)
@@ -216,7 +216,7 @@ public class FileResourceRepositoryImplTest {
     FileResource zeroByteLengthResource = new FileResourceImpl();
     zeroByteLengthResource.setUri(new URI("file:/proc/uptime"));
     zeroByteLengthResource.setMimeType(MimeType.MIME_WILDCARD);
-    resourceRepository.assertDocument(zeroByteLengthResource);
+    resourceRepository.assertReadability(zeroByteLengthResource);
   }
 
   @Test
@@ -224,7 +224,6 @@ public class FileResourceRepositoryImplTest {
     FileResource existingResource = new FileResourceImpl();
     existingResource.setUri(new URI("file:/var/log/wtmp"));
     existingResource.setMimeType(MimeType.MIME_WILDCARD);
-    resourceRepository.assertDocument(existingResource);
-    assertThat(true).isTrue();
+    resourceRepository.assertReadability(existingResource);
   }
 }
