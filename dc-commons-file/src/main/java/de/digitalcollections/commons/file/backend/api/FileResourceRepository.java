@@ -45,9 +45,9 @@ public interface FileResourceRepository<R extends FileResource> {
 
   Reader getReader(R resource) throws ResourceIOException;
 
-  void write(FileResource resource, String input) throws ResourceIOException;
+  long write(FileResource resource, String input) throws ResourceIOException;
 
-  void write(FileResource resource, InputStream inputStream) throws ResourceIOException;
+  long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
 
   Set<String> findKeys(String keyPattern, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException;
 }
