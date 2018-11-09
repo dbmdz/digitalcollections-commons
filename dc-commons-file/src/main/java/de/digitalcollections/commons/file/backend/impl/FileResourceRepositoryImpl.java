@@ -58,7 +58,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImpl.class);
   private List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers;
-  private ResourceLoader resourceLoader;
+  private final ResourceLoader resourceLoader;
   private DirectoryStream<Path> overriddenDirectoryStream;      // only for testing purposes
 
   @Autowired
@@ -66,7 +66,6 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     this.resourcePersistenceTypeHandlers = resourcePersistenceTypeHandlers;
     this.resourceLoader = resourceLoader;
   }
-
 
   @Override
   public FileResource create(MimeType mimeType) throws ResourceIOException {
@@ -138,20 +137,21 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       throw new ResourceIOException("Could not resolve key " + key + " with MIME type " + mimeType.getTypeName() + " to an URI");
     }
     URI uri = candidates.stream()
-        .filter(u -> resourceLoader.getResource(u.toString()).isReadable())
-        .findFirst()
-        .orElseThrow(() -> new ResourceIOException(
+            .filter(u -> (resourceLoader.getResource(u.toString()).isReadable() || u.toString().startsWith("http")))
+            .findFirst()
+            .orElseThrow(() -> new ResourceIOException(
             "Could not resolve key " + key + " with MIME type " + mimeType.getTypeName()
-                + " to a readable Resource. Attempted URIs were " + candidates));
+            + " to a readable Resource. Attempted URIs were " + candidates));
     resource.setUri(uri);
     org.springframework.core.io.Resource springResource = resourceLoader.getResource(uri.toString());
 
+    // TODO how to get lastModified for HTTP? (do a head-request?); for now it is 0
     long lastModified = getLastModified(springResource);
     resource.setLastModified(LocalDateTime.ofInstant(Instant.ofEpochMilli(lastModified), ZoneId.systemDefault()));
 
+    // TODO how to get length for HTTP? (do a head-request?); for now it is -1
     long length = getSize(springResource);
     resource.setSizeInBytes(length);
-
     return resource;
   }
 
@@ -205,7 +205,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   public ResourcePersistenceTypeHandler getResourcePersistenceTypeHandler(FileResourcePersistenceType resourcePersistence)
-      throws ResourceIOException {
+          throws ResourceIOException {
     for (ResourcePersistenceTypeHandler resourcePersistenceTypeHandler : this.getResourcePersistenceTypeHandlers()) {
       if (resourcePersistence.equals(resourcePersistenceTypeHandler.getResourcePersistenceType())) {
         return resourcePersistenceTypeHandler;
@@ -247,7 +247,6 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       throw new ResourceIOException("Cannot read " + resource.getFilename() + ": " + e.getMessage());
     }
   }
-
 
   @Override
   public long write(FileResource resource, InputStream payload) throws ResourceIOException {
@@ -297,7 +296,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
     // The pattern for valid keys is the original pattern without any brackets inside, but surrounded with one bracket.
     Pattern validKeysPattern = Pattern.compile(
-        "("
+            "("
             + keyPattern.replace("(", "").replace(")", "").replace("^", "").replace("$", "")
             + ")");
 
@@ -313,7 +312,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       String filenameAsKeyWithWildcards = p.getFileName().toString().replaceAll("\\$\\d+", ".*");
       Pattern validFilenamesPattern = Pattern.compile("^" + filenameAsKeyWithWildcards + "$");
 
-      if (basePath == null || "".equals(basePath)) {
+      if (basePath == null || "".equals(basePath.toString())) {
         basePath = Paths.get("/");
       }
 
@@ -327,10 +326,10 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       // Finally map them onto the keys
       try (Stream<Path> stream = getDirectoryStream(basePath)) {
         keys.addAll(stream.map(path -> path.getFileName().normalize().toString())
-            .filter(filename -> matchesPattern(validFilenamesPattern, filename))
-            .filter(filename -> matchesPattern(validKeysPattern, filename))
-            .map(filename -> mapToPattern(validKeysPattern, filename))
-            .collect(Collectors.toSet()));
+                .filter(filename -> matchesPattern(validFilenamesPattern, filename))
+                .filter(filename -> matchesPattern(validKeysPattern, filename))
+                .map(filename -> mapToPattern(validKeysPattern, filename))
+                .collect(Collectors.toSet()));
       } catch (IOException e) {
         LOGGER.error("Cannot traverse directory " + basePath + ": " + e, e);
       }
