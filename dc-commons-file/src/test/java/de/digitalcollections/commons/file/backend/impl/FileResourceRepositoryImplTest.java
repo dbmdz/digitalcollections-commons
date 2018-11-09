@@ -11,10 +11,12 @@ import de.digitalcollections.model.api.identifiable.resource.exceptions.Resource
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -166,14 +168,14 @@ public class FileResourceRepositoryImplTest {
     resolvers.add(mockMultiPatternsFileNameResolver);
 
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
-    Path[] mockFiles = { Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
-        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
+    Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
+                        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
     resourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
     resourceRepository.setResourcePersistenceHandlers(resolvers);
     Set<String> keys = resourceRepository.findKeys("news_(\\d{8})", RESOLVED);
-    assertThat(keys).containsExactly("news_12345678","news_23456789");
+    assertThat(keys).containsExactly("news_12345678", "news_23456789");
   }
 
   @Test
@@ -193,14 +195,14 @@ public class FileResourceRepositoryImplTest {
     resolvers.add(mockMultiPatternsFileNameResolver);
 
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
-    Path[] mockFiles = { Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
-        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
+    Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
+                        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
     resourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
     resourceRepository.setResourcePersistenceHandlers(resolvers);
     Set<String> keys = resourceRepository.findKeys("news_(\\d{6})(\\d{2})", RESOLVED);
-    assertThat(keys).containsExactly("news_12345678","news_23456789");
+    assertThat(keys).containsExactly("news_12345678", "news_23456789");
   }
 
   @Test(expected = ResourceIOException.class)
@@ -228,9 +230,15 @@ public class FileResourceRepositoryImplTest {
   }
 
   @Test
-  public void assertExistingFile() throws ResourceIOException, URISyntaxException {
+  public void assertExistingFile() throws ResourceIOException, URISyntaxException, IOException {
+    String newResourceFilename = "test_file.txt";
+    File newCreatedResource = folder.newFile(newResourceFilename);
+    String data = "Test data";
+    final Path filePath = newCreatedResource.toPath();
+    Files.write(filePath, data.getBytes());
+
     FileResource existingResource = new FileResourceImpl();
-    existingResource.setUri(new URI("file:/var/log/wtmp"));
+    existingResource.setUri(new URI("file:" + filePath.toString()));
     existingResource.setMimeType(MimeType.MIME_WILDCARD);
     resourceRepository.assertReadability(existingResource);
   }
