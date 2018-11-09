@@ -25,7 +25,7 @@ public interface FileNameResolver {
    */
   default List<String> getStrings(String identifier, MimeType mimeType) throws ResourceIOException {
     return getStrings(identifier).stream()
-            .filter(s -> MimeType.fromFilename(s).matches(mimeType))
+            .filter(s -> mimeType.matches(MimeType.fromFilename(s)))
             .collect(Collectors.toList());
   }
 
@@ -50,8 +50,9 @@ public interface FileNameResolver {
    * @throws ResourceIOException in case getStrings for key fails
    */
   default List<URI> getUris(String identifier, MimeType mimeType) throws ResourceIOException {
-    return getUris(identifier).stream()
-            .filter(u -> MimeType.fromURI(u).matches(mimeType))
+    final List<URI> uris = getUris(identifier);
+    return uris.stream()
+            .filter(u -> (mimeType.matches(MimeType.fromURI(u)) || MimeType.fromURI(u) == null))
             .collect(Collectors.toList());
   }
 
@@ -78,7 +79,7 @@ public interface FileNameResolver {
    */
   default List<Path> getPaths(String identifier, MimeType mimeType) throws ResourceIOException {
     return getPaths(identifier).stream()
-            .filter(p -> MimeType.fromFilename(p.toString()).matches(mimeType))
+            .filter(p -> mimeType.matches(MimeType.fromFilename(p.toString())))
             .collect(Collectors.toList());
   }
 
