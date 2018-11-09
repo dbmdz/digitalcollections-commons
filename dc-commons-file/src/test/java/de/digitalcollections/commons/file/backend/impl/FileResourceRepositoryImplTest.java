@@ -9,6 +9,9 @@ import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
@@ -24,7 +27,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +56,9 @@ public class FileResourceRepositoryImplTest {
 
   @Autowired
   private ResourceLoader resourceLoader;
+
+  @Rule
+  public TemporaryFolder folder = new TemporaryFolder();
 
   public FileResourceRepositoryImplTest() {
   }
@@ -225,5 +233,36 @@ public class FileResourceRepositoryImplTest {
     existingResource.setUri(new URI("file:/var/log/wtmp"));
     existingResource.setMimeType(MimeType.MIME_WILDCARD);
     resourceRepository.assertReadability(existingResource);
+  }
+
+  @Test
+  public void testWriteFile() throws Exception {
+    String newResourceFilename = "write_stream.txt";
+    File newCreatedResource = folder.newFile(newResourceFilename);
+    String newResourceContent = "Hopfenzeitung";
+
+    FileResource newResource = new FileResourceImpl();
+    newResource.setUri(new URI("file:" + newCreatedResource.getAbsolutePath()));
+    newResource.setMimeType(MimeType.fromFilename(newCreatedResource.getName()));
+
+    InputStream inputStream = new ByteArrayInputStream(newResourceContent.getBytes());
+    Long actualFileSize = resourceRepository.write(newResource, inputStream);
+
+    assertThat(actualFileSize).isEqualTo(13L);
+  }
+
+  @Test
+  public void testWriteString() throws Exception {
+    String newResourceFilename = "write_string.txt";
+    File newCreatedResource = folder.newFile(newResourceFilename);
+    String newResourceContent = "Hopfenzeitungen";
+
+    FileResource newResource = new FileResourceImpl();
+    newResource.setUri(new URI("file:" + newCreatedResource.getAbsolutePath()));
+    newResource.setMimeType(MimeType.fromFilename(newCreatedResource.getName()));
+
+    Long actualFileSize = resourceRepository.write(newResource, newResourceContent);
+
+    assertThat(actualFileSize).isEqualTo(15L);
   }
 }

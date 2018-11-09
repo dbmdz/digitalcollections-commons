@@ -50,13 +50,13 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public void write(FileResource fileResource, String input) throws ResourceIOException {
-    fileResourceRepository.write(fileResource, input);
+  public long write(FileResource fileResource, String input) throws ResourceIOException {
+    return fileResourceRepository.write(fileResource, input);
   }
 
   @Override
-  public void write(FileResource fileResource, InputStream inputStream) throws ResourceIOException {
-    fileResourceRepository.write(fileResource, inputStream);
+  public long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException {
+    return fileResourceRepository.write(fileResource, inputStream);
   }
 
   @Override

@@ -250,7 +250,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
 
   @Override
-  public void write(FileResource resource, InputStream payload) throws ResourceIOException {
+  public long write(FileResource resource, InputStream payload) throws ResourceIOException {
 
     Assert.notNull(payload, "payload must not be null");
     Assert.notNull(resource, "payload must not be null");
@@ -270,7 +270,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
       if (LOGGER.isDebugEnabled()) {
         LOGGER.debug("Writing: " + uri);
       }
-      IOUtils.copy(payload, new FileOutputStream(Paths.get(uri).toFile()));
+      return IOUtils.copyLarge(payload, new FileOutputStream(Paths.get(uri).toFile()));
     } catch (IOException e) {
       String msg = "Could not write data to uri " + String.valueOf(uri);
       LOGGER.error(msg, e);
@@ -279,9 +279,9 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   @Override
-  public void write(FileResource resource, String input) throws ResourceIOException {
+  public long write(FileResource resource, String input) throws ResourceIOException {
     try (InputStream in = new ReaderInputStream(new StringReader(input), Charset.forName("UTF-8"))) {
-      write(resource, in);
+      return write(resource, in);
     } catch (IOException ex) {
       String msg = "Could not write data to uri " + String.valueOf(resource.getUri());
       LOGGER.error(msg, ex);
