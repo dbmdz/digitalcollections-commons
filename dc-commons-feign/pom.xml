@@ -20,7 +20,6 @@
     <dependency>
       <groupId>io.github.openfeign</groupId>
       <artifactId>feign-core</artifactId>
-      <version>9.5.1</version>
     </dependency>
   </dependencies>
 </project>
