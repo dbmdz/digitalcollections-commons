@@ -51,7 +51,7 @@
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.mockito-java8>2.0.1</version.mockito-java8>
     <version.mockito-core>2.7.6</version.mockito-core>
-    <version.saxon>9.8.0-6</version.saxon>
+    <version.saxon>9.8.0-14</version.saxon>
     <version.servlet-api>3.1.0</version.servlet-api>
     <version.slf4j>1.7.22</version.slf4j>
     <version.snakeyaml>1.19</version.snakeyaml>
