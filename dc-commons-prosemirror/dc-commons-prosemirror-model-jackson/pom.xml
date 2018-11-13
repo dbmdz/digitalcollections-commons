@@ -31,6 +31,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>de.digitalcollections.commons</groupId>
+      <artifactId>dc-commons-prosemirror-model</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
@@ -38,10 +42,6 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>de.digitalcollections.commons</groupId>
-      <artifactId>dc-commons-prosemirror-model</artifactId>
     </dependency>
   </dependencies>
 </project>
