@@ -22,8 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -147,11 +146,17 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
     // TODO how to get lastModified for HTTP? (do a head-request?); for now it is 0
     long lastModified = getLastModified(springResource);
-    resource.setLastModified(LocalDateTime.ofInstant(Instant.ofEpochMilli(lastModified), ZoneId.systemDefault()));
+    if (lastModified != 0) {
+      // lastmodified by code in java.io.File#lastModified (is also used in Spring's core.io.Resource) is in milliseconds!
+      // TODO lastModified should be of type Instant? to be discussed...
+      resource.setLastModified(Instant.ofEpochMilli(lastModified).atOffset(ZoneOffset.UTC).toLocalDateTime());
+    }
 
     // TODO how to get length for HTTP? (do a head-request?); for now it is -1
     long length = getSize(springResource);
-    resource.setSizeInBytes(length);
+    if (length > -1) {
+      resource.setSizeInBytes(length);
+    }
     return resource;
   }
 
