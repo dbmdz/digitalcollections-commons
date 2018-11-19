@@ -26,7 +26,7 @@ public class MetricsService {
 
   /**
    * Sets the value of a gauge
-   * @param name Name of the gauge, postfixed with <tt>.amount</tt>
+   * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param value Value of the gauge
    */
   public void setGauge(String name, long value) {
@@ -35,8 +35,8 @@ public class MetricsService {
 
   /**
    * Sets the value of a gauge
-   * @param name Name of the gauge, postfixed with <tt>.amount</tt>
-   * @param tag Name of the tag (key is <tt>type</tt>)
+   * @param name Name of the gauge, postfixed with <code>.amount</code>
+   * @param tag Name of the tag (key is <code>type</code>)
    * @param value Value of the gauge
    */
   public void setGauge(String name, String tag, long value) {
@@ -46,7 +46,7 @@ public class MetricsService {
 
   /**
    * Sets the value of a gauge
-   * @param name Name of the gauge, postfixed with <tt>.amount</tt>
+   * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param tagKey Name of the tag
    * @param tagValue Value of the tag
    * @param value Value of the gauge
@@ -57,7 +57,7 @@ public class MetricsService {
 
   /**
    * Increases the gauge counter by one
-   * @param name Name of the gauge, postfixed with <tt>.amount</tt>
+   * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param tag Name of the tag
    */
   public void increaseCounter(String name, String tag) {
@@ -66,7 +66,7 @@ public class MetricsService {
 
   /**
    * Increases the gauge counter with a custom increment
-   * @param name Name of the gauge, postfixed with <tt>.amount</tt>
+   * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param tag Name of the tag
    * @param increment Increment value
    */
@@ -76,7 +76,7 @@ public class MetricsService {
 
   /**
    * Increases the gauge counter and logs its accompanied duration
-   * @param name Name of the gauge, postfixed with <tt>.amount</tt> and name of the timer, postfixed with <tt>.duration</tt>
+   * @param name Name of the gauge, postfixed with <code>.amount</code> and name of the timer, postfixed with <code>.duration</code>
    * @param tag Name of the tag
    * @param durationMillis Duration in milliseconds
    */
@@ -86,7 +86,7 @@ public class MetricsService {
 
   /**
    * Increases the gauge counter and logs its accompanied duration including percentiles (0.5 and 0.95) and histogram
-   * @param name Name of the gauge, postfixed with <tt>.amount</tt> and name of the timer, postfixed with <tt>.duration</tt>
+   * @param name Name of the gauge, postfixed with <code>.amount</code> and name of the timer, postfixed with <code>.duration</code>
    * @param tag Name of the tag (must not be null)
    * @param durationMillis Duration in milliseconds
    */
