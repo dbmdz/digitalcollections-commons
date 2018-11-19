@@ -5,7 +5,7 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
   </parent>
   
   <name>DigitalCollections: Commons File</name>
@@ -16,7 +16,6 @@
     <dependency>
       <groupId>de.digitalcollections.model</groupId>
       <artifactId>dc-model</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

@@ -105,7 +105,7 @@ public class MultiPatternsFileNameResolverImpl implements FileNameResolver, Init
     for (PatternFileNameResolverImpl resolver : patternFileNameResolvers) {
       if (resolver.getPattern().equals(pattern)) {
         // We strip any file: - prefix from the substitutions
-        List<String> substitutions = resolver.getSubstitutions().stream().map(p -> p.replaceAll("^file:","")).collect(Collectors.toList());
+        List<String> substitutions = resolver.getSubstitutions().stream().map(p -> p.replaceAll("^file:", "")).collect(Collectors.toList());
         paths.addAll(substitutions);
       }
     }

@@ -54,9 +54,9 @@ public interface FileResourceService {
 
   InputStream getInputStream(URI resourceUri) throws ResourceIOException;
 
-  void write(FileResource fileResource, String input) throws ResourceIOException;
+  long write(FileResource fileResource, String input) throws ResourceIOException;
 
-  void write(FileResource fileResource, InputStream inputStream) throws ResourceIOException;
+  long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException;
 
   Set<String> findKeys(String keyPattern, FileResourcePersistenceType fileResourcePersistenceType) throws ResourceIOException;
 }
