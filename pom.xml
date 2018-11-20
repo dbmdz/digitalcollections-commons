@@ -401,8 +401,6 @@
           <properties>
             <excludeTags>integration-test</excludeTags>
           </properties>
-          <forkCount>1</forkCount>
-          <reuseForks>false</reuseForks>
         </configuration>
         <dependencies>
           <dependency>
