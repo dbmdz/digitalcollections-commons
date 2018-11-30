@@ -375,26 +375,6 @@
             <excludeTags>integration-test</excludeTags>
           </properties>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${version.junit5}</version>
-            <scope>runtime</scope>
-          </dependency>
-          <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${version.junit5}</version>
-            <scope>runtime</scope>
-          </dependency>
-          <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>${version.junit5}</version>
-            <scope>runtime</scope>
-          </dependency>
-        </dependencies>
       </plugin>
 
 
