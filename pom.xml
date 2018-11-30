@@ -48,8 +48,7 @@
     <version.jdbi3>3.0.1</version.jdbi3>
     <version.jjwt>0.7.0</version.jjwt>
     <version.joda-time>2.9.4</version.joda-time>
-    <version.junit5>5.1.0</version.junit5>
-    <version.junit5-platform>1.1.0</version.junit5-platform>
+    <version.junit5>5.3.2</version.junit5>
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.mockito-java8>2.5.0</version.mockito-java8>
     <version.mockito-core>2.23.0</version.mockito-core>
@@ -198,24 +197,6 @@
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
         <version>${version.junit5}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.platform</groupId>
-        <artifactId>junit-platform-engine</artifactId>
-        <version>${version.junit5-platform}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.platform</groupId>
-        <artifactId>junit-platform-launcher</artifactId>
-        <version>${version.junit5-platform}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.platform</groupId>
-        <artifactId>junit-platform-surefire-provider</artifactId>
-        <version>${version.junit5-platform}</version>
         <scope>test</scope>
       </dependency>
       <dependency>

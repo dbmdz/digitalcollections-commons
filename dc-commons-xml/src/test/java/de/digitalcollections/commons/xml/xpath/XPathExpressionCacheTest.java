@@ -1,8 +1,9 @@
 package de.digitalcollections.commons.xml.xpath;
 
 import javax.xml.xpath.XPathExpressionException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,7 +13,7 @@ public class XPathExpressionCacheTest {
 
   private XPathExpressionCache expressionCache;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     expressionCache = new XPathExpressionCache();
   }

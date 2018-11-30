@@ -1,7 +1,8 @@
 package de.digitalcollections.commons.yaml.examples;
 
 import org.joda.time.LocalDateTime;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 public class BenchmarkTest {
 

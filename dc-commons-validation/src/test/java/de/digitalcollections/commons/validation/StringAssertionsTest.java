@@ -2,7 +2,7 @@ package de.digitalcollections.commons.validation;
 
 import java.util.Arrays;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
