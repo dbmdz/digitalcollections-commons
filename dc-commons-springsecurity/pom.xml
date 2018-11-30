@@ -6,7 +6,7 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0</version>
   </parent>
 
   <name>DigitalCollections: Commons Spring Security (Spring Security 5)</name>
