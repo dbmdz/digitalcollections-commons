@@ -7,6 +7,7 @@ import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -43,6 +44,7 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
@@ -69,13 +71,13 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
 
   @Override
   public FileResource create(MimeType mimeType) throws ResourceIOException {
-    FileResource resource = getResource(null, null, mimeType);
+    FileResource resource = createResource(null, null, mimeType);
     return resource;
   }
 
   @Override
   public FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException {
-    FileResource resource = getResource(key, resourcePersistenceType, mimeType);
+    FileResource resource = createResource(key, resourcePersistenceType, mimeType);
     if (key == null && FileResourcePersistenceType.MANAGED.equals(resourcePersistenceType)) {
       key = resource.getUuid().toString();
     }
@@ -85,7 +87,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   @Override
-  public Document getDocument(FileResource resource) throws ResourceIOException {
+  public Document getDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     Document doc = null;
     try {
       // get InputStream on resource
@@ -106,7 +108,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     return doc;
   }
 
-  private FileResource getResource(String key, FileResourcePersistenceType persistenceType, MimeType mimeType) {
+  private FileResource createResource(String key, FileResourcePersistenceType persistenceType, MimeType mimeType) {
     FileResource resource = new FileResourceImpl();
     if (mimeType != null) {
       resource.setMimeType(mimeType);
@@ -125,13 +127,13 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   @Override
-  public void delete(FileResource resource) throws ResourceIOException {
+  public void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     throw new UnsupportedOperationException("Not yet implemented.");
   }
 
   @Override
-  public FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException {
-    FileResource resource = getResource(key, resourcePersistenceType, mimeType);
+  public FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
+    FileResource resource = createResource(key, resourcePersistenceType, mimeType);
     List<URI> candidates = getUris(key, resourcePersistenceType, mimeType);
     if (candidates.isEmpty()) {
       throw new ResourceIOException("Could not resolve key " + key + " with MIME type " + mimeType.getTypeName() + " to an URI");
@@ -143,8 +145,11 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
             "Could not resolve key " + key + " with MIME type " + mimeType.getTypeName()
             + " to a readable Resource. Attempted URIs were " + candidates));
     resource.setUri(uri);
-    org.springframework.core.io.Resource springResource = resourceLoader.getResource(uri.toString());
+    Resource springResource = resourceLoader.getResource(uri.toString());
 
+    if (!springResource.exists()) {
+      throw new ResourceNotFoundException("Resource not found at location '" + uri.toString() + "'");
+    }
     // TODO how to get lastModified for HTTP? (do a head-request?); for now it is 0
     long lastModified = getLastModified(springResource);
     if (lastModified != 0) {
@@ -164,8 +169,9 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   @Override
-  public byte[] getBytes(FileResource resource) throws ResourceIOException {
+  public byte[] getBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     try {
+      assertReadability(resource);
       return IOUtils.toByteArray(this.getInputStream(resource));
     } catch (IOException ex) {
       String msg = "Could not read bytes from resource: " + resource;
@@ -175,24 +181,28 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   @Override
-  public InputStream getInputStream(URI resourceUri) throws ResourceIOException {
+  public InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException {
     try {
       String location = resourceUri.toString();
       if (LOGGER.isDebugEnabled()) {
         LOGGER.debug("Getting inputstream for location '{}'.", location);
       }
-      return resourceLoader.getResource(location).getInputStream();
+      final Resource resource = resourceLoader.getResource(location);
+      if (!resource.exists()) {
+        throw new ResourceNotFoundException("Resource not found at location '" + location + "'");
+      }
+      return resource.getInputStream();
     } catch (IOException e) {
       throw new ResourceIOException(e);
     }
   }
 
   @Override
-  public InputStream getInputStream(FileResource resource) throws ResourceIOException {
+  public InputStream getInputStream(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     return getInputStream(resource.getUri());
   }
 
-  private long getLastModified(org.springframework.core.io.Resource springResource) {
+  private long getLastModified(Resource springResource) {
     try {
       return springResource.lastModified();
     } catch (FileNotFoundException e) {
@@ -204,7 +214,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
   }
 
   @Override
-  public Reader getReader(FileResource resource) throws ResourceIOException {
+  public Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     return new InputStreamReader(this.getInputStream(resource));
   }
 
@@ -229,7 +239,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     return resourcePersistenceTypeHandlers;
   }
 
-  private long getSize(org.springframework.core.io.Resource springResource) {
+  private long getSize(Resource springResource) {
     try {
       long length = springResource.contentLength();
       return length;
@@ -244,13 +254,16 @@ public class FileResourceRepositoryImpl implements FileResourceRepository<FileRe
     return handler.getUris(key, mimeType);
   }
 
-  public void assertReadability(FileResource resource) throws ResourceIOException {
+  @Override
+  public void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     try (InputStream is = getInputStream(resource)) {
       if (is.available() <= 0) {
         throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
       }
     } catch (ResourceIOException e) {
       throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
+    } catch (ResourceNotFoundException e) {
+      throw e;
     } catch (Exception e) {
       throw new ResourceIOException("Cannot read " + resource.getFilename() + ": " + e.getMessage());
     }

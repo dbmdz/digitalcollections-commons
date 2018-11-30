@@ -5,7 +5,7 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
   </parent>
   
   <name>DigitalCollections: Commons ProseMirror (Parent)</name>
@@ -55,24 +55,6 @@
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
         <version>${version.junit5}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.platform</groupId>
-        <artifactId>junit-platform-engine</artifactId>
-        <version>${version.junit5-platform}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.platform</groupId>
-        <artifactId>junit-platform-launcher</artifactId>
-        <version>${version.junit5-platform}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.platform</groupId>
-        <artifactId>junit-platform-surefire-provider</artifactId>
-        <version>${version.junit5-platform}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
