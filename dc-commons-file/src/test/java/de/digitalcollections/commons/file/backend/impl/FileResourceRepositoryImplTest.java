@@ -8,6 +8,7 @@ import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
@@ -72,7 +73,7 @@ public class FileResourceRepositoryImplTest {
   }
 
   @Test
-  public void testReadXMLDocument() throws ResourceIOException {
+  public void testReadXMLDocument() throws ResourceIOException, ResourceNotFoundException {
     String key = "snafu";
     FileResourcePersistenceType resourcePersistenceType = RESOLVED;
     Document document = resourceRepository.getDocument(key, resourcePersistenceType);
@@ -202,13 +203,14 @@ public class FileResourceRepositoryImplTest {
       nonexistingResource.setUri(new URI("file:/tmp/nonexistant"));
       nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
       resourceRepository.assertReadability(nonexistingResource);
-    }).isInstanceOf(ResourceIOException.class);
+    }).isInstanceOf(ResourceNotFoundException.class);
   }
 
   @Test
   public void assertNonReadableFile() {
     assertThatThrownBy(() -> {
       FileResource nonReadableResource = new FileResourceImpl();
+      // TODO this is a system dependent test (only linux)
       nonReadableResource.setUri(new URI("file:/vmlinuz"));
       nonReadableResource.setMimeType(MimeType.MIME_WILDCARD);
       resourceRepository.assertReadability(nonReadableResource);
