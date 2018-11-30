@@ -48,7 +48,6 @@
     <version.jdbi3>3.0.1</version.jdbi3>
     <version.jjwt>0.7.0</version.jjwt>
     <version.joda-time>2.9.4</version.joda-time>
-    <version.junit>4.12</version.junit>
     <version.junit5>5.1.0</version.junit5>
     <version.junit5-platform>1.1.0</version.junit5-platform>
     <version.logback-classic>1.2.3</version.logback-classic>
