@@ -8,6 +8,7 @@ import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -83,7 +84,7 @@ public class FileResourceRepositoryImplTest {
   }
 
   @Test
-  public void testReadXMLDocument() throws ResourceIOException {
+  public void testReadXMLDocument() throws ResourceIOException, ResourceNotFoundException {
     String key = "snafu";
     FileResourcePersistenceType resourcePersistenceType = RESOLVED;
     Document document = resourceRepository.getDocument(key, resourcePersistenceType);
@@ -205,8 +206,8 @@ public class FileResourceRepositoryImplTest {
     assertThat(keys).containsExactly("news_12345678", "news_23456789");
   }
 
-  @Test(expected = ResourceIOException.class)
-  public void assertNonexistingFile() throws ResourceIOException, URISyntaxException {
+  @Test(expected = ResourceNotFoundException.class)
+  public void assertNonexistingFile() throws ResourceIOException, ResourceNotFoundException, URISyntaxException {
     FileResource nonexistingResource = new FileResourceImpl();
     nonexistingResource.setUri(new URI("file:/tmp/nonexistant"));
     nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
@@ -214,15 +215,16 @@ public class FileResourceRepositoryImplTest {
   }
 
   @Test(expected = ResourceIOException.class)
-  public void assertNonReadableFile() throws ResourceIOException, URISyntaxException {
+  public void assertNonReadableFile() throws ResourceIOException, ResourceNotFoundException, URISyntaxException {
     FileResource nonReadableResource = new FileResourceImpl();
+    // TODO this is a system dependent test (only linux)
     nonReadableResource.setUri(new URI("file:/vmlinuz"));
     nonReadableResource.setMimeType(MimeType.MIME_WILDCARD);
     resourceRepository.assertReadability(nonReadableResource);
   }
 
   @Test(expected = ResourceIOException.class)
-  public void assertZeroByteFile() throws ResourceIOException, URISyntaxException {
+  public void assertZeroByteFile() throws ResourceIOException, ResourceNotFoundException, URISyntaxException {
     FileResource zeroByteLengthResource = new FileResourceImpl();
     zeroByteLengthResource.setUri(new URI("file:/proc/uptime"));
     zeroByteLengthResource.setMimeType(MimeType.MIME_WILDCARD);
@@ -230,7 +232,7 @@ public class FileResourceRepositoryImplTest {
   }
 
   @Test
-  public void assertExistingFile() throws ResourceIOException, URISyntaxException, IOException {
+  public void assertExistingFile() throws ResourceIOException, ResourceNotFoundException, URISyntaxException, IOException {
     String newResourceFilename = "test_file.txt";
     File newCreatedResource = folder.newFile(newResourceFilename);
     String data = "Test data";

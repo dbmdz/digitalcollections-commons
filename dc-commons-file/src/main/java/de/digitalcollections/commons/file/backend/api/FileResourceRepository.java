@@ -4,6 +4,7 @@ import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
@@ -20,30 +21,30 @@ public interface FileResourceRepository<R extends FileResource> {
     return create(key, resourcePersistenceType, MimeType.fromExtension(filenameExtension));
   }
 
-  void delete(R resource) throws ResourceIOException;
+  void delete(R resource) throws ResourceIOException, ResourceNotFoundException;
 
-  FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException;
+  FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
 
-  default FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, String filenameExtension) throws ResourceIOException {
+  default FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, String filenameExtension) throws ResourceIOException, ResourceNotFoundException {
     return find(key, resourcePersistenceType, MimeType.fromExtension(filenameExtension));
   }
 
-  byte[] getBytes(R resource) throws ResourceIOException;
+  byte[] getBytes(R resource) throws ResourceIOException, ResourceNotFoundException;
 
-  Document getDocument(R resource) throws ResourceIOException;
+  Document getDocument(R resource) throws ResourceIOException, ResourceNotFoundException;
 
-  default Document getDocument(String key, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException {
+  default Document getDocument(String key, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException, ResourceNotFoundException {
     FileResource resource = find(key, resourcePersistenceType, MimeType.fromExtension("xml"));
     return getDocument((R) resource);
   }
 
-  void assertReadability(R resource) throws ResourceIOException;
+  void assertReadability(R resource) throws ResourceIOException, ResourceNotFoundException;
 
-  InputStream getInputStream(URI resourceUri) throws ResourceIOException;
+  InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException;
 
-  InputStream getInputStream(R resource) throws ResourceIOException;
+  InputStream getInputStream(R resource) throws ResourceIOException, ResourceNotFoundException;
 
-  Reader getReader(R resource) throws ResourceIOException;
+  Reader getReader(R resource) throws ResourceIOException, ResourceNotFoundException;
 
   long write(FileResource resource, String input) throws ResourceIOException;
 
