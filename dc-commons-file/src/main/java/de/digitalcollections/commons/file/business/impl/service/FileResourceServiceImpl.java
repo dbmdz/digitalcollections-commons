@@ -6,6 +6,7 @@ import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Set;
@@ -25,27 +26,27 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException {
+  public FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
     return fileResourceRepository.find(key, fileResourcePersistenceType, mimeType);
   }
 
   @Override
-  public Document getDocument(FileResource fileResource) throws ResourceIOException {
+  public Document getDocument(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException {
     return fileResourceRepository.getDocument(fileResource);
   }
 
   @Override
-  public void assertReadability(FileResource resource) throws ResourceIOException {
+  public void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     fileResourceRepository.assertReadability(resource);
   }
 
   @Override
-  public InputStream getInputStream(FileResource fileResource) throws ResourceIOException {
+  public InputStream getInputStream(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException {
     return fileResourceRepository.getInputStream(fileResource);
   }
 
   @Override
-  public InputStream getInputStream(URI resourceUri) throws ResourceIOException {
+  public InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException {
     return fileResourceRepository.getInputStream(resourceUri);
   }
 
