@@ -3,22 +3,23 @@ package de.digitalcollections.core.backend.impl.file.repository.resource.resolve
 import de.digitalcollections.commons.file.backend.impl.resolver.FileNameResolver;
 import de.digitalcollections.commons.file.backend.impl.resolver.MultiPatternsFileNameResolverImpl;
 import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
-import static de.digitalcollections.model.api.identifiable.resource.MimeType.MIME_APPLICATION_JSON;
 import java.net.URI;
 import java.util.List;
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static de.digitalcollections.model.api.identifiable.resource.MimeType.MIME_APPLICATION_JSON;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@ExtendWith(SpringExtension.class)
 // ApplicationContext will be loaded from the static inner SpringConfigBackendFile class
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class MultiPatternsFileNameResolverImplTest {
@@ -29,12 +30,12 @@ public class MultiPatternsFileNameResolverImplTest {
   private URI xmlUri;
   private URI jsonUri;
 
-  @BeforeClass
+  @BeforeAll
   public static void setupClass() {
     System.setProperty("spring.profiles.active", "TEST");
   }
 
-  @Before
+  @BeforeEach
   public void setup() {
     xmlUri = URI.create("http://rest.digitale-sammlungen.de/data/bsb00001000.xml");
     jsonUri = URI.create("http://iiif.digitale-sammlungen.de/presentation/v2/bsb00001000/manifest.json");
@@ -42,8 +43,6 @@ public class MultiPatternsFileNameResolverImplTest {
 
   /**
    * Test of getString method, of class MultiPatternsFileNameResolverImpl.
-   *
-   * @throws java.lang.Exception
    */
   @Test
   public void testGetStrings() throws Exception {
@@ -57,8 +56,6 @@ public class MultiPatternsFileNameResolverImplTest {
 
   /**
    * Test of getURI method, of class MultiPatternsFileNameResolverImpl.
-   *
-   * @throws java.lang.Exception
    */
   @Test
   public void testGetURIWithoutMime() throws Exception {
