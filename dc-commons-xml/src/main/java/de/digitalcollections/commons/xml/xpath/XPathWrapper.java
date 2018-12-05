@@ -213,7 +213,9 @@ public class XPathWrapper {
     List<Node> nodes = asListOfNodes(node, relativeXpath);
 
     if (nodes == null || nodes.isEmpty()) {
-      LOGGER.info("No relative node found for {} and relative path={}", getFullXPath(node), relativeXpath);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("No relative node found for {} and relative path={}", getFullXPath(node), relativeXpath);
+      }
       return null;
     }
     return nodes;
