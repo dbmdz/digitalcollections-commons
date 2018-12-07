@@ -144,7 +144,7 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void findValidKeys() throws Exception {
-    List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList();
+    List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList<>();
     resourcePersistenceTypeHandlers.add(new ResolvedResourcePersistenceTypeHandler());
 
     FileResourceRepositoryImpl resourceRepository = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
@@ -160,7 +160,7 @@ public class FileResourceRepositoryImplTest {
 
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
-        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
+                        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
     resourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
@@ -187,7 +187,7 @@ public class FileResourceRepositoryImplTest {
 
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
-        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
+                        Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
     resourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
@@ -242,7 +242,6 @@ public class FileResourceRepositoryImplTest {
   //    existingResource.setMimeType(MimeType.MIME_WILDCARD);
   //    resourceRepository.assertReadability(existingResource);
   //  }
-
   //  @Test
   //  public void testWriteFile() throws Exception {
   //    String newResourceFilename = "write_stream.txt";
