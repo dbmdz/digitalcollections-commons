@@ -9,9 +9,9 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.AbstractEnvironment;
@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 
 @Component
 @ManagedResource(objectName = "Service:type=JMX,name=VersionInfo")
-public class VersionInfo {
+public class VersionInfo implements InitializingBean {
 
   @Value("${info.app.project.artifactId:unknown}")
   private String projectArtifactId;
@@ -30,6 +30,7 @@ public class VersionInfo {
   @Value("${info.app.project.version:unknown}")
   private String projectVersion;
 
+  @Value("${info.app.project.buildDetails:unknown}")
   private String projectBuildDetails;
 
   @Value("${info.app.project.name:}")
@@ -44,12 +45,8 @@ public class VersionInfo {
   private static final String[] VERSION_KEYS = {"Implementation-Version", "Bundle-Version", "Version"};
   Map<String, String> versions = new TreeMap<>();
 
-  @PostConstruct
-  public void init() {
-
-    env.setIgnoreUnresolvableNestedPlaceholders(true);
-    projectBuildDetails = env.getProperty("info.app.project.buildDetails");
-
+  @Override
+  public void afterPropertiesSet() throws Exception {
     versions.put(projectArtifactId, projectBuildDetails);
 
     try {
