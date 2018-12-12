@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
  * http://michaelandrews.typepad.com/the_technical_times/2009/10/creating-a-hashed-directory-structure.html
  */
 @Repository
-public class FileResourceRepositoryImpl implements FileResourceRepository<FileResource> {
+public class FileResourceRepositoryImpl implements FileResourceRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImpl.class);
   private List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers;
