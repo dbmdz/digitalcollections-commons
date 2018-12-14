@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.Set;
 import org.w3c.dom.Document;
 
-public interface FileResourceRepository<R extends FileResource> {
+public interface FileResourceRepository {
 
   FileResource create(MimeType mimeType) throws ResourceIOException;
 
@@ -21,7 +21,7 @@ public interface FileResourceRepository<R extends FileResource> {
     return create(key, resourcePersistenceType, MimeType.fromExtension(filenameExtension));
   }
 
-  void delete(R resource) throws ResourceIOException, ResourceNotFoundException;
+  void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
   FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
 
@@ -29,22 +29,22 @@ public interface FileResourceRepository<R extends FileResource> {
     return find(key, resourcePersistenceType, MimeType.fromExtension(filenameExtension));
   }
 
-  byte[] getBytes(R resource) throws ResourceIOException, ResourceNotFoundException;
+  byte[] getBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  Document getDocument(R resource) throws ResourceIOException, ResourceNotFoundException;
+  Document getDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
   default Document getDocument(String key, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException, ResourceNotFoundException {
     FileResource resource = find(key, resourcePersistenceType, MimeType.fromExtension("xml"));
-    return getDocument((R) resource);
+    return getDocument(resource);
   }
 
-  void assertReadability(R resource) throws ResourceIOException, ResourceNotFoundException;
+  void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
   InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException;
 
-  InputStream getInputStream(R resource) throws ResourceIOException, ResourceNotFoundException;
+  InputStream getInputStream(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  Reader getReader(R resource) throws ResourceIOException, ResourceNotFoundException;
+  Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
   long write(FileResource resource, String input) throws ResourceIOException;
 

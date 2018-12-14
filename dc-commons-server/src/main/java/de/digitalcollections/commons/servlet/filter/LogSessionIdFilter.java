@@ -13,6 +13,14 @@ import org.slf4j.MDC;
 
 /**
  * Add session id of request to logging MDC (Mapped Diagnostic Context).
+ * Example:
+ * <pre>{@code
+ * <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+ * <layout>
+ *   <Pattern>%X{sessionID} - %m%n</Pattern>
+ * </layout>
+ * </appender>
+ * }</pre>
  */
 public class LogSessionIdFilter implements Filter {
 
