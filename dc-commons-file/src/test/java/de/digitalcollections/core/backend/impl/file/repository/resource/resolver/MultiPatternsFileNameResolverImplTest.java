@@ -43,6 +43,7 @@ public class MultiPatternsFileNameResolverImplTest {
 
   /**
    * Test of getString method, of class MultiPatternsFileNameResolverImpl.
+   * @throws java.lang.Exception
    */
   @Test
   public void testGetStrings() throws Exception {
@@ -56,6 +57,7 @@ public class MultiPatternsFileNameResolverImplTest {
 
   /**
    * Test of getURI method, of class MultiPatternsFileNameResolverImpl.
+   * @throws java.lang.Exception
    */
   @Test
   public void testGetURIWithoutMime() throws Exception {
