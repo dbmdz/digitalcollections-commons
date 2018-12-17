@@ -31,7 +31,7 @@ public class ManagedResourcePersistenceTypeHandler implements ResourcePersistenc
    * @param key the resource key (managed resource key is an uuid)
    * @param mimeType the MIME type of the resource (e.g. "application/xml")
    * @return All URIs that could be resolved from the parameters
-   * @throws ResourceIOException
+   * @throws ResourceIOException thrown if the path does not exist
    */
   // key = c30cf362-5992-4f5a-8de0-61938134e721, mimetype = image/jpeg
   // file:///local/repository/bsb/c30c/f362/5992/4f5a/8de0/6193/8134/e721/c30cf362-5992-4f5a-8de0-61938134e721.jpg

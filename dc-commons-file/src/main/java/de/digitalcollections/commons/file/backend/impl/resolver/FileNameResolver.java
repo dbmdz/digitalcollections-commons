@@ -85,8 +85,9 @@ public interface FileNameResolver {
 
   /**
    * Return all paths for a given pattern
-   * @return
-   * @throws ResourceIOException
+   * @param pattern the pattern for the paths
+   * @return the paths
+   * @throws ResourceIOException thrown if the path does not exist
    */
   Set<Path> getPathsForPattern(String pattern) throws ResourceIOException;
 }
