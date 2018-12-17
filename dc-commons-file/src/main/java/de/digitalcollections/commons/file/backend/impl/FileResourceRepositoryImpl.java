@@ -147,7 +147,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     resource.setUri(uri);
     Resource springResource = resourceLoader.getResource(uri.toString());
 
-    if (!springResource.exists()) {
+    if (!uri.getScheme().startsWith("http") && !springResource.exists()) {
       throw new ResourceNotFoundException("Resource not found at location '" + uri.toString() + "'");
     }
     // TODO how to get lastModified for HTTP? (do a head-request?); for now it is 0
@@ -188,7 +188,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
         LOGGER.debug("Getting inputstream for location '{}'.", location);
       }
       final Resource resource = resourceLoader.getResource(location);
-      if (!resource.exists()) {
+      if (!resourceUri.getScheme().startsWith("http") && !resource.exists()) {
         throw new ResourceNotFoundException("Resource not found at location '" + location + "'");
       }
       return resource.getInputStream();
