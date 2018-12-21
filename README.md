@@ -3,7 +3,7 @@
 [![Javadocs](https://javadoc.io/badge/de.digitalcollections.commons/dc-commons.svg)](https://javadoc.io/doc/de.digitalcollections.commons/dc-commons)
 [![Build Status](https://img.shields.io/travis/dbmdz/digitalcollections-commons/master.svg)](https://travis-ci.org/dbmdz/digitalcollections-commons)
 [![Codecov](https://img.shields.io/codecov/c/github/dbmdz/digitalcollections-commons/master.svg)](https://codecov.io/gh/dbmdz/digitalcollections-commons)
-[![MIT License](https://img.shields.io/github/license/dbmdz/digitalcollections-commons.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/dbmdz/digitalcollections-commons.svg)](LICENSE)
 [![GitHub release](https://img.shields.io/github/release/dbmdz/digitalcollections-commons.svg)](https://github.com/dbmdz/digitalcollections-commons/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/de.digitalcollections.commons/dc-commons.svg)](https://search.maven.org/search?q=a:dc-commons)
 
