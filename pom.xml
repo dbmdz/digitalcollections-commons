@@ -69,11 +69,10 @@
     <version.maven-compiler-plugin>3.8.0</version.maven-compiler-plugin>
     <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
     <version.maven-javadoc-plugin>3.0.1</version.maven-javadoc-plugin>
-    <version.maven-junit-jupiter-engine-plugin>3.0.1</version.maven-junit-jupiter-engine-plugin>
-    <version.nexus-staging-maven-plugin>1.6.7</version.nexus-staging-maven-plugin>
     <version.maven-source-plugin>3.0.1</version.maven-source-plugin>
     <version.maven-surefire-plugin>2.22.1</version.maven-surefire-plugin>
-    <version.versions-maven-plugin>2.3</version.versions-maven-plugin>
+    <version.nexus-staging-maven-plugin>1.6.8</version.nexus-staging-maven-plugin>
+    <version.versions-maven-plugin>2.7</version.versions-maven-plugin>
   </properties>
 
   <dependencyManagement>
@@ -325,6 +324,22 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${version.maven-surefire-plugin}</version>
+        <configuration>
+          <!--
+          <failIfNoTests>true</failIfNoTests>
+          -->
+          <includes>
+            <include>**/*Test.java</include>
+          </includes>
+          <properties>
+            <excludeTags>integration-test</excludeTags>
+          </properties>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
         <version>${version.versions-maven-plugin}</version>
@@ -359,25 +374,6 @@
           <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${version.maven-surefire-plugin}</version>
-        <configuration>
-          <!--
-          <failIfNoTests>true</failIfNoTests>
-          -->
-          <includes>
-            <include>**/*Test.java</include>
-          </includes>
-          <properties>
-            <excludeTags>integration-test</excludeTags>
-          </properties>
-        </configuration>
-      </plugin>
-
-
     </plugins>
   </build>
 
