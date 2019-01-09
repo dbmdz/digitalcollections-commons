@@ -34,7 +34,4 @@ public class VersionInfoTest {
 
     assertThat(versions.get("slf4j-api-1.7.22.jar")).isEqualTo("1.7.22");
   }
-
-
-
 }

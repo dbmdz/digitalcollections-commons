@@ -5,7 +5,6 @@ import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
 import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
 import static org.assertj.core.api.Assertions.assertThat;

@@ -67,6 +67,7 @@ public class FileResourceRepositoryImplTest {
 
   /**
    * Test of create method, of class ResourceRepositoryImpl.
+   * @throws java.lang.Exception
    */
   @Test
   public void testCreate() throws Exception {
@@ -99,6 +100,7 @@ public class FileResourceRepositoryImplTest {
 
   /**
    * Test of find method, of class ResourceRepositoryImpl.
+   * @throws java.lang.Exception
    */
   @Test
   public void testFind() throws Exception {
@@ -129,7 +131,7 @@ public class FileResourceRepositoryImplTest {
     List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList<>();
     resourcePersistenceTypeHandlers.add(new ResolvedResourcePersistenceTypeHandler());
 
-    FileResourceRepositoryImpl resourceRepository = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
+    FileResourceRepositoryImpl resourceRepo = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
 
     List<Path> paths = new ArrayList<>();
     paths.add(Paths.get("/opt/news/news_$1.md"));
@@ -144,10 +146,10 @@ public class FileResourceRepositoryImplTest {
     Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
-    resourceRepository.overrideDirectoryStream(mockDirectoryStream);
+    resourceRepo.overrideDirectoryStream(mockDirectoryStream);
 
-    resourceRepository.setResourcePersistenceHandlers(resolvers);
-    Set<String> keys = resourceRepository.findKeys("news_(\\d{8})", RESOLVED);
+    resourceRepo.setResourcePersistenceHandlers(resolvers);
+    Set<String> keys = resourceRepo.findKeys("news_(\\d{8})", RESOLVED);
     assertThat(keys).containsExactly("news_12345678", "news_23456789");
   }
 
@@ -156,7 +158,7 @@ public class FileResourceRepositoryImplTest {
     List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList();
     resourcePersistenceTypeHandlers.add(new ResolvedResourcePersistenceTypeHandler());
 
-    FileResourceRepositoryImpl resourceRepository = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
+    FileResourceRepositoryImpl resourceRepo = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
 
     List<Path> paths = new ArrayList<>();
     paths.add(Paths.get("/opt/news/news_$1$2.md"));
@@ -171,10 +173,10 @@ public class FileResourceRepositoryImplTest {
     Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
-    resourceRepository.overrideDirectoryStream(mockDirectoryStream);
+    resourceRepo.overrideDirectoryStream(mockDirectoryStream);
 
-    resourceRepository.setResourcePersistenceHandlers(resolvers);
-    Set<String> keys = resourceRepository.findKeys("news_(\\d{6})(\\d{2})", RESOLVED);
+    resourceRepo.setResourcePersistenceHandlers(resolvers);
+    Set<String> keys = resourceRepo.findKeys("news_(\\d{6})(\\d{2})", RESOLVED);
     assertThat(keys).containsExactly("news_12345678", "news_23456789");
   }
 
@@ -211,47 +213,51 @@ public class FileResourceRepositoryImplTest {
 
   // TODO: Currently, there's no native TemporaryFolder support in JUnit5, so we disable the following test cases.
   // FIXME: As soon there's a proper support TemporaryFolder, enable the following test cases.
-  //  @Test
-  //  public void assertExistingFile() throws ResourceIOException, URISyntaxException, IOException {
-  //    String newResourceFilename = "test_file.txt";
-  //    File newCreatedResource = folder.newFile(newResourceFilename);
-  //    String data = "Test data";
-  //    final Path filePath = newCreatedResource.toPath();
-  //    Files.write(filePath, data.getBytes());
-  //
-  //    FileResource existingResource = new FileResourceImpl();
-  //    existingResource.setUri(new URI("file:" + filePath.toString()));
-  //    existingResource.setMimeType(MimeType.MIME_WILDCARD);
-  //    resourceRepository.assertReadability(existingResource);
-  //  }
-  //  @Test
-  //  public void testWriteFile() throws Exception {
-  //    String newResourceFilename = "write_stream.txt";
-  //    File newCreatedResource = folder.newFile(newResourceFilename);
-  //    String newResourceContent = "Hopfenzeitung";
-  //
-  //    FileResource newResource = new FileResourceImpl();
-  //    newResource.setUri(new URI("file:" + newCreatedResource.getAbsolutePath()));
-  //    newResource.setMimeType(MimeType.fromFilename(newCreatedResource.getName()));
-  //
-  //    InputStream inputStream = new ByteArrayInputStream(newResourceContent.getBytes());
-  //    Long actualFileSize = resourceRepository.write(newResource, inputStream);
-  //
-  //    assertThat(actualFileSize).isEqualTo(13L);
-  //  }
-  //
-  //  @Test
-  //  public void testWriteString() throws Exception {
-  //    String newResourceFilename = "write_string.txt";
-  //    File newCreatedResource = folder.newFile(newResourceFilename);
-  //    String newResourceContent = "Hopfenzeitungen";
-  //
-  //    FileResource newResource = new FileResourceImpl();
-  //    newResource.setUri(new URI("file:" + newCreatedResource.getAbsolutePath()));
-  //    newResource.setMimeType(MimeType.fromFilename(newCreatedResource.getName()));
-  //
-  //    Long actualFileSize = resourceRepository.write(newResource, newResourceContent);
-  //
-  //    assertThat(actualFileSize).isEqualTo(15L);
-  //  }
+//  @Test
+//  public void assertExistingFile() throws ResourceIOException, URISyntaxException, IOException, ResourceNotFoundException {
+//    String newResourceFilename = "test_file.txt";
+//    TempDirectory folder = new TempDirectory();
+//    File newCreatedResource = folder.newFile(newResourceFilename);
+//    String data = "Test data";
+//    final Path filePath = newCreatedResource.toPath();
+//    Files.write(filePath, data.getBytes());
+//
+//    FileResource existingResource = new FileResourceImpl();
+//    existingResource.setUri(new URI("file:" + filePath.toString()));
+//    existingResource.setMimeType(MimeType.MIME_WILDCARD);
+//    resourceRepository.assertReadability(existingResource);
+//  }
+//
+//  @Test
+//  public void testWriteFile() throws Exception {
+//    String newResourceFilename = "write_stream.txt";
+//    TempDirectory folder = new TempDirectory();
+//    File newCreatedResource = folder.newFile(newResourceFilename);
+//    String newResourceContent = "Hopfenzeitung";
+//
+//    FileResource newResource = new FileResourceImpl();
+//    newResource.setUri(new URI("file:" + newCreatedResource.getAbsolutePath()));
+//    newResource.setMimeType(MimeType.fromFilename(newCreatedResource.getName()));
+//
+//    InputStream inputStream = new ByteArrayInputStream(newResourceContent.getBytes());
+//    Long actualFileSize = resourceRepository.write(newResource, inputStream);
+//
+//    assertThat(actualFileSize).isEqualTo(13L);
+//  }
+//
+//  @Test
+//  public void testWriteString() throws Exception {
+//    String newResourceFilename = "write_string.txt";
+//    TempDirectory folder = new TempDirectory();
+//    File newCreatedResource = folder.newFile(newResourceFilename);
+//    String newResourceContent = "Hopfenzeitungen";
+//
+//    FileResource newResource = new FileResourceImpl();
+//    newResource.setUri(new URI("file:" + newCreatedResource.getAbsolutePath()));
+//    newResource.setMimeType(MimeType.fromFilename(newCreatedResource.getName()));
+//
+//    Long actualFileSize = resourceRepository.write(newResource, newResourceContent);
+//
+//    assertThat(actualFileSize).isEqualTo(15L);
+//  }
 }
