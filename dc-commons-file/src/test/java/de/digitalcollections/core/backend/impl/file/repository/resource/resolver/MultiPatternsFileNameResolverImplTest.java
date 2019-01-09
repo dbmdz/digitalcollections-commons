@@ -47,7 +47,6 @@ public class MultiPatternsFileNameResolverImplTest {
    */
   @Test
   public void testGetStrings() throws Exception {
-    System.out.println("getString");
     String fileName = "bsb00001000_00001";
     String expResult = "http://rest.digitale-sammlungen.de/data/bsb00001000_00001.jpg";
     List<String> results = fileNameResolver.getStrings(fileName);
@@ -80,7 +79,6 @@ public class MultiPatternsFileNameResolverImplTest {
    */
   @Test
   public void testIsResolvable() {
-    System.out.println("isResolvable");
     String identifier = "bsb00001000";
     assertThat(fileNameResolver.isResolvable(identifier)).isTrue();
   }

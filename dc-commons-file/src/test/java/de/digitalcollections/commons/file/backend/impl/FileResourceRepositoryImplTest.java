@@ -19,10 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -52,24 +49,9 @@ public class FileResourceRepositoryImplTest {
   @Autowired
   private ResourceLoader resourceLoader;
 
-  public FileResourceRepositoryImplTest() {
-  }
-
   @BeforeAll
   public static void setUpClass() {
     System.setProperty("spring.profiles.active", "TEST");
-  }
-
-  @AfterAll
-  public static void tearDownClass() {
-  }
-
-  @BeforeEach
-  public void setUp() {
-  }
-
-  @AfterEach
-  public void tearDown() {
   }
 
   @Test

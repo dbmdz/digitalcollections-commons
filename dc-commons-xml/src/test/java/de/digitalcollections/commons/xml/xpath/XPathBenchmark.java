@@ -7,10 +7,14 @@ import java.time.Instant;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class XPathBenchmark {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(XPathBenchmark.class);
 
   //private static final String DTM_MANAGER_PROP_NAME = "com.sun.org.apache.xml.internal.dtm.DTMManager";
   //private static final String DTM_MANAGER_CLASS_NAME = "com.sun.org.apache.xml.internal.dtm.ref.DTMManagerDefault";
@@ -41,10 +45,10 @@ public class XPathBenchmark {
   }
 
   public static void main(String[] args) throws Exception {
-    System.out.println("Warming up the JIT compiler...");
+    LOGGER.info("Warming up the JIT compiler...");
     runBench();
     for (int i = 0; i < 10; i++) {
-      System.out.println(runBench());
+      LOGGER.info(runBench().toString());
     }
   }
 }

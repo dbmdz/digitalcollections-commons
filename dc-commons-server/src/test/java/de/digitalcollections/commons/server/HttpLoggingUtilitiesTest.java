@@ -1,13 +1,15 @@
 package de.digitalcollections.commons.server;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpLoggingUtilitiesTest {
+
   @Test
   public void testAnonymizeIp() {
-    assertEquals(HttpLoggingUtilities.anonymizeIp("192.168.0.1"), "192.168");
-    assertEquals(HttpLoggingUtilities.anonymizeIp("255.255.255.255"), "255.255");
+    assertThat(HttpLoggingUtilities.anonymizeIp("192.168.0.1")).isEqualTo("192.168");
+    assertThat(HttpLoggingUtilities.anonymizeIp("255.255.255.255")).isEqualTo("255.255");
   }
 
   /**
@@ -15,10 +17,6 @@ public class HttpLoggingUtilitiesTest {
    */
   @Test
   public void testIsValidPublicIp() {
-    System.out.println("isValidPublicIp");
-    String ip = "192.168.0.1";
-    boolean expResult = false;
-    boolean result = HttpLoggingUtilities.isValidPublicIp(ip);
-    assertEquals(expResult, result);
+    assertThat(HttpLoggingUtilities.isValidPublicIp("192.168.0.1")).isEqualTo(false);
   }
 }

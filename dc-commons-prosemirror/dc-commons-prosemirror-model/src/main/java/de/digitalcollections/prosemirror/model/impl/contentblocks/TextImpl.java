@@ -1,9 +1,9 @@
 package de.digitalcollections.prosemirror.model.impl.contentblocks;
 
-import de.digitalcollections.prosemirror.model.impl.MarkImpl;
 import de.digitalcollections.prosemirror.model.api.Mark;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Text;
 import de.digitalcollections.prosemirror.model.impl.ContentBlockImpl;
+import de.digitalcollections.prosemirror.model.impl.MarkImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

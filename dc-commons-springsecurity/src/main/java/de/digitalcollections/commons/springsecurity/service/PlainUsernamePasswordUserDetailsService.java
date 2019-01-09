@@ -34,7 +34,7 @@ public class PlainUsernamePasswordUserDetailsService implements UserDetailsServi
   public void afterPropertiesSet() throws Exception {
     Resource resource = null;
 
-    if ( userpropertiesLocation.startsWith("classpath")) {
+    if (userpropertiesLocation.startsWith("classpath")) {
       resource = new ClassPathResource(userpropertiesLocation.replaceFirst("classpath:", ""));
     } else {
       resource = new UrlResource(userpropertiesLocation);
@@ -54,7 +54,7 @@ public class PlainUsernamePasswordUserDetailsService implements UserDetailsServi
     repository = new InMemoryUserDetailsManager(userProperties);
 
     LOGGER.info("Load users=" + userProperties.entrySet().stream().map(user -> user.getKey() + ":["
-        + ((String)user.getValue()).replaceFirst(".*?,","") + "]").collect(Collectors.joining(", ")));
+            + ((String) user.getValue()).replaceFirst(".*?,", "") + "]").collect(Collectors.joining(", ")));
   }
 
   @Override

@@ -7,10 +7,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BaseProseMirrorObjectMapperTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BaseProseMirrorObjectMapperTest.class);
 
   public ObjectMapper mapper;
 
@@ -35,7 +39,7 @@ public class BaseProseMirrorObjectMapperTest {
         }
       }
     } catch (InvocationTargetException e) {
-      System.out.println(e);
+      LOGGER.warn(e.toString());
     }
 
     /*
@@ -45,9 +49,8 @@ public class BaseProseMirrorObjectMapperTest {
      */
     try {
       assertThat(objectOut).isEqualToComparingFieldByFieldRecursively(objectIn);
-      //System.out.println("IN=" + dump(objectIn) + "\nOUT=" + dump(objectOut) + "\n\n");
     } catch (Throwable e) {
-      System.err.println("ERR: IN=" + dump(objectIn) + "\n    OUT=" + dump(objectOut) + "\n\nERROR=" + e.getClass() + "=" + e.getMessage());
+      LOGGER.error("ERR: IN=" + dump(objectIn) + "\n    OUT=" + dump(objectOut) + "\n\nERROR=" + e.getClass() + "=" + e.getMessage());
       throw e;
     }
   }
