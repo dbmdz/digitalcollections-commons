@@ -1,4 +1,4 @@
-package de.digitalcollections.core.backend.impl.file.repository.resource.resolver;
+package de.digitalcollections.commons.file.backend.impl.resolver;
 
 import de.digitalcollections.commons.file.backend.impl.resolver.FileNameResolver;
 import de.digitalcollections.commons.file.backend.impl.resolver.MultiPatternsFileNameResolverImpl;
