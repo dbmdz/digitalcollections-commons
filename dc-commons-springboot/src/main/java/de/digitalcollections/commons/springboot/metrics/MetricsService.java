@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class MetricsService {
 
   protected Map<String, Long> counters = new HashMap<>();
-  protected Map<String,Set<Tag>> counterTags = new HashMap<>();
+  protected Map<String, Set<Tag>> counterTags = new HashMap<>();
   protected Map<String, Timer> timers = new HashMap<>();
 
   private final MeterRegistry meterRegistry;
@@ -30,7 +30,7 @@ public class MetricsService {
    * @param value Value of the gauge
    */
   public void setGauge(String name, long value) {
-    handleCounter(name, null,null, null, value, null, false);
+    handleCounter(name, null, null, null, value, null, false);
   }
 
   /**
@@ -42,7 +42,6 @@ public class MetricsService {
   public void setGauge(String name, String tag, long value) {
     handleCounter(name, "type", tag, null, value, null, false);
   }
-
 
   /**
    * Sets the value of a gauge
@@ -61,7 +60,7 @@ public class MetricsService {
    * @param tag Name of the tag
    */
   public void increaseCounter(String name, String tag) {
-    handleCounter(name, "type", tag, 1L,  null, null, false);
+    handleCounter(name, "type", tag, 1L, null, null, false);
   }
 
   /**
@@ -71,7 +70,7 @@ public class MetricsService {
    * @param increment Increment value
    */
   public void increaseCounter(String name, String tag, long increment) {
-    handleCounter(name, "type", tag, increment, null,null, false);
+    handleCounter(name, "type", tag, increment, null, null, false);
   }
 
   /**
@@ -95,9 +94,9 @@ public class MetricsService {
   }
 
   private void handleCounter(String name, String tagKey, String tagValue, Long increment, Long absoluteValue, Long durationMillis, Boolean publishPercentiles) {
-    String key = name + ( ( tagKey != null && tagValue != null ) ? "." + tagValue : "");
+    String key = name + ((tagKey != null && tagValue != null) ? "." + tagValue : "");
 
-    if ( increment != null ) {
+    if (increment != null) {
       // Increase counter value
       counters.put(key, counters.getOrDefault(key, 0L) + increment);
     } else {
@@ -107,7 +106,7 @@ public class MetricsService {
     // Register counter, if it doesn't exist yet
     if (counterTags.get(key) == null) {
       counterTags.put(key, new HashSet<>());
-      if ( tagKey != null && tagValue != null ) {
+      if (tagKey != null && tagValue != null) {
         counterTags.get(key).add(new ImmutableTag(tagKey, tagValue));
         meterRegistry.gauge(name + ".amount", counterTags.get(key), key, counters::get);
       } else {
@@ -121,13 +120,13 @@ public class MetricsService {
         Timer.Builder timerBuilder = Timer.builder(name + ".duration")
                 .tag(tagKey, tagValue);
 
-        if ( publishPercentiles ) {
+        if (publishPercentiles) {
           timerBuilder = timerBuilder.publishPercentiles(0.5, 0.95)
-              .publishPercentileHistogram();
+                  .publishPercentileHistogram();
         }
 
         Timer timer = timerBuilder
-          .register(meterRegistry);
+                .register(meterRegistry);
 
         timers.put(key, timer);
       }
