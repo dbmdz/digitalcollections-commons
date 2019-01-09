@@ -7,14 +7,15 @@ import java.time.Instant;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-public class XPathBenchmark {
+public class XPathBenchmarkTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(XPathBenchmark.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(XPathBenchmarkTest.class);
 
   //private static final String DTM_MANAGER_PROP_NAME = "com.sun.org.apache.xml.internal.dtm.DTMManager";
   //private static final String DTM_MANAGER_CLASS_NAME = "com.sun.org.apache.xml.internal.dtm.ref.DTMManagerDefault";
@@ -44,7 +45,8 @@ public class XPathBenchmark {
     return Duration.between(start, end);
   }
 
-  public static void main(String[] args) throws Exception {
+  @Test
+  public void runBenchmark() throws Exception {
     LOGGER.info("Warming up the JIT compiler...");
     runBench();
     for (int i = 0; i < 10; i++) {
