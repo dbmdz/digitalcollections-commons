@@ -142,6 +142,7 @@ public class FileResourceRepositoryImplTest {
     when(mockMultiPatternsFileNameResolver.getPathsForPattern("news_(\\d{8})")).thenReturn(paths);
     resolvers.add(mockMultiPatternsFileNameResolver);
 
+    @SuppressWarnings("unchecked")
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
@@ -155,7 +156,7 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void findValidKeysForExtendedPattern() throws Exception {
-    List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList();
+    List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList<ResourcePersistenceTypeHandler>();
     resourcePersistenceTypeHandlers.add(new ResolvedResourcePersistenceTypeHandler());
 
     FileResourceRepositoryImpl resourceRepo = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
@@ -169,6 +170,7 @@ public class FileResourceRepositoryImplTest {
     when(mockMultiPatternsFileNameResolver.getPathsForPattern("news_(\\d{6})(\\d{2})")).thenReturn(paths);
     resolvers.add(mockMultiPatternsFileNameResolver);
 
+    @SuppressWarnings("unchecked")
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};

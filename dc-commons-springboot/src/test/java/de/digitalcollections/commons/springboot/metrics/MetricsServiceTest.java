@@ -45,6 +45,7 @@ public class MetricsServiceTest {
 
   @Test
   @DisplayName("Initial call registers the counter")
+  @SuppressWarnings("unchecked")
   void initialCallRegistersCounter() {
     metricsService.increaseCounter("foo", "bar");
     Set<Tag> expectedTags = new HashSet<>();
@@ -54,6 +55,7 @@ public class MetricsServiceTest {
 
   @Test
   @DisplayName("Second call does not register the counter but increments")
+  @SuppressWarnings("unchecked")
   void secondCallDoesNotRegisterCounterTwice() {
     metricsService.increaseCounter("foo", "bar");
     Set<Tag> expectedTags = new HashSet<>();
@@ -109,6 +111,7 @@ public class MetricsServiceTest {
   @Test
   @DisplayName("Multiple calls for counter and duration only register once")
   @Disabled("Duration registration is not mockable and so not testable with reasonable effort")
+  @SuppressWarnings("unchecked")
   void multipleCallsForCounterAndDuration() {
     Set<Tag> expectedTags = new HashSet<>();
     expectedTags.add(new ImmutableTag("type", "bar"));
