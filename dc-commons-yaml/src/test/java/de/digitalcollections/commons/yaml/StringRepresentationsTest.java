@@ -32,5 +32,4 @@ public class StringRepresentationsTest {
   public void stringRepresentationOfNullShould() {
     System.out.println(stringRepresentationOf(null));
   }
-
 }

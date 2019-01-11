@@ -196,7 +196,6 @@ public class FileResourceRepositoryImplTest {
   public void assertNonReadableFile() {
     assertThatThrownBy(() -> {
       FileResource nonReadableResource = new FileResourceImpl();
-      // TODO this is a system dependent test (only linux)
       nonReadableResource.setUri(new URI("file:/vmlinuz"));
       nonReadableResource.setMimeType(MimeType.MIME_WILDCARD);
       resourceRepository.assertReadability(nonReadableResource);
@@ -213,8 +212,6 @@ public class FileResourceRepositoryImplTest {
     }).isInstanceOf(ResourceIOException.class);
   }
 
-  // TODO: Currently, there's no native TemporaryFolder support in JUnit5, so we disable the following test cases.
-  // FIXME: As soon there's a proper support TemporaryFolder, enable the following test cases.
 //  @Test
 //  public void assertExistingFile() throws ResourceIOException, URISyntaxException, IOException, ResourceNotFoundException {
 //    String newResourceFilename = "test_file.txt";
