@@ -1,6 +1,7 @@
 package de.digitalcollections.prosemirror.model.jackson;
 
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.core.util.VersionUtil;
 import com.fasterxml.jackson.databind.Module;
 import de.digitalcollections.prosemirror.model.api.ContentBlock;
 import de.digitalcollections.prosemirror.model.api.Document;
@@ -26,6 +27,7 @@ import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.ListI
 import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.OrderedListMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.ParagraphMixIn;
 import de.digitalcollections.prosemirror.model.jackson.mixin.contentblocks.TextMixIn;
+import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +35,11 @@ public class ProseMirrorModule extends Module {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProseMirrorModule.class);
 
+  protected static ResourceBundle rb = ResourceBundle.getBundle("dc-commons-prosemirror-model-jackson-version");
+
   @Override
   public String getModuleName() {
-    return "dc-commons prosemirror jackson module";
+    return "DigitalCollections ProseMirror Model jackson module";
   }
 
   @Override
@@ -59,7 +63,10 @@ public class ProseMirrorModule extends Module {
 
   @Override
   public Version version() {
-    return new Version(1, 3, 0, "SNAPSHOT", "de.digitalcollections.dc-commons-prosemirror", "model-jackson");
+    return VersionUtil.parseVersion(
+            rb.getString("project.version"),
+            rb.getString("project.groupId"),
+            rb.getString("project.artifactId"));
   }
 
 }
