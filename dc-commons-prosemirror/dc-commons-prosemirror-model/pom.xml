@@ -5,13 +5,10 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons-prosemirror</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.1</version>
   </parent>
   
   <name>DigitalCollections: Commons ProseMirror Model</name>
   <artifactId>dc-commons-prosemirror-model</artifactId>
   <packaging>jar</packaging>
-  
-  <dependencies>
-  </dependencies>
 </project>

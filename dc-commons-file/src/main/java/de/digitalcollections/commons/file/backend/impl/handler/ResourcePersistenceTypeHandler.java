@@ -12,6 +12,10 @@ public interface ResourcePersistenceTypeHandler {
 
   List<URI> getUris(String resolvingKey, MimeType mimeType) throws ResourceIOException;
 
+  default List<URI> getUris(String resolvingKey, String filenameExtension) throws ResourceIOException {
+    return getUris(resolvingKey, MimeType.fromExtension(filenameExtension));
+  }
+
   default URI getUri(String resolvingKey, String fileExtension) throws ResourceIOException {
     List<URI> uris = getUris(resolvingKey, fileExtension);
     if (uris.isEmpty()) {
@@ -19,9 +23,5 @@ public interface ResourcePersistenceTypeHandler {
     } else {
       return uris.get(0);
     }
-  }
-
-  default List<URI> getUris(String resolvingKey, String filenameExtension) throws ResourceIOException {
-    return getUris(resolvingKey, MimeType.fromExtension(filenameExtension));
   }
 }

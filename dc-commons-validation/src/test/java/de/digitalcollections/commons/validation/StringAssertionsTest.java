@@ -1,7 +1,6 @@
 package de.digitalcollections.commons.validation;
 
 import java.util.Arrays;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +40,7 @@ public class StringAssertionsTest {
   @Test
   public void doesNotContainShouldBeTrueIfContainsIsFalse() throws Exception {
     StringAssertions assertion = new StringAssertions("abc");
-    Assertions.assertThat(Arrays.asList("a", "x")).allMatch(s -> assertion.doesNotContain(s) != assertion.contains((String) s));
+    assertThat(Arrays.asList("a", "x")).allMatch(s -> assertion.doesNotContain(s) != assertion.contains((String) s));
   }
 
   @Test
@@ -59,7 +58,7 @@ public class StringAssertionsTest {
   @Test
   public void doesNotContainAsOftenAsShouldBeFalseIfContainsIsTrue() throws Exception {
     StringAssertions assertion = new StringAssertions("abca");
-    Assertions.assertThat(Arrays.asList("a", "c")).allMatch(s -> assertion.doesNotContain("b", StringAssertions.AS_OFTEN_AS, s) != assertion.contains("b", StringAssertions.AS_OFTEN_AS, s));
+    assertThat(Arrays.asList("a", "c")).allMatch(s -> assertion.doesNotContain("b", StringAssertions.AS_OFTEN_AS, s) != assertion.contains("b", StringAssertions.AS_OFTEN_AS, s));
   }
 
 }

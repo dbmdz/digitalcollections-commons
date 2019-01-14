@@ -53,21 +53,20 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
   @Test
   public void testDeserializationWithEmptyText() throws Exception {
     String jsonString = "{\n"
-        + "          \"type\": \"text\"\n"
-        + "        }";
+            + "          \"type\": \"text\"\n"
+            + "        }";
 
     Text text = mapper.readValue(jsonString, Text.class);
     assertThat(text).isNotNull();
     assertThat(text.getText()).isNull();
   }
 
-
   @Test
   public void testDeserializationWithText() throws Exception {
     String jsonString = "{\n"
-        + "          \"type\": \"text\",\n"
-        + "          \"text\": \"Impressum\"\n"
-        + "        }";
+            + "          \"type\": \"text\",\n"
+            + "          \"text\": \"Impressum\"\n"
+            + "        }";
 
     Text text = mapper.readValue(jsonString, Text.class);
     assertThat(text).isNotNull();
@@ -78,12 +77,12 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
   @Test
   public void testDeserializationWithMarksOnly() throws Exception {
     String jsonString = "{\n"
-        + "      \"type\": \"text\",\n"
-        + "      \"marks\": [\n"
-        + "        {\"type\":\"strong\"},\n"
-        + "        {\"type\":\"em\"}\n"
-        + "      ]\n"
-        + "    }";
+            + "      \"type\": \"text\",\n"
+            + "      \"marks\": [\n"
+            + "        {\"type\":\"strong\"},\n"
+            + "        {\"type\":\"em\"}\n"
+            + "      ]\n"
+            + "    }";
 
     Text text = mapper.readValue(jsonString, Text.class);
     assertThat(text).isNotNull();
@@ -91,30 +90,26 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
 
     Mark strong = new MarkImpl("strong");
     Mark em = new MarkImpl("em");
-
-    System.out.println("text.getMarks()=" + text.getMarks());
-
-    assertThat(text.getMarks()).containsExactly(strong,em);
+    assertThat(text.getMarks()).containsExactly(strong, em);
   }
 
   @Test
   public void testDeserializationWithTextAndMarks() throws Exception {
     String jsonString = "{\n"
-        + "      \"type\": \"text\",\n"
-        + "      \"marks\": [\n"
-        + "        {\"type\":\"strong\"},\n"
-        + "        {\"type\":\"em\"}\n"
-        + "      ],\n"
-        + "      \"text\": \"Fax:\"\n"
-        + "    }";
+            + "      \"type\": \"text\",\n"
+            + "      \"marks\": [\n"
+            + "        {\"type\":\"strong\"},\n"
+            + "        {\"type\":\"em\"}\n"
+            + "      ],\n"
+            + "      \"text\": \"Fax:\"\n"
+            + "    }";
 
     Text text = mapper.readValue(jsonString, Text.class);
     assertThat(text).isNotNull();
     assertThat(text.getText()).isEqualTo("Fax:");
     Mark strong = new MarkImpl("strong");
     Mark em = new MarkImpl("em");
-    assertThat(text.getMarks()).containsExactly(strong,em);
+    assertThat(text.getMarks()).containsExactly(strong, em);
   }
-
 
 }

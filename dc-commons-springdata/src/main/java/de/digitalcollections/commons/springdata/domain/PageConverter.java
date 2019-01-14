@@ -20,6 +20,7 @@ public class PageConverter {
       return null;
     }
     Pageable pageable = PageableConverter.convert(pageRequest);
+    @SuppressWarnings("unchecked")
     Page page = new PageImpl(pageResponse.getContent(), pageable, pageResponse.getTotalElements());
     return page;
   }

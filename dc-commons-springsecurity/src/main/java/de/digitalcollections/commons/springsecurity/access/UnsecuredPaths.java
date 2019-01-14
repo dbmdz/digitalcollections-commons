@@ -30,25 +30,25 @@ public class UnsecuredPaths {
   @PostConstruct()
   void init() {
 
-    if ( unsecuredPathsConfig.getUnsecured() != null ) {
+    if (unsecuredPathsConfig.getUnsecured() != null) {
       unsecuredPaths = unsecuredPathsConfig.getUnsecured();
     } else {
       unsecuredPaths.addAll(Arrays.asList(
-          "/health",
-          "/info",
-          "/javamelody",
-          "/jolokia",
-          "/jolokia/**",
-          "/jsondoc",
-          "/monitoring**",
-          "/monitoring/health",
-          "/monitoring/jolokia",
-          "/monitoring/jolokia/**",
-          "/monitoring/prometheus",
-          "/monitoring/prometheus/**",
-          "/monitoring/version",
-          "/resources/**",
-          "/version"
+              "/health",
+              "/info",
+              "/javamelody",
+              "/jolokia",
+              "/jolokia/**",
+              "/jsondoc",
+              "/monitoring**",
+              "/monitoring/health",
+              "/monitoring/jolokia",
+              "/monitoring/jolokia/**",
+              "/monitoring/prometheus",
+              "/monitoring/prometheus/**",
+              "/monitoring/version",
+              "/resources/**",
+              "/version"
       ));
     }
 

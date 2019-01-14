@@ -2,9 +2,12 @@ package de.digitalcollections.commons.yaml.examples;
 
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BenchmarkTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BenchmarkTest.class);
 
   private static final int COLUMN_WIDTH = 18;
 
@@ -29,16 +32,16 @@ public class BenchmarkTest {
   }
 
   private void measure(String info, Object thing, int repeats, int numberOfIterations) {
-    System.out.print(info + "\t");
+    String output = info + "\t";
     for (int k = 0; k < repeats; k++) {
       long start = System.currentTimeMillis();
       for (int i = 0; i < numberOfIterations; i++) {
         thing.toString();
       }
       double duration = 1.0 * (System.currentTimeMillis() - start) / numberOfIterations * 1000;
-      System.out.print(format(duration));
+      output = output + format(duration);
     }
-    System.out.println();
+    LOGGER.info(output);
   }
 
 }

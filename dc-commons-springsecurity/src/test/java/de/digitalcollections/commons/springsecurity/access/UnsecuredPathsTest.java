@@ -26,5 +26,4 @@ class UnsecuredPathsTest {
   public void testConfiguredPaths() {
     assertThat(unsecuredPaths.getUnsecuredPaths()).containsExactly("/foo", "/bar", "/baz");
   }
-
 }

@@ -150,17 +150,14 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     if (!uri.getScheme().startsWith("http") && !springResource.exists()) {
       throw new ResourceNotFoundException("Resource not found at location '" + uri.toString() + "'");
     }
-    // TODO how to get lastModified for HTTP? (do a head-request?); for now it is 0
     long lastModified = getLastModified(springResource);
     if (lastModified != 0) {
       // lastmodified by code in java.io.File#lastModified (is also used in Spring's core.io.Resource) is in milliseconds!
-      // TODO lastModified should be of type Instant? to be discussed...
       resource.setLastModified(Instant.ofEpochMilli(lastModified).atOffset(ZoneOffset.UTC).toLocalDateTime());
     } else {
       resource.setLastModified(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
     }
 
-    // TODO how to get length for HTTP? (do a head-request?); for now it is -1
     long length = getSize(springResource);
     if (length > -1) {
       resource.setSizeInBytes(length);

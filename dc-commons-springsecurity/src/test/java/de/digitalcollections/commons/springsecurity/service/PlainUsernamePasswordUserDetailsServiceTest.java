@@ -2,10 +2,8 @@ package de.digitalcollections.commons.springsecurity.service;
 
 import de.digitalcollections.commons.springsecurity.test.SpringConfigTest;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,11 +12,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Disabled
 @ExtendWith(SpringExtension.class)
-@TestPropertySource(properties = { "security.userproperties.location=classpath:/users.properties"})
+@TestPropertySource(properties = {"security.userproperties.location=classpath:/users.properties"})
 @ContextConfiguration(classes = {SpringConfigTest.class})
 class PlainUsernamePasswordUserDetailsServiceTest {
 
@@ -27,9 +24,9 @@ class PlainUsernamePasswordUserDetailsServiceTest {
 
   @Test
   void testUnknownUsernameThrowsUsernameNotFoundException() {
-    Executable testMethod = () -> service.loadUserByUsername("unknown");
-
-    assertThrows(UsernameNotFoundException.class, testMethod);
+    assertThatThrownBy(() -> {
+      service.loadUserByUsername("unknown");
+    }).isInstanceOf(UsernameNotFoundException.class);
   }
 
   @Test

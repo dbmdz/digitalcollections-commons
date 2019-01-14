@@ -26,6 +26,11 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
+  public FileResource create(MimeType mimeType) throws ResourceIOException {
+    return fileResourceRepository.create(mimeType);
+  }
+
+  @Override
   public FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
     return fileResourceRepository.find(key, fileResourcePersistenceType, mimeType);
   }
@@ -58,11 +63,6 @@ public class FileResourceServiceImpl implements FileResourceService {
   @Override
   public long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException {
     return fileResourceRepository.write(fileResource, inputStream);
-  }
-
-  @Override
-  public FileResource create(MimeType mimeType) throws ResourceIOException {
-    return fileResourceRepository.create(mimeType);
   }
 
   @Override
