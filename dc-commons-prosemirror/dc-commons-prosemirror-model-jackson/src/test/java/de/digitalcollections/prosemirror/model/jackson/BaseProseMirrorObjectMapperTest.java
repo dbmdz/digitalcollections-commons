@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BaseProseMirrorObjectMapperTest {
+public abstract class BaseProseMirrorObjectMapperTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseProseMirrorObjectMapperTest.class);
 

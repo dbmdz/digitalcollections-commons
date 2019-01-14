@@ -17,10 +17,6 @@ public class XPathBenchmarkTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathBenchmarkTest.class);
 
-  //private static final String DTM_MANAGER_PROP_NAME = "com.sun.org.apache.xml.internal.dtm.DTMManager";
-  //private static final String DTM_MANAGER_CLASS_NAME = "com.sun.org.apache.xml.internal.dtm.ref.DTMManagerDefault";
-  //private static final String DTM_MANAGER_PROP_NAME = "org.apache.xml.dtm.DTMManager";
-  //private static final String DTM_MANAGER_CLASS_NAME = "org.apache.xml.dtm.ref.DTMManagerDefault";
   private static final String TEST_PATH = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title";
 
   public static XPathWrapper getWrapper() throws ParserConfigurationException, IOException, SAXException {
