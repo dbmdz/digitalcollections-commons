@@ -1,7 +1,5 @@
 package de.digitalcollections.commons.file.backend.impl.resolver;
 
-import de.digitalcollections.commons.file.backend.impl.resolver.FileNameResolver;
-import de.digitalcollections.commons.file.backend.impl.resolver.MultiPatternsFileNameResolverImpl;
 import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
 import java.net.URI;
 import java.util.List;
