@@ -65,10 +65,6 @@ public class FileResourceRepositoryImplTest {
     assertThat("SNAFU").isEqualTo(textContent);
   }
 
-  /**
-   * Test of create method, of class ResourceRepositoryImpl.
-   * @throws java.lang.Exception
-   */
   @Test
   public void testCreate() throws Exception {
     // test managed
@@ -98,10 +94,6 @@ public class FileResourceRepositoryImplTest {
     assertThat(resource.isReadonly()).isTrue();
   }
 
-  /**
-   * Test of find method, of class ResourceRepositoryImpl.
-   * @throws java.lang.Exception
-   */
   @Test
   public void testFind() throws Exception {
     String key = "snafu";

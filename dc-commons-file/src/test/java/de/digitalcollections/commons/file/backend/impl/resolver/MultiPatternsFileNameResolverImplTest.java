@@ -39,10 +39,6 @@ public class MultiPatternsFileNameResolverImplTest {
     jsonUri = URI.create("http://iiif.digitale-sammlungen.de/presentation/v2/bsb00001000/manifest.json");
   }
 
-  /**
-   * Test of getString method, of class MultiPatternsFileNameResolverImpl.
-   * @throws java.lang.Exception
-   */
   @Test
   public void testGetStrings() throws Exception {
     String fileName = "bsb00001000_00001";
@@ -52,10 +48,6 @@ public class MultiPatternsFileNameResolverImplTest {
     assertThat(results.get(0)).isEqualTo(expResult);
   }
 
-  /**
-   * Test of getURI method, of class MultiPatternsFileNameResolverImpl.
-   * @throws java.lang.Exception
-   */
   @Test
   public void testGetURIWithoutMime() throws Exception {
     String identifier = "bsb00001000";
@@ -72,9 +64,6 @@ public class MultiPatternsFileNameResolverImplTest {
     assertThat(jsonResults).containsExactly(jsonUri);
   }
 
-  /**
-   * Test of isResolvable method, of class MultiPatternsFileNameResolverImpl.
-   */
   @Test
   public void testIsResolvable() {
     String identifier = "bsb00001000";
