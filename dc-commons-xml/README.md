@@ -7,4 +7,3 @@ Commons XML contains several utilities for processing XML files. Most important 
 XPathWrapper wrapper = new XPathWrapper(doc);
 Number id = wrapper.asNumber("//tei:classCode[@scheme='project']/tei:idno").intValue(), 12345)
 ```
-

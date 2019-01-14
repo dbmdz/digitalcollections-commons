@@ -10,7 +10,7 @@ Add the following artifact to your maven ```pom.xml```
 <dependency>
    <groupId>de.digitalcollections.commons</groupId>
    <artifactId>dc-commons-springboot</artifactId>
-   <version>1.4.0</version>
+   <version>{set to current version}</version>
 </dependency>
 ```
 

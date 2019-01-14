@@ -52,4 +52,3 @@ Running de.digitalcollections.commons.yaml.examples.BenchmarkTest
 Book    93,6 µs   49,0 µs   34,4 µs
 Person  22,4 µs   21,0 µs   28,6 µs
 ```
-

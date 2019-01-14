@@ -10,7 +10,7 @@ Add the following artifact to your maven ```pom.xml```
 <dependency>
    <groupId>de.digitalcollections.commons</groupId>
    <artifactId>dc-commons-springsecurity</artifactId>
-   <version>1.3.0-SNAPSHOT</version>
+   <version>{set to current version}</version>
 </dependency>
 ```
 
