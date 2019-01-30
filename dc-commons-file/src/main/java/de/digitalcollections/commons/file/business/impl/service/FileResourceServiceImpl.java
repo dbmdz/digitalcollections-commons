@@ -17,8 +17,12 @@ import org.w3c.dom.Document;
 @Service
 public class FileResourceServiceImpl implements FileResourceService {
 
+  private final FileResourceRepository fileResourceRepository;
+
   @Autowired
-  private FileResourceRepository fileResourceRepository;
+  public FileResourceServiceImpl(FileResourceRepository fileResourceRepository) {
+    this.fileResourceRepository = fileResourceRepository;
+  }
 
   @Override
   public FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException {

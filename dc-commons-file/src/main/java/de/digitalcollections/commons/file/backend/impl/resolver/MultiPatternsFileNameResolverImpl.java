@@ -28,19 +28,20 @@ public class MultiPatternsFileNameResolverImpl implements FileNameResolver, Init
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MultiPatternsFileNameResolverImpl.class);
 
-  @Value(value = "${multiPatternResolvingFile:}")
   private String multiPatternResolvingFile;
 
+  private final ResourceLoader resourceLoader;
+
+  private List<PatternFileNameResolverImpl> patternFileNameResolvers;
+
   @Autowired
-  ResourceLoader resourceLoader;
-
-  private List<PatternFileNameResolverImpl> patternFileNameResolvers = new ArrayList<>();
-
-  public MultiPatternsFileNameResolverImpl(List<PatternFileNameResolverImpl> patternFileNameResolvers) {
-    this.patternFileNameResolvers = patternFileNameResolvers;
-  }
-
-  public MultiPatternsFileNameResolverImpl() {
+  public MultiPatternsFileNameResolverImpl(
+      @Value(value = "${multiPatternResolvingFile:}") String multiPatternResolvingFile,
+      ResourceLoader resourceLoader
+  ) {
+    this.multiPatternResolvingFile = multiPatternResolvingFile;
+    this.resourceLoader = resourceLoader;
+    this.patternFileNameResolvers = new ArrayList<>();
   }
 
   public void addPattern(String regex, String replacement) {
@@ -85,17 +86,15 @@ public class MultiPatternsFileNameResolverImpl implements FileNameResolver, Init
   @Override
   public List<String> getStrings(String identifier) throws ResourceIOException {
     return patternFileNameResolvers.stream()
-            .filter(r -> r.isResolvable(identifier))
-            .map(r -> r.getStrings(identifier))
-            .flatMap(Collection::stream)
-            .collect(Collectors.toList());
+                                   .filter(r -> r.isResolvable(identifier))
+                                   .map(r -> r.getStrings(identifier))
+                                   .flatMap(Collection::stream)
+                                   .collect(Collectors.toList());
   }
 
   @Override
   public Boolean isResolvable(String identifier) {
-    return patternFileNameResolvers.stream()
-            .filter(r -> r.isResolvable(identifier))
-            .findFirst().isPresent();
+    return patternFileNameResolvers.stream().anyMatch(r -> r.isResolvable(identifier));
   }
 
   @Override

@@ -8,8 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -74,8 +76,9 @@ public class MultiPatternsFileNameResolverImplTest {
   static class SpringConfigBackendFileTest extends SpringConfigCommonsFile {
 
     @Bean
-    public FileNameResolver fileNameResolver() {
-      return new MultiPatternsFileNameResolverImpl();
+    public FileNameResolver fileNameResolver(@Value(value = "${multiPatternResolvingFile:}") String multiPatternResolvingFile,
+                                             ResourceLoader resourceLoader) {
+      return new MultiPatternsFileNameResolverImpl(multiPatternResolvingFile, resourceLoader);
     }
   }
 }
