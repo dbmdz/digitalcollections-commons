@@ -36,7 +36,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Dependency versions -->
-    <version.aspectjweaver>1.8.10</version.aspectjweaver>
+    <version.aspectjweaver>1.9.2</version.aspectjweaver>
     <version.assertj>3.5.2</version.assertj>
     <version.commons-beanutils>1.9.3</version.commons-beanutils>
     <version.commons-lang3>3.4</version.commons-lang3>
