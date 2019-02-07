@@ -37,7 +37,7 @@
 
     <!-- Dependency versions -->
     <version.aspectjweaver>1.8.10</version.aspectjweaver>
-    <version.assertj>3.5.2</version.assertj>
+    <version.assertj>3.11.1</version.assertj>
     <version.commons-beanutils>1.9.3</version.commons-beanutils>
     <version.commons-lang3>3.4</version.commons-lang3>
     <version.dc-model>2.2.0</version.dc-model>
