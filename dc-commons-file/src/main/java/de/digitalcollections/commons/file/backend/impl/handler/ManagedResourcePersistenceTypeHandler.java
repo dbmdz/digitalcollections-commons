@@ -40,7 +40,11 @@ public class ManagedResourcePersistenceTypeHandler implements ResourcePersistenc
     String uuidPath = getSplittedUuidPath(key);
     Path path = Paths.get(this.getRepositoryFolderPath(), this.getNamespace(), uuidPath, key);
     String location = path.toString();
-    location = "file://" + location + "." + mimeType.getExtensions().get(0);
+    String extension = "";
+    if (!mimeType.getExtensions().isEmpty()) {
+      extension = "." + mimeType.getExtensions().get(0);
+    }
+    location = "file://" + location + extension;
     final URI uri = URI.create(location);
     return Collections.singletonList(uri);
   }
