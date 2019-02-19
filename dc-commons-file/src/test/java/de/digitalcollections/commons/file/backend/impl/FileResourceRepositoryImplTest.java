@@ -1,6 +1,5 @@
 package de.digitalcollections.commons.file.backend.impl;
 
-import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
 import de.digitalcollections.commons.file.backend.impl.handler.ResolvedResourcePersistenceTypeHandler;
 import de.digitalcollections.commons.file.backend.impl.handler.ResourcePersistenceTypeHandler;
 import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +44,7 @@ public class FileResourceRepositoryImplTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImplTest.class);
 
   @Autowired
-  private FileResourceRepository resourceRepository;
+  private FileResourceRepositoryImpl resourceRepository;
 
   @Autowired
   private ResourceLoader resourceLoader;
@@ -68,16 +68,16 @@ public class FileResourceRepositoryImplTest {
   @Test
   public void testCreate() throws Exception {
     // test managed
-    String key = "a30cf362-5992-4f5a-8de0-61938134e721";
-    FileResourcePersistenceType resourcePersistenceType = FileResourcePersistenceType.MANAGED;
-    FileResource resource = resourceRepository.create(key, resourcePersistenceType, "xml");
-    URI expResult = URI.create("file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721.xml");
+    FileResource resource = resourceRepository.createManaged(MimeType.MIME_APPLICATION_XML, "test.xml");
+    resource.setUuid(UUID.fromString("a30cf362-5992-4f5a-8de0-61938134e721"));
+    resource.setUri(resourceRepository.getUriForManagedFileResource(resource));
+    URI expResult = URI.create("file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721_test.xml");
     URI result = resource.getUri();
     assertThat(expResult).isEqualTo(result);
 
     // test resolved
-    key = "bsb00001000";
-    resourcePersistenceType = RESOLVED;
+    String key = "bsb00001000";
+    FileResourcePersistenceType resourcePersistenceType = RESOLVED;
     resource = resourceRepository.create(key, resourcePersistenceType, "xml");
     expResult = URI.create("http://rest.digitale-sammlungen.de/data/bsb00001000.xml");
     result = resource.getUri();
@@ -116,6 +116,21 @@ public class FileResourceRepositoryImplTest {
   public void testFindMimeWildcard() throws Exception {
     FileResource res = resourceRepository.find("snafu", RESOLVED, MimeType.MIME_WILDCARD);
     assertThat(res.getUri()).isEqualTo(URI.create("classpath:/snafu.xml"));
+  }
+
+  @Test
+  public void testSplitEqually() {
+    String[] expectedResult = new String[]{"Theq", "uick", "brow", "nfox", "jump", "s"};
+    String[] result = FileResourceRepositoryImpl.splitEqually("Thequickbrownfoxjumps", 4);
+    assertThat(result).containsExactly(expectedResult);
+  }
+
+  @Test
+  public void testGetSplittedUuidPath() {
+    FileResourceRepositoryImpl impl = new FileResourceRepositoryImpl(null, null);
+    String expectedResult = "c30c/f362/5992/4f5a/8de0/6193/8134/e721";
+    String result = impl.getSplittedUuidPath("c30cf362-5992-4f5a-8de0-61938134e721");
+    assertThat(result).isEqualTo(expectedResult);
   }
 
   @Test

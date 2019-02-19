@@ -12,16 +12,25 @@ import org.w3c.dom.Document;
 
 public interface FileResourceService {
 
+  // new
+  default FileResource createManaged(String contentType, String filename) {
+    return createManaged(MimeType.fromTypename(contentType), filename);
+  }
+
+  FileResource createManaged(MimeType mimeType, String filename);
+
+  // old
+//  default FileResource createManaged(MimeType mimeType) throws ResourceIOException {
+//    return create(null, FileResourcePersistenceType.MANAGED, mimeType);
+//  }
   FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException;
 
-  FileResource create(MimeType mimeType) throws ResourceIOException;
+  default FileResource create(MimeType mimeType) throws ResourceIOException {
+    return create(null, null, mimeType);
+  }
 
   default FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, String fileExtension) throws ResourceIOException {
     return create(key, fileResourcePersistenceType, MimeType.fromExtension(fileExtension));
-  }
-
-  default FileResource createManaged(MimeType mimeType) throws ResourceIOException {
-    return create(null, FileResourcePersistenceType.MANAGED, mimeType);
   }
 
   FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;

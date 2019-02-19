@@ -25,13 +25,13 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException {
-    return fileResourceRepository.create(key, fileResourcePersistenceType, mimeType);
+  public FileResource createManaged(MimeType mimeType, String filename) {
+    return fileResourceRepository.createManaged(mimeType, filename);
   }
 
   @Override
-  public FileResource create(MimeType mimeType) throws ResourceIOException {
-    return fileResourceRepository.create(mimeType);
+  public FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException {
+    return fileResourceRepository.create(key, fileResourcePersistenceType, mimeType);
   }
 
   @Override

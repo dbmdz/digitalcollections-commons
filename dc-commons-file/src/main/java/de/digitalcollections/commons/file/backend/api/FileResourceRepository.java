@@ -13,8 +13,10 @@ import org.w3c.dom.Document;
 
 public interface FileResourceRepository {
 
-  FileResource create(MimeType mimeType) throws ResourceIOException;
+  // new
+  FileResource createManaged(MimeType mimeType, String filename);
 
+  // old
   FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException;
 
   default FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, String filenameExtension) throws ResourceIOException {

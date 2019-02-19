@@ -9,6 +9,7 @@ import de.digitalcollections.model.api.identifiable.resource.enums.FileResourceP
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,6 +45,7 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
@@ -58,6 +60,16 @@ import org.xml.sax.SAXException;
 @Repository
 public class FileResourceRepositoryImpl implements FileResourceRepository {
 
+  @Value("${resourceRepository.managedPathFactory.namespace}")
+  private String managedFileResourcesNamespace;
+
+  private String managedFileResourcesFolder;
+
+  @Value("${resourceRepository.managedPathFactory.folderpath}")
+  public void setRepositoryFolderPath(String path) {
+    this.managedFileResourcesFolder = path.replace("~", System.getProperty("user.home"));
+  }
+
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImpl.class);
   private List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers;
   private final ResourceLoader resourceLoader;
@@ -70,17 +82,76 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
   }
 
   @Override
-  public FileResource create(MimeType mimeType) throws ResourceIOException {
-    FileResource resource = createResource(null, null, mimeType);
+  public FileResource createManaged(MimeType mimeType, String filename) {
+    FileResource resource = new FileResourceImpl();
+    if (mimeType == null) {
+      mimeType = MimeType.fromFilename(filename);
+    }
+    if (mimeType == null) {
+      mimeType = MimeType.MIME_APPLICATION_OCTET_STREAM;
+    }
+    resource.setMimeType(mimeType);
+    resource.setFilename(filename);
+    resource.setReadonly(false);
+    resource.setUuid(UUID.randomUUID());
+
+    URI uri = getUriForManagedFileResource(resource);
+    resource.setUri(uri);
     return resource;
+  }
+
+  protected URI getUriForManagedFileResource(FileResource resource) {
+    final String uuid = resource.getUuid().toString();
+    String uuidPath = getSplittedUuidPath(uuid);
+    Path path = Paths.get(managedFileResourcesFolder, managedFileResourcesNamespace, uuidPath, uuid);
+    String location = "file://" + path.toString();
+    if (resource.getFilename() != null) {
+      location = location + "_" + resource.getFilename();
+    }
+    // example location:
+    // file:///mnt/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721_test.xml
+    return URI.create(location);
+  }
+
+  protected String getSplittedUuidPath(String uuid) {
+    String uuidWithoutDashes = uuid.replaceAll("-", "");
+    String[] pathParts = splitEqually(uuidWithoutDashes, 4);
+    String splittedUuidPath = String.join(File.separator, pathParts);
+    return splittedUuidPath;
+  }
+
+  /**
+   * Convert "Thequickbrownfoxjumps" to String[] {"Theq","uick","brow","nfox","jump","s"}
+   *
+   * @param text text to split
+   * @param partLength length of parts
+   * @return array of text parts
+   */
+  protected static String[] splitEqually(String text, int partLength) {
+    int textLength = text.length();
+
+    // Number of parts
+    int numberOfParts = (textLength + partLength - 1) / partLength;
+    String[] parts = new String[numberOfParts];
+
+    // Break into parts
+    int offset = 0;
+    int i = 0;
+    while (i < numberOfParts) {
+      parts[i] = text.substring(offset, Math.min(offset + partLength, textLength));
+      offset += partLength;
+      i++;
+    }
+
+    return parts;
   }
 
   @Override
   public FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException {
     FileResource resource = createResource(key, resourcePersistenceType, mimeType);
-    if (key == null && FileResourcePersistenceType.MANAGED.equals(resourcePersistenceType)) {
-      key = resource.getUuid().toString();
-    }
+//    if (key == null && FileResourcePersistenceType.MANAGED.equals(resourcePersistenceType)) {
+//      key = resource.getUuid().toString();
+//    }
     List<URI> uris = getUris(key, resourcePersistenceType, mimeType);
     resource.setUri(uris.get(0));
     return resource;
@@ -116,13 +187,13 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     if (FileResourcePersistenceType.REFERENCED.equals(persistenceType)) {
       resource.setReadonly(true);
     }
-    if (FileResourcePersistenceType.MANAGED.equals(persistenceType)) {
-      if (key != null) {
-        resource.setUuid(UUID.fromString(key));
-      } else {
-        resource.setUuid(UUID.randomUUID());
-      }
-    }
+//    if (FileResourcePersistenceType.MANAGED.equals(persistenceType)) {
+//      if (key != null) {
+//        resource.setUuid(UUID.fromString(key));
+//      } else {
+//        resource.setUuid(UUID.randomUUID());
+//      }
+//    }
     return resource;
   }
 
@@ -139,11 +210,11 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
       throw new ResourceIOException("Could not resolve key " + key + " with MIME type " + mimeType.getTypeName() + " to an URI");
     }
     URI uri = candidates.stream()
-            .filter(u -> (resourceLoader.getResource(u.toString()).isReadable() || u.toString().startsWith("http")))
-            .findFirst()
-            .orElseThrow(() -> new ResourceIOException(
-            "Could not resolve key " + key + " with MIME type " + mimeType.getTypeName()
-            + " to a readable Resource. Attempted URIs were " + candidates));
+        .filter(u -> (resourceLoader.getResource(u.toString()).isReadable() || u.toString().startsWith("http")))
+        .findFirst()
+        .orElseThrow(() -> new ResourceIOException(
+        "Could not resolve key " + key + " with MIME type " + mimeType.getTypeName()
+        + " to a readable Resource. Attempted URIs were " + candidates));
     resource.setUri(uri);
     Resource springResource = resourceLoader.getResource(uri.toString());
 
@@ -215,12 +286,12 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     return new InputStreamReader(this.getInputStream(resource));
   }
 
-  public void setResourcePersistenceHandlers(List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers) {
+  protected void setResourcePersistenceHandlers(List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers) {
     this.resourcePersistenceTypeHandlers = resourcePersistenceTypeHandlers;
   }
 
-  public ResourcePersistenceTypeHandler getResourcePersistenceTypeHandler(FileResourcePersistenceType resourcePersistence)
-          throws ResourceIOException {
+  private ResourcePersistenceTypeHandler getResourcePersistenceTypeHandler(FileResourcePersistenceType resourcePersistence)
+      throws ResourceIOException {
     for (ResourcePersistenceTypeHandler resourcePersistenceTypeHandler : this.getResourcePersistenceTypeHandlers()) {
       if (resourcePersistence.equals(resourcePersistenceTypeHandler.getResourcePersistenceType())) {
         return resourcePersistenceTypeHandler;
@@ -229,7 +300,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     throw new ResourceIOException("No ResourcePersistenceHandler defined for " + resourcePersistence);
   }
 
-  public List<ResourcePersistenceTypeHandler> getResourcePersistenceTypeHandlers() {
+  private List<ResourcePersistenceTypeHandler> getResourcePersistenceTypeHandlers() {
     if (this.resourcePersistenceTypeHandlers == null) {
       this.resourcePersistenceTypeHandlers = new LinkedList<>();
     }
@@ -314,9 +385,9 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
 
     // The pattern for valid keys is the original pattern without any brackets inside, but surrounded with one bracket.
     Pattern validKeysPattern = Pattern.compile(
-            "("
-            + keyPattern.replace("(", "").replace(")", "").replace("^", "").replace("$", "")
-            + ")");
+        "("
+        + keyPattern.replace("(", "").replace(")", "").replace("^", "").replace("$", "")
+        + ")");
 
     Set<String> keys = new HashSet<>();
     ResolvedResourcePersistenceTypeHandler handler = (ResolvedResourcePersistenceTypeHandler) getResourcePersistenceTypeHandler(resourcePersistenceType);
@@ -344,10 +415,10 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
       // Finally map them onto the keys
       try (Stream<Path> stream = getDirectoryStream(basePath)) {
         keys.addAll(stream.map(path -> path.getFileName().normalize().toString())
-                .filter(filename -> matchesPattern(validFilenamesPattern, filename))
-                .filter(filename -> matchesPattern(validKeysPattern, filename))
-                .map(filename -> mapToPattern(validKeysPattern, filename))
-                .collect(Collectors.toSet()));
+            .filter(filename -> matchesPattern(validFilenamesPattern, filename))
+            .filter(filename -> matchesPattern(validKeysPattern, filename))
+            .map(filename -> mapToPattern(validKeysPattern, filename))
+            .collect(Collectors.toSet()));
       } catch (IOException e) {
         LOGGER.error("Cannot traverse directory " + basePath + ": " + e, e);
       }
