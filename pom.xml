@@ -55,7 +55,7 @@
     <version.mockito-core>2.23.0</version.mockito-core>
     <version.openfeign>10.1.0</version.openfeign>
     <version.saxon>9.9.1-1</version.saxon>
-    <version.servlet-api>3.1.0</version.servlet-api>
+    <version.servlet-api>4.0.1</version.servlet-api>
     <version.slf4j>1.7.22</version.slf4j>
     <version.snakeyaml>1.23</version.snakeyaml>
     <version.springframework>5.1.4.RELEASE</version.springframework>
