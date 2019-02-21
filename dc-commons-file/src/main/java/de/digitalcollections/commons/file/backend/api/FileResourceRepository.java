@@ -2,13 +2,13 @@ package de.digitalcollections.commons.file.backend.api;
 
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Set;
+import java.util.UUID;
 import org.w3c.dom.Document;
 
 public interface FileResourceRepository {
@@ -16,29 +16,41 @@ public interface FileResourceRepository {
   // new
   FileResource createManaged(MimeType mimeType, String filename);
 
-  // old
-  FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException;
-
-  default FileResource create(String key, FileResourcePersistenceType resourcePersistenceType, String filenameExtension) throws ResourceIOException {
-    return create(key, resourcePersistenceType, MimeType.fromExtension(filenameExtension));
+  default FileResource createManaged(String filename) {
+    return createManaged(MimeType.fromFilename(filename), filename);
   }
 
+  FileResource findManaged(UUID uuid) throws ResourceIOException, ResourceNotFoundException;
+
+  default FileResource findManaged(String uuid) throws ResourceIOException, ResourceNotFoundException {
+    return findManaged(UUID.fromString(uuid));
+  }
+
+  FileResource createResolved(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException;
+
+  default FileResource createResolved(String identifier, String filenameExtension, boolean readOnly) throws ResourceIOException {
+    return createResolved(identifier, MimeType.fromExtension(filenameExtension), readOnly);
+  }
+
+  FileResource findResolved(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException, ResourceNotFoundException;
+
+  default FileResource findResolved(String identifier, String filenameExtension, boolean readOnly) throws ResourceIOException, ResourceNotFoundException {
+    return findResolved(identifier, MimeType.fromExtension(filenameExtension), readOnly);
+  }
+
+  // old
+//  default FileResource create(String identifier, String filenameExtension) throws ResourceIOException {
+//    return createResolved(identifier, MimeType.fromExtension(filenameExtension), true);
+//  }
   void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
-
-  default FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, String filenameExtension) throws ResourceIOException, ResourceNotFoundException {
-    return find(key, resourcePersistenceType, MimeType.fromExtension(filenameExtension));
-  }
-
+//  FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
+//  default FileResource find(String key, FileResourcePersistenceType resourcePersistenceType, String filenameExtension) throws ResourceIOException, ResourceNotFoundException {
+//    return find(key, resourcePersistenceType, MimeType.fromExtension(filenameExtension));
+//  }
   byte[] getBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
   Document getDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
-
-  default Document getDocument(String key, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException, ResourceNotFoundException {
-    FileResource resource = find(key, resourcePersistenceType, MimeType.fromExtension("xml"));
-    return getDocument(resource);
-  }
 
   void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
@@ -52,5 +64,5 @@ public interface FileResourceRepository {
 
   long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
 
-  Set<String> findKeys(String keyPattern, FileResourcePersistenceType resourcePersistenceType) throws ResourceIOException;
+  Set<String> findKeysForResolvedFileResources(String keyPattern) throws ResourceIOException;
 }

@@ -1,11 +1,10 @@
 package de.digitalcollections.commons.file.backend.impl;
 
-import de.digitalcollections.commons.file.backend.impl.handler.ResolvedResourcePersistenceTypeHandler;
-import de.digitalcollections.commons.file.backend.impl.handler.ResourcePersistenceTypeHandler;
+import de.digitalcollections.commons.file.backend.impl.resolved.PatternFileNameResolverImpl;
+import de.digitalcollections.commons.file.backend.impl.resolved.ResolvedFileResourcesConfig;
 import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
@@ -14,31 +13,29 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import static de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType.RESOLVED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {SpringConfigCommonsFile.class})
+@SpringBootTest(classes = {SpringConfigCommonsFile.class})
+@ActiveProfiles("TEST")
 public class FileResourceRepositoryImplTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImplTest.class);
@@ -49,16 +46,10 @@ public class FileResourceRepositoryImplTest {
   @Autowired
   private ResourceLoader resourceLoader;
 
-  @BeforeAll
-  public static void setUpClass() {
-    System.setProperty("spring.profiles.active", "TEST");
-  }
-
   @Test
-  public void testReadXMLDocument() throws ResourceIOException, ResourceNotFoundException {
-    String key = "snafu";
-    FileResourcePersistenceType resourcePersistenceType = RESOLVED;
-    Document document = resourceRepository.getDocument(key, resourcePersistenceType);
+  public void testReadResolvedXMLDocument() throws ResourceIOException, ResourceNotFoundException {
+    FileResource fileResource = resourceRepository.createResolved("snafu", MimeType.MIME_APPLICATION_XML, true);
+    Document document = resourceRepository.getDocument(fileResource);
     Node rootElement = document.getElementsByTagName("rootElement").item(0);
     String textContent = rootElement.getTextContent();
 
@@ -70,24 +61,22 @@ public class FileResourceRepositoryImplTest {
     // test managed
     FileResource resource = resourceRepository.createManaged(MimeType.MIME_APPLICATION_XML, "test.xml");
     resource.setUuid(UUID.fromString("a30cf362-5992-4f5a-8de0-61938134e721"));
-    resource.setUri(resourceRepository.getUriForManagedFileResource(resource));
+    resource.setUri(resourceRepository.createUriForManagedFileResource(resource.getUuid(), resource.getMimeType(), resource.getFilename()));
     URI expResult = URI.create("file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721_test.xml");
     URI result = resource.getUri();
     assertThat(expResult).isEqualTo(result);
 
     // test resolved
-    String key = "bsb00001000";
-    FileResourcePersistenceType resourcePersistenceType = RESOLVED;
-    resource = resourceRepository.create(key, resourcePersistenceType, "xml");
+    String identifier = "bsb00001000";
+    resource = resourceRepository.createResolved(identifier, MimeType.MIME_APPLICATION_XML, false);
     expResult = URI.create("http://rest.digitale-sammlungen.de/data/bsb00001000.xml");
     result = resource.getUri();
     assertThat(expResult).isEqualTo(result);
     assertThat(resource.isReadonly()).isFalse();
 
     // test referenced
-    key = "bsb00001000";
-    resourcePersistenceType = FileResourcePersistenceType.REFERENCED;
-    resource = resourceRepository.create(key, resourcePersistenceType, "xml");
+    identifier = "bsb00001000";
+    resource = resourceRepository.createResolved(identifier, MimeType.MIME_APPLICATION_XML, true);
     expResult = URI.create("http://rest.digitale-sammlungen.de/data/bsb00001000.xml");
     result = resource.getUri();
     assertThat(expResult).isEqualTo(result);
@@ -96,9 +85,7 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void testFind() throws Exception {
-    String key = "snafu";
-    FileResourcePersistenceType resourcePersistenceType = RESOLVED;
-    FileResource resource = resourceRepository.find(key, resourcePersistenceType, MimeType.MIME_APPLICATION_XML);
+    FileResource resource = resourceRepository.findResolved("snafu", MimeType.MIME_APPLICATION_XML, true);
 
     URI expResult = URI.create("classpath:/snafu.xml");
     URI result = resource.getUri();
@@ -114,7 +101,7 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void testFindMimeWildcard() throws Exception {
-    FileResource res = resourceRepository.find("snafu", RESOLVED, MimeType.MIME_WILDCARD);
+    FileResource res = resourceRepository.findResolved("snafu", MimeType.MIME_WILDCARD, true);
     assertThat(res.getUri()).isEqualTo(URI.create("classpath:/snafu.xml"));
   }
 
@@ -127,7 +114,7 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void testGetSplittedUuidPath() {
-    FileResourceRepositoryImpl impl = new FileResourceRepositoryImpl(null, null);
+    FileResourceRepositoryImpl impl = new FileResourceRepositoryImpl(null, null, null);
     String expectedResult = "c30c/f362/5992/4f5a/8de0/6193/8134/e721";
     String result = impl.getSplittedUuidPath("c30cf362-5992-4f5a-8de0-61938134e721");
     assertThat(result).isEqualTo(expectedResult);
@@ -135,57 +122,39 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void findValidKeys() throws Exception {
-    List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList<>();
-    resourcePersistenceTypeHandlers.add(new ResolvedResourcePersistenceTypeHandler());
-
-    FileResourceRepositoryImpl resourceRepo = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
-
-    List<Path> paths = new ArrayList<>();
-    paths.add(Paths.get("/opt/news/news_$1.md"));
-
-    List<ResourcePersistenceTypeHandler> resolvers = new ArrayList<>();
-    ResolvedResourcePersistenceTypeHandler mockMultiPatternsFileNameResolver = mock(ResolvedResourcePersistenceTypeHandler.class);
-    when(mockMultiPatternsFileNameResolver.getResourcePersistenceType()).thenReturn(FileResourcePersistenceType.RESOLVED);
-    when(mockMultiPatternsFileNameResolver.getPathsForPattern("news_(\\d{8})")).thenReturn(paths);
-    resolvers.add(mockMultiPatternsFileNameResolver);
-
     @SuppressWarnings("unchecked")
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
-    Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
+    Path[] mockFiles = {Paths.get("file:///opt/news/news_12345678.md"), Paths.get("file:///opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
-    resourceRepo.overrideDirectoryStream(mockDirectoryStream);
 
-    resourceRepo.setResourcePersistenceHandlers(resolvers);
-    Set<String> keys = resourceRepo.findKeys("news_(\\d{8})", RESOLVED);
+    ResolvedFileResourcesConfig resolvedFileResourcesConfig = new ResolvedFileResourcesConfig();
+    PatternFileNameResolverImpl patternFileNameResolverImpl = new PatternFileNameResolverImpl("news_(\\d{8})", "file:///opt/news/news_$1.md");
+    resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
+
+    FileResourceRepositoryImpl fileResourceRepository = new FileResourceRepositoryImpl(null, resolvedFileResourcesConfig, resourceLoader);
+    fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
+
+    Set<String> keys = fileResourceRepository.findKeysForResolvedFileResources("news_(\\d{8})");
     assertThat(keys).containsExactly("news_12345678", "news_23456789");
   }
 
   @Test
   public void findValidKeysForExtendedPattern() throws Exception {
-    List<ResourcePersistenceTypeHandler> resourcePersistenceTypeHandlers = new ArrayList<ResourcePersistenceTypeHandler>();
-    resourcePersistenceTypeHandlers.add(new ResolvedResourcePersistenceTypeHandler());
-
-    FileResourceRepositoryImpl resourceRepo = new FileResourceRepositoryImpl(resourcePersistenceTypeHandlers, resourceLoader);
-
-    List<Path> paths = new ArrayList<>();
-    paths.add(Paths.get("/opt/news/news_$1$2.md"));
-
-    List<ResourcePersistenceTypeHandler> resolvers = new ArrayList<>();
-    ResolvedResourcePersistenceTypeHandler mockMultiPatternsFileNameResolver = mock(ResolvedResourcePersistenceTypeHandler.class);
-    when(mockMultiPatternsFileNameResolver.getResourcePersistenceType()).thenReturn(FileResourcePersistenceType.RESOLVED);
-    when(mockMultiPatternsFileNameResolver.getPathsForPattern("news_(\\d{6})(\\d{2})")).thenReturn(paths);
-    resolvers.add(mockMultiPatternsFileNameResolver);
-
     @SuppressWarnings("unchecked")
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
-    Path[] mockFiles = {Paths.get("/opt/news/news_12345678.md"), Paths.get("/opt/news/news_23456789.md"),
+    Path[] mockFiles = {Paths.get("file:///opt/news/news_12345678.md"), Paths.get("file:///opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
-    resourceRepo.overrideDirectoryStream(mockDirectoryStream);
 
-    resourceRepo.setResourcePersistenceHandlers(resolvers);
-    Set<String> keys = resourceRepo.findKeys("news_(\\d{6})(\\d{2})", RESOLVED);
+    ResolvedFileResourcesConfig resolvedFileResourcesConfig = new ResolvedFileResourcesConfig();
+    PatternFileNameResolverImpl patternFileNameResolverImpl = new PatternFileNameResolverImpl("news_(\\d{6})(\\d{2})", "file:///opt/news/news_$1$2.md");
+    resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
+
+    FileResourceRepositoryImpl fileResourceRepository = new FileResourceRepositoryImpl(null, resolvedFileResourcesConfig, resourceLoader);
+    fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
+
+    Set<String> keys = fileResourceRepository.findKeysForResolvedFileResources("news_(\\d{6})(\\d{2})");
     assertThat(keys).containsExactly("news_12345678", "news_23456789");
   }
 

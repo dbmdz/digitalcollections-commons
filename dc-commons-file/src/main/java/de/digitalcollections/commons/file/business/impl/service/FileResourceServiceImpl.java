@@ -4,12 +4,12 @@ import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
 import de.digitalcollections.commons.file.business.api.FileResourceService;
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Set;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -30,13 +30,8 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException {
-    return fileResourceRepository.create(key, fileResourcePersistenceType, mimeType);
-  }
-
-  @Override
-  public FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
-    return fileResourceRepository.find(key, fileResourcePersistenceType, mimeType);
+  public FileResource createResolved(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException {
+    return fileResourceRepository.createResolved(identifier, mimeType, readOnly);
   }
 
   @Override
@@ -60,6 +55,16 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
+  public FileResource getManaged(UUID uuid) throws ResourceIOException, ResourceNotFoundException {
+    return fileResourceRepository.findManaged(uuid);
+  }
+
+  @Override
+  public FileResource getResolved(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException, ResourceNotFoundException {
+    return fileResourceRepository.findResolved(identifier, mimeType, readOnly);
+  }
+
+  @Override
   public long write(FileResource fileResource, String input) throws ResourceIOException {
     return fileResourceRepository.write(fileResource, input);
   }
@@ -70,7 +75,7 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public Set<String> findKeys(String keyPattern, FileResourcePersistenceType fileResourcePersistenceType) throws ResourceIOException {
-    return fileResourceRepository.findKeys(keyPattern, fileResourcePersistenceType);
+  public Set<String> findKeysForResolvedFileResources(String keyPattern) throws ResourceIOException {
+    return fileResourceRepository.findKeysForResolvedFileResources(keyPattern);
   }
 }
