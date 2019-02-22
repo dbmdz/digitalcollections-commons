@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties("resource-repository.managed")
-public class ManagedFileResourcesConfig {
+public class ManagedFileResourceRepositoryConfig {
 
   private String namespace;
   private String folderpath;

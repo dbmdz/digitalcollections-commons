@@ -5,48 +5,35 @@ import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.URI;
-import java.util.Set;
-import java.util.UUID;
 import org.w3c.dom.Document;
 
 public interface FileResourceService {
 
-  FileResource createManaged(MimeType mimeType, String filename);
+  FileResource create();
 
-  default FileResource createManaged(String contentType, String filename) {
-    return createManaged(MimeType.fromTypename(contentType), filename);
+  FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
+
+  default FileResource find(String identifier, String fileExtension) throws ResourceIOException, ResourceNotFoundException {
+    return find(identifier, MimeType.fromExtension(fileExtension));
   }
 
-  default FileResource createManaged(MimeType mimeType) throws ResourceIOException {
-    return createManaged(mimeType, null);
-  }
+  void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  FileResource createResolved(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException;
+  byte[] getBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  default FileResource createResolved(MimeType mimeType) throws ResourceIOException {
-    return createResolved(null, mimeType, true);
-  }
-
-  FileResource getManaged(UUID uuid) throws ResourceIOException, ResourceNotFoundException;
-
-  FileResource getResolved(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException, ResourceNotFoundException;
-
-  default FileResource getResolved(String identifier, String filenameExtension, boolean readOnly) throws ResourceIOException, ResourceNotFoundException {
-    return getResolved(identifier, MimeType.fromExtension(filenameExtension), readOnly);
-  }
-
-  Document getDocument(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException;
+  Document getDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
   void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  InputStream getInputStream(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException;
-
   InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException;
 
-  long write(FileResource fileResource, String input) throws ResourceIOException;
+  InputStream getInputStream(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException;
+  Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  Set<String> findKeysForResolvedFileResources(String keyPattern) throws ResourceIOException;
+  long write(FileResource resource, String input) throws ResourceIOException;
+
+  long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
 }

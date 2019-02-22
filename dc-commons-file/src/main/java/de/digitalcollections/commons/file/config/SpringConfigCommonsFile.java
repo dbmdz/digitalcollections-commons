@@ -10,13 +10,5 @@ import org.springframework.context.annotation.Configuration;
   "de.digitalcollections.commons.file.business.impl.service"
 })
 @EnableConfigurationProperties
-//@PropertySource(value = {
-//  "classpath:SpringConfigCommonsFile-${spring.profiles.active}.properties"
-//})
 public class SpringConfigCommonsFile {
-
-//  @Bean
-//  public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-//    return new PropertySourcesPlaceholderConfigurer();
-//  }
 }
