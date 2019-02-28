@@ -68,12 +68,6 @@ public class PatternFileNameResolverImpl {
         .collect(Collectors.toList());
   }
 
-  /*
-  @Override
-  public String toString() {
-  return StringRepresentations.stringRepresentationOf(this);
-  }
-   */
   public String getPattern() {
     return pattern;
   }
