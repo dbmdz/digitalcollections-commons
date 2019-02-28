@@ -35,6 +35,10 @@ public class ManagedFileResourceServiceImpl extends FileResourceServiceImpl impl
     return getRepo().create(mimeType, filename);
   }
 
+  public FileResource create(String contentType, String filename) {
+    return create(MimeType.fromTypename(contentType), filename);
+  }
+
   public FileResource create(UUID uuid) {
     return getRepo().create(uuid);
   }
