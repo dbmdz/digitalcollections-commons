@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 /**
  * A binary repository using filesystem.
@@ -45,6 +46,10 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
    * @return array of text parts
    */
   protected static String[] splitEqually(String text, int partLength) {
+    if (StringUtils.isEmpty(text) || partLength == 0) {
+      return new String[] {text};
+    }
+    
     int textLength = text.length();
 
     // Number of parts
