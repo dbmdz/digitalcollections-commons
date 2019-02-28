@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
  * A binary repository using filesystem.
  * see http://docs.oracle.com/javase/tutorial/essential/io/fileio.html
  * see https://docs.oracle.com/javase/tutorial/essential/io/file.html
- * see http://michaelandrews.typepad.com/the_technical_times/2009/10/creating-a-hashed-directory-structure.html
+ * see https://medium.com/eonian-technologies/file-name-hashing-creating-a-hashed-directory-structure-eabb03aa4091
  */
 @Repository
 public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImpl {
