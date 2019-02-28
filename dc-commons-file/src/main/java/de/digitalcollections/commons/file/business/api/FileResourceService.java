@@ -2,55 +2,38 @@ package de.digitalcollections.commons.file.business.api;
 
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.enums.FileResourcePersistenceType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.URI;
-import java.util.Set;
 import org.w3c.dom.Document;
 
 public interface FileResourceService {
 
-  FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException;
+  FileResource create();
 
-  FileResource create(MimeType mimeType) throws ResourceIOException;
+  FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
 
-  default FileResource create(String key, FileResourcePersistenceType fileResourcePersistenceType, String fileExtension) throws ResourceIOException {
-    return create(key, fileResourcePersistenceType, MimeType.fromExtension(fileExtension));
+  default FileResource find(String identifier, String fileExtension) throws ResourceIOException, ResourceNotFoundException {
+    return find(identifier, MimeType.fromExtension(fileExtension));
   }
 
-  default FileResource createManaged(MimeType mimeType) throws ResourceIOException {
-    return create(null, FileResourcePersistenceType.MANAGED, mimeType);
-  }
+  void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
+  byte[] getBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  default FileResource get(String key, FileResourcePersistenceType fileResourcePersistenceType, String fileExtension) throws ResourceIOException, ResourceNotFoundException {
-    return get(key, fileResourcePersistenceType, MimeType.fromExtension(fileExtension));
-  }
-
-  Document getDocument(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException;
-
-  default Document getDocument(String key, FileResourcePersistenceType fileResourcePersistenceType) throws ResourceIOException, ResourceNotFoundException {
-    FileResource fileResource = get(key, fileResourcePersistenceType, MimeType.fromExtension("xml"));
-    return getDocument(fileResource);
-  }
+  Document getDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
   void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  default void assertReadability(String key, FileResourcePersistenceType resourcePersistenceType, String fileExtension) throws ResourceIOException, ResourceNotFoundException {
-    FileResource resource = get(key, resourcePersistenceType, MimeType.fromExtension(fileExtension));
-    assertReadability(resource);
-  }
-
-  InputStream getInputStream(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException;
-
   InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException;
 
-  long write(FileResource fileResource, String input) throws ResourceIOException;
+  InputStream getInputStream(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException;
+  Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  Set<String> findKeys(String keyPattern, FileResourcePersistenceType fileResourcePersistenceType) throws ResourceIOException;
+  long write(FileResource resource, String input) throws ResourceIOException;
+
+  long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
 }

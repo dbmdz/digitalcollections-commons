@@ -11,6 +11,7 @@ The DigitalCollection Common Java Libraries provide project independent common f
 
 Read module specific documentations:
 
+- [DigitalCollections Commons File](dc-commons-file)
 - [DigitalCollections Commons Server](dc-commons-server)
 - [DigitalCollections Commons Spring AOP](dc-commons-springaop)
 - [DigitalCollections Commons Spring Boot](dc-commons-springboot)
