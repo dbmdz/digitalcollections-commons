@@ -32,6 +32,6 @@ public class VersionInfoTest {
   void testBuildDetails() {
     Map<String, String> versions = versionInfo.getArtifactVersions();
 
-    assertThat(versions.get("slf4j-api-1.7.22.jar")).isEqualTo("1.7.22");
+    assertThat(versions.get("junit-jupiter-5.4.0.jar")).isEqualTo("5.4.0");
   }
 }

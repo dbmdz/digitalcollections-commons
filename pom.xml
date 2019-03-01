@@ -37,9 +37,9 @@
 
     <!-- Dependency versions -->
     <version.aspectjweaver>1.9.2</version.aspectjweaver>
-    <version.assertj>3.12.0</version.assertj>
+    <version.assertj>3.12.1</version.assertj>
     <version.commons-beanutils>1.9.3</version.commons-beanutils>
-    <version.commons-lang3>3.4</version.commons-lang3>
+    <version.commons-lang3>3.8.1</version.commons-lang3>
     <version.dc-model>3.0.0-SNAPSHOT</version.dc-model>
     <version.geoip>2.12.0</version.geoip>
     <version.hamcrest-core>2.1</version.hamcrest-core>
@@ -48,20 +48,20 @@
     <version.javax.annotation-api>1.3.2</version.javax.annotation-api>
     <version.jdbi3>3.6.0</version.jdbi3>
     <version.jjwt>0.9.1</version.jjwt>
-    <version.joda-time>2.9.4</version.joda-time>
-    <version.junit>5.3.2</version.junit>
+    <version.joda-time>2.10.1</version.joda-time>
+    <version.junit>5.4.0</version.junit>
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.mockito-java8>2.5.0</version.mockito-java8>
-    <version.mockito-core>2.23.0</version.mockito-core>
-    <version.openfeign>10.1.0</version.openfeign>
+    <version.mockito-core>2.24.5</version.mockito-core>
+    <version.openfeign>10.2.0</version.openfeign>
     <version.saxon>9.9.1-1</version.saxon>
-    <version.servlet-api>3.1.0</version.servlet-api>
-    <version.slf4j>1.7.22</version.slf4j>
-    <version.snakeyaml>1.23</version.snakeyaml>
-    <version.springframework>5.1.4.RELEASE</version.springframework>
+    <version.servlet-api>4.0.1</version.servlet-api>
+    <version.slf4j>1.7.26</version.slf4j>
+    <version.snakeyaml>1.24</version.snakeyaml>
+    <version.springframework>5.1.5.RELEASE</version.springframework>
     <version.spring-boot>2.1.3.RELEASE</version.spring-boot>
     <version.spring-boot-starter-jsondoc>1.2.19</version.spring-boot-starter-jsondoc>
-    <version.spring-data-commons>1.13.16.RELEASE</version.spring-data-commons>
+    <version.spring-data-commons>2.1.5.RELEASE</version.spring-data-commons>
     <version.spring-security>5.1.4.RELEASE</version.spring-security>
     <version.thymeleaf>3.0.11.RELEASE</version.thymeleaf>
 
@@ -69,6 +69,7 @@
     <version.jacoco-maven-plugin>0.8.3</version.jacoco-maven-plugin>
     <version.maven-checkstyle-plugin>3.0.0</version.maven-checkstyle-plugin>
     <version.maven-compiler-plugin>3.8.0</version.maven-compiler-plugin>
+    <version.maven-failsafe-plugin>2.22.1</version.maven-failsafe-plugin>
     <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
     <version.maven-javadoc-plugin>3.0.1</version.maven-javadoc-plugin>
     <version.maven-source-plugin>3.0.1</version.maven-source-plugin>
@@ -190,13 +191,7 @@
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-api</artifactId>
-        <version>${version.junit}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
+        <artifactId>junit-jupiter</artifactId>
         <version>${version.junit}</version>
         <scope>test</scope>
       </dependency>
@@ -319,6 +314,12 @@
           <showDeprecation>true</showDeprecation>
           <compilerArgument>-Xlint:unchecked</compilerArgument>
         </configuration>
+      </plugin>
+      <plugin>
+        <!-- Spring Boot configures surefire by default, but not failsafe -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${version.maven-failsafe-plugin}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

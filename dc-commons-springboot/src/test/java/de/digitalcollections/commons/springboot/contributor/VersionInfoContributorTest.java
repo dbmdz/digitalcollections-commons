@@ -31,6 +31,6 @@ public class VersionInfoContributorTest {
     @SuppressWarnings("unchecked")
     Map<String, String> versionInfoValues = (Map) infoValues.get("version");
 
-    assertThat(versionInfoValues.get("slf4j-api-1.7.22.jar")).isEqualTo("1.7.22");
+    assertThat(versionInfoValues.get("junit-jupiter-5.4.0.jar")).isEqualTo("5.4.0");
   }
 }
