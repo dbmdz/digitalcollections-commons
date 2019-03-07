@@ -29,7 +29,6 @@ import org.springframework.util.Assert;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-
 public abstract class FileResourceRepositoryImpl implements FileResourceRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImpl.class);

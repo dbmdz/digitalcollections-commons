@@ -53,6 +53,9 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
     resource.setUuid(UUID.randomUUID());
 
     List<URI> uris = getUris(identifier, mimeType);
+    if (uris.isEmpty()) {
+      throw new ResourceIOException(String.format("FileResource with identifier %s and MimeType %s is not resolvable.", identifier, mimeType));
+    }
     URI uri = uris.get(0);
     resource.setUri(uri);
 
