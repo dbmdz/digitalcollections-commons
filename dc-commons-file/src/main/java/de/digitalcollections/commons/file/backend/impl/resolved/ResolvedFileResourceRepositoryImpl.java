@@ -143,6 +143,11 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
         throw new ResourceIOException("Cannot find keys for substitutions with references in paths");
       }
 
+      // Ensure, the basePath does not start with "file:"
+      if (basePath.toString().startsWith("file:"))  {
+        basePath = Paths.get(basePath.toString().substring(5));
+      }
+
       // Retrieve all files in the substitution path and filter out the non matching ones.
       // "Matching" means, match the filename of the substitution and match the key pattern
       // Finally map them onto the keys
