@@ -37,7 +37,7 @@
 
     <!-- Dependency versions -->
     <version.aspectjweaver>1.9.2</version.aspectjweaver>
-    <version.assertj>3.12.1</version.assertj>
+    <version.assertj>3.12.2</version.assertj>
     <version.commons-beanutils>1.9.3</version.commons-beanutils>
     <version.commons-lang3>3.8.1</version.commons-lang3>
     <version.dc-model>3.0.0</version.dc-model>
@@ -49,12 +49,12 @@
     <version.jdbi3>3.6.0</version.jdbi3>
     <version.jjwt>0.9.1</version.jjwt>
     <version.joda-time>2.10.1</version.joda-time>
-    <version.junit>5.4.0</version.junit>
+    <version.junit>5.4.1</version.junit>
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.mockito-java8>2.5.0</version.mockito-java8>
-    <version.mockito-core>2.25.0</version.mockito-core>
+    <version.mockito-core>2.25.1</version.mockito-core>
     <version.openfeign>10.2.0</version.openfeign>
-    <version.saxon>9.9.1-1</version.saxon>
+    <version.saxon>9.9.1-2</version.saxon>
     <version.servlet-api>4.0.1</version.servlet-api>
     <version.slf4j>1.7.26</version.slf4j>
     <version.snakeyaml>1.24</version.snakeyaml>

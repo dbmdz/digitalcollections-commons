@@ -31,6 +31,6 @@ public class VersionInfoContributorTest {
     @SuppressWarnings("unchecked")
     Map<String, String> versionInfoValues = (Map) infoValues.get("version");
 
-    assertThat(versionInfoValues.get("junit-jupiter-5.4.0.jar")).isEqualTo("5.4.0");
+    assertThat(versionInfoValues.get("junit-jupiter-5.4.1.jar")).isEqualTo("5.4.1");
   }
 }
