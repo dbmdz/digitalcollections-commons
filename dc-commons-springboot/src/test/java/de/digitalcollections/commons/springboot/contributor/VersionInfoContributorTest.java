@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.actuate.info.Info.Builder;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootConfiguration()
 public class VersionInfoContributorTest {
 
-  private static final String JUNIT_VERSION = "5.4.1";
+  @Value("${junit.version}")
+  private String junitVersion;
 
   @Autowired
   VersionInfoContributor versionInfoContributor;
@@ -33,6 +35,6 @@ public class VersionInfoContributorTest {
     @SuppressWarnings("unchecked")
     Map<String, String> versionInfoValues = (Map) infoValues.get("version");
 
-    assertThat(versionInfoValues.get("junit-jupiter-" + JUNIT_VERSION + ".jar")).isEqualTo(JUNIT_VERSION);
+    assertThat(versionInfoValues.get("junit-jupiter-" + junitVersion + ".jar")).isEqualTo(junitVersion);
   }
 }
