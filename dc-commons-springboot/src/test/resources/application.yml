@@ -6,3 +6,6 @@ info:
       artifactId: 'dc-commons-springboot.example'
       version: '1.2.3'
       buildDetails: 'build by foo@bar.com'
+
+junit:
+  version: "@version.junit@"
