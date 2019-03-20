@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootConfiguration()
 public class VersionInfoContributorTest {
 
+  private static final String JUNIT_VERSION = "5.4.1";
+
   @Autowired
   VersionInfoContributor versionInfoContributor;
 
@@ -31,6 +33,6 @@ public class VersionInfoContributorTest {
     @SuppressWarnings("unchecked")
     Map<String, String> versionInfoValues = (Map) infoValues.get("version");
 
-    assertThat(versionInfoValues.get("junit-jupiter-5.4.1.jar")).isEqualTo("5.4.1");
+    assertThat(versionInfoValues.get("junit-jupiter-" + JUNIT_VERSION + ".jar")).isEqualTo(JUNIT_VERSION);
   }
 }
