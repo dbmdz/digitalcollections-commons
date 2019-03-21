@@ -5,52 +5,16 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
-    <version>4.0.1</version>
+    <version>4.1.0-SNAPSHOT</version>
   </parent>
 
   <name>DigitalCollections: Commons ProseMirror (Parent)</name>
   <artifactId>dc-commons-prosemirror</artifactId>
+  <version>4.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
     <module>dc-commons-prosemirror-model</module>
     <module>dc-commons-prosemirror-model-jackson</module>
   </modules>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${version.logback-classic}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${version.jackson}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${version.jackson}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-beanutils</groupId>
-        <artifactId>commons-beanutils</artifactId>
-        <version>${version.commons-beanutils}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>de.digitalcollections.commons</groupId>
-        <artifactId>dc-commons-prosemirror-model</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>${version.junit}</version>
-        <scope>test</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 </project>
