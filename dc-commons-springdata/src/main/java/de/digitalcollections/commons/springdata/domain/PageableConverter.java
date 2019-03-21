@@ -45,7 +45,7 @@ public class PageableConverter {
     final Sorting sorting = pageRequest.getSorting();
     Sort sort = SortConverter.convert(sorting);
 
-    Pageable pageable = new org.springframework.data.domain.PageRequest(pageNumber, pageSize, sort);
+    Pageable pageable = org.springframework.data.domain.PageRequest.of(pageNumber, pageSize, sort);
     return pageable;
   }
 }

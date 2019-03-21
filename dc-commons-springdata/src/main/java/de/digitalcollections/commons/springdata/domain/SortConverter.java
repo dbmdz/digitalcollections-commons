@@ -41,7 +41,7 @@ public class SortConverter {
       return null;
     }
 
-    Sort sort = new Sort(orders);
+    Sort sort = Sort.by(orders);
     return sort;
   }
 }
