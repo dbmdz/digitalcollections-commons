@@ -4,23 +4,23 @@
 
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>dc-commons</artifactId>
-  <version>4.0.1</version>
+  <version>4.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
+    <module>dc-commons-feign</module>
+    <module>dc-commons-file</module>
+    <module>dc-commons-jdbi</module>
+    <module>dc-commons-prosemirror</module>
     <module>dc-commons-server</module>
-    <module>dc-commons-springmvc</module>
     <module>dc-commons-springaop</module>
+    <module>dc-commons-springboot</module>
+    <module>dc-commons-springdata</module>
+    <module>dc-commons-springmvc</module>
+    <module>dc-commons-springsecurity</module>
     <module>dc-commons-validation</module>
     <module>dc-commons-xml</module>
     <module>dc-commons-yaml</module>
-    <module>dc-commons-springdata</module>
-    <module>dc-commons-jdbi</module>
-    <module>dc-commons-feign</module>
-    <module>dc-commons-springboot</module>
-    <module>dc-commons-springsecurity</module>
-    <module>dc-commons-prosemirror</module>
-    <module>dc-commons-file</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
@@ -35,36 +35,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- Dependency versions -->
-    <version.aspectjweaver>1.9.2</version.aspectjweaver>
-    <version.assertj>3.12.2</version.assertj>
-    <version.commons-beanutils>1.9.3</version.commons-beanutils>
-    <version.commons-lang3>3.8.1</version.commons-lang3>
-    <version.dc-model>3.0.0</version.dc-model>
-    <version.geoip>2.12.0</version.geoip>
-    <version.hamcrest-core>2.1</version.hamcrest-core>
-    <version.jackson>2.9.8</version.jackson>
-    <version.jaxb-api>2.3.1</version.jaxb-api>
-    <version.javax.annotation-api>1.3.2</version.javax.annotation-api>
-    <version.jdbi3>3.6.0</version.jdbi3>
-    <version.jjwt>0.9.1</version.jjwt>
-    <version.joda-time>2.10.1</version.joda-time>
-    <version.junit>5.4.1</version.junit>
-    <version.logback-classic>1.2.3</version.logback-classic>
-    <version.mockito-java8>2.5.0</version.mockito-java8>
-    <version.mockito-core>2.25.1</version.mockito-core>
-    <version.openfeign>10.2.0</version.openfeign>
-    <version.saxon>9.9.1-2</version.saxon>
-    <version.servlet-api>4.0.1</version.servlet-api>
-    <version.slf4j>1.7.26</version.slf4j>
-    <version.snakeyaml>1.24</version.snakeyaml>
-    <version.springframework>5.1.5.RELEASE</version.springframework>
-    <version.spring-boot>2.1.3.RELEASE</version.spring-boot>
-    <version.spring-boot-starter-jsondoc>1.2.19</version.spring-boot-starter-jsondoc>
-    <version.spring-data-commons>2.1.5.RELEASE</version.spring-data-commons>
-    <version.spring-security>5.1.4.RELEASE</version.spring-security>
-    <version.thymeleaf>3.0.11.RELEASE</version.thymeleaf>
-
     <!-- Plugin versions -->
     <version.jacoco-maven-plugin>0.8.3</version.jacoco-maven-plugin>
     <version.maven-checkstyle-plugin>3.0.0</version.maven-checkstyle-plugin>
@@ -77,211 +47,6 @@
     <version.nexus-staging-maven-plugin>1.6.8</version.nexus-staging-maven-plugin>
     <version.versions-maven-plugin>2.7</version.versions-maven-plugin>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${version.logback-classic}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
-        <version>${version.jackson}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${version.jackson}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.maxmind.geoip2</groupId>
-        <artifactId>geoip2</artifactId>
-        <version>${version.geoip}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-beanutils</groupId>
-        <artifactId>commons-beanutils</artifactId>
-        <version>${version.commons-beanutils}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>de.digitalcollections.commons</groupId>
-        <artifactId>dc-commons-springsecurity</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>de.digitalcollections.model</groupId>
-        <artifactId>dc-model</artifactId>
-        <version>${version.dc-model}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.github.openfeign</groupId>
-        <artifactId>feign-core</artifactId>
-        <version>${version.openfeign}</version>
-      </dependency>
-      <dependency>
-        <groupId>info.solidsoft.mockito</groupId>
-        <artifactId>mockito-java8</artifactId>
-        <version>${version.mockito-java8}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt</artifactId>
-        <version>${version.jjwt}</version>
-      </dependency>
-      <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
-      <dependency>
-        <groupId>javax.annotation</groupId>
-        <artifactId>javax.annotation-api</artifactId>
-        <version>${version.javax.annotation-api}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>javax.servlet-api</artifactId>
-        <version>${version.servlet-api}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>${version.jaxb-api}</version>
-      </dependency>
-      <dependency>
-        <groupId>joda-time</groupId>
-        <artifactId>joda-time</artifactId>
-        <version>${version.joda-time}</version>
-      </dependency>
-      <dependency>
-        <groupId>net.sf.saxon</groupId>
-        <artifactId>Saxon-HE</artifactId>
-        <version>${version.saxon}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>${version.commons-lang3}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.aspectj</groupId>
-        <artifactId>aspectjweaver</artifactId>
-        <version>${version.aspectjweaver}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${version.assertj}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.hamcrest</groupId>
-        <artifactId>hamcrest-core</artifactId>
-        <version>${version.hamcrest-core}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.jdbi</groupId>
-        <artifactId>jdbi3-core</artifactId>
-        <version>${version.jdbi3}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jsondoc</groupId>
-        <artifactId>spring-boot-starter-jsondoc</artifactId>
-        <version>${version.spring-boot-starter-jsondoc}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>${version.junit}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${version.mockito-core}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.yaml</groupId>
-        <artifactId>snakeyaml</artifactId>
-        <version>${version.snakeyaml}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${version.slf4j}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-aop</artifactId>
-        <version>${version.springframework}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${version.springframework}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${version.springframework}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
-        <version>${version.springframework}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${version.springframework}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-webmvc</artifactId>
-        <version>${version.springframework}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${version.spring-boot}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-commons</artifactId>
-        <version>${version.spring-data-commons}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-config</artifactId>
-        <version>${version.spring-security}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-core</artifactId>
-        <version>${version.spring-security}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-web</artifactId>
-        <version>${version.spring-security}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.thymeleaf</groupId>
-        <artifactId>thymeleaf</artifactId>
-        <version>${version.thymeleaf}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <build>
     <plugins>
@@ -468,6 +233,7 @@
     <url>https://travis-ci.org/dbmdz/digitalcollections-commons</url>
     <system>Travis CI</system>
   </ciManagement>
+
   <issueManagement>
     <url>https://github.com/dbmdz/digitalcollections-commons/issues</url>
     <system>GitHub Issues</system>

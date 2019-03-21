@@ -5,21 +5,34 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
-    <version>4.0.1</version>
+    <version>4.1.0-SNAPSHOT</version>
   </parent>
   
   <name>DigitalCollections: Commons Server</name>
   <artifactId>dc-commons-server</artifactId>
+  <version>4.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   
+  <properties>
+    <version.assertj>3.12.2</version.assertj>
+    <version.geoip>2.12.0</version.geoip>
+    <version.hamcrest-core>2.1</version.hamcrest-core>
+    <version.jackson-databind>2.9.8</version.jackson-databind>
+    <version.junit>5.4.1</version.junit>
+    <version.servlet-api>4.0.1</version.servlet-api>
+    <version.slf4j>1.7.26</version.slf4j>
+  </properties>
+    
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <version>${version.jackson-databind}</version>
     </dependency>
     <dependency>
       <groupId>com.maxmind.geoip2</groupId>
       <artifactId>geoip2</artifactId>
+      <version>${version.geoip}</version>
       <exclusions>
         <exclusion>
           <groupId>com.fasterxml.jackson.core</groupId>
@@ -30,29 +43,35 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+      <version>${version.servlet-api}</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>${version.assertj}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
+      <version>${version.hamcrest-core}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
+      <version>${version.junit}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+      <version>${version.slf4j}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
+      <version>${version.slf4j}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
