@@ -60,7 +60,7 @@
     <version.snakeyaml>1.24</version.snakeyaml>
     <version.springframework>5.1.5.RELEASE</version.springframework>
     <version.spring-boot>2.1.3.RELEASE</version.spring-boot>
-    <version.spring-boot-starter-jsondoc>1.2.20</version.spring-boot-starter-jsondoc>
+    <version.spring-boot-starter-jsondoc>1.2.19</version.spring-boot-starter-jsondoc>
     <version.spring-data-commons>2.1.5.RELEASE</version.spring-data-commons>
     <version.spring-security>5.1.4.RELEASE</version.spring-security>
     <version.thymeleaf>3.0.11.RELEASE</version.thymeleaf>
