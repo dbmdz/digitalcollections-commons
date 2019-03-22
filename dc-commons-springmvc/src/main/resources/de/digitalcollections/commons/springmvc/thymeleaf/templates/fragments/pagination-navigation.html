@@ -44,5 +44,40 @@
         </li>
       </ul>
     </div>
+    
+    <div class="table-pagination" th:fragment="pagination-bootstrap4">
+      <ul class="pagination pagination-sm">
+        <li th:classappend="|page-item ${page.firstPage ? 'disabled' : ''}|">
+          <span class="page-link" th:if='${page.firstPage}'><i class="fa fa-fast-backward" aria-hidden="true"></i></span>
+          <a class="page-link" th:if='${not page.firstPage}'
+             th:href='@{${page.url}(page=0,size=${page.size})}'
+             th:title='#{pagination.first_page}'><i class="fa fa-fast-backward" aria-hidden="true"></i></a>
+        </li>
+        <li th:classappend="|page-item ${page.hasPreviousPage ? '' : 'disabled'}|">
+          <span class="page-link" th:if='${not page.hasPreviousPage}'><i class="fa fa-backward" aria-hidden="true"></i></span>
+          <a class="page-link" th:if='${page.hasPreviousPage}'
+             th:href='@{${page.url}(page=${page.number - 2},size=${page.size})}'
+             th:title='#{pagination.previous_page}'><i class="fa fa-backward" aria-hidden="true"></i></a>
+        </li>
+        <li th:each='item : ${page.items}' th:classappend="|page-item ${item.current ? 'active' : ''}|">
+          <span class="page-link" th:if='${item.current}' th:text='${item.number}'>1</span>
+          <a class="page-link" th:if='${not item.current}'
+             th:href='@{${page.url}(page=${item.number - 1},size=${page.size})}'><span
+              th:text='${item.number}'>1</span></a>
+        </li>
+        <li th:classappend="|page-item ${page.hasNextPage ? '' : 'disabled'}|">
+          <span class="page-link" th:if='${not page.hasNextPage}'><i class="fa fa-forward" aria-hidden="true"></i></span>
+          <a class="page-link" th:if='${page.hasNextPage}'
+             th:href='@{${page.url}(page=${page.number},size=${page.size})}'
+             th:title='#{pagination.next_page}'><i class="fa fa-forward" aria-hidden="true"></i></span></a>
+        </li>
+        <li th:classappend="|page-item ${page.lastPage ? 'disabled' : ''}|">
+          <span class="page-link" th:if='${page.lastPage}'><i class="fa fa-fast-forward" aria-hidden="true"></i></span>
+          <a class="page-link" th:if='${not page.lastPage}'
+             th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'
+             th:title='#{pagination.last_page}'><i class="fa fa-fast-forward" aria-hidden="true"></i></span></a>
+        </li>
+      </ul>
+    </div>
   </body>
 </html>
