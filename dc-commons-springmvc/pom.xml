@@ -23,9 +23,15 @@
     <version.spring>5.1.5.RELEASE</version.spring>
     <version.spring-security>5.1.4.RELEASE</version.spring-security>
     <version.thymeleaf>3.0.11.RELEASE</version.thymeleaf>
+    <version.guava>27.1-jre</version.guava>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${version.guava}</version>
+    </dependency>
     <dependency>
       <groupId>info.solidsoft.mockito</groupId>
       <artifactId>mockito-java8</artifactId>
