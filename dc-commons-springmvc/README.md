@@ -134,3 +134,18 @@ must be catched and translated into frontend specific exceptions.
 The package "de.digitalcollections.commons.springmvc.exceptions" contains common frontend exceptions you can use.
 
 - ResourceNotFoundException: used when service can not deliver some resource because it can not be found. It is translated to HTTP-Status 404 (Not Found).
+
+## Thymeleaf Dialect
+
+### SpacesDialect
+
+Extracted from judge project <https://github.com/zjnu-acm/judge> (Apache licensed).
+Thymeleaf generates HTML containing useless white spaces between the tags and between the attribute gaps.
+The SpacesDialect removes useless whitespace. Just add it as Spring Bean to your ApplicationContext:
+
+```java
+@Bean
+public AbstractProcessorDialect whiteSpaceNormalizedDialect() {
+  return new SpacesDialect();
+}
+```
