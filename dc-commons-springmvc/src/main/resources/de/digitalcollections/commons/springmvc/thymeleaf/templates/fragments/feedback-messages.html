@@ -27,7 +27,29 @@
         </div>
       </div>
     </div>
-  </body>
+
+  <th:block th:fragment="global-bootstrap4">
+    <div class="row" th:if="${error_message}">
+      <div class="col-sm-12 alert alert-danger" role="alert">
+        <span class="fa fa-exclamation-circle"></span> <span class="sr-only">Error:</span> <span class="message ml-1" th:text="${error_message}">Error message</span>
+      </div>
+    </div>
+    <div class="row" th:if="${info_message}">
+      <div class="col-sm-12 alert alert-info" role="alert">
+        <span class="fa fa-info-circle"></span> <span class="sr-only">Info:</span> <span class="message ml-1" th:text="${info_message}">Info message</span>
+      </div>
+    </div>
+    <div class="row" th:if="${success_message}" role="alert">
+      <div class="col-sm-12 alert alert-success">
+        <span class="fa fa-check-circle"></span> <span class="sr-only">Success:</span> <span class="message ml-1" th:text="${success_message}">Success message</span>
+      </div>
+    </div>
+    <div class="row" th:if="${warning_message}" role="alert">
+      <div class="col-sm-12 alert alert-warning">
+        <span class="fa fa-arrow-circle-right"></span> <span class="sr-only">Warning:</span> <span class="message ml-1" th:text="${warning_message}">Warning</span>
+      </div>
+    </div>
+  </th:block>
 
   <div th:fragment="form">
     <div class="alert alert-warning" th:if="${#fields.hasAnyErrors()}">
@@ -37,4 +59,14 @@
       </ul>
     </div>
   </div>
+
+  <div th:fragment="form-bootstrap4">
+    <div class="col-sm-12 alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+      <span class="fa fa-exclamation-circle"></span> <span class="message ml-1" th:text="#{msg.correct_input_errors}">Correct invalid input, please.</span>
+      <ul th:if="${#fields.hasErrors('global')}">
+        <li th:each="err : ${#fields.errors('global')}" th:text="${err}">Input is incorrect</li>
+      </ul>
+    </div>
+  </div>
+</body>
 </html>
