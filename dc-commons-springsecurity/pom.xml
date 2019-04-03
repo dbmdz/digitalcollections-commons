@@ -23,7 +23,7 @@
     <version.snakeyaml>1.24</version.snakeyaml>
     <version.spring>5.1.5.RELEASE</version.spring>
     <version.spring-boot>2.1.3.RELEASE</version.spring-boot>
-    <version.spring-security>5.1.4.RELEASE</version.spring-security>
+    <version.spring-security>5.1.5.RELEASE</version.spring-security>
   </properties>
 
   <name>DigitalCollections: Commons Spring Security (Spring Security 5)</name>
