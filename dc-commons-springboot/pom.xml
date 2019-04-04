@@ -20,7 +20,7 @@
     <version.hamcrest-core>2.1</version.hamcrest-core>
     <version.jackson>2.9.8</version.jackson>
     <version.junit>5.4.1</version.junit>
-    <version.micrometer>1.1.3</version.micrometer>
+    <version.micrometer>1.1.4</version.micrometer>
     <version.mockito-core>2.25.1</version.mockito-core>
     <version.slf4j>1.7.26</version.slf4j>
     <version.snakeyaml>1.24</version.snakeyaml>
