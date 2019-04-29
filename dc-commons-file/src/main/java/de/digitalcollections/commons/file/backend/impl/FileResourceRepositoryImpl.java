@@ -2,8 +2,14 @@ package de.digitalcollections.commons.file.backend.impl;
 
 import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
+import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
+import de.digitalcollections.model.impl.identifiable.resource.ApplicationFileResourceImpl;
+import de.digitalcollections.model.impl.identifiable.resource.AudioFileResourceImpl;
+import de.digitalcollections.model.impl.identifiable.resource.ImageFileResourceImpl;
+import de.digitalcollections.model.impl.identifiable.resource.TextFileResourceImpl;
+import de.digitalcollections.model.impl.identifiable.resource.VideoFileResourceImpl;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,6 +54,33 @@ public abstract class FileResourceRepositoryImpl implements FileResourceReposito
     } catch (Exception e) {
       throw new ResourceIOException("Cannot read " + resource.getFilename() + ": " + e.getMessage());
     }
+  }
+
+  @Override
+  public FileResource createByMimetype(MimeType mimeType) {
+    if (mimeType == null) {
+      return new ApplicationFileResourceImpl();
+    }
+    FileResource result;
+    String primaryType = mimeType.getPrimaryType();
+    switch (primaryType) {
+      case "audio":
+        result = new AudioFileResourceImpl();
+        break;
+      case "image":
+        result = new ImageFileResourceImpl();
+        break;
+      case "text":
+        result = new TextFileResourceImpl();
+        break;
+      case "video":
+        result = new VideoFileResourceImpl();
+        break;
+      default:
+        result = new ApplicationFileResourceImpl();
+    }
+    result.setMimeType(mimeType);
+    return result;
   }
 
   @Override

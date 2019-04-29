@@ -26,6 +26,11 @@ public abstract class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
+  public FileResource createByMimetype(MimeType mimeType) {
+    return repository.createByMimetype(mimeType);
+  }
+
+  @Override
   public void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     repository.delete(resource);
   }
