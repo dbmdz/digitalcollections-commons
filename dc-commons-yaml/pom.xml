@@ -15,7 +15,7 @@
   
   <properties>
     <version.assertj>3.12.2</version.assertj>
-    <version.joda-time>2.10.1</version.joda-time>
+    <version.joda-time>2.10.2</version.joda-time>
     <version.junit>5.4.2</version.junit>
     <version.slf4j>1.7.26</version.slf4j>
     <version.snakeyaml>1.24</version.snakeyaml>
