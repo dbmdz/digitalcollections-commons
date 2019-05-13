@@ -47,8 +47,10 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
   }
 
   public FileResource create(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException {
-    FileResource resource = create();
-    resource.setMimeType(mimeType);
+    if (mimeType == null) {
+      throw new ResourceIOException("missing mimetype");
+    }
+    FileResource resource = createByMimetype(mimeType);
     resource.setReadonly(readOnly);
     resource.setUuid(UUID.randomUUID());
 
@@ -59,10 +61,6 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
     URI uri = uris.get(0);
     resource.setUri(uri);
 
-    if (mimeType == null) {
-      mimeType = MimeType.fromURI(uri);
-      resource.setMimeType(mimeType);
-    }
     return resource;
   }
 

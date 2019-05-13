@@ -8,7 +8,10 @@ import de.digitalcollections.model.api.identifiable.resource.exceptions.Resource
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
@@ -47,9 +50,9 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
    */
   protected static String[] splitEqually(String text, int partLength) {
     if (StringUtils.isEmpty(text) || partLength == 0) {
-      return new String[] {text};
+      return new String[]{text};
     }
-    
+
     int textLength = text.length();
 
     // Number of parts
@@ -85,21 +88,22 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
   }
 
   public FileResource create(MimeType mimeType, String filename) {
-    FileResource resource = create();
     if (mimeType == null) {
       mimeType = MimeType.fromFilename(filename);
     }
-    if (mimeType == null) {
-      mimeType = MimeType.MIME_APPLICATION_OCTET_STREAM;
-    }
-    resource.setMimeType(mimeType);
+    FileResource resource = createByMimetype(mimeType);
+
     resource.setReadonly(false);
     final UUID uuid = UUID.randomUUID();
     resource.setUuid(uuid);
     resource.setFilename(filename);
 
-    URI uri = createUri(uuid, mimeType, filename);
-    resource.setUri(uri);
+    try {
+      URI uri = createUri(uuid, mimeType, filename);
+      resource.setUri(uri);
+    } catch (UnsupportedEncodingException ex) {
+      LOGGER.error("Can not create uri for uuid / filename: " + uuid.toString() + "/" + filename);
+    }
 
     // TODO if filename == null extract uuid-filename from uri and set it
     return resource;
@@ -112,7 +116,7 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
     return resource;
   }
 
-  protected URI createUri(@Nonnull UUID uuid, MimeType mimeType, String filename) {
+  protected URI createUri(@Nonnull UUID uuid, MimeType mimeType, String filename) throws UnsupportedEncodingException {
     Objects.requireNonNull(uuid, "uuid must not be null");
 
     final String uuidStr = uuid.toString();
@@ -121,7 +125,7 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
     String location = "file://" + path.toString();
 
     if (filename != null) {
-      location = location + "_" + filename;
+      location = location + "_" + URLEncoder.encode(filename, StandardCharsets.UTF_8.name());
       // example location = file:///mnt/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721_test.xml
     } else if (mimeType != null && !mimeType.getExtensions().isEmpty()) {
       location = location + "." + mimeType.getExtensions().get(0);
