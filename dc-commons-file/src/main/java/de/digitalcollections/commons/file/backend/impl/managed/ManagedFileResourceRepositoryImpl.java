@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
@@ -99,7 +97,7 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
     resource.setFilename(filename);
 
     try {
-      URI uri = createUri(uuid, mimeType, filename);
+      URI uri = createUri(uuid, mimeType);
       resource.setUri(uri);
     } catch (UnsupportedEncodingException ex) {
       LOGGER.error("Can not create uri for uuid / filename: " + uuid.toString() + "/" + filename);
@@ -116,22 +114,24 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
     return resource;
   }
 
-  protected URI createUri(@Nonnull UUID uuid, MimeType mimeType, String filename) throws UnsupportedEncodingException {
+  protected URI createUri(@Nonnull UUID uuid, MimeType mimeType) throws UnsupportedEncodingException {
     Objects.requireNonNull(uuid, "uuid must not be null");
 
     final String uuidStr = uuid.toString();
-    String uuidPath = getSplittedUuidPath(uuidStr);
-    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), managedFileResourcesConfig.getNamespace(), uuidPath, uuidStr);
+    Path path = getUuidFilePath(uuidStr);
     String location = "file://" + path.toString();
 
-    if (filename != null) {
-      location = location + "_" + URLEncoder.encode(filename, StandardCharsets.UTF_8.name());
-      // example location = file:///mnt/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721_test.xml
-    } else if (mimeType != null && !mimeType.getExtensions().isEmpty()) {
+    if (mimeType != null && !mimeType.getExtensions().isEmpty()) {
       location = location + "." + mimeType.getExtensions().get(0);
       // example location = file:///mnt/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721.xml
     }
     return URI.create(location);
+  }
+
+  private Path getUuidFilePath(final String uuidStr) {
+    String uuidPath = getSplittedUuidPath(uuidStr);
+    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), managedFileResourcesConfig.getNamespace(), uuidPath, uuidStr);
+    return path;
   }
 
   public FileResource find(String uuid) throws ResourceIOException, ResourceNotFoundException {
@@ -193,6 +193,16 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
     Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), managedFileResourcesConfig.getNamespace(), uuidPath);
     String location = "file://" + path.toString();
 
+    String filename = getFilename(path, uuidStr);
+    if (filename == null) {
+      throw new ResourceNotFoundException("No matching file found in " + location);
+    }
+    location = location + "/" + filename;
+
+    return URI.create(location);
+  }
+
+  private String getFilename(Path path, final String uuidStr) throws ResourceNotFoundException {
     File directory = path.toFile();
     if (!directory.isDirectory()) {
       throw new ResourceNotFoundException(path.toString() + " does not exist");
@@ -201,15 +211,13 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
     FilenameFilter fileNameFilter = (File dir, String name) -> {
       return name.startsWith(uuidStr);
     };
-
     File[] matchingFiles = directory.listFiles(fileNameFilter);
+    String filename = null;
     if (matchingFiles.length > 0) {
       File file = matchingFiles[0];
-      String filename = file.getName();
-      location = location + "_" + filename;
-      return URI.create(location);
+      filename = file.getName();
     }
-    throw new ResourceNotFoundException("No matching file found in " + path.toString());
+    return filename;
   }
 
 }

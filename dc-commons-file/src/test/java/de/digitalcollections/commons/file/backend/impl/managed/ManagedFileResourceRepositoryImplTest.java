@@ -39,8 +39,8 @@ public class ManagedFileResourceRepositoryImplTest {
     // test managed
     FileResource resource = resourceRepository.create(MimeType.MIME_APPLICATION_XML, "test.xml");
     resource.setUuid(UUID.fromString("a30cf362-5992-4f5a-8de0-61938134e721"));
-    resource.setUri(resourceRepository.createUri(resource.getUuid(), resource.getMimeType(), resource.getFilename()));
-    URI expResult = URI.create("file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721_test.xml");
+    resource.setUri(resourceRepository.createUri(resource.getUuid(), resource.getMimeType()));
+    URI expResult = URI.create("file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721.xml");
     URI result = resource.getUri();
     assertThat(expResult).isEqualTo(result);
   }
