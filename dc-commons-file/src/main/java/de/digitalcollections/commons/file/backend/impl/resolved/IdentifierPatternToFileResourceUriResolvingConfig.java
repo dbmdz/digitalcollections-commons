@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties("resource-repository.resolved")
-public class ResolvedFileResourceRepositoryConfig {
+public class IdentifierPatternToFileResourceUriResolvingConfig {
 
   private List<IdentifierPatternToFileResourceUriResolverImpl> patterns;
 

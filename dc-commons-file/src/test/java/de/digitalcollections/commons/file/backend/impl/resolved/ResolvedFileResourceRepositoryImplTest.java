@@ -102,7 +102,7 @@ public class ResolvedFileResourceRepositoryImplTest {
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
 
-    ResolvedFileResourceRepositoryConfig resolvedFileResourcesConfig = new ResolvedFileResourceRepositoryConfig();
+    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
     IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("news_(\\d{8})", "file:///opt/news/news_$1.md");
     resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
 
@@ -121,7 +121,7 @@ public class ResolvedFileResourceRepositoryImplTest {
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
 
-    ResolvedFileResourceRepositoryConfig resolvedFileResourcesConfig = new ResolvedFileResourceRepositoryConfig();
+    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
     IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("news_(\\d{6})(\\d{2})", "file:///opt/news/news_$1$2.md");
     resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
 

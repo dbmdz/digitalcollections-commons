@@ -38,10 +38,10 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
   private static final Logger LOGGER = LoggerFactory.getLogger(ResolvedFileResourceRepositoryImpl.class);
 
   private DirectoryStream<Path> overriddenDirectoryStream;      // only for testing purposes
-  private final ResolvedFileResourceRepositoryConfig resolvedFileResourcesConfig;
+  private final IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig;
 
   @Autowired
-  public ResolvedFileResourceRepositoryImpl(ResolvedFileResourceRepositoryConfig resolvedFileResourcesConfig, ResourceLoader resourceLoader) {
+  public ResolvedFileResourceRepositoryImpl(IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig, ResourceLoader resourceLoader) {
     this.resolvedFileResourcesConfig = resolvedFileResourcesConfig;
     this.resourceLoader = resourceLoader;
   }
