@@ -1,5 +1,6 @@
 package de.digitalcollections.commons.file.backend.impl.resolved;
 
+import de.digitalcollections.commons.file.backend.api.resolved.IdentifierToFileresourceUriResolver;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import java.net.URI;
@@ -14,9 +15,20 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PatternFileNameResolverImpl {
+/**
+ * Implementation resolving a file resource identifier to file resource uris by using regular expression patterns on given identifier.
+ * Use this implementation, if parts/regex groups of identifier and configurable given static uri templates are sufficient to construct an absolute uri for file resource.
+ * Example:
+ *
+ * <ul>
+ *   <li>identifier: bsb10012345</li>
+ *   <li>regex pattern: '^(\w{3})(\d{4})(\d{4})$'
+ *   <li>uri template / substituton: 'https://iiif.digitale-sammlungen.de/presentation/v2/$1$2$3/manifest.json'
+ * </ul>
+ */
+public class IdentifierPatternToFileResourceUriResolverImpl implements IdentifierToFileresourceUriResolver {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(PatternFileNameResolverImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IdentifierPatternToFileResourceUriResolverImpl.class);
 
   private Pattern compiledPattern;
 
@@ -24,10 +36,10 @@ public class PatternFileNameResolverImpl {
 
   private List<String> substitutions;
 
-  public PatternFileNameResolverImpl() {
+  public IdentifierPatternToFileResourceUriResolverImpl() {
   }
 
-  public PatternFileNameResolverImpl(String regex, String replacement) {
+  public IdentifierPatternToFileResourceUriResolverImpl(String regex, String replacement) {
     this.pattern = regex;
     this.compiledPattern = Pattern.compile(regex);
     this.substitutions = Collections.singletonList(replacement.replace("~", System.getProperty("user.home")));
@@ -35,9 +47,9 @@ public class PatternFileNameResolverImpl {
 
   public Set<Path> getPaths() throws ResourceIOException {
     return substitutions.stream()
-        .filter(s -> s.startsWith("file:"))
-        .map(p -> Paths.get(p))
-        .collect(Collectors.toSet());
+      .filter(s -> s.startsWith("file:"))
+      .map(p -> Paths.get(p))
+      .collect(Collectors.toSet());
   }
 
   /**
@@ -45,13 +57,14 @@ public class PatternFileNameResolverImpl {
    *
    * @param identifier file identifier/resolving key
    * @return list of resolved file uris
-   * @throws ResourceIOException in case getUrisAsString for key fails
+   * @throws ResourceIOException in case getUrisAsStrings for key fails
    */
+  @Override
   public List<Path> getPaths(String identifier) throws ResourceIOException {
-    return getUrisAsString(identifier).stream()
-        .filter(s -> s.startsWith("file:"))
-        .map(Paths::get)
-        .collect(Collectors.toList());
+    return getUrisAsStrings(identifier).stream()
+      .filter(s -> s.startsWith("file:"))
+      .map(Paths::get)
+      .collect(Collectors.toList());
   }
 
   /**
@@ -60,12 +73,13 @@ public class PatternFileNameResolverImpl {
    * @param identifier file identifier/resolving key
    * @param mimeType target mimetype (resolving subkey)
    * @return list of resolved file uris
-   * @throws ResourceIOException in case getUrisAsString for key fails
+   * @throws ResourceIOException in case getUrisAsStrings for key fails
    */
+  @Override
   public List<Path> getPaths(String identifier, MimeType mimeType) throws ResourceIOException {
     return getPaths(identifier).stream()
-        .filter(p -> mimeType.matches(MimeType.fromFilename(p.toString())))
-        .collect(Collectors.toList());
+      .filter(p -> mimeType.matches(MimeType.fromFilename(p.toString())))
+      .collect(Collectors.toList());
   }
 
   public String getPattern() {
@@ -83,8 +97,8 @@ public class PatternFileNameResolverImpl {
 
   public void setSubstitutions(List<String> substitutions) {
     this.substitutions = substitutions.stream()
-        .map(s -> s.replace("~", System.getProperty("user.home")))
-        .collect(Collectors.toList());
+      .map(s -> s.replace("~", System.getProperty("user.home")))
+      .collect(Collectors.toList());
   }
 
   /**
@@ -92,12 +106,13 @@ public class PatternFileNameResolverImpl {
    *
    * @param identifier file identifier/resolving key
    * @return list of resolved file uris
-   * @throws ResourceIOException in case getUrisAsString for key fails
+   * @throws ResourceIOException in case getUrisAsStrings for key fails
    */
+  @Override
   public List<URI> getUris(String identifier) throws ResourceIOException {
-    return getUrisAsString(identifier).stream()
-        .map(URI::create)
-        .collect(Collectors.toList());
+    return getUrisAsStrings(identifier).stream()
+      .map(URI::create)
+      .collect(Collectors.toList());
   }
 
   /**
@@ -106,20 +121,22 @@ public class PatternFileNameResolverImpl {
    * @param identifier file identifier/resolving key
    * @param mimeType target mimetype (resolving subkey)
    * @return list of resolved file uris
-   * @throws ResourceIOException in case getUrisAsString for key fails
+   * @throws ResourceIOException in case getUrisAsStrings for key fails
    */
+  @Override
   public List<URI> getUris(String identifier, MimeType mimeType) throws ResourceIOException {
     final List<URI> uris = getUris(identifier);
     return uris.stream()
-        .filter(u -> (mimeType.matches(MimeType.fromURI(u)) || MimeType.fromURI(u) == null))
-        .collect(Collectors.toList());
+      .filter(u -> (mimeType.matches(MimeType.fromURI(u)) || MimeType.fromURI(u) == null))
+      .collect(Collectors.toList());
   }
 
-  public List<String> getUrisAsString(String identifier) {
+  @Override
+  public List<String> getUrisAsStrings(String identifier) {
     Matcher matcher = this.compiledPattern.matcher(identifier);
     return this.substitutions.stream()
-        .map(matcher::replaceAll)
-        .collect(Collectors.toList());
+      .map(matcher::replaceAll)
+      .collect(Collectors.toList());
   }
 
   /**
@@ -128,14 +145,15 @@ public class PatternFileNameResolverImpl {
    * @param identifier file identifier/resolving key
    * @param mimeType target mimetype (resolving subkey)
    * @return list of resolved file uris
-   * @throws ResourceIOException in case getUrisAsString for key fails
    */
-  public List<String> getUrisAsString(String identifier, MimeType mimeType) throws ResourceIOException {
-    return getUrisAsString(identifier).stream()
-        .filter(s -> mimeType.matches(MimeType.fromFilename(s)))
-        .collect(Collectors.toList());
+  @Override
+  public List<String> getUrisAsStrings(String identifier, MimeType mimeType) {
+    return getUrisAsStrings(identifier).stream()
+      .filter(s -> mimeType.matches(MimeType.fromFilename(s)))
+      .collect(Collectors.toList());
   }
 
+  @Override
   public Boolean isResolvable(String identifier) {
     Boolean b = this.compiledPattern.matcher(identifier).matches();
     LOGGER.debug("Matching " + identifier + " against " + this.pattern + " is " + b);

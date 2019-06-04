@@ -173,7 +173,7 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
 
   public Set<Path> getPathsByPattern(String pattern) throws ResourceIOException {
     Set<Path> paths = new HashSet<>();
-    for (PatternFileNameResolverImpl resolver : resolvedFileResourcesConfig.getPatterns()) {
+    for (IdentifierPatternToFileResourceUriResolverImpl resolver : resolvedFileResourcesConfig.getPatterns()) {
       if (resolver.getPattern().equals(pattern)) {
         paths.addAll(resolver.getPaths());
       }
@@ -182,8 +182,8 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
   }
 
   public List<URI> getUris(String identifier, MimeType mimeType) throws ResourceIOException {
-    List<PatternFileNameResolverImpl> patterns = resolvedFileResourcesConfig.getPatterns();
-    PatternFileNameResolverImpl patternFileNameResolverImpl = patterns.stream()
+    List<IdentifierPatternToFileResourceUriResolverImpl> patterns = resolvedFileResourcesConfig.getPatterns();
+    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = patterns.stream()
         .filter(r -> r.isResolvable(identifier))
         .findFirst() // TODO: why only the first? See below method collectiong from all resolvers...
         .orElseThrow(() -> new ResourceIOException(identifier + " not resolvable!"));
@@ -194,7 +194,7 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
   public List<String> getUrisAsString(String identifier) throws ResourceIOException {
     return resolvedFileResourcesConfig.getPatterns().stream()
         .filter(r -> r.isResolvable(identifier))
-        .map(r -> r.getUrisAsString(identifier))
+        .map(r -> r.getUrisAsStrings(identifier))
         .flatMap(Collection::stream)
         .collect(Collectors.toList());
   }

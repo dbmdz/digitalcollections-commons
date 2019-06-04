@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("resource-repository.resolved")
 public class ResolvedFileResourceRepositoryConfig {
 
-  private List<PatternFileNameResolverImpl> patterns;
+  private List<IdentifierPatternToFileResourceUriResolverImpl> patterns;
 
-  public List<PatternFileNameResolverImpl> getPatterns() {
+  public List<IdentifierPatternToFileResourceUriResolverImpl> getPatterns() {
     return this.patterns;
   }
 
   // IMPORTANT: patterns does not get filled without setter! (not mentioned in Spring Boot doc!)
-  public void setPatterns(List<PatternFileNameResolverImpl> patterns) {
+  public void setPatterns(List<IdentifierPatternToFileResourceUriResolverImpl> patterns) {
     this.patterns = patterns;
   }
 }
