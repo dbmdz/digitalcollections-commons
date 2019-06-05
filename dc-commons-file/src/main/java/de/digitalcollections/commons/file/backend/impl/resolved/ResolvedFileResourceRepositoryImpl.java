@@ -58,6 +58,10 @@ public class ResolvedFileResourceRepositoryImpl extends FileResourceRepositoryIm
     this.resourceLoader = resourceLoader;
   }
 
+  public void addIdentifierToFileresourceUriResolver(IdentifierToFileResourceUriResolver resolver) {
+    identifierToFileresourceUriResolvers.add(resolver);
+  }
+
   public FileResource create(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException {
     if (mimeType == null) {
       throw new ResourceIOException("missing mimetype");
