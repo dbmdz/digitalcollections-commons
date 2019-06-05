@@ -1,6 +1,6 @@
 package de.digitalcollections.commons.file.backend.impl.resolved;
 
-import de.digitalcollections.commons.file.backend.api.resolved.IdentifierToFileresourceUriResolver;
+import de.digitalcollections.commons.file.backend.api.resolved.IdentifierToFileResourceUriResolver;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import java.net.URI;
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  *   <li>uri template / substituton: 'https://iiif.digitale-sammlungen.de/presentation/v2/$1$2$3/manifest.json'
  * </ul>
  */
-public class IdentifierPatternToFileResourceUriResolverImpl implements IdentifierToFileresourceUriResolver {
+public class IdentifierPatternToFileResourceUriResolverImpl implements IdentifierToFileResourceUriResolver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IdentifierPatternToFileResourceUriResolverImpl.class);
 

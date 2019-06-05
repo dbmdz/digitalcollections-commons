@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * Interface / contract for classes that resolve a given file resource identifier and an optional target mimetype
  * to one or more system specific URIs or Paths for accessing the file resource.
  */
-public interface IdentifierToFileresourceUriResolver {
+public interface IdentifierToFileResourceUriResolver {
 
   Boolean isResolvable(String identifier);
 

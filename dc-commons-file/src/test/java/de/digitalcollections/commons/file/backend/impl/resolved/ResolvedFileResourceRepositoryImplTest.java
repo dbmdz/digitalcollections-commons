@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,6 +96,12 @@ public class ResolvedFileResourceRepositoryImplTest {
   }
 
   @Test
+  public void testGetUrisAsStringsForCustomResolver() throws Exception {
+    List<String> urisAsString = resourceRepository.getUrisAsString("identifier_resolved_by_custom_resolver");
+    assertThat(urisAsString).isNotEmpty();
+  }
+
+  @Test
   public void findValidKeys() throws Exception {
     @SuppressWarnings("unchecked")
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
@@ -106,7 +113,7 @@ public class ResolvedFileResourceRepositoryImplTest {
     IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("news_(\\d{8})", "file:///opt/news/news_$1.md");
     resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
 
-    ResolvedFileResourceRepositoryImpl fileResourceRepository = new ResolvedFileResourceRepositoryImpl(resolvedFileResourcesConfig, resourceLoader);
+    ResolvedFileResourceRepositoryImpl fileResourceRepository = new ResolvedFileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
     fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
     Set<String> keys = fileResourceRepository.findKeys("news_(\\d{8})");
@@ -125,7 +132,7 @@ public class ResolvedFileResourceRepositoryImplTest {
     IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("news_(\\d{6})(\\d{2})", "file:///opt/news/news_$1$2.md");
     resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
 
-    ResolvedFileResourceRepositoryImpl fileResourceRepository = new ResolvedFileResourceRepositoryImpl(resolvedFileResourcesConfig, resourceLoader);
+    ResolvedFileResourceRepositoryImpl fileResourceRepository = new ResolvedFileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
     fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
     Set<String> keys = fileResourceRepository.findKeys("news_(\\d{6})(\\d{2})");
