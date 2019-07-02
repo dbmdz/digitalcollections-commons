@@ -7,16 +7,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("resource-repository.managed")
 public class ManagedFileResourceRepositoryConfig {
 
-  private String namespace;
   private String folderpath;
-
-  public String getNamespace() {
-    return namespace;
-  }
-
-  public void setNamespace(String namespace) {
-    this.namespace = namespace;
-  }
 
   public String getFolderpath() {
     return folderpath;

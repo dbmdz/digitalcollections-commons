@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 public interface FileResourceService {
 
   FileResource create();
-  
+
   FileResource createByMimetype(MimeType mimeType);
 
   FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;

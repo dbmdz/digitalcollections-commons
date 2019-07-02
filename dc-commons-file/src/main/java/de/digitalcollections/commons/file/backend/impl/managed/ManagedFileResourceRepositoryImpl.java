@@ -130,7 +130,7 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
 
   private Path getUuidFilePath(final String uuidStr) {
     String uuidPath = getSplittedUuidPath(uuidStr);
-    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), managedFileResourcesConfig.getNamespace(), uuidPath, uuidStr);
+    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), uuidPath, uuidStr);
     return path;
   }
 
@@ -167,15 +167,10 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
   @Override
   public FileResource find(String uuid, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
     FileResource fileResource = find(uuid);
-    if (fileResource != null) {
-      if (fileResource.getMimeType() == null) {
-        return fileResource;
-      }
-      if (!fileResource.getMimeType().equals(mimeType)) {
-        throw new ResourceNotFoundException("Mimetype " + fileResource.getMimeType() + " does not match requested mimetype " + mimeType);
-      }
+    if (fileResource != null && mimeType != null && mimeType.equals(fileResource.getMimeType())) {
+      return fileResource;
     }
-    return fileResource;
+    throw new ResourceNotFoundException("No file resource for uuid " + uuid + " and mimetype " + mimeType + " found.");
   }
 
   protected String getSplittedUuidPath(String uuid) {
@@ -190,7 +185,7 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
 
     final String uuidStr = uuid.toString();
     String uuidPath = getSplittedUuidPath(uuidStr);
-    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), managedFileResourcesConfig.getNamespace(), uuidPath);
+    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), uuidPath);
     String location = "file://" + path.toString();
 
     String filename = getFilename(path, uuidStr);
