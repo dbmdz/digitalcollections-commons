@@ -130,7 +130,7 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
 
   private Path getUuidFilePath(final String uuidStr) {
     String uuidPath = getSplittedUuidPath(uuidStr);
-    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), managedFileResourcesConfig.getNamespace(), uuidPath, uuidStr);
+    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), uuidPath, uuidStr);
     return path;
   }
 
@@ -190,7 +190,7 @@ public class ManagedFileResourceRepositoryImpl extends FileResourceRepositoryImp
 
     final String uuidStr = uuid.toString();
     String uuidPath = getSplittedUuidPath(uuidStr);
-    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), managedFileResourcesConfig.getNamespace(), uuidPath);
+    Path path = Paths.get(managedFileResourcesConfig.getFolderpath(), uuidPath);
     String location = "file://" + path.toString();
 
     String filename = getFilename(path, uuidStr);
