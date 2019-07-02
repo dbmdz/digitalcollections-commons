@@ -28,21 +28,18 @@ The managed file storage uses an UUID as unique identifier for a file resource.
 Whenever you create a new file resource a random UUID is assigned to it.
 The managed file storage uses this UUID as basis for storing and finding file resources stored on a local filesystem (`file://`).
 
-A managed file storage takes two configuration parameters (see [ManagedFileResourceRepositoryConfig.java](./src/main/java/de/digitalcollections.commons.file.backend.impl.managed.ManagedFileResourceRepositoryConfig.java)):
+A managed file storage takes one configuration parameters (see [ManagedFileResourceRepositoryConfig.java](./src/main/java/de/digitalcollections.commons.file.backend.impl.managed.ManagedFileResourceRepositoryConfig.java)):
 
 - folderpath: The root directory, where to store all file resources (e.g. `/local/repository`)
-- namespace: A subfolder to the root directory to make it possible to store file resources of multiple "namespaces" (e.g. customers)
 
 The configuration of `folderpath` is bound to the application property / environment variable `resourceRepository.managed.folderpath`.
 
-The configuration of `namespace` is bound to the application property / environment variable `resourceRepository.managed.namespace`.
 
 Example `application.yml`of a Spring Boot webapp:
 
 ```yml
 resourceRepository:
   managed:
-    namespace: 'dico'
     folderpath: '/local/repository'
 ```
 
@@ -95,6 +92,27 @@ A pattern can have a list of substitutions. In this case the substitution is cho
 - existing check: If file resource of first selected match (uri) does not exist, the next matching uri is tested. Finally the first uri matching and existing is returned for the given identifier
 
 # Migration Guides
+
+## from version 4 to 5
+
+In version 5 the namespace configuration parameter has been removed, in favor of appending it to the folderpath (if needed).
+
+Example `application.yml`:
+
+```yml
+resourceRepository:
+  managed:
+    namespace: 'dico'
+    folderpath: '/local/resourceRepository'
+```
+
+changes to
+
+```yml
+resourceRepository:
+  managed:
+    folderpath: '/local/resourceRepository/dico'
+```
 
 ## from version 3 to 4
 
