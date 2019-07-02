@@ -25,6 +25,9 @@ DC Commons File comes with two storage logics:
 Supports: `file://`
 
 The managed file storage uses an UUID as unique identifier for a file resource.
+
+### Storing of newly created managed file resources
+
 Whenever you create a new file resource a random UUID is assigned to it.
 The managed file storage uses this UUID as basis for storing and finding file resources stored on a local filesystem (`file://`).
 
@@ -34,7 +37,6 @@ A managed file storage takes one configuration parameters (see [ManagedFileResou
 
 The configuration of `folderpath` is bound to the application property / environment variable `resourceRepository.managed.folderpath`.
 
-
 Example `application.yml`of a Spring Boot webapp:
 
 ```yml
@@ -43,16 +45,21 @@ resourceRepository:
     folderpath: '/local/repository'
 ```
 
-Above example results in the repository path `/local/repository/dico/`.
+Above example results in the repository path `/local/repository/`.
 
 The UUID of a file resource is used to construct the sub-directories under the repository path.
 The managed file storage splits the UUID in 4-character long parts and creates corresponding subdirectories.
 The filename is created depending on what additionally is given beside the UUID.
 
-- If a filename (e.g. `1.jpg`) is given, this will be appended to the UUID with `_`-separator
 - If a mimetype (e.g. `application/xml`) or file extension is given, the corresponding file extension will be appended to the UUID with `.`-separator
+- If no mimetype is given, no file extension will be appended.
 
-Example: A file resource defined with filename `1.jpg` and UUID `a30cf362-5992-4f5a-8de0-61938134e721` results in the file resource directory `/local/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/` containing a file `a30cf362-5992-4f5a-8de0-61938134e721_1.jpg`
+Example: A file resource defined with filename `1.jpg` and UUID `a30cf362-5992-4f5a-8de0-61938134e721` results in the file resource directory `/local/repository/a30c/f362/5992/4f5a/8de0/6193/8134/e721/` containing a file `a30cf362-5992-4f5a-8de0-61938134e721.jpg`
+
+### Retrieving of existing file resources
+
+A managed file resource can be retrieved by its UUID. It is not necessary to give the mimetype as additional information.
+This will be looked up by inspecting the file extension in the folder corresponding to the UUID.
 
 ## Resolved file storage
 
