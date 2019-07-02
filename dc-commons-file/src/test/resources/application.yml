@@ -1,7 +1,6 @@
 resourceRepository:
   managed:
-    namespace: 'dico'
-    folderpath: '/src/test/resources/repository'
+    folderpath: '/src/test/resources/repository/dico'
   resolved:
     patterns:
       - pattern: '^(\w{5})$'
