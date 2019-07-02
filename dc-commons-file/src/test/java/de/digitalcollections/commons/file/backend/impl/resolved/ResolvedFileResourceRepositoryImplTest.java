@@ -107,7 +107,8 @@ public class ResolvedFileResourceRepositoryImplTest {
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {Paths.get("file:///opt/news/news_12345678.md"), Paths.get("file:///opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
-    when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
+    //when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
+    when(mockDirectoryStream.iterator()).thenReturn(Arrays.stream(mockFiles).iterator());
 
     IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
     IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("news_(\\d{8})", "file:///opt/news/news_$1.md");
@@ -126,7 +127,7 @@ public class ResolvedFileResourceRepositoryImplTest {
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {Paths.get("file:///opt/news/news_12345678.md"), Paths.get("file:///opt/news/news_23456789.md"),
                         Paths.get("README.md"), Paths.get("/opt/news/news_123.md")};
-    when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
+    when(mockDirectoryStream.iterator()).thenReturn(Arrays.stream(mockFiles).iterator());
 
     IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
     IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("news_(\\d{6})(\\d{2})", "file:///opt/news/news_$1$2.md");
