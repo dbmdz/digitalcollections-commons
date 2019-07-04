@@ -1,4 +1,4 @@
-package de.digitalcollections.commons.file.backend.impl.resolved;
+package de.digitalcollections.commons.file.backend.impl;
 
 import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;

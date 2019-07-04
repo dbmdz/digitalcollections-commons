@@ -1,6 +1,4 @@
 resourceRepository:
-  managed:
-    folderpath: '/src/test/resources/repository/dico'
   resolved:
     patterns:
       - pattern: '^(\w{5})$'
@@ -16,6 +14,10 @@ resourceRepository:
       - pattern: '^(\w{3})(\d{4})(\d{4})_(\d{5})'
         substitutions:
           - 'http://rest.digitale-sammlungen.de/data/$1$2$3_$4.jpg'
+      
+      - pattern: '^([0-9a-f]{4})([0-9a-f]{4})-([0-9a-f]{4})-([1-5][0-9a-f]{3})-([89ab][0-9a-f]{3})-([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})$'
+        substitutions:
+          - 'file:///src/test/resources/repository/dico/$1/$2/$3/$4/$5/$6/$7/$8/$0.xml'
 
 spring:
   profiles:

@@ -1,4 +1,4 @@
-package de.digitalcollections.commons.file.backend.api.resolved;
+package de.digitalcollections.commons.file.backend.api;
 
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
