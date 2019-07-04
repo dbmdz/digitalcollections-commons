@@ -1,6 +1,6 @@
-package de.digitalcollections.commons.file.backend.impl.resolved;
+package de.digitalcollections.commons.file.backend.impl;
 
-import de.digitalcollections.commons.file.backend.api.resolved.IdentifierToFileResourceUriResolver;
+import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import java.net.URI;
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * <ul>
  *   <li>identifier: bsb10012345</li>
  *   <li>regex pattern: '^(\w{3})(\d{4})(\d{4})$'
- *   <li>uri template / substituton: 'https://iiif.digitale-sammlungen.de/presentation/v2/$1$2$3/manifest.json'
+ *   <li>uri template / substitution: 'https://iiif.digitale-sammlungen.de/presentation/v2/$1$2$3/manifest.json'
  * </ul>
  */
 public class IdentifierPatternToFileResourceUriResolverImpl implements IdentifierToFileResourceUriResolver {
