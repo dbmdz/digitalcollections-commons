@@ -7,13 +7,15 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +70,7 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
       // Retrieve all files in the substitution path and filter out the non matching ones.
       // "Matching" means, match the filename of the substitution and match the key pattern
       // Finally map them onto the keys
-      try (Stream<Path> stream = getDirectoryStream(basePath)) {
+      try (Stream<Path> stream = getDirectory(basePath).stream()) {
         keys.addAll(stream.map(path -> path.getFileName().normalize().toString())
           .filter(filename -> matchesPattern(validFilenamesPattern, filename))
           .filter(filename -> matchesPattern(validKeysPattern, filename))
@@ -92,12 +94,23 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
     return paths;
   }
 
-  private Stream<Path> getDirectoryStream(Path basePath) throws IOException {
-    if (overriddenDirectoryStream == null) {
-      return StreamSupport.stream(Files.newDirectoryStream(basePath).spliterator(), false).filter(Files::isRegularFile);
-    } else {
-      return StreamSupport.stream(overriddenDirectoryStream.spliterator(), false);
+  private List<Path> getDirectory(Path basePath) throws IOException {
+    List<Path> ret = new ArrayList<>();
+
+    // The overriddenDirectoryStream is only used for testing
+    try (DirectoryStream<Path> directoryStream = overriddenDirectoryStream == null ? Files.newDirectoryStream(basePath) : overriddenDirectoryStream) {
+      Iterator<Path> it = directoryStream.iterator();
+      if (it != null) {
+        while (it.hasNext()) {
+          Path path = it.next();
+          if ((overriddenDirectoryStream != null) || Files.isRegularFile(path)) {
+            ret.add(path);
+          }
+        }
+      }
     }
+
+    return ret;
   }
 
   private String mapToPattern(Pattern pattern, String filename) {
@@ -151,7 +164,7 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
   /**
   @param uuid an uuid, e.g. "a30cf362-5992-4f5a-8de0-61938134e721"
   @return filepath with uuid splitted in 4 character junks as directories, e.g. "a30c/f362/5992/4f5a/8de0/6193/8134/e721"
-  */
+   */
   public static String getSplittedUuid(String uuid) {
     String uuidWithoutDashes = uuid.replaceAll("-", "");
     String[] pathParts = splitEqually(uuidWithoutDashes, 4);
