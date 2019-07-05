@@ -2,8 +2,7 @@
 
 This library ("DC Commons File") contains Services for accessing and working comfortably and flexibly with files.
 
-Originally it has been developed for usage with Spring Framework.
-Thus it has `@Service` and `@Repository` annotated classes being well known to Spring developers.
+Originally it has been developed for usage with Spring Framework. Thus it has `@Service` and `@Repository` annotated classes being well known to Spring developers. It has been extended for an usage outside a Spring environment.
 
 With this library you are able to access files via different protocols (as part of URIs):
 
@@ -15,10 +14,66 @@ are supported.
 
 Files (`FileResources`) are usually stored following a systematic pattern.
 
-DC Commons File comes with two storage logics:
+## Usage
 
-- Managed file resources
-- Resolved file resources
+### Add library to your application
+
+#### Maven project
+
+`pom.xml`
+
+```xml
+<dependency>
+  <groupId>de.digitalcollections.commons</groupId>
+  <artifactId>dc-commons-file</artifactId>
+  <version>${version.dc-commons-file}</version>
+</dependency>
+```
+
+### Spring Environment
+
+#### Configuration of ApplicationContext
+
+Import `dc-commons-file` Spring configuration into your Spring configuration:
+
+Example:
+
+```java
+...
+import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
+...
+
+@Configuration
+@Import(SpringConfigCommonsFile.class)
+public class YourSpringConfig {
+```
+
+#### Use FileResourceService
+
+For using `dc-commons-file`for accessing your file resources, get the `FileResourceService` bean from the Spring application context and use its methods.
+
+Example:
+
+```java
+@Autowired
+private FileResourceService fileResourceService;
+
+@Override
+public Manifest getManifest(String identifier) throws ResolvingException, ResourceNotFoundException, InvalidDataException {
+  FileResource fileResource;
+  try {
+    fileResource = fileResourceService.find(identifier, MimeType.MIME_APPLICATION_JSON);
+  } catch (ResourceIOException ex) {
+    LOGGER.error("Error getting manifest for identifier {}", identifier, ex);
+    throw new ResolvingException("No manifest for identifier " + identifier);
+  }
+```
+
+The `find` method returns a `FileResource` model object containing iformation about the file resource and an access uri based on an identifier to URI resolving. For accessing the file content, use the following methods:
+
+- `fileResourceService.getInputStream(fileResource)`
+- `fileResourceService.getAsDocument(fileResource)` (convenience method on top of `getInputStream` to get XML document)
+- `fileResourceService.getAsString(fileResource)` (convenience method on top of `getInputStream`)
 
 ## Managed file storage
 
@@ -102,6 +157,39 @@ A pattern can have a list of substitutions. In this case the substitution is cho
 
 ## from version 4 to 5
 
+
+In version 5 manged and resolved fileresource handling were merged to one way of fileresource handling.
+The manged way of using UUID identifier to file path resolving was incorporated into resolved fileresource handling using pattern base resolving.
+The heavily used resolved fileresource handling is now the only fileresource handling mechanism.
+
+The `readOnly` flag for indicating readonly/writable handling has been removed from Service/Repository methods. Developers have to handle it for themselves. It is still available in the model object `FileResource`.
+
+Customization of fileresource resolving was improved by introducing the IdentifierToFileResourceUriResolver-interface to be implemented, making it possible to inject own implementations.
+By default the `IdentifierPatternToFileResourceUriResolverImpl` resolver is used, being configured over identifier-regex to filepath-patterns. Own resolvers will be added additionally. So if you do not configure patterns, dthe default resolver won't resolve any identifier and your custom resolvers have to handle resolving.
+
+Migration steps:
+
+- Upgrade `dc-commons-file` version in `pom.xml` to `5.x.y`.
+
+### Migrate Resolved FileResource Service/Repository
+
+- replace `ResolvedFileResourceServiceImpl` with `FileResourceService`:
+
+Example:
+
+```java
+@Autowired
+private ResolvedFileResourceServiceImpl resourceService;
+```
+
+changed to
+
+```java
+@Autowired
+private FileResourceService resourceService;
+```
+
+### Migrate Managed FileResource Service/Repository
 In version 5 the namespace configuration parameter has been removed, in favor of appending it to the folderpath (if needed).
 
 Example `application.yml`:
