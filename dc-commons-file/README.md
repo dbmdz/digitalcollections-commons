@@ -158,8 +158,8 @@ A pattern can have a list of substitutions. In this case the substitution is cho
 ## from version 4 to 5
 
 
-In version 5 manged and resolved fileresource handling were merged to one way of fileresource handling.
-The manged way of using UUID identifier to file path resolving was incorporated into resolved fileresource handling using pattern base resolving.
+In version 5 managed and resolved fileresource handling were merged to one way of fileresource handling.
+The managed way of using UUID identifier to file path resolving was incorporated into resolved fileresource handling using pattern based resolving.
 The heavily used resolved fileresource handling is now the only fileresource handling mechanism.
 
 The `readOnly` flag for indicating readonly/writable handling has been removed from Service/Repository methods. Developers have to handle it for themselves. It is still available in the model object `FileResource`.
@@ -182,11 +182,30 @@ Example:
 private ResolvedFileResourceServiceImpl resourceService;
 ```
 
-changed to
+changes to
 
 ```java
 @Autowired
 private FileResourceService resourceService;
+```
+
+- replace `ResolvedFileResourceServiceImpl.findKeys(pattern)` with `IdentifierPatternToFileResourceUriResolvingUtil.findKeys(pattern)`:
+
+Example:
+
+```java
+List<String> allKeys = new ArrayList(fileResourceService.findKeys(pattern));
+```
+
+changes to
+
+```java
+import de.digitalcollections.commons.file.backend.impl.IdentifierPatternToFileResourceUriResolvingUtil;
+...
+@Autowired
+IdentifierPatternToFileResourceUriResolvingUtil identifierPatternToFileResourceUriResolvingUtil;
+...
+List<String> allKeys = new ArrayList(identifierPatternToFileResourceUriResolvingUtil.findKeys(pattern));
 ```
 
 ### Migrate Managed FileResource Service/Repository
