@@ -10,6 +10,8 @@ import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -21,9 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {SpringConfigCommonsFile.class})
@@ -44,10 +43,10 @@ public class FileResourceRepositoryImplTest {
   public void assertNonReadableFile() {
     assertThatThrownBy(() -> {
       FileResource nonReadableResource = new FileResourceImpl();
-      nonReadableResource.setUri(new URI("file:/vmlinuz"));
+      nonReadableResource.setUri(new URI("file:/root/.profile"));
       nonReadableResource.setMimeType(MimeType.MIME_WILDCARD);
       resourceRepository.assertReadability(nonReadableResource);
-    }).isInstanceOf(ResourceIOException.class);
+    }).isInstanceOf(Exception.class);
   }
 
   @Test
