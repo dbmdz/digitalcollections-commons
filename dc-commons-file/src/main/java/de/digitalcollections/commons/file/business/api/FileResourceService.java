@@ -11,8 +11,9 @@ import org.w3c.dom.Document;
 public interface FileResourceService {
 
 //  FileResource create();
-//
-//  FileResource create(MimeType mimeType);
+
+  FileResource createByMimeType(MimeType mimeType);
+
   FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
 
   default FileResource find(String identifier, String fileExtension) throws ResourceIOException, ResourceNotFoundException {
@@ -41,5 +42,5 @@ public interface FileResourceService {
 //
 //  long write(FileResource resource, String input) throws ResourceIOException;
 //
-//  long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
+  long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
 }

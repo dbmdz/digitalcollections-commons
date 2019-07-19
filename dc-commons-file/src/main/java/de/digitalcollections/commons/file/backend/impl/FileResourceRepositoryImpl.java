@@ -12,9 +12,12 @@ import de.digitalcollections.model.impl.identifiable.resource.ImageFileResourceI
 import de.digitalcollections.model.impl.identifiable.resource.TextFileResourceImpl;
 import de.digitalcollections.model.impl.identifiable.resource.VideoFileResourceImpl;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -23,19 +26,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 /**
- * Repository for accessing files by using an unique identifier and a mimetype specifying the file resource.
- * Identifier and mimetype are the source for determining the access-uri to the file resource via (in this order):
+ * Repository for accessing files by using an unique identifier and a mimetype specifying the file resource. Identifier and mimetype are the source for determining the access-uri to the file resource
+ * via (in this order):
  * <ul>
- *   <li>configurable identifier to uri resolving using regex-patterns</li>
- *   <li>custom @see IdentifierToFileResourceUriResolver beans put onto the spring application context</li>
+ * <li>configurable identifier to uri resolving using regex-patterns</li>
+ * <li>custom @see IdentifierToFileResourceUriResolver beans put onto the spring application context</li>
  * </ul>
  */
 @Repository
@@ -78,7 +83,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     if (mimeType == null) {
       throw new ResourceIOException("missing mimetype");
     }
-    FileResource resource = createByMimetype(mimeType);
+    FileResource resource = createByMimeType(mimeType);
     resource.setReadonly(false);
     resource.setUuid(UUID.randomUUID());
 
@@ -92,7 +97,8 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     return resource;
   }
 
-  private FileResource createByMimetype(MimeType mimeType) {
+  @Override
+  public FileResource createByMimeType(MimeType mimeType) {
     if (mimeType == null) {
       return new ApplicationFileResourceImpl();
     }
@@ -141,7 +147,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     if (mimeType == null) {
       throw new ResourceIOException("missing mimetype");
     }
-    FileResource resource = createByMimetype(mimeType);
+    FileResource resource = createByMimeType(mimeType);
     resource.setReadonly(false);
     resource.setUuid(UUID.randomUUID());
 
@@ -156,9 +162,9 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
       throw new ResourceIOException("Could not resolve identifier " + identifier + " with MIME type " + mimeType.getTypeName() + " to an URI");
     }
     URI uriCandidates = candidates.stream()
-      .filter(u -> (resourceLoader.getResource(u.toString()).isReadable() || u.toString().startsWith("http")))
-      .findFirst()
-      .orElseThrow(() -> new ResourceIOException("Could not resolve identifier " + identifier + " with MIME type " + mimeType.getTypeName() + " to a readable Resource. Attempted URIs were " + candidates));
+            .filter(u -> (resourceLoader.getResource(u.toString()).isReadable() || u.toString().startsWith("http")))
+            .findFirst()
+            .orElseThrow(() -> new ResourceIOException("Could not resolve identifier " + identifier + " with MIME type " + mimeType.getTypeName() + " to a readable Resource. Attempted URIs were " + candidates));
     resource.setUri(uriCandidates);
     Resource springResource = resourceLoader.getResource(uriCandidates.toString());
 
@@ -232,8 +238,8 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     // first: try to resolve by patterns (if configured)
     List<IdentifierPatternToFileResourceUriResolverImpl> patterns = resolvedFileResourcesConfig.getPatterns();
     Optional<IdentifierPatternToFileResourceUriResolverImpl> patternFileNameResolverImpl = patterns.stream()
-      .filter(r -> r.isResolvable(identifier))
-      .findFirst(); // TODO: why only the first? See below method collectiong from all resolvers...
+            .filter(r -> r.isResolvable(identifier))
+            .findFirst(); // TODO: why only the first? See below method collectiong from all resolvers...
     if (patternFileNameResolverImpl.isPresent()) {
       return patternFileNameResolverImpl.get().getUris(identifier, mimeType);
     }
@@ -249,48 +255,48 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
 
   public List<String> getUrisAsString(String identifier) throws ResourceIOException {
     List<String> uris = resolvedFileResourcesConfig.getPatterns().stream()
-      .filter(r -> r.isResolvable(identifier))
-      .map(r -> r.getUrisAsStrings(identifier))
-      .flatMap(Collection::stream)
-      .collect(Collectors.toList());
+            .filter(r -> r.isResolvable(identifier))
+            .map(r -> r.getUrisAsStrings(identifier))
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
 
     identifierToFileresourceUriResolvers.stream()
-      .filter(r -> r.isResolvable(identifier))
-      .forEachOrdered(r -> {
-        uris.addAll(r.getUrisAsStrings(identifier));
-      });
+            .filter(r -> r.isResolvable(identifier))
+            .forEachOrdered(r -> {
+              uris.addAll(r.getUrisAsStrings(identifier));
+            });
     return uris;
   }
 
-//  @Override
-//  public long write(FileResource resource, InputStream payload) throws ResourceIOException {
-//
-//    Assert.notNull(payload, "payload must not be null");
-//    Assert.notNull(resource, "payload must not be null");
-//
-//    if (resource.isReadonly()) {
-//      throw new ResourceIOException("Resource does not support write-operations.");
-//    }
-//
-//    URI uri = resource.getUri();
-//    final String scheme = uri.getScheme();
-//    try {
-//      if ("http".equals(scheme) || "https".equals(scheme)) {
-//        throw new ResourceIOException("Scheme not supported for write-operations: " + scheme + " (" + uri + ")");
-//      }
-//
-//      Files.createDirectories(Paths.get(uri).getParent());
-//      if (LOGGER.isDebugEnabled()) {
-//        LOGGER.debug("Writing: " + uri);
-//      }
-//      return IOUtils.copyLarge(payload, new FileOutputStream(Paths.get(uri).toFile()));
-//    } catch (IOException e) {
-//      String msg = "Could not write data to uri " + String.valueOf(uri);
-//      LOGGER.error(msg, e);
-//      throw new ResourceIOException(msg, e);
-//    }
-//  }
-//
+  @Override
+  public long write(FileResource resource, InputStream payload) throws ResourceIOException {
+
+    Assert.notNull(payload, "payload must not be null");
+    Assert.notNull(resource, "payload must not be null");
+
+    if (resource.isReadonly()) {
+      throw new ResourceIOException("Resource does not support write-operations.");
+    }
+
+    URI uri = resource.getUri();
+    final String scheme = uri.getScheme();
+    try {
+      if ("http".equals(scheme) || "https".equals(scheme)) {
+        throw new ResourceIOException("Scheme not supported for write-operations: " + scheme + " (" + uri + ")");
+      }
+
+      Files.createDirectories(Paths.get(uri).getParent());
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Writing: " + uri);
+      }
+      return IOUtils.copyLarge(payload, new FileOutputStream(Paths.get(uri).toFile()));
+    } catch (IOException e) {
+      String msg = "Could not write data to uri " + String.valueOf(uri);
+      LOGGER.error(msg, e);
+      throw new ResourceIOException(msg, e);
+    }
+  }
+
 //  @Override
 //  public long write(FileResource resource, String input) throws ResourceIOException {
 //    try (InputStream in = new ReaderInputStream(new StringReader(input), Charset.forName("UTF-8"))) {

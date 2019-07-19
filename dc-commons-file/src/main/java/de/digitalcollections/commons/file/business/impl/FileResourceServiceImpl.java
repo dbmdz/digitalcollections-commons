@@ -41,11 +41,10 @@ public class FileResourceServiceImpl implements FileResourceService {
 //  public FileResource create() {
 //    return repository.create();
 //  }
-//
-//  @Override
-//  public FileResource create(MimeType mimeType) {
-//    return repository.createByMimetype(mimeType);
-//  }
+  @Override
+  public FileResource createByMimeType(MimeType mimeType) {
+    return repository.createByMimeType(mimeType);
+  }
 //
 //  @Override
 //  public void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
@@ -69,6 +68,7 @@ public class FileResourceServiceImpl implements FileResourceService {
 //  public FileResource find(String uuid) throws ResourceIOException, ResourceNotFoundException {
 //    return getRepo().find(uuid);
 //  }
+
   @Override
   public FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
     return repository.find(identifier, mimeType);
@@ -130,10 +130,10 @@ public class FileResourceServiceImpl implements FileResourceService {
 //    return repository.write(fileResource, input);
 //  }
 //
-//  @Override
-//  public long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException {
-//    return repository.write(fileResource, inputStream);
-//  }
+  @Override
+  public long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException {
+    return repository.write(fileResource, inputStream);
+  }
   //  public FileResource create(String identifier, MimeType mimeType, boolean readOnly) throws ResourceIOException {
 //    return getRepo().create(identifier, mimeType, readOnly);
 //  }

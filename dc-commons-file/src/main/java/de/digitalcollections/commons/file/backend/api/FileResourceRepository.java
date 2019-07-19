@@ -10,10 +10,10 @@ public interface FileResourceRepository {
 
   void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
-  FileResource create(String identifier, MimeType mimeType) throws ResourceIOException;
 //  FileResource create();
-//
-//  FileResource createByMimetype(MimeType mimeType);
+  FileResource create(String identifier, MimeType mimeType) throws ResourceIOException;
+
+  FileResource createByMimeType(MimeType mimeType);
 
   FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
 
@@ -28,8 +28,6 @@ public interface FileResourceRepository {
   InputStream getInputStream(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
 //  Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
-//
 //  long write(FileResource resource, String input) throws ResourceIOException;
-//
-//  long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
+  long write(FileResource resource, InputStream inputStream) throws ResourceIOException;
 }
