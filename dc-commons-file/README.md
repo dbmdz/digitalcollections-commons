@@ -107,7 +107,7 @@ resourceRepository:
 
 #### Use FileResourceService
 
-For using `dc-commons-file`for accessing your file resources, get the `FileResourceService` bean from the Spring application context and use its methods.
+For using `dc-commons-file` for accessing your file resources, get the `FileResourceService` bean from the Spring application context and use its methods.
 
 Example:
 
@@ -126,7 +126,7 @@ public Manifest getManifest(String identifier) throws ResolvingException, Resour
   }
 ```
 
-The `find` method returns a `FileResource` model object containing iformation about the file resource and an access uri based on an identifier to URI resolving. For accessing the file content, use the following methods:
+The `find` method returns a `FileResource` model object containing information about the file resource and an access uri based on an identifier to URI resolving. For accessing the file content, use the following methods:
 
 - `fileResourceService.getInputStream(fileResource)`
 - `fileResourceService.getAsDocument(fileResource)` (convenience method on top of `getInputStream` to get XML document)
