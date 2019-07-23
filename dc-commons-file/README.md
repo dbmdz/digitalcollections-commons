@@ -1,14 +1,14 @@
 # DigitalCollections: Commons File
 
-This library ("DC Commons File") contains Services for accessing and working comfortably and flexibly with files.
+This library ("DC Commons File") contains Services for reading files from configurable paths.
 
 Originally it has been developed for usage with Spring Framework. Thus it has `@Service` and `@Repository` annotated classes being well known to Spring developers. It has been extended for an usage outside a Spring environment, too.
 
-With this library you are able to access files via different protocols (as part of URIs):
+With this library you are able to read files via different protocols (as part of URIs):
 
 - `file://`
 - `classpath://`
-- `http(s)://` (readonly)
+- `http(s)://`
 
 are supported.
 
@@ -22,6 +22,8 @@ The sequence of the substitution-entries is also considered in two ways:
 
 - mimetype matching: The first matching mimetype from top down is selected
 - existing check: If file resource of first selected match (uri) does not exist, the next matching uri is tested. Finally the first uri matching and existing is returned for the given identifier
+
+This makes it possible to read files from (historically) heterogeneous organized file storage.
 
 Example configuration (via a Spring Boot `application.yml`):
 
