@@ -10,16 +10,41 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import org.w3c.dom.Document;
 
+/**
+ * Service providing methods for creating FileResource instances and reading binary data of a FileResource.
+ */
 public interface FileResourceService {
 
+  /**
+   * Assert/check that FileResource is readable.
+   * @param resource FileResource to be checked for read accessibility
+   * @throws ResourceIOException thrown if FileResource can not be accessed
+   * @throws ResourceNotFoundException thrown if FileResource does not exist
+   */
   void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
+  /**
+   * @return newly created instance of the underlying FileResource implementation.
+   */
   FileResource create();
 
+  /**
+   * Convenience method for creating an FileResource instance depending on content type.
+   * @param contentType content type of FileResource
+   * @param filename filename of FileResource
+   * @return newly created instance of the underlying MimeType specific FileResource implementation.
+   * @see FileResourceService#createByMimeType(MimeType)
+   */
   default FileResource createByContentTypeAndFilename(String contentType, String filename) {
     return createByMimeTypeAndFilename(MimeType.fromTypename(contentType), filename);
   }
 
+  /**
+   * Convenience method for creating an FileResource instance depending on mimetype derived from filename.
+   * @param filename filename of FileResource
+   * @return newly created instance of the underlying MimeType specific FileResource implementation.
+   * @see FileResourceService#createByMimeType(MimeType)
+   */
   default FileResource createByFilename(String filename) {
     MimeType mimeType = MimeType.fromFilename(filename);
     FileResource result = createByMimeType(mimeType);
@@ -27,22 +52,54 @@ public interface FileResourceService {
     return result;
   }
 
+  /**
+   * Convenience method for creating an FileResource instance depending on mimetype derived from filename extension.
+   * @param filenameExtension filename extension representing mimetype
+   * @return newly created instance of the underlying MimeType specific FileResource implementation.
+   * @see FileResourceService#createByMimeType(MimeType)
+   */
   default FileResource createByFilenameExtension(String filenameExtension) {
     MimeType mimeType = MimeType.fromExtension(filenameExtension);
     FileResource result = createByMimeType(mimeType);
     return result;
   }
 
+  /**
+   * @param mimeType mimetype of the FileResource
+   * @return newly created instance of the underlying MimeType specific FileResource implementation.
+   */
   FileResource createByMimeType(MimeType mimeType);
 
+  /**
+   * Convenience method for creating an FileResource instance depending on given mimetype and filename.
+   * @param mimeType mimetype of FileResource
+   * @param filename filename of FileResource
+   * @return newly created instance of the underlying MimeType specific FileResource implementation.
+   * @see FileResourceService#createByMimeType(MimeType)
+   */
   default FileResource createByMimeTypeAndFilename(MimeType mimeType, String filename) {
     FileResource result = createByMimeType(mimeType);
     result.setFilename(filename);
     return result;
   }
 
+  /**
+   * @param identifier identifier of FileResource, used to lookup URI for FileResource
+   * @param mimeType mimetype of the FileResource
+   * @return FileResource implementation matching mimetype and URI resolved using identifier.
+   * @throws ResourceIOException thrown if no URI can be resolved for FileResource with given mimetype and identifier
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   */
   FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException;
 
+  /**
+   * @param identifier identifier of FileResource, used to lookup URI for FileResource
+   * @param fileExtension file extension used to derive mimetype for FileResource
+   * @return FileResource implementation matching mimetype and URI resolved using identifier.
+   * @throws ResourceIOException thrown if no URI can be resolved for FileResource with given mimetype and identifier
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   * @see FileResourceService#find(String, MimeType)
+   */
   default FileResource find(String identifier, String fileExtension) throws ResourceIOException, ResourceNotFoundException {
     return find(identifier, MimeType.fromExtension(fileExtension));
   }
@@ -53,9 +110,27 @@ public interface FileResourceService {
 
   String getAsString(FileResource fileResource, Charset charset) throws ResourceIOException, ResourceNotFoundException;
 
+  /**
+   * @param fileResource FileResource containing URI for accessing FileResource data
+   * @return InputStream for reading FileResource data
+   * @throws ResourceIOException thrown if an IOExcpetion appears at reading FileResource data
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   */
   InputStream getInputStream(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException;
 
+  /**
+   * @param resourceUri URI for accessing FileResource data
+   * @return InputStream for reading FileResource data
+   * @throws ResourceIOException thrown if an IOExcpetion appears at reading FileResource data
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   */
   InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException;
 
+  /**
+   * @param resource FileResource containing URI for accessing FileResource data
+   * @return Reader for InputStream of FileResource data
+   * @throws ResourceIOException thrown if an IOExcpetion appears at reading FileResource data
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   */
   Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 }

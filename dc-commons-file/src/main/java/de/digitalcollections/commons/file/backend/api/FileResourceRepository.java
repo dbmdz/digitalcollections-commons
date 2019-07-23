@@ -9,7 +9,7 @@ import java.io.Reader;
 import java.net.URI;
 
 /**
- * Repository providing methods for reading binary data of a FileResource.
+ * Repository providing methods for creating FileResource instances and reading binary data of a FileResource.
  */
 public interface FileResourceRepository {
 
@@ -58,7 +58,6 @@ public interface FileResourceRepository {
   InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException;
 
   /**
-   *
    * @param resource FileResource containing URI for accessing FileResource data
    * @return InputStream for reading FileResource data
    * @throws ResourceIOException thrown if an IOExcpetion appears at reading FileResource data
