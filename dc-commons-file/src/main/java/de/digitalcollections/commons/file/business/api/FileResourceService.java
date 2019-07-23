@@ -104,10 +104,32 @@ public interface FileResourceService {
     return find(identifier, MimeType.fromExtension(fileExtension));
   }
 
+  /**
+   * Convenience method for directly getting FileResource binary data as byte[].
+   * @param resource FileResource containing URI for accessing FileResource data
+   * @return binary data of FileResource as byte[]
+   * @throws ResourceIOException thrown if an IOExcpetion appears at reading FileResource data
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   */
   byte[] getAsBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
+  /**
+   * Convenience method for directly getting FileResource binary data as XML-Document.
+   * @param resource FileResource containing URI for accessing FileResource data
+   * @return binary data of FileResource parsed as XML-Document
+   * @throws ResourceIOException thrown if an IOExcpetion appears at reading FileResource data
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   */
   Document getAsDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException;
 
+  /**
+   * Convenience method for directly getting FileResource binary data as String.
+   * @param fileResource FileResource containing URI for accessing FileResource data
+   * @param charset encoding of FileResource data
+   * @return binary data of FileResource as String
+   * @throws ResourceIOException thrown if an IOExcpetion appears at reading FileResource data
+   * @throws ResourceNotFoundException thrown if FileResource at resolved URI does not exist
+   */
   String getAsString(FileResource fileResource, Charset charset) throws ResourceIOException, ResourceNotFoundException;
 
   /**
