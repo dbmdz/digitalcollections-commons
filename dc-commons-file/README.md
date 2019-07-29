@@ -1,100 +1,212 @@
 # DigitalCollections: Commons File
 
-This library ("DC Commons File") contains Services for accessing and working comfortably and flexibly with files.
+This library ("DC Commons File") contains Services for reading files from configurable paths.
 
-Originally it has been developed for usage with Spring Framework.
-Thus it has `@Service` and `@Repository` annotated classes being well known to Spring developers.
+Originally it has been developed for usage with Spring Framework. Thus it has `@Service` and `@Repository` annotated classes being well known to Spring developers. It has been extended for an usage outside a Spring environment, too.
 
-With this library you are able to access files via different protocols (as part of URIs):
+With this library you are able to read files via different protocols (as part of URIs):
 
 - `file://`
 - `classpath://`
-- `http(s)://` (readonly)
+- `http(s)://`
 
 are supported.
 
-Files (`FileResources`) are usually stored following a systematic pattern.
+Files (`FileResource`s) are usually stored following a systematic pattern.
 
-DC Commons File comes with two storage logics:
+If you have a look at the interface `FileResource` you will see, that it has properties of type `MimeType`, `Identifier`s and `UUID`. Based on this informations (and your project specific logic) you can select/create an unique identifier of a `FileResource` to be handed over to the `FileResourceService` to get access to the `FileResource`'s data.
 
-- Managed file resources
-- Resolved file resources
+By default the `IdentifierPatternToFileResourceUriResolverImpl` resolver is used to lookup the access URI using the given unique identifier. It can be configured specifiying a list of identifier-regex-patterns to URI/filepath-patterns (`substitutions`) with dynamic parts filled by using regular expression matching groups. The configuration is bound to the application property / environment variable `resourceRepository.resolved.patterns`. It is possible to configure multiple URIs for one identifier-regex-pattern.
 
-## Managed file storage
+The sequence of the substitution-entries is also considered in two ways:
 
-Supports: `file://`
+- mimetype matching: The first matching mimetype from top down is selected
+- existing check: If file resource of first selected match (uri) does not exist, the next matching uri is tested. Finally the first uri matching and existing is returned for the given identifier
 
-The managed file storage uses an UUID as unique identifier for a file resource.
-Whenever you create a new file resource a random UUID is assigned to it.
-The managed file storage uses this UUID as basis for storing and finding file resources stored on a local filesystem (`file://`).
+This makes it possible to read files from (historically) heterogeneous organized file storage.
 
-A managed file storage takes two configuration parameters (see [ManagedFileResourceRepositoryConfig.java](./src/main/java/de/digitalcollections.commons.file.backend.impl.managed.ManagedFileResourceRepositoryConfig.java)):
-
-- folderpath: The root directory, where to store all file resources (e.g. `/local/repository`)
-- namespace: A subfolder to the root directory to make it possible to store file resources of multiple "namespaces" (e.g. customers)
-
-The configuration of `folderpath` is bound to the application property / environment variable `resourceRepository.managed.folderpath`.
-
-The configuration of `namespace` is bound to the application property / environment variable `resourceRepository.managed.namespace`.
-
-Example `application.yml`of a Spring Boot webapp:
-
-```yml
-resourceRepository:
-  managed:
-    namespace: 'dico'
-    folderpath: '/local/repository'
-```
-
-Above example results in the repository path `/local/repository/dico/`.
-
-The UUID of a file resource is used to construct the sub-directories under the repository path.
-The managed file storage splits the UUID in 4-character long parts and creates corresponding subdirectories.
-The filename is created depending on what additionally is given beside the UUID.
-
-- If a filename (e.g. `1.jpg`) is given, this will be appended to the UUID with `_`-separator
-- If a mimetype (e.g. `application/xml`) or file extension is given, the corresponding file extension will be appended to the UUID with `.`-separator
-
-Example: A file resource defined with filename `1.jpg` and UUID `a30cf362-5992-4f5a-8de0-61938134e721` results in the file resource directory `/local/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/` containing a file `a30cf362-5992-4f5a-8de0-61938134e721_1.jpg`
-
-## Resolved file storage
-
-Supports: `file://`, `classpath://` and `http(s)://`
-
-The resolved file storage uses a String as unique identifier for a file resource.
-The resolved file storage uses this identifier as key for resolving an unique URI via a configured list of URIs bound to configured identifier-patterns (using regular expressions).
-
-A resolved file storage configuration takes a list of regular-expression-patterns each containing a list of uri-templates (`substitutions`) with dynamic parts filled by using regular expression matching groups.
-
-The configuration is bound to the application property / environment variable `resourceRepository.resolved.patterns`.
-
-Example `application.yml` of a Spring Boot webapp:
+Example configuration (via a Spring Boot `application.yml`):
 
 ```yml
 resourceRepository:
   resolved:
     patterns:
+      # resolving based on a given FileResource-UUID
+      - pattern: '^([0-9a-f]{4})([0-9a-f]{4})-([0-9a-f]{4})-([1-5][0-9a-f]{3})-([89ab][0-9a-f]{3})-([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})$'
+        substitutions:
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.xml'
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.jp2'
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.jpg'
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.tif'
+```
+
+Customization of fileresource resolving is possible by implementing the `IdentifierToFileResourceUriResolver`-interface's with you own resolving logic, e.g. lookup access URIs in a database by using the identifier as key, and adding it to `FileResouceRepositoryImpl`. Own resolvers will be added additionally on top of the default implementation. So if you do not configure regex-patterns, the default resolver won't resolve any identifier and your custom resolvers have to handle resolving.
+
+## Configuration
+
+### Add library to your application
+
+#### Maven project
+
+`pom.xml`
+
+```xml
+<dependency>
+  <groupId>de.digitalcollections.commons</groupId>
+  <artifactId>dc-commons-file</artifactId>
+  <version>${version.dc-commons-file}</version>
+</dependency>
+```
+
+### Spring Environment
+
+#### Configuration of ApplicationContext
+
+Import `dc-commons-file` Spring configuration into your Spring configuration:
+
+Example:
+
+```java
+...
+import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
+...
+
+@Configuration
+@Import(SpringConfigCommonsFile.class)
+public class YourSpringConfig {
+```
+
+#### Configuration of URI resolving over regex patterns
+
+##### Spring Boot
+
+If you use `dc-commons-file` in a Spring Boot application, the place to configure URI resolving is the central `application.yml`(or `application.properties`) configuration file of your application.
+
+Example resolving (in `application.yml`):
+
+```yml
+resourceRepository:
+  resolved:
+    patterns:
+      # resolving based on an identifier of a given FileResource
       - pattern: '^(\w{5})$'
         substitutions:
           - 'classpath:/$1.xml'
           - 'classpath:/$1.json'
 
-      - pattern: '^(\w{3})(\d{4})(\d{4})$'
+      # resolving based on a given FileResource-UUID
+      - pattern: '^([0-9a-f]{4})([0-9a-f]{4})-([0-9a-f]{4})-([1-5][0-9a-f]{3})-([89ab][0-9a-f]{3})-([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})$'
         substitutions:
-          - 'http://rest.digitale-sammlungen.de/data/$1$2$3.xml'
-          - 'http://iiif.digitale-sammlungen.de/presentation/v2/$1$2$3/manifest.json'
-
-      - pattern: '^(\w{3})(\d{4})(\d{4})_(\d{5})'
-        substitutions:
-          - 'http://rest.digitale-sammlungen.de/data/$1$2$3_$4.jpg'
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.xml'
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.jp2'
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.jpg'
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.tif'
 ```
 
-A pattern can have a list of substitutions. In this case the substitution is chosen that matches the mimetype requested. The sequence of the substitution-entries is also considered in two ways:
+## Usage
 
-- mimetype matching: The first matching mimetype from top down is selected
-- existing check: If file resource of first selected match (uri) does not exist, the next matching uri is tested. Finally the first uri matching and existing is returned for the given identifier
+### Spring Environment
+
+#### Use FileResourceService
+
+For using `dc-commons-file` for accessing your file resources, get the `FileResourceService` bean from the Spring application context and use its methods.
+
+Example:
+
+```java
+@Autowired
+private FileResourceService fileResourceService;
+
+@Override
+public Manifest getManifest(String identifier) throws ResolvingException, ResourceNotFoundException, InvalidDataException {
+  FileResource fileResource;
+  try {
+    fileResource = fileResourceService.find(identifier, MimeType.MIME_APPLICATION_JSON);
+  } catch (ResourceIOException ex) {
+    LOGGER.error("Error getting manifest for identifier {}", identifier, ex);
+    throw new ResolvingException("No manifest for identifier " + identifier);
+  }
+```
+
+The `find` method returns a `FileResource` model object containing information about the file resource and an access uri based on an identifier to URI resolving. For accessing the file content, use the following methods:
+
+- `fileResourceService.getInputStream(fileResource)`
+- `fileResourceService.getAsDocument(fileResource)` (convenience method on top of `getInputStream` to get XML document)
+- `fileResourceService.getAsString(fileResource)` (convenience method on top of `getInputStream`)
 
 # Migration Guides
+
+## from version 4 to 5
+
+In version 5 managed and resolved fileresource handling were merged to one way of fileresource handling.
+The managed way of using UUID identifier to file path resolving was incorporated into resolved fileresource handling using pattern based resolving.
+The heavily used resolved fileresource handling is now the only fileresource handling mechanism.
+
+The `readOnly` flag for indicating readonly/writable handling has been removed from Service/Repository methods. Developers have to handle it for themselves. It is still available in the model object `FileResource`.
+
+Customization of fileresource resolving was improved by introducing the IdentifierToFileResourceUriResolver-interface to be implemented, making it possible to inject own implementations.
+By default the `IdentifierPatternToFileResourceUriResolverImpl` resolver is used, being configured over identifier-regex to filepath-patterns. Own resolvers will be added additionally. So if you do not configure patterns, the default resolver won't resolve any identifier and your custom resolvers have to handle resolving.
+
+Migration steps:
+
+- Upgrade `dc-commons-file` version in `pom.xml` to `5.x.y`.
+
+### Migrate Resolved FileResource Service/Repository
+
+- replace `ResolvedFileResourceServiceImpl` with `FileResourceService`:
+
+Example:
+
+```java
+@Autowired
+private ResolvedFileResourceServiceImpl resourceService;
+```
+
+changes to
+
+```java
+@Autowired
+private FileResourceService resourceService;
+```
+
+- replace `ResolvedFileResourceServiceImpl.findKeys(pattern)` with `IdentifierPatternToFileResourceUriResolvingUtil.findKeys(pattern)`:
+
+Example:
+
+```java
+List<String> allKeys = new ArrayList(fileResourceService.findKeys(pattern));
+```
+
+changes to
+
+```java
+import de.digitalcollections.commons.file.backend.impl.IdentifierPatternToFileResourceUriResolvingUtil;
+...
+@Autowired
+IdentifierPatternToFileResourceUriResolvingUtil identifierPatternToFileResourceUriResolvingUtil;
+...
+List<String> allKeys = new ArrayList(identifierPatternToFileResourceUriResolvingUtil.findKeys(pattern));
+```
+
+### Migrate Managed FileResource Service/Repository
+In version 5 the namespace configuration parameter has been removed, in favor of appending it to the folderpath (if needed).
+
+Example `application.yml`:
+
+```yml
+resourceRepository:
+  managed:
+    namespace: 'dico'
+    folderpath: '/local/resourceRepository'
+```
+
+changes to
+
+```yml
+resourceRepository:
+  managed:
+    folderpath: '/local/resourceRepository/dico'
+```
 
 ## from version 3 to 4
 

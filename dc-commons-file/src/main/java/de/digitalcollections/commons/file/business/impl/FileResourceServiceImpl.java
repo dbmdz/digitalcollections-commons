@@ -6,14 +6,34 @@ import de.digitalcollections.model.api.identifiable.resource.FileResource;
 import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
+import java.nio.charset.Charset;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
-public abstract class FileResourceServiceImpl implements FileResourceService {
+@Service
+public class FileResourceServiceImpl implements FileResourceService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceServiceImpl.class);
 
   protected FileResourceRepository repository;
+
+  @Autowired
+  public FileResourceServiceImpl(FileResourceRepository repository) {
+    this.repository = repository;
+  }
 
   @Override
   public void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
@@ -26,13 +46,8 @@ public abstract class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public FileResource createByMimetype(MimeType mimeType) {
-    return repository.createByMimetype(mimeType);
-  }
-
-  @Override
-  public void delete(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
-    repository.delete(resource);
+  public FileResource createByMimeType(MimeType mimeType) {
+    return repository.createByMimeType(mimeType);
   }
 
   @Override
@@ -41,13 +56,45 @@ public abstract class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public byte[] getBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
-    return repository.getBytes(resource);
+  public byte[] getAsBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+    try {
+      return IOUtils.toByteArray(getInputStream(resource));
+    } catch (IOException ex) {
+      String msg = "Could not read bytes from resource: " + resource;
+      LOGGER.error(msg, ex);
+      throw new ResourceIOException(msg, ex);
+    }
   }
 
   @Override
-  public Document getDocument(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException {
-    return repository.getDocument(fileResource);
+  public Document getAsDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+    Document doc = null;
+    try {
+      // get InputStream on resource
+      try (InputStream is = getInputStream(resource)) {
+        // create Document
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        doc = db.parse(is);
+      }
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Got document: " + doc);
+      }
+    } catch (IOException | ParserConfigurationException | SAXException ex) {
+      throw new ResourceIOException("Cannot read document from resolved resource '" + resource.getUri().toString() + "'", ex);
+    }
+    return doc;
+  }
+
+  @Override
+  public String getAsString(FileResource fileResource, Charset charset) throws ResourceIOException, ResourceNotFoundException {
+    try (InputStream is = getInputStream(fileResource)) {
+      return IOUtils.toString(is, charset);
+    } catch (IOException e) {
+      throw new ResourceIOException(e);
+    }
   }
 
   @Override
@@ -63,15 +110,5 @@ public abstract class FileResourceServiceImpl implements FileResourceService {
   @Override
   public Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     return repository.getReader(resource);
-  }
-
-  @Override
-  public long write(FileResource fileResource, String input) throws ResourceIOException {
-    return repository.write(fileResource, input);
-  }
-
-  @Override
-  public long write(FileResource fileResource, InputStream inputStream) throws ResourceIOException {
-    return repository.write(fileResource, inputStream);
   }
 }

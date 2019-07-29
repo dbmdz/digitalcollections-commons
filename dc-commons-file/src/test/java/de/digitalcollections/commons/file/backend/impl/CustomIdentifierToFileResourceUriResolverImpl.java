@@ -1,6 +1,6 @@
-package de.digitalcollections.commons.file.backend.impl.resolved;
+package de.digitalcollections.commons.file.backend.impl;
 
-import de.digitalcollections.commons.file.backend.api.resolved.IdentifierToFileResourceUriResolver;
+import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.stereotype.Component;
