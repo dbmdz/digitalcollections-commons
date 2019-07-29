@@ -70,7 +70,7 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
       // Retrieve all files in the substitution path and filter out the non matching ones.
       // "Matching" means, match the filename of the substitution and match the key pattern
       // Finally map them onto the keys
-      try (Stream<Path> stream = getDirectory(basePath).stream()) {
+      try (Stream<Path> stream = getFilesInDirectory(basePath).stream()) {
         keys.addAll(stream.map(path -> path.getFileName().normalize().toString())
           .filter(filename -> matchesPattern(validFilenamesPattern, filename))
           .filter(filename -> matchesPattern(validKeysPattern, filename))
@@ -94,7 +94,7 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
     return paths;
   }
 
-  private List<Path> getDirectory(Path basePath) throws IOException {
+  private List<Path> getFilesInDirectory(Path basePath) throws IOException {
     List<Path> ret = new ArrayList<>();
 
     // The overriddenDirectoryStream is only used for testing
