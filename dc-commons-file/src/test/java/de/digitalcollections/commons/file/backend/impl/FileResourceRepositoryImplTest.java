@@ -8,7 +8,11 @@ import de.digitalcollections.model.api.identifiable.resource.exceptions.Resource
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
 import java.net.URI;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +28,8 @@ import org.w3c.dom.Node;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {SpringConfigCommonsFile.class})
@@ -123,22 +129,53 @@ public class FileResourceRepositoryImplTest {
     assertThat("SNAFU").isEqualTo(textContent);
   }
 
-//  @Test
-//  // FIXME: for testing directory stream has to be simulated (overridden)
-//  public void findSubstitutionsForUnknownFilename() throws Exception {
-//    @SuppressWarnings("unchecked")
-//    DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
-//    Path[] mockFiles = {Paths.get("file:///bavstorage/objects/ASM/OBJ/000000000000/bav-ASM-OBJ-0000000000000736/image/D_2014-196_Wittislingen.jpg")};
-//    when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
-//
-//    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
-//    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("^(?:bav:)?([A-Z]{3})-([A-Z]{3})-(\\w{12})(\\w{4})$", "file:/bavstorage/objects/$1/$2/$3/bav-$1-$2-$3$4/image/*\\.jpg");
-//    resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
-//
-//    FileResourceRepository fileResourceRepository = new FileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
-//    fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
-//
-//    FileResource f = fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.fromExtension("jpg"));
-//    assertThat(f.getFilename()).isEqualTo("D_2014-196_Wittislingen.jpg");
-//  }
+  @Test
+  public void findFileResourceForUnknownFilenameAndGivenMimetype() throws Exception {
+    @SuppressWarnings("unchecked")
+    DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
+    Path[] mockFiles = {
+      Paths.get(URI.create("file:///bavstorage/objects/ASM/OBJ/000000000000/bav-ASM-OBJ-0000000000000736/image/D_2014-196_Wittislingen.jpg"))
+    };
+    LOGGER.debug("Path = " + mockFiles[0].toAbsolutePath().toString());
+    when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
+
+    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
+    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("^(?:bav:)?([A-Z]{3})-([A-Z]{3})-(\\w{12})(\\w{4})$", "file:/bavstorage/objects/$1/$2/$3/bav-$1-$2-$3$4/image/*\\.jpg");
+    resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
+
+    FileResourceRepositoryImpl fileResourceRepository = new FileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
+    fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
+
+    // find with given mimetype
+    FileResource f = fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.fromExtension("jpg"));
+    assertThat(f.getFilename()).isEqualTo("D_2014-196_Wittislingen.jpg");
+
+    // find with unknown mimetype
+    f = fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.MIME_IMAGE);
+    assertThat(f.getFilename()).isEqualTo("D_2014-196_Wittislingen.jpg");
+
+    f = fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.MIME_WILDCARD);
+    assertThat(f.getFilename()).isEqualTo("D_2014-196_Wittislingen.jpg");
+  }
+
+  @Test
+  public void findFileResourceForUnknownFilenameAndAnyMimetype() throws Exception {
+    @SuppressWarnings("unchecked")
+    DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
+    Path[] mockFiles = {
+      Paths.get(URI.create("file:///bavstorage/objects/ASM/OBJ/000000000000/bav-ASM-OBJ-0000000000000736/image/D_2014-196_Wittislingen"))
+    };
+    LOGGER.debug("Path = " + mockFiles[0].toAbsolutePath().toString());
+    when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
+
+    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
+    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("^(?:bav:)?([A-Z]{3})-([A-Z]{3})-(\\w{12})(\\w{4})$", "file:/bavstorage/objects/$1/$2/$3/bav-$1-$2-$3$4/image/*");
+    resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
+
+    FileResourceRepositoryImpl fileResourceRepository = new FileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
+    fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
+
+    FileResource f = fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.MIME_WILDCARD);
+    assertThat(f.getFilename()).isEqualTo("D_2014-196_Wittislingen");
+  }
 }

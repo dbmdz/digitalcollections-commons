@@ -23,8 +23,6 @@ The sequence of the substitution-entries is also considered in two ways:
 - mimetype matching: The first matching mimetype from top down is selected
 - existing check: If file resource of first selected match (uri) does not exist, the next matching uri is tested. Finally the first uri matching and existing is returned for the given identifier
 
-This makes it possible to read files from (historically) heterogeneous organized file storage.
-
 Example configuration (via a Spring Boot `application.yml`):
 
 ```yml
@@ -40,7 +38,32 @@ resourceRepository:
           - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/$0.tif'
 ```
 
-Customization of fileresource resolving is possible by implementing the `IdentifierToFileResourceUriResolver`-interface's with you own resolving logic, e.g. lookup access URIs in a database by using the identifier as key, and adding it to `FileResouceRepositoryImpl`. Own resolvers will be added additionally on top of the default implementation. So if you do not configure regex-patterns, the default resolver won't resolve any identifier and your custom resolvers have to handle resolving.
+This makes it possible to read files from (historically) heterogeneous organized file storage.
+
+For even more flexible resolving, it is possible to use a wildcard pattern in the filename part of the uris:
+
+- Example for fixed mimetype: `file:///..../*.xml`
+- Example for any mimetype: `file:///..../*`
+
+Example configuration (via a Spring Boot `application.yml`):
+
+```yml
+resourceRepository:
+  resolved:
+    patterns:
+      # resolving based on a given FileResource-UUID
+      - pattern: '^([0-9a-f]{4})([0-9a-f]{4})-([0-9a-f]{4})-([1-5][0-9a-f]{3})-([89ab][0-9a-f]{3})-([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})$'
+        substitutions:
+          - 'file:///mnt/DATA/repository/$1/$2/$3/$4/$5/$6/$7/$8/*'
+```
+
+The substitution-Pattern matches all files in the UUID-specific directory if no specific mimetype is given for lookup:
+
+```java
+FileResource fileResource = fileResourceService.find(identifier, MimeType.MIME_WILDCARD);
+```
+
+Further customization of fileresource resolving is possible by implementing the `IdentifierToFileResourceUriResolver`-interface's with you own resolving logic, e.g. lookup access URIs in a database by using the identifier as key, and adding it to `FileResouceRepositoryImpl`. Own resolvers will be added additionally on top of the default implementation. So if you do not configure regex-patterns, the default resolver won't resolve any identifier and your custom resolvers have to handle resolving.
 
 ## Configuration
 
