@@ -17,15 +17,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,6 +136,34 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     return result;
   }
 
+  private List<URI> expandWildcardFilenames(List<URI> candidates) throws ResourceIOException {
+    List<URI> result = new ArrayList<>();
+    for (URI candidate : candidates) {
+      if (candidate.getScheme().startsWith("file")) {
+        String absolutePath = candidate.toString();
+        String filenamePattern = absolutePath.substring(absolutePath.lastIndexOf("/"));
+        if (filenamePattern.contains("*")) {
+          try {
+            Path directory = Paths.get(absolutePath.substring(0, absolutePath.lastIndexOf("/")));
+            final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + filenamePattern);
+            DirectoryStream.Filter<Path> filter = matcher::matches;
+            List<URI> uris = StreamSupport.stream(Files.newDirectoryStream(directory, filter).spliterator(), false)
+              .map(Path::toUri)
+              .collect(Collectors.toList());
+            result.addAll(uris);
+            continue;
+          } catch (MalformedURLException ex) {
+            throw new ResourceIOException("Invalid URL " + candidate.toString(), ex);
+          } catch (IOException ex) {
+            throw new ResourceIOException("Invalid file system access for " + candidate.toString(), ex);
+          }
+        }
+      }
+      result.add(candidate);
+    }
+    return result;
+  }
+
   @Override
   public FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
     if (mimeType == null) {
@@ -146,15 +183,16 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     if (candidates.isEmpty()) {
       throw new ResourceIOException("Could not resolve identifier " + identifier + " with MIME type " + mimeType.getTypeName() + " to an URI");
     }
-    URI uriCandidates = candidates.stream()
+    final List<URI> expandedCandidates = expandWildcardFilenames(candidates);
+    URI uriCandidate = expandedCandidates.stream()
       .filter(u -> (resourceLoader.getResource(u.toString()).isReadable() || u.toString().startsWith("http")))
       .findFirst()
       .orElseThrow(() -> new ResourceIOException("Could not resolve identifier " + identifier + " with MIME type " + mimeType.getTypeName() + " to a readable Resource. Attempted URIs were " + candidates));
-    resource.setUri(uriCandidates);
-    Resource springResource = resourceLoader.getResource(uriCandidates.toString());
+    resource.setUri(uriCandidate);
+    Resource springResource = resourceLoader.getResource(uriCandidate.toString());
 
-    if (!uriCandidates.getScheme().startsWith("http") && !springResource.exists()) {
-      throw new ResourceNotFoundException("Resource not found at location '" + uriCandidates.toString() + "'");
+    if (!uriCandidate.getScheme().startsWith("http") && !springResource.exists()) {
+      throw new ResourceNotFoundException("Resource not found at location '" + uriCandidate.toString() + "'");
     }
     long lastModified = getLastModified(springResource);
     if (lastModified != 0) {
