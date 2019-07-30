@@ -20,7 +20,7 @@
     <version.hamcrest-core>2.1</version.hamcrest-core>
     <version.jackson-annotations>2.10.0.pr1</version.jackson-annotations>
     <version.jackson-databind>2.9.9.1</version.jackson-databind>
-    <version.junit>5.4.2</version.junit>
+    <version.junit>5.5.1</version.junit>
     <version.micrometer>1.1.3</version.micrometer>
     <version.mockito-core>2.27.0</version.mockito-core>
     <version.slf4j>1.7.26</version.slf4j>
