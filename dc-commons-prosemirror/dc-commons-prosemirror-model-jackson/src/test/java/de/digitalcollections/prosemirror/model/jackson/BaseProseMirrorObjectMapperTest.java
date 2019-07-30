@@ -48,7 +48,7 @@ public abstract class BaseProseMirrorObjectMapperTest {
      * methodSetUUid.invoke(objectOut, uuid); } catch (NoSuchMethodException ignore) { }
      */
     try {
-      assertThat(objectOut).isEqualToComparingFieldByFieldRecursively(objectIn);
+      assertThat(objectOut).usingRecursiveComparison().isEqualTo(objectIn);
     } catch (Throwable e) {
       LOGGER.error("ERR: IN=" + dump(objectIn) + "\n    OUT=" + dump(objectOut) + "\n\nERROR=" + e.getClass() + "=" + e.getMessage());
       throw e;
