@@ -30,12 +30,13 @@ import org.w3c.dom.NodeList;
  * Provides a lightweight wrapper around the Document class to make XPath queries less painful and verbose.
  */
 public class XPathWrapper {
+  private static XPathExpressionCache GLOBAL_CACHE = new XPathExpressionCache(new DigitalCollectionsNamespaceContext());
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathWrapper.class);
   private Document document;
   private XPathExpressionCache expressionCache;
 
   public XPathWrapper(Document document) {
-    this(document, new DigitalCollectionsNamespaceContext());
+    this(document, GLOBAL_CACHE);
   }
 
   public XPathWrapper(Document document, NamespaceContext namespaceCtx) {
