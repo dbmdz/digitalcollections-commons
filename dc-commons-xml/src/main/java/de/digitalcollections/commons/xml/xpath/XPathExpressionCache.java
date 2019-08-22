@@ -4,6 +4,7 @@ import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceC
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
@@ -17,9 +18,14 @@ public class XPathExpressionCache {
   private final XPath xpath;
 
   public XPathExpressionCache() {
+    this(new DigitalCollectionsNamespaceContext());
+  }
+
+  public XPathExpressionCache(NamespaceContext namespaceCtx) {
     cache = new ConcurrentHashMap<>();
     xpath = xPathFactory.newXPath();
-    xpath.setNamespaceContext(new DigitalCollectionsNamespaceContext());
+    xpath.setNamespaceContext(namespaceCtx);
+
   }
 
   public XPathExpression get(String expression) {

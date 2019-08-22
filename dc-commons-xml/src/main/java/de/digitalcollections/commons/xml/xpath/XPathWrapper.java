@@ -1,10 +1,12 @@
 package de.digitalcollections.commons.xml.xpath;
 
+import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceContext;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -28,22 +30,21 @@ import org.w3c.dom.NodeList;
  * Provides a lightweight wrapper around the Document class to make XPath queries less painful and verbose.
  */
 public class XPathWrapper {
-  private static XPathExpressionCache GLOBAL_CACHE = new XPathExpressionCache();
-
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathWrapper.class);
   private Document document;
   private XPathExpressionCache expressionCache;
 
-  private XPathWrapper() {
+  public XPathWrapper(Document document) {
+    this(document, new DigitalCollectionsNamespaceContext());
+  }
+
+  public XPathWrapper(Document document, NamespaceContext namespaceCtx) {
+    this(document, new XPathExpressionCache(namespaceCtx));
   }
 
   public XPathWrapper(Document document, XPathExpressionCache expressionCache) {
     this.document = document;
     this.expressionCache = expressionCache;
-  }
-
-  public XPathWrapper(Document document) {
-    this(document, GLOBAL_CACHE);
   }
 
   public void setDefaultNamespace(String namespaceUrl) {
