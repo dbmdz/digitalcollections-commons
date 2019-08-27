@@ -12,10 +12,11 @@ import org.w3c.dom.Document;
  */
 public class UniversalNamespaceContext implements NamespaceContext {
   private final Document doc;
-  private HashMap<String, String> customPrefixes;
+  private final HashMap<String, String> customPrefixes;
 
   public UniversalNamespaceContext(Document doc) {
     this.doc = doc;
+    this.customPrefixes = new HashMap<>();
   }
 
   /** Add a user-defined namespace. Takes precedence over the document's declared namespaces. */
