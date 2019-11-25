@@ -15,9 +15,9 @@
   <packaging>jar</packaging>
 
   <properties>
-    <version.dc-model>4.0.0-SNAPSHOT</version.dc-model>
-    <version.jackson-databind>2.9.9.1</version.jackson-databind>
-    <version.jdbi3>3.9.0</version.jdbi3>
+    <version.dc-model>4.0.2</version.dc-model>
+    <version.jackson-databind>2.10.1</version.jackson-databind>
+    <version.jdbi3>3.10.1</version.jdbi3>
   </properties>
 
   <dependencies>
