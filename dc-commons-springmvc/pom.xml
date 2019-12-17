@@ -10,7 +10,7 @@
 
   <name>DigitalCollections: Commons Spring MVC</name>
   <artifactId>dc-commons-springmvc</artifactId>
-  <version>4.1.1</version>
+  <version>4.1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
@@ -21,7 +21,7 @@
     <version.mockito-java8>2.5.0</version.mockito-java8>
     <version.servlet-api>4.0.1</version.servlet-api>
     <version.slf4j>1.7.29</version.slf4j>
-    <version.spring>5.2.0.RELEASE</version.spring>
+    <version.spring>5.2.2.RELEASE</version.spring>
     <version.spring-security>5.2.1.RELEASE</version.spring-security>
     <version.thymeleaf>3.0.11.RELEASE</version.thymeleaf>
   </properties>
