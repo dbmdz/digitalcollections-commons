@@ -15,7 +15,7 @@
   
   <properties>
     <version.assertj>3.14.0</version.assertj>
-    <version.geoip>2.12.0</version.geoip>
+    <version.geoip>2.13.0</version.geoip>
     <version.hamcrest-core>2.1</version.hamcrest-core>
     <version.jackson-databind>2.10.1</version.jackson-databind>
     <version.junit>5.5.2</version.junit>
