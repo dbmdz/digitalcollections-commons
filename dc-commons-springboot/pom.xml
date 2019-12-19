@@ -17,7 +17,6 @@
   <properties>
     <version.assertj>3.14.0</version.assertj>
     <version.dc-commons-springsecurity>4.1.0-SNAPSHOT</version.dc-commons-springsecurity>
-    <version.hamcrest-core>2.2</version.hamcrest-core>
     <version.jackson-annotations>2.10.1</version.jackson-annotations>
     <version.jackson-databind>2.10.1</version.jackson-databind>
     <version.junit>5.5.2</version.junit>
@@ -61,12 +60,6 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>${version.assertj}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>${version.hamcrest-core}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

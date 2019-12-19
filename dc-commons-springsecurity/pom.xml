@@ -16,7 +16,6 @@
   
   <properties>
     <version.assertj>3.14.0</version.assertj>
-    <version.hamcrest-core>2.2</version.hamcrest-core>
     <version.jackson>2.10.1</version.jackson>
     <version.javax.annotation-api>1.3.2</version.javax.annotation-api>
     <version.javax.servlet-api>4.0.1</version.javax.servlet-api>
@@ -61,12 +60,6 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>${version.assertj}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>${version.hamcrest-core}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
