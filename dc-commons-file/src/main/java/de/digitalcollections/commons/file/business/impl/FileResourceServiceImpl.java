@@ -56,6 +56,16 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
+  public FileResource findOrCreate(String identifier, MimeType mimeType) throws ResourceIOException {
+    try {
+      return find(identifier, mimeType);
+      // find() returns a ResourceIOException, if a resource does not exist!
+    } catch (ResourceIOException | ResourceNotFoundException e) {
+      return repository.create(identifier, mimeType);
+    }
+  }
+
+  @Override
   public byte[] getAsBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
     try {
       return IOUtils.toByteArray(getInputStream(resource));

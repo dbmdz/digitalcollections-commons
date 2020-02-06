@@ -105,6 +105,14 @@ public interface FileResourceService {
   }
 
   /**
+   * @param identifier identifier of FileResource, used to lookup URI for FileResource
+   * @param mimeType mimetype of the FileResource
+   * @return FileResource implementation matching mimetype and URI resolved using identifier. If the file resource does not exist, create it
+   * @throws ResourceIOException thrown if no URI can be resolved for FileResource with given mimetype and identifier
+   */
+  FileResource findOrCreate(String identifier, MimeType mimeType) throws ResourceIOException;
+
+  /**
    * Convenience method for directly getting FileResource binary data as byte[].
    * @param resource FileResource containing URI for accessing FileResource data
    * @return binary data of FileResource as byte[]
