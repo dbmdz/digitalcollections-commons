@@ -60,6 +60,19 @@ public class XPathMapper implements InvocationHandler {
     // Set of variable names from the template string
     Set<String> variables = getVariables(binding.valueTemplate());
 
+    // Set of expressions from the expression string for direct evaluation w/o templates
+    Set<String> expressions = new HashSet<>(Arrays.asList(binding.expressions()));
+
+    // If both, variables and expressions are set, we must throw an exception, because
+    // they are mutually exclusive
+    if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty() && !isEmptyOrBlankStringSet(expressions)) {
+      throw new XPathMappingException("Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
+    }
+    // If neither variables nor expressions are defined, we must throw an Exception, too
+    if (isEmptyOrBlankStringSet(variables) && binding.valueTemplate().isEmpty() && isEmptyOrBlankStringSet(expressions)) {
+      throw new XPathMappingException("Either variables or expressions must be used, not none of them!");
+    }
+
     // Sanity checks
     if (binding.multiLanguage()) {
       if (!method.getReturnType().isAssignableFrom(Map.class)) {
@@ -96,6 +109,7 @@ public class XPathMapper implements InvocationHandler {
       return null;
     }
   }
+
 
   private Map<Locale, String> executeTemplate(String templateString, Map<String, Map<Locale, String>> resolvedVariables) throws XPathExpressionException {
     Set<Locale> langs = resolvedVariables.values()
@@ -228,5 +242,13 @@ public class XPathMapper implements InvocationHandler {
       }
     }
     return result;
+  }
+
+  /**
+   * @param set A set with string elements
+   * @return true, when the set is empty or contains just a single empty string
+   */
+  private boolean isEmptyOrBlankStringSet(Set<String> set) {
+    return set.isEmpty() || ((set.size() == 1) && set.iterator().next().length() < 1);
   }
 }
