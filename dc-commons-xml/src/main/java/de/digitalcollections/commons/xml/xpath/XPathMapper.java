@@ -90,17 +90,40 @@ public class XPathMapper implements InvocationHandler {
       xpw.setDefaultNamespace(binding.defaultNamespace());
     }
 
-    // Resolve variables
+    // Resolve variables, if variables and valueTemplate are set
+    if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()) {
+      return evaluteVariablesAndTemplate(binding, binding.valueTemplate(), variables);
+    } else {
+      return evaluateExpressions(binding, expressions);
+    }
+  }
+
+
+  private Object evaluateExpressions(XPathBinding binding, Set<String> expressions) throws XPathExpressionException {
+    Map<Locale, String> resolved = resolveVariable(expressions.toArray(new String[expressions.size()]));
+    if (binding.multiLanguage()) {
+      return resolved;
+    } else if (!resolved.isEmpty()) {
+      return resolved.entrySet().iterator().next().getValue();
+    } else {
+      return null;
+    }
+  }
+
+  private Object evaluteVariablesAndTemplate(XPathBinding binding, String valueTemplate, Set<String> variables)
+      throws XPathMappingException, XPathExpressionException {
     Map<String, Map<Locale, String>> resolvedVariables = new LinkedHashMap<>();
     for (String variableName : variables) {
       XPathVariable var = Arrays.stream(binding.variables())
           .filter(v -> v.name().equals(variableName))
           .findFirst()
-          .orElseThrow(() -> new XPathMappingException(String.format("Could not resolve variable `%s`", variableName)));
-      resolvedVariables.put(variableName, this.resolveVariable(var));
+          .orElseThrow(() -> new XPathMappingException(
+              String.format("Could not resolve variable `%s`", variableName)));
+      resolvedVariables.put(variableName, this.resolveVariable(var.paths()));
     }
 
-    Map<Locale, String> resolved = this.executeTemplate(binding.valueTemplate(), resolvedVariables);
+    Map<Locale, String> resolved = this
+        .executeTemplate(valueTemplate, resolvedVariables);
     if (binding.multiLanguage()) {
       return resolved;
     } else if (!resolved.isEmpty()) {
@@ -214,9 +237,9 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
-  private Map<Locale, String> resolveVariable(XPathVariable var) throws XPathExpressionException {
+  private Map<Locale, String> resolveVariable(String[] paths) throws XPathExpressionException {
     Map<Locale, String> result = new LinkedHashMap<>();
-    for (String path : var.paths()) {
+    for (String path : paths) {
       List<Node> nodes = xpw.asListOfNodes(path);
       for (Node node : nodes) {
         Locale locale = null;
