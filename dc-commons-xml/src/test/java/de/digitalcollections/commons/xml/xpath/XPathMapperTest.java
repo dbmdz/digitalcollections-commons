@@ -52,7 +52,7 @@ public class XPathMapperTest {
         defaultNamespace = TEI_NS,
         multiLanguage = true,
         expressions = {
-            "BIBLSTRUCT_PATH + \"/tei:monogr/tei:author/tei:persName/tei:name"
+            BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"
         }
     )
     Map<Locale, String> getAuthorFromExpression() throws XPathMappingException;
@@ -65,7 +65,7 @@ public class XPathMapperTest {
             @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
         },
         expressions = {
-            "BIBLSTRUCT_PATH + \"/tei:monogr/tei:author/tei:persName/tei:name"
+            BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"
         }
     )
     Map<Locale, String> getAuthorFromExpressionAndVariables() throws XPathMappingException;
