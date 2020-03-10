@@ -105,7 +105,7 @@ public class XPathMapper implements InvocationHandler {
 
   private Object evaluateExpressions(Set<String> expressions, boolean multiValueReturnType, boolean multiLanguage)  {
     Map<Locale, List<String>> resolved = resolveVariables(expressions.toArray(new String[]{}), multiValueReturnType);
-    if (multiLanguage ) {
+    if (multiLanguage) {
       if (multiValueReturnType) {
         Map<Locale, List<String>> out = new HashMap<>();
         for (Entry<Locale, List<String>> resolvedVariable : resolved.entrySet()) {
@@ -310,11 +310,11 @@ public class XPathMapper implements InvocationHandler {
   }
 
   /**
-   * Verification of the return type:
+   * Verification of the return type.
    * <br/>
    * <ul>
    * <li>Multi language fields can return single and multi valued content, so the return types are
-   * <code>Map&lt;Locale,String&gt;</li> and <code>Map&lt;Locale,List&lt;String&gt;&gt;</code>, but
+   * <code>Map&lt;Locale,String&gt;</code> and <code>Map&lt;Locale,List&lt;String&gt;&gt;</code>, but
    * multi valued content is only allowed on expressions, not in template evaluations.
    * <li>For a single valued, non localized field, it must be <code>String</code>
    * <li>For a multi valued, non localized field, it must be <code>List&lt;String&gt;</code>
@@ -328,24 +328,25 @@ public class XPathMapper implements InvocationHandler {
     if (binding.multiLanguage()) {
       if (!method.getReturnType().isAssignableFrom(Map.class)) {
         throw new XPathMappingException(
-            "Method return type must be " + RETURN_TYPE_MULTI_LANGUAGE_SINGLE_VALUE + " if multiLanguage=true");
+            "Method return type must be " + RETURN_TYPE_MULTI_LANGUAGE_SINGLE_VALUE
+                + " if multiLanguage=true");
       }
       return;
     }
 
     // If we use a multiLanguage field, we ensure, that the return type is Map<Locale,String> or Map<Locale,List<String>>
     if (method.getReturnType().isAssignableFrom(Map.class)) {
-      String genericReturnTypeName=method.getGenericReturnType().getTypeName();
+      String genericReturnTypeName = method.getGenericReturnType().getTypeName();
 
-      if (!genericReturnTypeName.equals(RETURN_TYPE_MULTI_LANGUAGE_SINGLE_VALUE) &&
-          !genericReturnTypeName.equals(RETURN_TYPE_MULTI_LANGUAGE_MULTI_VALUE)) {
+      if (!genericReturnTypeName.equals(RETURN_TYPE_MULTI_LANGUAGE_SINGLE_VALUE)
+          && !genericReturnTypeName.equals(RETURN_TYPE_MULTI_LANGUAGE_MULTI_VALUE)) {
         throw new XPathMappingException("Method return type for multiLanguage fields must be "
             + RETURN_TYPE_MULTI_LANGUAGE_SINGLE_VALUE + " or "
             + RETURN_TYPE_MULTI_LANGUAGE_MULTI_VALUE + ", but not "
             + method.getGenericReturnType().getTypeName());
       }
 
-      boolean isTemplated = binding.valueTemplate().length()>0;
+      boolean isTemplated = binding.valueTemplate().length() > 0;
       if (isTemplated) {
         // Templates are only allowed on single valued return fields
         if (!genericReturnTypeName.equals(RETURN_TYPE_MULTI_LANGUAGE_SINGLE_VALUE)) {
