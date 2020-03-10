@@ -35,6 +35,15 @@ public class XPathMapperTest {
     Map<Locale, String> getAuthor() throws XPathMappingException;
 
     @XPathBinding(
+        defaultNamespace = TEI_NS,
+        valueTemplate = "{author}",
+        variables = {
+            @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author[@type=\"ChuckNorris\"]/tei:persName/tei:name"})
+        }
+    )
+    String getNoAuthor() throws XPathMappingException;
+
+    @XPathBinding(
             defaultNamespace = TEI_NS,
             valueTemplate = "{title}<: {subtitle}>< [. {partNumber}<, {partTitle}>]>",
             variables = {
@@ -45,6 +54,14 @@ public class XPathMapperTest {
             }
     )
     String getTitle() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        expressions = {
+            BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"alt\" and @subtype=\"main\"]"
+        }
+    )
+    Map<Locale,List<String>> getMultlangAlternativeTitles() throws XPathMappingException;
 
     @XPathBinding(valueTemplate = "{broken}", variables = {})
     String broken() throws XPathMappingException;
@@ -81,6 +98,55 @@ public class XPathMapperTest {
         }
     )
     List<String> getPlaces() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        expressions = {
+            BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace[1]"
+        }
+    )
+    String getFirstPlace() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        expressions = {
+            BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:noPlace[1]"
+        }
+    )
+    String getNoPlace() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        expressions = {"/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]"}
+    )
+    Integer wrongReturnTypeSinglevalued() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        expressions = {"/tei:TEI/tei:facsimile/tei:surface/@xml:id"}
+    )
+    List<Integer> wrongReturnTypeMultivalued() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        expressions = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"}
+    )
+    Map<Locale, Integer> wrongReturnTypeMultiLanguage() throws XPathMappingException;
+
+    @XPathBinding(
+        multiLanguage = true,
+        expressions = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"}
+    )
+    String wrongReturnTypeExplicitMultiLanguage() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        valueTemplate = "{author}",
+        variables = {
+            @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+        }
+    )
+    Map<Locale, List<String>> wrongReturnTypeTemplatedMultiLanguage() throws XPathMappingException;
   }
 
   @BeforeEach
@@ -100,16 +166,16 @@ public class XPathMapperTest {
     assertThat(mapper.getAuthor().get(Locale.ENGLISH)).isEqualTo("Name, English");
   }
 
+  @DisplayName("shall return null for a template with a single variable and non matching xpath")
+  @Test
+  public void testTemplateWithNonmatchingXPath() throws Exception {
+    assertThat(mapper.getNoAuthor()).isNull();
+  }
+
   @DisplayName("shall evaluate a template with context")
   @Test
   public void testTemplateWithContext() throws Exception {
     assertThat(mapper.getTitle()).isEqualTo("Ein Titel: Ein Untertitel");
-  }
-
-  @DisplayName("shall throw an exception, when a template variable is missing")
-  @Test
-  public void testMissingVariableThrows() throws Exception {
-    assertThatThrownBy(mapper::broken).isInstanceOf(XPathMappingException.class).hasMessageContaining("Could not resolve variable");
   }
 
   @DisplayName("shall evaluate an expression without template")
@@ -117,6 +183,37 @@ public class XPathMapperTest {
   public void testExpression() throws Exception {
     assertThat(mapper.getAuthorFromExpression().get(Locale.GERMAN)).isEqualTo("Kugelmann, Hans");
     assertThat(mapper.getAuthorFromExpression().get(Locale.ENGLISH)).isEqualTo("Name, English");
+  }
+
+  @DisplayName("shall evaluate a single value expression without template")
+  @Test
+  public void testSingleValueExpression() throws Exception {
+    assertThat(mapper.getFirstPlace()).isEqualTo("Augsburg");
+  }
+
+  @DisplayName("shall return multivalued contents in the same order as in the bind")
+  @Test
+  public void testMultivaluedFieldsAndTheirOrder() throws Exception {
+    assertThat(mapper.getPlaces()).containsExactly("Augsburg","München","Aachen");
+  }
+
+  @DisplayName("shall return multivalued, multilanguage contents in correct order")
+  @Test
+  public void testMultivaluedMultilanguageFieldsAndTheirOrder() throws Exception {
+    assertThat(mapper.getMultlangAlternativeTitles().get(Locale.GERMAN)).containsExactly("Chuck Norris Biographie","Fakten");
+    assertThat(mapper.getMultlangAlternativeTitles().get(Locale.ENGLISH)).containsExactly("Chuck Norris Biography","Facts");
+  }
+
+  @DisplayName("shall return null for a non matching single value expression")
+  @Test
+  public void testNonmatchingExpressionReturnsNull() throws Exception {
+    assertThat(mapper.getNoPlace()).isNull();
+  }
+
+  @DisplayName("shall throw an exception, when a template variable is missing")
+  @Test
+  public void testMissingVariableThrows() throws Exception {
+    assertThatThrownBy(mapper::broken).isInstanceOf(XPathMappingException.class).hasMessageContaining("Could not resolve variable");
   }
 
   @DisplayName("shall throw an exception, when templates and expressions are used at the same time")
@@ -131,9 +228,34 @@ public class XPathMapperTest {
     assertThatThrownBy(mapper::getNothing).isInstanceOf(XPathMappingException.class).hasMessageContaining("Either variables or expressions must be used");
   }
 
-  @DisplayName("shall return multivalued contents in the same order as in the bind")
+  @DisplayName("shall throw an exception, when the return type of a single valued field is wrong")
   @Test
-  public void testMultivaluedFieldsAndTheirOder() throws Exception {
-    assertThat(mapper.getPlaces()).containsExactly("Augsburg","München","Aachen");
+  public void testWrongReturnTypeOfSingleValuedFieldsThrowsException() {
+    assertThatThrownBy(mapper::wrongReturnTypeSinglevalued).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return for single valued single language fields must be java.lang.String");
+  }
+
+  @DisplayName("shall throw an exception, when the return type of a multivalued field is wrong")
+  @Test
+  public void testWrongReturnTypeOfMultiValuedFieldsThrowsException() {
+    assertThatThrownBy(mapper::wrongReturnTypeMultivalued).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type for multivalued single language fields");
+  }
+
+  @DisplayName("shall throw an exception, when the return type of a multilanguage field is wrong")
+  @Test
+  public void testWrongReturnTypeOfMultilanguageFieldsThrowsException() {
+    assertThatThrownBy(mapper::wrongReturnTypeMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type for multiLanguage fields must be java.util.Map");
+  }
+
+
+  @DisplayName("shall throw an exception, when the return type of a explicitly defined multilanguage field is wrong")
+  @Test
+  public void testWrongReturnTypeOfExplicitMultilanguageFieldsThrowsException() {
+    assertThatThrownBy(mapper::wrongReturnTypeExplicitMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type must be java.util.Map");
+  }
+
+  @DisplayName("shall throw an exception, when the return type of a multilanguage field is wrong in templated context")
+  @Test
+  public void testWrongReturnTypeOfMultilanguageFieldsInTemplatesThrowsException() {
+    assertThatThrownBy(mapper::wrongReturnTypeTemplatedMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type for templated multiLanguageFields must be");
   }
 }
