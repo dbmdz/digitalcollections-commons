@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -269,6 +270,8 @@ public class XPathMapper implements InvocationHandler {
    * @return true, when the set is empty or contains just a single empty string
    */
   private boolean isEmptyOrBlankStringSet(Set<String> set) {
-    return set.isEmpty() || ((set.size() == 1) && set.iterator().next().length() < 1);
+    return set.stream()
+        .filter(Objects::nonNull)
+        .allMatch(String::isEmpty);
   }
 }
