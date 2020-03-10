@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,6 +73,16 @@ public class XPathMapperTest {
 
     @XPathBinding()
     String getNothing() throws XPathMappingException;
+
+    @XPathBinding(
+        defaultNamespace = TEI_NS,
+        multiValue = true,
+        expressions = {
+            BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace"
+        }
+    )
+    // or LinkedHashSet??
+    Set<String> getPlaces() throws XPathMappingException;
   }
 
   @BeforeEach
@@ -120,5 +131,11 @@ public class XPathMapperTest {
   @Test
   public void testNoTemplatesAndExpressionsThrowException() {
     assertThatThrownBy(mapper::getNothing).isInstanceOf(XPathMappingException.class).hasMessageContaining("Either variables or expressions must be used");
+  }
+
+  @DisplayName("shall return multivalued contents in the same order as in the bind")
+  @Test
+  public void testMultivaluedFieldsAndTheirOder() throws Exception {
+    assertThat(mapper.getPlaces()).containsExactly("Augsburg","München","Aachen");
   }
 }

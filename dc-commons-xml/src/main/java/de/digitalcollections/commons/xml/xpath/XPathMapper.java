@@ -80,8 +80,15 @@ public class XPathMapper implements InvocationHandler {
             "Method return type must be a Map<Locale, String> type if multiLanguage=true.");
       }
     } else {
-      if (!method.getReturnType().isAssignableFrom(String.class)) {
-        throw new XPathMappingException("Return type must be String if multiLanguage=false;");
+      if (!binding.multiValue()) {
+        if (!method.getReturnType().isAssignableFrom(String.class)) {
+          throw new XPathMappingException(
+              "Return type must be String if multiLanguage=false; and multiValue=false");
+        }
+      } else {
+        if (!method.getReturnType().isAssignableFrom(LinkedHashSet.class)) {
+          throw new XPathMappingException("Return type must be a LinkedHashSet if multiValue=true and multiLanguage=false");
+        }
       }
     }
 
@@ -100,11 +107,15 @@ public class XPathMapper implements InvocationHandler {
 
 
   private Object evaluateExpressions(XPathBinding binding, Set<String> expressions) throws XPathExpressionException {
-    Map<Locale, String> resolved = resolveVariable(expressions.toArray(new String[expressions.size()]));
+    Map<Locale, LinkedHashSet<String>> resolved = resolveVariable(expressions.toArray(new String[expressions.size()]), binding.multiValue());
     if (binding.multiLanguage()) {
       return resolved;
     } else if (!resolved.isEmpty()) {
-      return resolved.entrySet().iterator().next().getValue();
+      if (binding.multiValue()) {
+        return resolved.entrySet().iterator().next().getValue();
+      } else {
+        return resolved.entrySet().iterator().next().getValue().iterator().next();
+      }
     } else {
       return null;
     }
@@ -112,17 +123,18 @@ public class XPathMapper implements InvocationHandler {
 
   private Object evaluteVariablesAndTemplate(XPathBinding binding, String valueTemplate, Set<String> variables)
       throws XPathMappingException, XPathExpressionException {
-    Map<String, Map<Locale, String>> resolvedVariables = new LinkedHashMap<>();
+    Map<String, Map<Locale, LinkedHashSet<String>>> resolvedVariables = new LinkedHashMap<>();
     for (String variableName : variables) {
       XPathVariable var = Arrays.stream(binding.variables())
           .filter(v -> v.name().equals(variableName))
           .findFirst()
           .orElseThrow(() -> new XPathMappingException(
               String.format("Could not resolve variable `%s`", variableName)));
-      resolvedVariables.put(variableName, this.resolveVariable(var.paths()));
+      resolvedVariables.put(variableName, this.resolveVariable(var.paths(), binding.multiValue()));
     }
 
-    Map<Locale, String> resolved = this
+    /*
+    Map<Locale, LinkedHashSet<String>> resolved = this
         .executeTemplate(valueTemplate, resolvedVariables);
     if (binding.multiLanguage()) {
       return resolved;
@@ -131,6 +143,9 @@ public class XPathMapper implements InvocationHandler {
     } else {
       return null;
     }
+     */
+
+    return null;
   }
 
 
@@ -237,11 +252,12 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
-  private Map<Locale, String> resolveVariable(String[] paths) throws XPathExpressionException {
-    Map<Locale, String> result = new LinkedHashMap<>();
+  private Map<Locale, LinkedHashSet<String>> resolveVariable(String[] paths, boolean multiValued) throws XPathExpressionException {
+    Map<Locale, LinkedHashSet<String>> result = new LinkedHashMap<>();
     for (String path : paths) {
       List<Node> nodes = xpw.asListOfNodes(path);
       for (Node node : nodes) {
+        System.err.println("node=" + node);
         Locale locale = null;
         if (node.hasAttributes()) {
           Node langCode = node.getAttributes().getNamedItem("xml:lang");
@@ -252,12 +268,24 @@ public class XPathMapper implements InvocationHandler {
         if (locale == null || locale.getLanguage().isEmpty()) {
           locale = Locale.forLanguageTag("");
         }
-        // Only register value if we don't have one for the current locale
-        if (!result.keySet().contains(locale)) {
-          String value = node.getTextContent()
-              .replace("<", "\\<")
-              .replace(">", "\\>");
-          result.put(locale, value);
+        // For single valued: Only register value if we don't have one for the current locale
+        String value = node.getTextContent()
+            .replace("<", "\\<")
+            .replace(">", "\\>");
+        if (!multiValued) {
+          if (!result.keySet().contains(locale)) {
+            LinkedHashSet valueSet = new LinkedHashSet();
+            valueSet.add(value);
+            result.put(locale, valueSet);
+          }
+        } else {
+          LinkedHashSet valuesForLocale = result.get(locale);
+          if (valuesForLocale == null) {
+            valuesForLocale = new LinkedHashSet();
+          }
+          valuesForLocale.add(value);
+          result.put(locale, valuesForLocale);
+          System.err.println("---> result=" + result);
         }
       }
       if (!result.isEmpty()) {

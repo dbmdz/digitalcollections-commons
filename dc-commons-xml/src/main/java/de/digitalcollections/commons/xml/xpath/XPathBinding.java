@@ -11,6 +11,7 @@ public @interface XPathBinding {
   String valueTemplate() default "";
   String defaultNamespace() default "";
   boolean multiLanguage() default false;
+  boolean multiValue() default false;
   XPathVariable[] variables() default {};
   String[] expressions() default "";
 }

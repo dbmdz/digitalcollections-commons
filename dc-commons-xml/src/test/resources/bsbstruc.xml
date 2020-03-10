@@ -45,6 +45,8 @@
               </respStmt>
               <imprint>
                 <pubPlace xml:id="bsb00050852_pubPlace01">Augsburg</pubPlace>
+                <pubPlace xml:id="bsb00050852_pubPlace02">München</pubPlace>
+                <pubPlace xml:id="bsb00050852_pubPlace03">Aachen</pubPlace>
                 <publisher>unbekannt</publisher>
                 <date type="pub">[1540]</date>
               </imprint>
