@@ -63,15 +63,6 @@ public class XPathMapper implements InvocationHandler {
     // Set of expressions from the expression string for direct evaluation w/o templates
     Set<String> expressions = new HashSet<>(Arrays.asList(binding.expressions()));
 
-    // If both, variables and expressions are set, we must throw an exception, because
-    // they are mutually exclusive
-    if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty() && !isEmptyOrBlankStringSet(expressions)) {
-      throw new XPathMappingException("Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
-    }
-    // If neither variables nor expressions are defined, we must throw an Exception, too
-    if (isEmptyOrBlankStringSet(variables) && binding.valueTemplate().isEmpty() && isEmptyOrBlankStringSet(expressions)) {
-      throw new XPathMappingException("Either variables or expressions must be used, not none of them!");
-    }
 
     // Sanity checks
     if (binding.multiLanguage()) {
@@ -83,6 +74,12 @@ public class XPathMapper implements InvocationHandler {
       if (!method.getReturnType().isAssignableFrom(String.class)) {
         throw new XPathMappingException("Return type must be String if multiLanguage=false;");
       }
+    }
+    if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty() && !isEmptyOrBlankStringSet(expressions)) {
+      throw new XPathMappingException("Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
+    }
+    if (isEmptyOrBlankStringSet(variables) && binding.valueTemplate().isEmpty() && isEmptyOrBlankStringSet(expressions)) {
+      throw new XPathMappingException("Either variables or expressions must be used, not none of them!");
     }
 
     // Set default namespace, if applicable
