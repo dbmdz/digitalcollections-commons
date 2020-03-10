@@ -3,6 +3,7 @@ package de.digitalcollections.commons.xml.xpath;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,33 +65,14 @@ public class XPathMapper implements InvocationHandler {
     // Set of expressions from the expression string for direct evaluation w/o templates
     Set<String> expressions = new HashSet<>(Arrays.asList(binding.expressions()));
 
-    // If both, variables and expressions are set, we must throw an exception, because
-    // they are mutually exclusive
+
+    // Sanity checks
+    verifyReturnType(method, binding);
     if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty() && !isEmptyOrBlankStringSet(expressions)) {
       throw new XPathMappingException("Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
     }
-    // If neither variables nor expressions are defined, we must throw an Exception, too
     if (isEmptyOrBlankStringSet(variables) && binding.valueTemplate().isEmpty() && isEmptyOrBlankStringSet(expressions)) {
       throw new XPathMappingException("Either variables or expressions must be used, not none of them!");
-    }
-
-    // Sanity checks
-    if (binding.multiLanguage()) {
-      if (!method.getReturnType().isAssignableFrom(Map.class)) {
-        throw new XPathMappingException(
-            "Method return type must be a Map<Locale, String> type if multiLanguage=true.");
-      }
-    } else {
-      if (!binding.multiValue()) {
-        if (!method.getReturnType().isAssignableFrom(String.class)) {
-          throw new XPathMappingException(
-              "Return type must be String if multiLanguage=false; and multiValue=false");
-        }
-      } else {
-        if (!method.getReturnType().isAssignableFrom(LinkedHashSet.class)) {
-          throw new XPathMappingException("Return type must be a LinkedHashSet if multiValue=true and multiLanguage=false");
-        }
-      }
     }
 
     // Set default namespace, if applicable
@@ -98,20 +81,22 @@ public class XPathMapper implements InvocationHandler {
     }
 
     // Resolve variables, if variables and valueTemplate are set
+    boolean multiValue = method.getReturnType().isAssignableFrom(List.class);
     if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()) {
-      return evaluteVariablesAndTemplate(binding, binding.valueTemplate(), variables);
+      return evaluteVariablesAndTemplate(binding, binding.valueTemplate(), variables, multiValue);
     } else {
-      return evaluateExpressions(binding, expressions);
+      return evaluateExpressions(binding, expressions, multiValue);
     }
   }
 
 
-  private Object evaluateExpressions(XPathBinding binding, Set<String> expressions) throws XPathExpressionException {
-    Map<Locale, LinkedHashSet<String>> resolved = resolveVariable(expressions.toArray(new String[expressions.size()]), binding.multiValue());
+
+  private Object evaluateExpressions(XPathBinding binding, Set<String> expressions, boolean multiValue) throws XPathExpressionException {
+    Map<Locale, List<String>> resolved = resolveVariable(expressions.toArray(new String[expressions.size()]), multiValue);
     if (binding.multiLanguage()) {
       return resolved;
     } else if (!resolved.isEmpty()) {
-      if (binding.multiValue()) {
+      if (multiValue) {
         return resolved.entrySet().iterator().next().getValue();
       } else {
         return resolved.entrySet().iterator().next().getValue().iterator().next();
@@ -121,20 +106,19 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
-  private Object evaluteVariablesAndTemplate(XPathBinding binding, String valueTemplate, Set<String> variables)
+  private Object evaluteVariablesAndTemplate(XPathBinding binding, String valueTemplate, Set<String> variables, boolean multiValue)
       throws XPathMappingException, XPathExpressionException {
-    Map<String, Map<Locale, LinkedHashSet<String>>> resolvedVariables = new LinkedHashMap<>();
+    Map<String, Map<Locale, List<String>>> resolvedVariables = new LinkedHashMap<>();
     for (String variableName : variables) {
       XPathVariable var = Arrays.stream(binding.variables())
           .filter(v -> v.name().equals(variableName))
           .findFirst()
           .orElseThrow(() -> new XPathMappingException(
               String.format("Could not resolve variable `%s`", variableName)));
-      resolvedVariables.put(variableName, this.resolveVariable(var.paths(), binding.multiValue()));
+      resolvedVariables.put(variableName, this.resolveVariable(var.paths(), multiValue));
     }
 
-    /*
-    Map<Locale, LinkedHashSet<String>> resolved = this
+    Map<Locale, LinkedHashSet<List<String>>> resolved = this
         .executeTemplate(valueTemplate, resolvedVariables);
     if (binding.multiLanguage()) {
       return resolved;
@@ -143,13 +127,12 @@ public class XPathMapper implements InvocationHandler {
     } else {
       return null;
     }
-     */
 
     return null;
   }
 
 
-  private Map<Locale, String> executeTemplate(String templateString, Map<String, Map<Locale, String>> resolvedVariables) throws XPathExpressionException {
+  private Map<Locale, String> executeTemplate(String templateString, Map<String, Map<Locale, List<String>>> resolvedVariables) throws XPathExpressionException {
     Set<Locale> langs = resolvedVariables.values()
         .stream()
         .map(Map::keySet)  // Get set of languages for each resolved variable
@@ -252,12 +235,11 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
-  private Map<Locale, LinkedHashSet<String>> resolveVariable(String[] paths, boolean multiValued) throws XPathExpressionException {
-    Map<Locale, LinkedHashSet<String>> result = new LinkedHashMap<>();
+  private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued) throws XPathExpressionException {
+    Map<Locale, List<String>> result = new LinkedHashMap<>();
     for (String path : paths) {
       List<Node> nodes = xpw.asListOfNodes(path);
       for (Node node : nodes) {
-        System.err.println("node=" + node);
         Locale locale = null;
         if (node.hasAttributes()) {
           Node langCode = node.getAttributes().getNamedItem("xml:lang");
@@ -274,18 +256,17 @@ public class XPathMapper implements InvocationHandler {
             .replace(">", "\\>");
         if (!multiValued) {
           if (!result.keySet().contains(locale)) {
-            LinkedHashSet valueSet = new LinkedHashSet();
-            valueSet.add(value);
-            result.put(locale, valueSet);
+            result.put(locale, Arrays.asList(value));
           }
         } else {
-          LinkedHashSet valuesForLocale = result.get(locale);
+          List valuesForLocale = result.get(locale);
           if (valuesForLocale == null) {
-            valuesForLocale = new LinkedHashSet();
+            valuesForLocale = new ArrayList<>();
           }
-          valuesForLocale.add(value);
+          if (!valuesForLocale.contains(value)) {
+            valuesForLocale.add(value);
+          }
           result.put(locale, valuesForLocale);
-          System.err.println("---> result=" + result);
         }
       }
       if (!result.isEmpty()) {
@@ -296,10 +277,50 @@ public class XPathMapper implements InvocationHandler {
   }
 
   /**
+   * Verification of the return type:
+   * <br/>
+   * <ul>
+   * <li>For a single valued, non localized field, it must be <code>String</code>
+   * <li>For a multi valued, non localized field, it must be <code>List&lt;String&gt;</code>
+   * <li>For a single valued, localized field, it must be <code>Map&lt;Locale,String&gt;</code>
+   * <li>For a multi valued, localized field, it must be <code>Map&lt;Locale,List&lt;String&gt;&gt;</code>
+   * </ul>
+   * @param method the invoked method
+   * @param binding the XPathBinding
+   * @throws XPathMappingException
+   */
+  private void verifyReturnType(Method method, XPathBinding binding) throws XPathMappingException {
+    if (binding.multiLanguage()) {
+      //TODO both multi valued cases
+      if (!method.getReturnType().isAssignableFrom(Map.class)) {
+        throw new XPathMappingException(
+            "Method return type must be a Map<Locale, String> type if multiLanguage=true.");
+      }
+      return;
+    }
+
+    if (method.getReturnType().isAssignableFrom(List.class)) {
+      if (!method.getGenericReturnType().getTypeName().equals("java.util.List<java.lang.String>")) {
+        throw new XPathMappingException("Method return type for single language multivalued fields "
+            + " must be List<String> and not "
+            + method.getGenericReturnType().getTypeName());
+      }
+      return;
+    }
+
+    if (!method.getReturnType().isAssignableFrom(String.class)) {
+      throw new XPathMappingException(
+          "Return type must be String for single valued fields, if multiLanguage=false");
+    }
+  }
+
+  /**
    * @param set A set with string elements
    * @return true, when the set is empty or contains just a single empty string
    */
   private boolean isEmptyOrBlankStringSet(Set<String> set) {
-    return set.isEmpty() || ((set.size() == 1) && set.iterator().next().length() < 1);
+    return set.stream()
+        .filter(Objects::nonNull)
+        .allMatch(String::isEmpty);
   }
 }

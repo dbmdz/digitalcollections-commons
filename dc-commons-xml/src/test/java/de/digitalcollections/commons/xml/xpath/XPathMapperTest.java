@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,13 +76,11 @@ public class XPathMapperTest {
 
     @XPathBinding(
         defaultNamespace = TEI_NS,
-        multiValue = true,
         expressions = {
             BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace"
         }
     )
-    // or LinkedHashSet??
-    Set<String> getPlaces() throws XPathMappingException;
+    List<String> getPlaces() throws XPathMappingException;
   }
 
   @BeforeEach
