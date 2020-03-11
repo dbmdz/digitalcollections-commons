@@ -16,7 +16,7 @@ public @interface XPathBinding {
    * Specifying the return type is sufficient, this field will be removed in future.
    * @return flag for returning localized content
    */
-  @Deprecated()
+  @Deprecated
   boolean multiLanguage() default false;
 
   XPathVariable[] variables() default {};
