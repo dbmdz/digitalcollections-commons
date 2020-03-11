@@ -33,6 +33,9 @@ public class XPathMapper implements InvocationHandler {
   private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)\\}");
 
   private final XPathWrapper xpw;
+  private final Set<String> rootPaths;
+  private final String defaultRootNamespace;
+
   private static final TypeToken<String> SINGLEVALUED_RETURN_TYPE = new TypeToken<String>() {};
   private static final TypeToken<Map<Locale, ?>> LOCALIZED_RETURN_TYPE = new TypeToken<Map<Locale, ?>>() {};
   private static final TypeToken<List<String>> MULTIVALUED_RETURN_TYPE =
@@ -48,11 +51,20 @@ public class XPathMapper implements InvocationHandler {
         .concat(Stream.of(iface), Stream.of(otherIfaces))
         .distinct()
         .toArray(Class<?>[]::new);
-    return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc));
+    return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc,
+     iface.getAnnotation(XPathRoot.class)));
   }
 
-  private XPathMapper(Document doc) {
+  private XPathMapper(Document doc, XPathRoot xpathRoot) {
     this.xpw = new XPathWrapper(doc);
+    if (xpathRoot != null) {
+      rootPaths = new HashSet<>(Arrays.asList(xpathRoot.value()));
+      defaultRootNamespace = xpathRoot.defaultNamespace();
+    } else {
+      // If no root paths are set, we use / as default root path
+      rootPaths = new HashSet<>(Arrays.asList(new String[]{"/"}));
+      defaultRootNamespace = "";
+    }
   }
 
   public Set<String> getVariables(String templateString) {
@@ -90,6 +102,8 @@ public class XPathMapper implements InvocationHandler {
     // Set default namespace, if applicable
     if (!binding.defaultNamespace().isEmpty()) {
       xpw.setDefaultNamespace(binding.defaultNamespace());
+    } else if (defaultRootNamespace != null && defaultRootNamespace.length() > 0) {
+      xpw.setDefaultNamespace(defaultRootNamespace);
     }
 
     // Resolve variables, if variables and valueTemplate are set. Otherwise, evalute expressions
@@ -103,7 +117,7 @@ public class XPathMapper implements InvocationHandler {
       } else {
         multiValue = MULTIVALUED_RETURN_TYPE.isSubtypeOf(method.getGenericReturnType());
       }
-      return evaluateExpressions(expressions, multiValue, multiLanguage);
+      return evaluateExpressions(prependWithRootPaths(expressions), multiValue, multiLanguage);
     }
   }
 
@@ -147,7 +161,7 @@ public class XPathMapper implements InvocationHandler {
           .findFirst()
           .orElseThrow(() -> new XPathMappingException(
               String.format("Could not resolve variable `%s`", variableName)));
-      resolvedVariables.put(variableName, this.resolveVariable(var.paths()));
+      resolvedVariables.put(variableName, this.resolveVariable(prependWithRootPaths(var.paths())));
     }
 
     Map<Locale, String> resolved = this
@@ -160,6 +174,19 @@ public class XPathMapper implements InvocationHandler {
       return null;
     }
 
+  }
+
+  private String[] prependWithRootPaths(String[] paths) {
+    Set<String> prependedPaths =
+        prependWithRootPaths(new HashSet<>(Arrays.asList(paths)));
+    return prependedPaths.toArray(new String[prependedPaths.size()]);
+  }
+
+  private Set<String> prependWithRootPaths(Set<String> expressions) {
+    return expressions.stream()
+        .flatMap(e -> rootPaths.stream()
+            .map(r -> r + e))
+        .collect(Collectors.toSet());
   }
 
 
