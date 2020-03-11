@@ -18,6 +18,7 @@ import org.w3c.dom.Document;
 public class XPathMapperTest {
 
   private TestMapper mapper;
+  private XPathRootMapper xPathRootMapper;
 
   private interface TestMapper {
 
@@ -149,6 +150,26 @@ public class XPathMapperTest {
     Map<Locale, List<String>> wrongReturnTypeTemplatedMultiLanguage() throws XPathMappingException;
   }
 
+  @XPathRoot(
+      defaultNamespace = "http://www.tei-c.org/ns/1.0",
+      value = { "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct" }
+  )
+  private interface XPathRootMapper {
+
+    @XPathBinding(
+        expressions = { "/tei:monogr/tei:author/tei:persName/tei:name"}
+    )
+    String getAuthor() throws XPathMappingException;
+
+    @XPathBinding(
+        valueTemplate = "{author}",
+        variables = {
+            @XPathVariable(name = "author", paths = {"/tei:monogr/tei:author/tei:persName/tei:name"})
+        }
+    )
+    Map<Locale, String> getAuthors() throws XPathMappingException;
+  }
+
   @BeforeEach
   public void setUp() throws Exception {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -157,6 +178,7 @@ public class XPathMapperTest {
     InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("bsbstruc.xml");
     Document doc = db.parse(is);
     this.mapper = XPathMapper.makeProxy(doc, TestMapper.class);
+    this.xPathRootMapper = XPathMapper.makeProxy(doc, XPathRootMapper.class);
   }
 
   @DisplayName("shall evaluate a template with a single variable")
@@ -189,6 +211,19 @@ public class XPathMapperTest {
   @Test
   public void testSingleValueExpression() throws Exception {
     assertThat(mapper.getFirstPlace()).isEqualTo("Augsburg");
+  }
+
+  @DisplayName("shall evaluate a single value expression with root path defined in type")
+  @Test
+  public void testSingleValueExpressionWithXPathRoot() throws Exception {
+    assertThat(xPathRootMapper.getAuthor()).isEqualTo("Kugelmann, Hans");
+  }
+
+  @DisplayName("shall evaluate a template with a single variable and root path defined in type")
+  @Test
+  public void testTemplateWithSingleVariableAndXPathRoot() throws Exception {
+    assertThat(xPathRootMapper.getAuthors().get(Locale.GERMAN)).isEqualTo("Kugelmann, Hans");
+    assertThat(xPathRootMapper.getAuthors().get(Locale.ENGLISH)).isEqualTo("Name, English");
   }
 
   @DisplayName("shall return multivalued contents in the same order as in the bind")
