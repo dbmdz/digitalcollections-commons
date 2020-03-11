@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,11 +32,11 @@ public class XPathMapper implements InvocationHandler {
   private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)\\}");
 
   private final XPathWrapper xpw;
-  private static final TypeToken<List<String>> MULTIVALUE_RETURN_TYPE =
+  private static final TypeToken<List<String>> MULTIVALUED_RETURN_TYPE =
       new TypeToken<List<String>>() {};
-  private static final TypeToken<Map<Locale, String>> LOCALIZED_SINGLEVALUE_RETURN_TYPE =
+  private static final TypeToken<Map<Locale, String>> LOCALIZED_SINGLEVALUED_RETURN_TYPE =
       new TypeToken<Map<Locale, String>>() {};
-  private static final TypeToken<Map<Locale, List<String>>> LOCALIZED_MULTIVALUE_RETURN_TYPE =
+  private static final TypeToken<Map<Locale, List<String>>> LOCALIZED_MULTIVALUED_RETURN_TYPE =
       new TypeToken<Map<Locale, List<String>>>() {};
 
   @SuppressWarnings("unchecked")
@@ -95,7 +96,7 @@ public class XPathMapper implements InvocationHandler {
     } else {
       boolean multiValue;
       if (multiLanguage) {
-        multiValue = LOCALIZED_MULTIVALUE_RETURN_TYPE.isSubtypeOf(method.getGenericReturnType());
+        multiValue = LOCALIZED_MULTIVALUED_RETURN_TYPE.isSubtypeOf(method.getGenericReturnType());
       } else {
         multiValue = method.getReturnType().isAssignableFrom(List.class);
       }
@@ -330,31 +331,30 @@ public class XPathMapper implements InvocationHandler {
     if (binding.multiLanguage()) {
       if (!method.getReturnType().isAssignableFrom(Map.class)) {
         throw new XPathMappingException(
-            "Method return type must be " + LOCALIZED_SINGLEVALUE_RETURN_TYPE
+            "Method return type must be " + LOCALIZED_SINGLEVALUED_RETURN_TYPE
                 + " if multiLanguage=true");
       }
       return;
     }
 
     // If we use a multiLanguage field, we ensure, that the return type is Map<Locale,String> or Map<Locale,List<String>>
+    final Type genericMethodReturnType = method.getGenericReturnType();
     if (method.getReturnType().isAssignableFrom(Map.class)) {
-      String genericReturnTypeName = method.getGenericReturnType().getTypeName();
-
-      if (!LOCALIZED_SINGLEVALUE_RETURN_TYPE.isSubtypeOf(method.getGenericReturnType())
-        && !LOCALIZED_MULTIVALUE_RETURN_TYPE.isSubtypeOf(method.getGenericReturnType())) {
+      if (!LOCALIZED_SINGLEVALUED_RETURN_TYPE.isSubtypeOf(genericMethodReturnType)
+        && !LOCALIZED_MULTIVALUED_RETURN_TYPE.isSubtypeOf(genericMethodReturnType)) {
         throw new XPathMappingException("Method return type for multiLanguage fields must be "
-            + LOCALIZED_SINGLEVALUE_RETURN_TYPE + " or "
-            + LOCALIZED_MULTIVALUE_RETURN_TYPE + ", but not "
-            + method.getGenericReturnType().getTypeName());
+            + LOCALIZED_SINGLEVALUED_RETURN_TYPE + " or "
+            + LOCALIZED_MULTIVALUED_RETURN_TYPE + ", but not "
+            + genericMethodReturnType.getTypeName());
       }
 
       boolean isTemplated = binding.valueTemplate().length() > 0;
       if (isTemplated) {
         // Templates are only allowed on single valued return fields
-        if (!LOCALIZED_SINGLEVALUE_RETURN_TYPE.isSubtypeOf(method.getGenericReturnType())) {
+        if (!LOCALIZED_SINGLEVALUED_RETURN_TYPE.isSubtypeOf(genericMethodReturnType)) {
           throw new XPathMappingException("Method return type for templated multiLanguageFields must be "
-              + LOCALIZED_SINGLEVALUE_RETURN_TYPE + ", but not "
-              + method.getGenericReturnType().getTypeName());
+              + LOCALIZED_SINGLEVALUED_RETURN_TYPE + ", but not "
+              + genericMethodReturnType.getTypeName());
         }
       }
       return;
@@ -362,10 +362,10 @@ public class XPathMapper implements InvocationHandler {
 
     // Multi value fields must return a List<String>
     if (method.getReturnType().isAssignableFrom(List.class)) {
-      if (!MULTIVALUE_RETURN_TYPE.isSubtypeOf(method.getGenericReturnType())) {
+      if (!MULTIVALUED_RETURN_TYPE.isSubtypeOf(genericMethodReturnType)) {
         throw new XPathMappingException("Method return type for multivalued single language fields "
-            + "must be " + MULTIVALUE_RETURN_TYPE + " and not "
-            + method.getGenericReturnType().getTypeName());
+            + "must be " + MULTIVALUED_RETURN_TYPE + " and not "
+            + genericMethodReturnType.getTypeName());
       }
       return;
     }
