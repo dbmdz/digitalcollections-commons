@@ -31,6 +31,10 @@
             <monogr>
               <title level="m" type="main">Ein Titel</title>
               <title level="m" type="sub">Ein Untertitel</title>
+              <title level="m" type="alt" subtype="main" xml:id="bsb00050852_titleAlt_01" xml:lang="en">Chuck Norris Biography</title>
+              <title level="m" type="alt" subtype="main" xml:id="bsb00050852_titleAlt_02" xml:lang="en">Facts</title>
+              <title level="m" type="alt" subtype="main" xml:id="bsb00050852_titleAlt_01" xml:lang="de">Chuck Norris Biographie</title>
+              <title level="m" type="alt" subtype="main" xml:id="bsb00050852_titleAlt_02" xml:lang="de">Fakten</title>
               <author>
                 <persName>
                   <name xml:lang="de">Kugelmann, Hans</name>
@@ -45,6 +49,8 @@
               </respStmt>
               <imprint>
                 <pubPlace xml:id="bsb00050852_pubPlace01">Augsburg</pubPlace>
+                <pubPlace xml:id="bsb00050852_pubPlace02">München</pubPlace>
+                <pubPlace xml:id="bsb00050852_pubPlace03">Aachen</pubPlace>
                 <publisher>unbekannt</publisher>
                 <date type="pub">[1540]</date>
               </imprint>
