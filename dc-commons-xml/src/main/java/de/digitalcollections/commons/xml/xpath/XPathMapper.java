@@ -117,7 +117,7 @@ public class XPathMapper implements InvocationHandler {
       } else {
         Map<Locale, String> out = new HashMap<>();
         for (Entry<Locale, List<String>> resolvedVariable : resolved.entrySet()) {
-          // We use the first match only
+          // We only use the first match, since we want to return a single value
           out.put(resolvedVariable.getKey(), resolvedVariable.getValue().get(0));
         }
         return out;
