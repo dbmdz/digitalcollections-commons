@@ -231,31 +231,24 @@ public class XPathMapperTest {
   @DisplayName("shall throw an exception, when the return type of a single valued field is wrong")
   @Test
   public void testWrongReturnTypeOfSingleValuedFieldsThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeSinglevalued).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return for single valued single language fields must be java.lang.String");
+    assertThatThrownBy(mapper::wrongReturnTypeSinglevalued).isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal return type");
   }
 
   @DisplayName("shall throw an exception, when the return type of a multivalued field is wrong")
   @Test
   public void testWrongReturnTypeOfMultiValuedFieldsThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeMultivalued).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type for multivalued single language fields");
+    assertThatThrownBy(mapper::wrongReturnTypeMultivalued).isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal return type");
   }
 
   @DisplayName("shall throw an exception, when the return type of a multilanguage field is wrong")
   @Test
   public void testWrongReturnTypeOfMultilanguageFieldsThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type for multiLanguage fields must be java.util.Map");
-  }
-
-
-  @DisplayName("shall throw an exception, when the return type of a explicitly defined multilanguage field is wrong")
-  @Test
-  public void testWrongReturnTypeOfExplicitMultilanguageFieldsThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeExplicitMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type must be java.util.Map");
+    assertThatThrownBy(mapper::wrongReturnTypeMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal return type");
   }
 
   @DisplayName("shall throw an exception, when the return type of a multilanguage field is wrong in templated context")
   @Test
   public void testWrongReturnTypeOfMultilanguageFieldsInTemplatesThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeTemplatedMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Method return type for templated multiLanguageFields must be");
+    assertThatThrownBy(mapper::wrongReturnTypeTemplatedMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Templated binding methods must have a java.lang.String");
   }
 }

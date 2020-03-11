@@ -13,8 +13,7 @@ public @interface XPathBinding {
 
   /**
    * @deprecated
-   * Specifying the return type is sufficient, this field will be removed in future.
-   * @return flag for returning localized content
+   * Specifying the return type is sufficient, this field will be removed in future and is simply ignored for now.
    */
   @Deprecated
   boolean multiLanguage() default false;
