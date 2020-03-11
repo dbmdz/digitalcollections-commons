@@ -10,7 +10,14 @@ import java.lang.annotation.Target;
 public @interface XPathBinding {
   String valueTemplate() default "";
   String defaultNamespace() default "";
+
+  /**
+   * @deprecated
+   * Specifying the return type is sufficient, this field will be removed in future and is simply ignored for now.
+   */
+  @Deprecated
   boolean multiLanguage() default false;
+
   XPathVariable[] variables() default {};
   String[] expressions() default "";
 }
