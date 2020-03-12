@@ -19,6 +19,8 @@ public class XPathMapperTest {
 
   private TestMapper mapper;
   private XPathRootMapper xPathRootMapper;
+  private OuterMapper hierarchicalMapper;
+  private BrokenOuterMapper brokenHierarchicalMapper;
 
   private interface TestMapper {
 
@@ -170,6 +172,30 @@ public class XPathMapperTest {
     Map<Locale, String> getAuthors() throws XPathMappingException;
   }
 
+  @XPathRoot("/outer")
+  private interface OuterMapper {
+      @XPathRoot("/inner")
+      InnerMapper getInnerMapper();
+  }
+
+  @XPathRoot("/ignored")
+  private interface InnerMapper {
+      @XPathBinding(
+          expressions = "/author"
+      )
+    String getAuthor();
+  }
+
+  @XPathRoot("/outer")
+  private interface BrokenOuterMapper {
+    @XPathRoot("/inner")
+    BrokenInnerMapper getInnerMapper() throws XPathMappingException;
+  }
+
+  private interface BrokenInnerMapper {
+    String someMethod() throws XPathMappingException;
+  }
+
   @BeforeEach
   public void setUp() throws Exception {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -179,6 +205,12 @@ public class XPathMapperTest {
     Document doc = db.parse(is);
     this.mapper = XPathMapper.makeProxy(doc, TestMapper.class);
     this.xPathRootMapper = XPathMapper.makeProxy(doc, XPathRootMapper.class);
+
+    is = Thread.currentThread().getContextClassLoader().getResourceAsStream("simple.xml");
+    Document simpleDoc = db.parse(is);
+    this.hierarchicalMapper = XPathMapper.makeProxy(simpleDoc, OuterMapper.class);
+
+    this.brokenHierarchicalMapper = XPathMapper.makeProxy(simpleDoc, BrokenOuterMapper.class);
   }
 
   @DisplayName("shall evaluate a template with a single variable")
@@ -285,5 +317,19 @@ public class XPathMapperTest {
   @Test
   public void testWrongReturnTypeOfMultilanguageFieldsInTemplatesThrowsException() {
     assertThatThrownBy(mapper::wrongReturnTypeTemplatedMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Templated binding methods must have a java.lang.String");
+  }
+
+  @DisplayName("shall throw an exception, when embedded mappers lack @XPathBinding annotations")
+  @Test
+  public void testInvalidHierarchy() {
+    assertThatThrownBy(brokenHierarchicalMapper::getInnerMapper)
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining(
+        "Childs must contain at least one method with @XPathBinding annotation");
+  }
+
+  @DisplayName("shall pass down root path definitions on hierarchies")
+  @Test
+  public void shallPassDownRootPathsOnHierarchies() {
+    assertThat(hierarchicalMapper.getInnerMapper().getAuthor()).isEqualTo("Chuck Norris");
   }
 }
