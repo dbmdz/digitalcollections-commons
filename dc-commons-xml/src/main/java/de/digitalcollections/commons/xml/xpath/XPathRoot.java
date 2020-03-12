@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * Annotation to set the default namespace and path prefixes for all
  * subsequent {@link XPathBinding} annotations.
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface XPathRoot {
 
@@ -25,6 +25,8 @@ public @interface XPathRoot {
    *     paths and expressions of the subsequent {@link XPathBinding} annotations.
    *
    *     <p>Each path prefix will be prepended to each path of the bindings.
+   *
+   *     <p>Parent root paths are prepended.
    * @return an array of path prefixes (optional; if unset, a blank root path prefix is used)
    */
   String[] value() default {};
