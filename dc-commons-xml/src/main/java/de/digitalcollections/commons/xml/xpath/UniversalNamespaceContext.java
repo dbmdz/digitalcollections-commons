@@ -21,8 +21,8 @@ public class UniversalNamespaceContext implements NamespaceContext {
 
   /**
    * Add a user-defined namespace. Takes precedence over the document's declared namespaces.
-   * @param prefix the prefix
-   * @param uri the uri
+   * @param prefix the namespace prefix
+   * @param uri the namespace uri
    */
   public void addNamespace(String prefix, String uri) {
     this.customPrefixes.put(prefix, uri);

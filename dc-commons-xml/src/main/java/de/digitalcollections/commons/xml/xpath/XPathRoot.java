@@ -20,13 +20,12 @@ public @interface XPathRoot {
   String defaultNamespace() default "";
 
   /**
-   * @return an array of path prefixes, e.g. <code>/tei:TEI/tei:teiHeader/tei:fileDesc/tei
+   * Definition of path prefixes, e.g. <code>/tei:TEI/tei:teiHeader/tei:fileDesc/tei
    *     :sourceDesc/tei:listBibl/tei:biblStruct</code>, which will be prepended to all
    *     paths and expressions of the subsequent {@link XPathBinding} annotations.
-   *     <p>
-   *     Each path prefix will be prepended to each path of the bindings.
-   *     <p>
-   *     This field is optional, too. If unset, a blank root path is used.
+   *
+   *     <p>Each path prefix will be prepended to each path of the bindings.
+   * @return an array of path prefixes (optional; if unset, a blank root path prefix is used)
    */
   String[] value() default {};
 }
