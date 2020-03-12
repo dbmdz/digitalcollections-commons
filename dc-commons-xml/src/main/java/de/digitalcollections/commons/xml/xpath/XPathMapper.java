@@ -51,20 +51,43 @@ public class XPathMapper implements InvocationHandler {
         .concat(Stream.of(iface), Stream.of(otherIfaces))
         .distinct()
         .toArray(Class<?>[]::new);
-    return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc,
-     iface.getAnnotation(XPathRoot.class)));
+    XPathRoot xPathRootAnnotation = iface.getAnnotation(XPathRoot.class);
+    if (xPathRootAnnotation != null) {
+      return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc,
+          xPathRootAnnotation.value(), xPathRootAnnotation.defaultNamespace()));
+    } else {
+      return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc,
+          new String[]{""}, ""));
+    }
   }
 
-  private XPathMapper(Document doc, XPathRoot xpathRoot) {
-    this.xpw = new XPathWrapper(doc);
-    if (xpathRoot != null) {
-      rootPaths = new HashSet<>(Arrays.asList(xpathRoot.value()));
-      defaultRootNamespace = xpathRoot.defaultNamespace();
-    } else {
-      // If no root paths are set, we use / as default root path
-      rootPaths = new HashSet<>(Arrays.asList(new String[]{""}));
-      defaultRootNamespace = "";
+  public static <T> T makeProxy(Document doc, Class<? extends T> iface, String[] rootPaths,
+      String defaultRootNamespace) {
+
+    Set<String> concatenatedRootPaths = new HashSet<>(Arrays.asList(rootPaths));
+
+    XPathRoot xPathRootAnnotation = iface.getAnnotation(XPathRoot.class);
+    if (xPathRootAnnotation != null && xPathRootAnnotation.value().length>0) {
+      //TODO: What do we do with the default namespace?
+
+      concatenatedRootPaths.clear();
+      for (int i=0; i<xPathRootAnnotation.value().length; i++) {
+        for ( int j=0; j<rootPaths.length; j++) {
+          concatenatedRootPaths.add(xPathRootAnnotation.value()[i] + rootPaths[j]);
+          System.err.println("From root annotation=" + xPathRootAnnotation.value()[i] + "; from "
+              + "method annotation: " + rootPaths[j]);
+        }
+      }
     }
+    return (T) Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, new XPathMapper(doc,
+        concatenatedRootPaths.toArray(new String[concatenatedRootPaths.size()]), defaultRootNamespace));
+  }
+
+  private XPathMapper(Document doc, String[] rootPaths, String defaultRootNamespace) {
+    this.xpw = new XPathWrapper(doc);
+    this.rootPaths = new HashSet<>(Arrays.asList(rootPaths));
+    this.defaultRootNamespace = defaultRootNamespace;
+    System.err.println("rootPaths=" + Arrays.toString(rootPaths));
   }
 
   public Set<String> getVariables(String templateString) {
@@ -79,8 +102,24 @@ public class XPathMapper implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     XPathBinding binding = method.getAnnotation(XPathBinding.class);
-    if (binding == null) {
-      throw new XPathMappingException("No @XPathBinding annotation was found on the specified method!");
+    XPathRoot root = method.getAnnotation(XPathRoot.class);
+    if (binding == null && root == null) {
+      throw new XPathMappingException("No @XPathBinding or @XPathRoot annotation was found on the "
+          + "specified method!");
+    }
+
+    if (root != null) {
+      System.err.println("Found root for method=" + method);
+      // If XPathRoot was set on a method, we must ensure, that this method returns an interface
+      // with at least one method, which is annotated with an XPathBinding
+      verifyReturnTypeForHierarchy(method);
+      System.err.println("Make proxy for " + method.getReturnType().getClass().getName() + " with"
+          + " expressions=" + Arrays.toString(root.value()));
+
+      Set<String> rootPaths = new HashSet<>(Arrays.asList(rootPaths));
+
+      return makeProxy(xpw.getDocument(), method.getReturnType(), root.value(),
+          root.defaultNamespace());
     }
 
     // Set of variable names from the template string
@@ -121,6 +160,17 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
+  private void verifyReturnTypeForHierarchy(Method method) throws XPathMappingException {
+    Class childClass = method.getReturnType();
+    List<Method> childMethods = new ArrayList<>(Arrays.asList(childClass.getDeclaredMethods()));
+    for (Method childMethod : childMethods) {
+      if (childMethod.isAnnotationPresent(XPathBinding.class)) {
+        return;     // At least one child method contains an XPathBinding.
+      }
+    }
+    throw new XPathMappingException("Childs must contain at least one method with @XPathBinding "
+        + "annotation");
+  }
 
 
   private Object evaluateExpressions(Set<String> expressions, boolean multiValueReturnType, boolean multiLanguage)  {
