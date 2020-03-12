@@ -62,7 +62,7 @@ public class XPathMapper implements InvocationHandler {
       defaultRootNamespace = xpathRoot.defaultNamespace();
     } else {
       // If no root paths are set, we use / as default root path
-      rootPaths = new HashSet<>(Arrays.asList(new String[]{"/"}));
+      rootPaths = new HashSet<>(Arrays.asList(new String[]{""}));
       defaultRootNamespace = "";
     }
   }

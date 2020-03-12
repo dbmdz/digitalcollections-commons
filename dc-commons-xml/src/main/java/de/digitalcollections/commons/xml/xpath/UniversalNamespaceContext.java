@@ -19,7 +19,11 @@ public class UniversalNamespaceContext implements NamespaceContext {
     this.customPrefixes = new HashMap<>();
   }
 
-  /** Add a user-defined namespace. Takes precedence over the document's declared namespaces. */
+  /**
+   * Add a user-defined namespace. Takes precedence over the document's declared namespaces.
+   * @param prefix the prefix
+   * @param uri the uri
+   */
   public void addNamespace(String prefix, String uri) {
     this.customPrefixes.put(prefix, uri);
   }
