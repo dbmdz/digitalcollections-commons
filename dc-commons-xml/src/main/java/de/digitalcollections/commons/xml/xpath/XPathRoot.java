@@ -6,9 +6,27 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation to set the default namespace and path prefixes for all
+ * subsequent {@link XPathBinding} annotations.
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface XPathRoot {
+
+  /**
+   * @return the default namespace, e.g. <code>http://www.tei-c.org/ns/1.0"</code> (optional)
+   */
   String defaultNamespace() default "";
+
+  /**
+   * @return an array of path prefixes, e.g. <code>/tei:TEI/tei:teiHeader/tei:fileDesc/tei
+   *     :sourceDesc/tei:listBibl/tei:biblStruct</code>, which will be prepended to all
+   *     paths and expressions of the subsequent {@link XPathBinding} annotations.
+   *     <p>
+   *     Each path prefix will be prepended to each path of the bindings.
+   *     <p>
+   *     This field is optional, too. If unset, a blank root path is used.
+   */
   String[] value() default {};
 }
