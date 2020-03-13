@@ -72,7 +72,7 @@ public class XPathMapper implements InvocationHandler {
 
   private XPathMapper(Document doc, String[] rootPaths, String defaultRootNamespace) {
     this.xpw = new XPathWrapper(doc);
-    this.rootPaths = new HashSet<>(Arrays.asList(prependWithRootPaths(rootPaths)));
+    this.rootPaths = new HashSet<>(Arrays.asList(rootPaths));
     this.defaultRootNamespace = defaultRootNamespace;
   }
 
