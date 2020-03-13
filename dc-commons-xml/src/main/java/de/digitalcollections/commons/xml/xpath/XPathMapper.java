@@ -53,6 +53,7 @@ public class XPathMapper implements InvocationHandler {
         .toArray(Class<?>[]::new);
     XPathRoot xPathRootAnnotation = iface.getAnnotation(XPathRoot.class);
     if (xPathRootAnnotation != null) {
+      // XPathRoot annotation on type level sets root paths and default namespace, when defined
       return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc,
           xPathRootAnnotation.value(), xPathRootAnnotation.defaultNamespace()));
     } else {
@@ -61,33 +62,18 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
-  public static <T> T makeProxy(Document doc, Class<? extends T> iface, String[] rootPaths,
+  @SuppressWarnings("unchecked")
+  public static <T> T makeProxy(Document doc, Class<? extends T> iface, Set<String>rootPaths,
       String defaultRootNamespace) {
 
-    Set<String> concatenatedRootPaths = new HashSet<>(Arrays.asList(rootPaths));
-
-    XPathRoot xPathRootAnnotation = iface.getAnnotation(XPathRoot.class);
-    if (xPathRootAnnotation != null && xPathRootAnnotation.value().length>0) {
-      //TODO: What do we do with the default namespace?
-
-      concatenatedRootPaths.clear();
-      for (int i=0; i<xPathRootAnnotation.value().length; i++) {
-        for ( int j=0; j<rootPaths.length; j++) {
-          concatenatedRootPaths.add(xPathRootAnnotation.value()[i] + rootPaths[j]);
-          System.err.println("From root annotation=" + xPathRootAnnotation.value()[i] + "; from "
-              + "method annotation: " + rootPaths[j]);
-        }
-      }
-    }
     return (T) Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, new XPathMapper(doc,
-        concatenatedRootPaths.toArray(new String[concatenatedRootPaths.size()]), defaultRootNamespace));
+        rootPaths.toArray(new String[rootPaths.size()]), defaultRootNamespace));
   }
 
   private XPathMapper(Document doc, String[] rootPaths, String defaultRootNamespace) {
     this.xpw = new XPathWrapper(doc);
-    this.rootPaths = new HashSet<>(Arrays.asList(rootPaths));
+    this.rootPaths = new HashSet<>(Arrays.asList(prependWithRootPaths(rootPaths)));
     this.defaultRootNamespace = defaultRootNamespace;
-    System.err.println("rootPaths=" + Arrays.toString(rootPaths));
   }
 
   public Set<String> getVariables(String templateString) {
@@ -109,25 +95,15 @@ public class XPathMapper implements InvocationHandler {
     }
 
     if (root != null) {
-      System.err.println("Found root for method=" + method);
-      // If XPathRoot was set on a method, we must ensure, that this method returns an interface
-      // with at least one method, which is annotated with an XPathBinding
-      verifyReturnTypeForHierarchy(method);
-      System.err.println("Make proxy for " + method.getReturnType().getClass().getName() + " with"
-          + " expressions=" + Arrays.toString(root.value()));
-
-      Set<String> rootPaths = new HashSet<>(Arrays.asList(rootPaths));
-
-      return makeProxy(xpw.getDocument(), method.getReturnType(), root.value(),
-          root.defaultNamespace());
+      // We have an XPathRoot binding on a method, so we have to return a proxy method
+      return makeProxyForMethodMapper(method);
     }
 
     // Set of variable names from the template string
     Set<String> variables = getVariables(binding.valueTemplate());
 
-    // Set of expressions from the expression string for direct evaluation w/o templates
-    Set<String> expressions = new HashSet<>(Arrays.asList(binding.expressions()));
-
+    // Set of expressions for direct evaluation w/o templates
+    Set<String> expressions = new HashSet<>(Arrays.asList(binding.value()));
 
     // Sanity checks
     verifyReturnType(method, binding);
@@ -139,9 +115,7 @@ public class XPathMapper implements InvocationHandler {
     }
 
     // Set default namespace, if applicable
-    if (!binding.defaultNamespace().isEmpty()) {
-      xpw.setDefaultNamespace(binding.defaultNamespace());
-    } else if (defaultRootNamespace != null && defaultRootNamespace.length() > 0) {
+    if (defaultRootNamespace != null && defaultRootNamespace.length() > 0) {
       xpw.setDefaultNamespace(defaultRootNamespace);
     }
 
@@ -158,6 +132,52 @@ public class XPathMapper implements InvocationHandler {
       }
       return evaluateExpressions(prependWithRootPaths(expressions), multiValue, multiLanguage);
     }
+  }
+
+  private Object makeProxyForMethodMapper(Method method)
+      throws XPathMappingException {
+    XPathRoot root = method.getAnnotation(XPathRoot.class);
+
+    // Since XPathRoot was set on a method, we must ensure, that this method returns an interface
+    // with at least one method, which is annotated with an XPathBinding
+    verifyReturnTypeForHierarchy(method);
+
+    // On methods, no DefaultNamespace must be set
+    if (!root.defaultNamespace().isEmpty()) {
+      throw new XPathMappingException("Default namespace can only be set on type level "
+          + "@XPathRoot annotation, not on method level.");
+    }
+
+    Set<String> combinedMethodPaths;
+    Set<String> methodPaths = new HashSet<>(Arrays.asList(root.value()));
+    if (!rootPaths.isEmpty()) {
+      combinedMethodPaths = rootPaths.stream()
+          .flatMap(r -> methodPaths.stream()
+              .map(m -> r + m))
+              .collect(Collectors.toSet());
+    } else {
+      combinedMethodPaths = methodPaths;
+    }
+
+    return makeProxy(xpw.getDocument(), method.getReturnType(),
+        combinedMethodPaths, defaultRootNamespace);
+  }
+
+  private String[] prependWithRootPaths(String[] paths) {
+    Set<String> prependedPaths =
+        prependWithRootPaths(new HashSet<>(Arrays.asList(paths)));
+    return prependedPaths.toArray(new String[prependedPaths.size()]);
+  }
+
+  private Set<String> prependWithRootPaths(Set<String> expressions) {
+    if (rootPaths == null || rootPaths.isEmpty()) {
+      return expressions;
+    }
+
+    return expressions.stream()
+        .flatMap(e -> rootPaths.stream()
+            .map(r -> r + e))
+        .collect(Collectors.toSet());
   }
 
   private void verifyReturnTypeForHierarchy(Method method) throws XPathMappingException {
@@ -211,7 +231,7 @@ public class XPathMapper implements InvocationHandler {
           .findFirst()
           .orElseThrow(() -> new XPathMappingException(
               String.format("Could not resolve variable `%s`", variableName)));
-      resolvedVariables.put(variableName, this.resolveVariable(prependWithRootPaths(var.paths())));
+      resolvedVariables.put(variableName, this.resolveVariable(var.paths()));
     }
 
     Map<Locale, String> resolved = this
@@ -225,20 +245,6 @@ public class XPathMapper implements InvocationHandler {
     }
 
   }
-
-  private String[] prependWithRootPaths(String[] paths) {
-    Set<String> prependedPaths =
-        prependWithRootPaths(new HashSet<>(Arrays.asList(paths)));
-    return prependedPaths.toArray(new String[prependedPaths.size()]);
-  }
-
-  private Set<String> prependWithRootPaths(Set<String> expressions) {
-    return expressions.stream()
-        .flatMap(e -> rootPaths.stream()
-            .map(r -> r + e))
-        .collect(Collectors.toSet());
-  }
-
 
   private Map<Locale, String> executeTemplate(String templateString, Map<String, Map<Locale, String>> resolvedVariables) throws XPathExpressionException {
     Set<Locale> langs = resolvedVariables.values()
