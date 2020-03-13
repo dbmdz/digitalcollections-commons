@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.w3c.dom.Document;
 
 @DisplayName("The XPath Mapper")
@@ -21,16 +22,17 @@ public class XPathMapperTest {
   private XPathRootMapper xPathRootMapper;
   private OuterMapper hierarchicalMapper;
   private BrokenOuterMapper brokenHierarchicalMapper;
+  private BrokenNamespacedOuterMapper brokenNamespacedOuterMapper;
 
+  @XPathRoot(
+      defaultNamespace = "http://www.tei-c.org/ns/1.0"
+  )
   private interface TestMapper {
 
-    String TEI_NS = "http://www.tei-c.org/ns/1.0";
     String BIBLSTRUCT_PATH = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct";
 
     @XPathBinding(
-            defaultNamespace = TEI_NS,
             valueTemplate = "{author}",
-            multiLanguage = true,
             variables = {
               @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
             }
@@ -38,7 +40,6 @@ public class XPathMapperTest {
     Map<Locale, String> getAuthor() throws XPathMappingException;
 
     @XPathBinding(
-        defaultNamespace = TEI_NS,
         valueTemplate = "{author}",
         variables = {
             @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author[@type=\"ChuckNorris\"]/tei:persName/tei:name"})
@@ -47,7 +48,6 @@ public class XPathMapperTest {
     String getNoAuthor() throws XPathMappingException;
 
     @XPathBinding(
-            defaultNamespace = TEI_NS,
             valueTemplate = "{title}<: {subtitle}>< [. {partNumber}<, {partTitle}>]>",
             variables = {
               @XPathVariable(name = "title", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"main\"]"}),
@@ -58,92 +58,49 @@ public class XPathMapperTest {
     )
     String getTitle() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        expressions = {
-            BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"alt\" and @subtype=\"main\"]"
-        }
-    )
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"alt\" and @subtype=\"main\"]")
     Map<Locale,List<String>> getMultlangAlternativeTitles() throws XPathMappingException;
 
     @XPathBinding(valueTemplate = "{broken}", variables = {})
     String broken() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        multiLanguage = true,
-        expressions = {
-            BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"
-        }
-    )
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
     Map<Locale, String> getAuthorFromExpression() throws XPathMappingException;
 
     @XPathBinding(
-        defaultNamespace = TEI_NS,
         valueTemplate = "{author}",
-        multiLanguage = true,
         variables = {
             @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
         },
-        expressions = {
-            BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"
-        }
+        value = BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"
     )
     Map<Locale, String> getAuthorFromExpressionAndVariables() throws XPathMappingException;
 
     @XPathBinding()
     String getNothing() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        expressions = {
-            BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace"
-        }
-    )
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace")
     List<String> getPlaces() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        expressions = {
-            BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace[1]"
-        }
-    )
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace[1]")
     String getFirstPlace() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        expressions = {
-            BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:noPlace[1]"
-        }
-    )
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:noPlace[1]")
     String getNoPlace() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        expressions = {"/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]"}
-    )
+    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
     Integer wrongReturnTypeSinglevalued() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        expressions = {"/tei:TEI/tei:facsimile/tei:surface/@xml:id"}
-    )
+    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id")
     List<Integer> wrongReturnTypeMultivalued() throws XPathMappingException;
 
-    @XPathBinding(
-        defaultNamespace = TEI_NS,
-        expressions = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"}
-    )
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
     Map<Locale, Integer> wrongReturnTypeMultiLanguage() throws XPathMappingException;
 
-    @XPathBinding(
-        multiLanguage = true,
-        expressions = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"}
-    )
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
     String wrongReturnTypeExplicitMultiLanguage() throws XPathMappingException;
 
     @XPathBinding(
-        defaultNamespace = TEI_NS,
         valueTemplate = "{author}",
         variables = {
             @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
@@ -158,9 +115,7 @@ public class XPathMapperTest {
   )
   private interface XPathRootMapper {
 
-    @XPathBinding(
-        expressions = { "/tei:monogr/tei:author/tei:persName/tei:name"}
-    )
+    @XPathBinding("/tei:monogr/tei:author/tei:persName/tei:name")
     String getAuthor() throws XPathMappingException;
 
     @XPathBinding(
@@ -180,13 +135,10 @@ public class XPathMapperTest {
 
   @XPathRoot("/ignored")
   private interface InnerMapper {
-      @XPathBinding(
-          expressions = "/author"
-      )
-    String getAuthor();
+      @XPathBinding("/author")
+      String getAuthor();
   }
 
-  @XPathRoot("/outer")
   private interface BrokenOuterMapper {
     @XPathRoot("/inner")
     BrokenInnerMapper getInnerMapper() throws XPathMappingException;
@@ -194,6 +146,22 @@ public class XPathMapperTest {
 
   private interface BrokenInnerMapper {
     String someMethod() throws XPathMappingException;
+  }
+
+  @XPathRoot(
+      value = "/outer",
+      defaultNamespace = "http://www.tei-c.org/ns/1.0")
+  private interface BrokenNamespacedOuterMapper {
+    @XPathRoot(
+        value = "/inner",
+        defaultNamespace = "foo"
+    )
+    BrokenNamespacedInnerMapper getInnerMapper() throws XPathMappingException;;
+  }
+
+  private interface BrokenNamespacedInnerMapper {
+    @XPathBinding("/author")
+    String getAuthor() throws XPathMappingException;;
   }
 
   @BeforeEach
@@ -211,6 +179,9 @@ public class XPathMapperTest {
     this.hierarchicalMapper = XPathMapper.makeProxy(simpleDoc, OuterMapper.class);
 
     this.brokenHierarchicalMapper = XPathMapper.makeProxy(simpleDoc, BrokenOuterMapper.class);
+
+    this.brokenNamespacedOuterMapper = XPathMapper.makeProxy(simpleDoc,
+        BrokenNamespacedOuterMapper.class);
   }
 
   @DisplayName("shall evaluate a template with a single variable")
@@ -243,19 +214,6 @@ public class XPathMapperTest {
   @Test
   public void testSingleValueExpression() throws Exception {
     assertThat(mapper.getFirstPlace()).isEqualTo("Augsburg");
-  }
-
-  @DisplayName("shall evaluate a single value expression with root path defined in type")
-  @Test
-  public void testSingleValueExpressionWithXPathRoot() throws Exception {
-    assertThat(xPathRootMapper.getAuthor()).isEqualTo("Kugelmann, Hans");
-  }
-
-  @DisplayName("shall evaluate a template with a single variable and root path defined in type")
-  @Test
-  public void testTemplateWithSingleVariableAndXPathRoot() throws Exception {
-    assertThat(xPathRootMapper.getAuthors().get(Locale.GERMAN)).isEqualTo("Kugelmann, Hans");
-    assertThat(xPathRootMapper.getAuthors().get(Locale.ENGLISH)).isEqualTo("Name, English");
   }
 
   @DisplayName("shall return multivalued contents in the same order as in the bind")
@@ -331,5 +289,14 @@ public class XPathMapperTest {
   @Test
   public void shallPassDownRootPathsOnHierarchies() {
     assertThat(hierarchicalMapper.getInnerMapper().getAuthor()).isEqualTo("Chuck Norris");
+  }
+
+  @DisplayName("shall throw an exception, when embedding and embedded mappers both set a default "
+      + "namespace")
+  @Test
+  public void testHierarchyWithConflicingDefaultNamespaces() {
+    assertThatThrownBy(brokenNamespacedOuterMapper::getInnerMapper)
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining(
+        "Default namespace can only be set on type level @XPathRoot annotation, not on method level.");
   }
 }
