@@ -63,7 +63,7 @@ public class XPathMapper implements InvocationHandler {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T makeProxy(Document doc, Class<? extends T> iface, Set<String>rootPaths,
+  public static <T> T makeProxy(Document doc, Class<? extends T> iface, Set<String> rootPaths,
       String defaultRootNamespace) {
 
     return (T) Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, new XPathMapper(doc,
