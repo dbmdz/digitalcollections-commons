@@ -106,8 +106,8 @@ public class XPathMapper implements InvocationHandler {
 
         // For the embedded mappers, we have to contactenate the root paths
         String[] subMapperRootPaths = determineRootPaths(rootAnnotation, rootPaths);
-        if (rootBinding != null && rootBinding.value() != null && rootBinding.value().length == 1) {
-          for (int i=0; i<subMapperRootPaths.length; i++) {
+        if (rootBinding != null && rootBinding.value().length == 1) {
+          for (int i = 0; i < subMapperRootPaths.length; i++) {
             subMapperRootPaths[i] = subMapperRootPaths[i] + rootBinding.value()[0];
           }
         }
