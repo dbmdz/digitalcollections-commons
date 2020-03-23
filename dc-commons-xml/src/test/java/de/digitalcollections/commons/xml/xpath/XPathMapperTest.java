@@ -22,6 +22,7 @@ public class XPathMapperTest {
   private OuterMapper hierarchicalMapper;
   private BrokenOuterMapper brokenHierarchicalMapper;
   private BrokenNamespacedOuterMapper brokenNamespacedOuterMapper;
+  private NestedOuterClass nestedOuterClass;
 
   @XPathRoot(
       defaultNamespace = "http://www.tei-c.org/ns/1.0"
@@ -163,6 +164,7 @@ public class XPathMapperTest {
     String getAuthor() throws XPathMappingException;;
   }
 
+
   @BeforeEach
   public void setUp() throws Exception {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -181,6 +183,8 @@ public class XPathMapperTest {
 
     this.brokenNamespacedOuterMapper = XPathMapper.makeProxy(simpleDoc,
         BrokenNamespacedOuterMapper.class);
+
+    this.nestedOuterClass = XPathMapper.readDocument(simpleDoc, NestedOuterClass.class);
   }
 
   @DisplayName("shall evaluate a template with a single variable")
@@ -284,10 +288,17 @@ public class XPathMapperTest {
         "Childs must contain at least one method with @XPathBinding annotation");
   }
 
-  @DisplayName("shall pass down root path definitions on hierarchies")
+  @DisplayName("shall pass down root path definitions on hierarchies on interface mappers")
   @Test
-  public void shallPassDownRootPathsOnHierarchies() {
+  public void shallPassDownRootPathsOnInterfaceHierarchies() {
     assertThat(hierarchicalMapper.getInnerMapper().getAuthor()).isEqualTo("Chuck Norris");
+  }
+
+  @DisplayName("shall pass down root path definitions on hierarchies on class mappers")
+  @Test
+  public void shallPassDownRootPathsOnClassHierarchies() {
+    assertThat(nestedOuterClass.getNestedInnerClass()).isNotNull();
+    assertThat(nestedOuterClass.getNestedInnerClass().getAuthor()).isEqualTo("Chuck Norris");
   }
 
   @DisplayName("shall throw an exception, when embedding and embedded mappers both set a default "
