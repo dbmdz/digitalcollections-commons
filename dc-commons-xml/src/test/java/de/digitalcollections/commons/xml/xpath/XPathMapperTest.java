@@ -128,7 +128,8 @@ public class XPathMapperTest {
   public void testNoTemplatesAndExpressionsThrowException() {
     assertThatThrownBy(
         () -> incompleteTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Invalid structure for field=nothing");
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("An @XPathBinding must have one of `variables` or `expressions`, but neither were set!");
   }
 
   @DisplayName("shall throw an exception, when the type of a single valued field is wrong")
@@ -197,19 +198,6 @@ public class XPathMapperTest {
     HierarchicalMapper mapper = hierarchicalMapperFixture.setUpMapperWithResource("simple.xml");
     assertThat(mapper.getInnerMapper().getAuthor()).isEqualTo("Chuck Norris");
   }
-
-
-  @DisplayName("shall throw an exception, when embedding and embedded mappers both set a default "
-      + "namespace")
-  @Test
-  public void testHierarchyWithConflicingDefaultNamespaces() {
-    assertThatThrownBy(
-        () -> brokenHierarchivalMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).
-        hasMessageContaining("XPathRoot must not be declared on classes that are embedded in other mapping classes.");
-  }
-
-
   // ---------------------------------------------------------------------------------------------
 
   @XPathRoot(

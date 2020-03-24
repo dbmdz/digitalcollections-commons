@@ -27,12 +27,17 @@ import org.w3c.dom.Node;
 
 
 @SuppressWarnings("UnstableApiUsage")
-public class XPathMapper {
-
+public class XPathMapper<T> {
+  // FIXME: Ideally the XPathMapper instance  should be independent of a Document so that it can be re-used for many
+  //        documents. This means we have to either use a thread-local XPathWrapper or introduce a second class that
+  //        performs the actual retrieval of the values from XML. This class should have no clue of reflection or
+  //        other kinds of type wizardry, but expose simple methods like `readTemplated`, `readValue`,
+  //        `readLocalizedValue`, etc.
   private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)}");
 
+  private final Class<T> type;
   private final XPathWrapper xpw;
-  private final Set<String> rootPaths;
+  private final List<String> rootPaths;
   private final String defaultRootNamespace;
 
   private static final TypeToken<String> SINGLEVALUED_TYPE = new TypeToken<String>() {};
@@ -44,140 +49,119 @@ public class XPathMapper {
   private static final TypeToken<Map<Locale, List<String>>> LOCALIZED_MULTIVALUED_TYPE =
       new TypeToken<Map<Locale, List<String>>>() {};
 
-  public XPathMapper(Document doc, String[] rootPaths, String defaultRootNamespace) {
-    this.xpw = new XPathWrapper(doc);
-    this.rootPaths = new HashSet<>(Arrays.asList(rootPaths));
-    this.defaultRootNamespace = defaultRootNamespace;
-  }
-
   /**
-   * The central entry method to set up an XPathMapper
+   * Convenience method to construct a temporary mapper and read a single document with it.
+   *
    * @param doc the document for evaluation
    * @param targetType the target type, e.g. a mapper class
    * @param rootPaths optional array of root paths
    * @return The bind mapper with filled setters and fields, ready for getter consumption
    */
   public static <T> T readDocument(Document doc, Class<T> targetType, String... rootPaths) throws XPathMappingException {
-    XPathRoot rootAnnotation = targetType.getAnnotation(XPathRoot.class);
-    T bindMapper;
-    try {
-      bindMapper = targetType.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      throw new XPathMappingException("Cannot create an instance of " + targetType.getName() + ": " + e);
-    }
-
-    ensureValidRootPaths(rootAnnotation, rootPaths);
-
-    XPathMapper xPathMapper = new XPathMapper(doc, determineRootPaths(rootAnnotation, rootPaths),
-        determineDefaultRootNamespace(rootAnnotation));
-
-    // Evaluate all methods, which carry the @XPathBinding annotation
-    List<Method> methodsWithAnnotation = ReflectionUtils.getMethodsAnnotatedWith(targetType, XPathBinding.class);
-    for (Method m : methodsWithAnnotation) {
-      XPathBinding binding = m.getDeclaredAnnotation(XPathBinding.class);
-      XPathRoot root = m.getDeclaredAnnotation(XPathRoot.class);
-      // TODO: Verify that we're dealing with a setter
-      Type paramType = m.getGenericParameterTypes()[0];
-      m.setAccessible(true);
-      try {
-        Object args = xPathMapper.readValue(binding, root, paramType);
-        m.invoke(bindMapper, args);
-      } catch (Throwable t) {
-        throw new XPathMappingException("Cannot invoke method=" + m.getName() + " on "
-            + targetType.getName() + ": " + t);
-      }
-    }
-
-    // Evaluate all fields, which carry the @XPathRoot annotation and process them recursively
-    Set<Field> fieldsWithMapper = ReflectionUtils.getFieldsAnnotatedWith(targetType, XPathRoot.class);
-    for (Field f: fieldsWithMapper) {
-      XPathRoot rootBinding = f.getAnnotation(XPathRoot.class);
-
-      // For the embedded mappers, we have to concatenate the root paths
-      String[] subMapperRootPaths = determineRootPaths(rootAnnotation, rootPaths);
-      if (rootBinding != null && rootBinding.value().length == 1) {
-        for (int i = 0; i < subMapperRootPaths.length; i++) {
-          subMapperRootPaths[i] = subMapperRootPaths[i] + rootBinding.value()[0];
-        }
-      }
-
-      Object subMapper = readDocument(doc, f.getType(), subMapperRootPaths);
-      f.setAccessible(true);
-      try {
-        f.set(bindMapper, subMapper);
-      } catch (IllegalAccessException e) {
-        throw new XPathMappingException("Cannot process @XPathRoot field=" + f.getName() + " on "
-            + targetType.getName() + ": " + e);
-      }
-    }
-
-    // Evaluate all fields, which carry the @XPathBinding annotation
-    Set<Field> fieldsWithAnnotation = ReflectionUtils.getFieldsAnnotatedWith(targetType, XPathBinding.class);
-    for (Field f : fieldsWithAnnotation) {
-      XPathBinding fieldAnnotation = f.getAnnotation(XPathBinding.class);
-      f.setAccessible(true);
-
-      Set<String> variables = xPathMapper.getVariables(fieldAnnotation.valueTemplate());
-      Set<String> expressions = new LinkedHashSet<>(Arrays.asList(fieldAnnotation.value()));
-      try {
-        f.set(bindMapper, xPathMapper.evaluateXPathBinding(f.getGenericType(), fieldAnnotation, variables, expressions));
-      } catch (IllegalAccessException e) {
-        throw new XPathMappingException("Cannot evaluate field=" + f.getName() + " on "
-          + targetType.getName() + ": " + e);
-      } catch (XPathExpressionException e) {
-        throw new XPathMappingException("Invalid XPathExpression for field=" + f.getName()
-            + " on " + targetType.getName() + ": " + e);
-      } catch (IllegalArgumentException e) {
-        throw new XPathMappingException("Invalid structure for field=" + f.getName()
-            + " on " + targetType.getName() + ": " + e.getCause());
-      }
-    }
-
-    return bindMapper;
+    return new XPathMapper<>(targetType, doc, rootPaths, null).buildObject();
   }
 
-  private static String determineDefaultRootNamespace(XPathRoot rootAnnotation) {
-    if (rootAnnotation != null && !rootAnnotation.defaultNamespace().isEmpty()) {
-      return rootAnnotation.defaultNamespace();
-    }
-    return "";
+  public XPathMapper(Class<T> type, Document doc, String[] rootPaths, String defaultRootNamespace) {
+    this(type, new XPathWrapper(doc), rootPaths, defaultRootNamespace);
   }
 
-  private static String[] determineRootPaths(XPathRoot rootAnnotation, String[] rootPaths) {
-    if (rootPaths != null && rootPaths.length > 0) {
-      return rootPaths;
-    } else if (rootAnnotation != null && rootAnnotation.value().length > 0) {
-      return rootAnnotation.value();
+  XPathMapper(Class<T> type, XPathWrapper xpw, String[] rootPaths, String defaultRootNamespace) {
+    this.xpw = xpw;
+    this.type = type;
+
+    // Set default namespace
+    if (defaultRootNamespace != null) {
+      xpw.setDefaultNamespace(defaultRootNamespace);
+    }
+
+    XPathRoot rootAnnotation = type.getAnnotation(XPathRoot.class);
+    // Determine the default namespace
+    if (defaultRootNamespace != null) {
+      this.defaultRootNamespace = defaultRootNamespace;
+    } else if (rootAnnotation != null) {
+      this.defaultRootNamespace = rootAnnotation.defaultNamespace();
     } else {
-      return new String[0];
+      this.defaultRootNamespace = "";
+    }
+
+    // If there are no user-suppplied root paths, we use those annotated on the type itself
+    if (rootPaths.length > 0) {
+      this.rootPaths = Arrays.asList(rootPaths);
+    } else if (rootAnnotation != null) {
+      this.rootPaths = Arrays.asList(rootAnnotation.value());
+    } else {
+      this.rootPaths = new ArrayList<>();
     }
   }
 
-  private static void ensureValidRootPaths(XPathRoot rootAnnotation, String[] rootPaths)
-      throws XPathMappingException {
-    // Sanity check: We must not allow two clashing root paths
-    if (rootAnnotation != null && rootAnnotation.value().length > 0
-        && rootPaths != null && rootPaths.length > 0) {
+
+  public T buildObject() throws XPathMappingException {
+    // Instantiate an empty target object
+    T val;
+    try {
+      val = type.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new XPathMappingException(
-          "XPathRoot must not be declared on classes that are embedded in other mapping classes.");
+          String.format("Cannot create an instance of %s, does the type have a public default constructor?",
+              type.getName()), e);
     }
+
+    // Evaluate all setters and fields annotated with @XPathBinding
+    for (Method m : ReflectionUtils.getSettersAnnotatedWith(type, XPathBinding.class)) {
+      XPathBinding binding = m.getDeclaredAnnotation(XPathBinding.class);
+      Type paramType = m.getGenericParameterTypes()[0];
+      try {
+        m.setAccessible(true);
+        m.invoke(val, readSimpleValue(binding, paramType));
+      } catch (IllegalAccessException | InvocationTargetException e) {
+        throw new XPathMappingException(
+            String.format("Cannot evaluate field=%s on %s: %s", m.getName(), paramType.getTypeName(), e));
+      } catch (XPathExpressionException e) {
+        throw new XPathMappingException(
+            String.format("Invalid XPathExpression for field=%s on %s: %s", paramType.getTypeName(), type.getName(), e));
+      }
+    }
+    for (Field fl : ReflectionUtils.getFieldsAnnotatedWith(type, XPathBinding.class)) {
+      XPathBinding binding = fl.getDeclaredAnnotation(XPathBinding.class);
+      Type fieldType = fl.getGenericType();
+      try {
+        fl.setAccessible(true);
+        fl.set(val, readSimpleValue(binding, fieldType));
+      } catch (IllegalAccessException e) {
+        throw new XPathMappingException(
+            String.format("Cannot evaluate field=%s on %s: %s", fl.getName(), fieldType.getTypeName(), e));
+      } catch (XPathExpressionException e) {
+        throw new XPathMappingException(
+            String.format("Invalid XPathExpression for field=%s on %s: %s", fieldType.getTypeName(), type.getName(), e));
+      }
+    }
+
+  // Evaluate all setters and fields that map nested types, i.e. are annotated with @XPathRoot
+    for (Method m : ReflectionUtils.getSettersAnnotatedWith(type, XPathRoot.class)) {
+      XPathRoot nestedRoot = m.getDeclaredAnnotation(XPathRoot.class);
+      Class<?> argType = m.getParameterTypes()[0];
+      try {
+        m.setAccessible(true);
+        m.invoke(val, readNestedValue(nestedRoot, argType));
+      } catch (IllegalAccessException | InvocationTargetException e) {
+        throw new XPathMappingException("Failed to map " + m, e);
+      }
+    }
+    for (Field fl : ReflectionUtils.getFieldsAnnotatedWith(type, XPathRoot.class)) {
+      XPathRoot nestedRoot = fl.getDeclaredAnnotation(XPathRoot.class);
+      Class<?> fieldType = fl.getType();
+      try {
+        fl.setAccessible(true);
+        fl.set(val, readNestedValue(nestedRoot, fieldType));
+      } catch (IllegalAccessException e) {
+        throw new XPathMappingException("Failed to map " + fl, e);
+      }
+    }
+    return val;
   }
 
-
-  private Set<String> getVariables(String templateString) {
-    Matcher matcher = VARIABLE_PATTERN.matcher(templateString);
-    Set<String> variables = new HashSet<>();
-    while (matcher.find()) {
-      variables.add(matcher.group(1));
-    }
-    return variables;
-  }
-
-  public Object readValue(XPathBinding binding, XPathRoot root, Type targetType) throws Throwable {
-    if (binding == null && root == null) {
-      throw new XPathMappingException("Either a  binding or a root are required.");
-    }
-
+  private Object readSimpleValue(XPathBinding binding, Type targetType)
+      throws XPathMappingException, XPathExpressionException {
     verifyTargetType(targetType, binding);
 
     // Set of variable names from the template string
@@ -189,37 +173,56 @@ public class XPathMapper {
     if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()
         && !isEmptyOrBlankStringSet(expressions)) {
       throw new XPathMappingException(
-          "Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
+          "An @XPathBinding must have one of `variables` or `expressions`, but both were set!");
     }
 
     if (isEmptyOrBlankStringSet(variables) && binding.valueTemplate().isEmpty() && isEmptyOrBlankStringSet(expressions)) {
-      throw new XPathMappingException("Either variables or expressions must be used, not none of them!");
+      throw new XPathMappingException(
+          "An @XPathBinding must have one of `variables` or `expressions`, but neither were set!");
     }
 
-    // Set default namespace, if applicable
-    if (defaultRootNamespace != null && defaultRootNamespace.length() > 0) {
-      xpw.setDefaultNamespace(defaultRootNamespace);
-    }
-
-    // Resolve variables, if variables and valueTemplate are set. Otherwise, evalute expressions
-    return evaluateXPathBinding(targetType, binding, variables, expressions);
-  }
-
-
-  private Object evaluateXPathBinding(Type type, XPathBinding binding, Set<String> variables,
-      Set<String> expressions) throws XPathMappingException, XPathExpressionException {
-    boolean multiLanguage = LOCALIZED_TYPE.isSupertypeOf(type);
+    boolean multiLanguage = LOCALIZED_TYPE.isSupertypeOf(targetType);
     if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()) {
+      // Complex template
       return evaluteVariablesAndTemplate(binding, variables, multiLanguage);
     } else {
+      // Simple xpath -> value binding, possibly multi-valued
       boolean multiValue;
       if (multiLanguage) {
-        multiValue = LOCALIZED_MULTIVALUED_TYPE.isSubtypeOf(type);
+        multiValue = LOCALIZED_MULTIVALUED_TYPE.isSubtypeOf(targetType);
       } else {
-        multiValue = MULTIVALUED_TYPE.isSubtypeOf(type);
+        multiValue = MULTIVALUED_TYPE.isSubtypeOf(targetType);
       }
       return evaluateExpressions(prependWithRootPaths(expressions), multiValue, multiLanguage);
     }
+  }
+
+  private <S> S readNestedValue(XPathRoot root, Class<S> targetType)
+      throws XPathMappingException {
+    // For the embedded mappers, we have to concatenate the root paths
+    String[] fullRoots = Arrays.stream(root.value())
+        .flatMap(r -> rootPaths.stream().map(pr -> pr + r))
+        .distinct()
+        .toArray(String[]::new);
+    String namespace = root.defaultNamespace();
+    if (namespace.isEmpty() && !this.defaultRootNamespace.isEmpty()) {
+      namespace = defaultRootNamespace;
+    }
+    try {
+      XPathMapper<S> subMapper = new XPathMapper<>(targetType, xpw, fullRoots, namespace);
+      return subMapper.buildObject();
+    } catch (XPathMappingException e) {
+      throw new XPathMappingException("Failed to map nested type " + targetType, e);
+    }
+  }
+
+  private Set<String> getVariables(String templateString) {
+    Matcher matcher = VARIABLE_PATTERN.matcher(templateString);
+    Set<String> variables = new HashSet<>();
+    while (matcher.find()) {
+      variables.add(matcher.group(1));
+    }
+    return variables;
   }
 
   private Set<String> prependWithRootPaths(Set<String> expressions) {
@@ -439,10 +442,10 @@ public class XPathMapper {
   }
 
   /**
-   * Verification of the return type.
+   * Verification of the mapping target type.
    * <br/>
    * <ul>
-   * <li>Multi language fields can return single and multi valued content, so the return types are
+   * <li>Multi language fields can be single- and multi-valued, so the valid types are
    * <code>Map&lt;Locale,String&gt;</code> and <code>Map&lt;Locale,List&lt;String&gt;&gt;</code>, but
    * multi valued content is only allowed on expressions, not in template evaluations.
    * <li>For a single valued, non localized field, it must be <code>String</code>
