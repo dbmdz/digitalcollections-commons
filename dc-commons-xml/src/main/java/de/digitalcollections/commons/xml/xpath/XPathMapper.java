@@ -2,10 +2,8 @@ package de.digitalcollections.commons.xml.xpath;
 
 import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,16 +21,15 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 
 @SuppressWarnings("UnstableApiUsage")
-public class XPathMapper implements InvocationHandler {
+public class XPathMapper {
 
-  private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)\\}");
+  private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)}");
 
   private final XPathWrapper xpw;
   private final Set<String> rootPaths;
@@ -46,31 +43,6 @@ public class XPathMapper implements InvocationHandler {
       new TypeToken<Map<Locale, String>>() {};
   private static final TypeToken<Map<Locale, List<String>>> LOCALIZED_MULTIVALUED_TYPE =
       new TypeToken<Map<Locale, List<String>>>() {};
-
-  @SuppressWarnings("unchecked")
-  public static <T> T makeProxy(Document doc, Class<? extends T> iface, Class<?>... otherIfaces) {
-    Class<?>[] allInterfaces = Stream
-        .concat(Stream.of(iface), Stream.of(otherIfaces))
-        .distinct()
-        .toArray(Class<?>[]::new);
-    XPathRoot xPathRootAnnotation = iface.getAnnotation(XPathRoot.class);
-    if (xPathRootAnnotation != null) {
-      // XPathRoot annotation on type level sets root paths and default namespace, when defined
-      return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc,
-          xPathRootAnnotation.value(), xPathRootAnnotation.defaultNamespace()));
-    } else {
-      return (T) Proxy.newProxyInstance(iface.getClassLoader(), allInterfaces, new XPathMapper(doc,
-          new String[]{""}, ""));
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  public static <T> T makeProxy(Document doc, Class<? extends T> iface, Set<String> rootPaths,
-      String defaultRootNamespace) {
-
-    return (T) Proxy.newProxyInstance(iface.getClassLoader(), new Class[]{iface}, new XPathMapper(doc,
-        rootPaths.toArray(new String[rootPaths.size()]), defaultRootNamespace));
-  }
 
   public XPathMapper(Document doc, String[] rootPaths, String defaultRootNamespace) {
     this.xpw = new XPathWrapper(doc);
@@ -87,7 +59,7 @@ public class XPathMapper implements InvocationHandler {
    */
   public static <T> T readDocument(Document doc, Class<T> targetType, String... rootPaths) throws XPathMappingException {
     XPathRoot rootAnnotation = targetType.getAnnotation(XPathRoot.class);
-    T bindMapper = null;
+    T bindMapper;
     try {
       bindMapper = targetType.getDeclaredConstructor().newInstance();
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -102,9 +74,13 @@ public class XPathMapper implements InvocationHandler {
     // Evaluate all methods, which carry the @XPathBinding annotation
     List<Method> methodsWithAnnotation = ReflectionUtils.getMethodsAnnotatedWith(targetType, XPathBinding.class);
     for (Method m : methodsWithAnnotation) {
+      XPathBinding binding = m.getDeclaredAnnotation(XPathBinding.class);
+      XPathRoot root = m.getDeclaredAnnotation(XPathRoot.class);
+      // TODO: Verify that we're dealing with a setter
+      Type paramType = m.getGenericParameterTypes()[0];
       m.setAccessible(true);
       try {
-        Object args = xPathMapper.invoke(bindMapper, m, null);
+        Object args = xPathMapper.readValue(binding, root, paramType);
         m.invoke(bindMapper, args);
       } catch (Throwable t) {
         throw new XPathMappingException("Cannot invoke method=" + m.getName() + " on "
@@ -196,31 +172,18 @@ public class XPathMapper implements InvocationHandler {
     return variables;
   }
 
-  @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    XPathBinding binding = method.getAnnotation(XPathBinding.class);
-    XPathRoot root = method.getAnnotation(XPathRoot.class);
+  public Object readValue(XPathBinding binding, XPathRoot root, Type targetType) throws Throwable {
     if (binding == null && root == null) {
-      throw new XPathMappingException("No @XPathBinding or @XPathRoot annotation was found on the "
-          + "specified method!");
+      throw new XPathMappingException("Either a  binding or a root are required.");
     }
 
-    if (root != null) {
-      // We have an XPathRoot binding on a method, so we have to return a proxy method
-      return makeProxyForMethodMapper(method);
-    }
+    verifyTargetType(targetType, binding);
 
     // Set of variable names from the template string
     Set<String> variables = getVariables(binding.valueTemplate());
 
     // Set of expressions for direct evaluation w/o templates
     Set<String> expressions = new HashSet<>(Arrays.asList(binding.value()));
-
-    // Sanity checks
-    if (!method.getReturnType().equals(Void.TYPE)) {
-      throw new XPathMappingException("@XPathBinding annotations are only allowed on fields and setters");
-    }
-    verifyArgumentType(method, binding);
 
     if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()
         && !isEmptyOrBlankStringSet(expressions)) {
@@ -238,7 +201,7 @@ public class XPathMapper implements InvocationHandler {
     }
 
     // Resolve variables, if variables and valueTemplate are set. Otherwise, evalute expressions
-    return evaluateXPathBinding(method.getGenericReturnType(), binding, variables, expressions);
+    return evaluateXPathBinding(targetType, binding, variables, expressions);
   }
 
 
@@ -258,42 +221,6 @@ public class XPathMapper implements InvocationHandler {
     }
   }
 
-
-  private Object makeProxyForMethodMapper(Method method)
-      throws XPathMappingException {
-    XPathRoot root = method.getAnnotation(XPathRoot.class);
-
-    // Since XPathRoot was set on a method, we must ensure, that this method returns an interface
-    // with at least one method, which is annotated with an XPathBinding
-    verifyReturnTypeForHierarchy(method);
-
-    // On methods, no DefaultNamespace must be set
-    if (!root.defaultNamespace().isEmpty()) {
-      throw new XPathMappingException("Default namespace can only be set on type level "
-          + "@XPathRoot annotation, not on method level.");
-    }
-
-    Set<String> combinedMethodPaths;
-    Set<String> methodPaths = new HashSet<>(Arrays.asList(root.value()));
-    if (!rootPaths.isEmpty()) {
-      combinedMethodPaths = rootPaths.stream()
-          .flatMap(r -> methodPaths.stream()
-              .map(m -> r + m))
-              .collect(Collectors.toSet());
-    } else {
-      combinedMethodPaths = methodPaths;
-    }
-
-    return makeProxy(xpw.getDocument(), method.getReturnType(),
-        combinedMethodPaths, defaultRootNamespace);
-  }
-
-  private String[] prependWithRootPaths(String[] paths) {
-    Set<String> prependedPaths =
-        prependWithRootPaths(new HashSet<>(Arrays.asList(paths)));
-    return prependedPaths.toArray(new String[prependedPaths.size()]);
-  }
-
   private Set<String> prependWithRootPaths(Set<String> expressions) {
     if (rootPaths == null || rootPaths.isEmpty()) {
       return expressions;
@@ -304,19 +231,6 @@ public class XPathMapper implements InvocationHandler {
             .map(r -> r + e))
         .collect(Collectors.toSet());
   }
-
-  private void verifyReturnTypeForHierarchy(Method method) throws XPathMappingException {
-    Class childClass = method.getReturnType();
-    List<Method> childMethods = new ArrayList<>(Arrays.asList(childClass.getDeclaredMethods()));
-    for (Method childMethod : childMethods) {
-      if (childMethod.isAnnotationPresent(XPathBinding.class)) {
-        return;     // At least one child method contains an XPathBinding.
-      }
-    }
-    throw new XPathMappingException("Childs must contain at least one method with @XPathBinding "
-        + "annotation");
-  }
-
 
   private Object evaluateExpressions(Set<String> expressions, boolean multiValueReturnType, boolean multiLanguage)  {
     Map<Locale, List<String>> resolved = resolveVariables(expressions.toArray(new String[]{}), multiValueReturnType);
@@ -533,32 +447,27 @@ public class XPathMapper implements InvocationHandler {
    * <li>For a single valued, non localized field, it must be <code>String</code>
    * <li>For a multi valued, non localized field, it must be <code>List&lt;String&gt;</code>
    * </ul>
-   * @param method the invoked method
+   * @param targetType the type that the binding should map to
    * @param binding the XPathBinding
    * @throws XPathMappingException if the validation did not pass
    */
-  private void verifyArgumentType(Method method, XPathBinding binding) throws XPathMappingException {
-    if (method.getParameterTypes().length == 0) {
-      return;
-    }
-
-    final Type argumentType = method.getParameterTypes()[0];
-    boolean isMultiLocalized = LOCALIZED_MULTIVALUED_TYPE.isSubtypeOf(argumentType);
-    boolean isSingleLocalized = LOCALIZED_SINGLEVALUED_TYPE.isSubtypeOf(argumentType);
-    boolean isMultiValued = MULTIVALUED_TYPE.isSubtypeOf(argumentType);
-    boolean isSingleValued = SINGLEVALUED_TYPE.isSubtypeOf(argumentType);
+  private void verifyTargetType(Type targetType, XPathBinding binding) throws XPathMappingException {
+    boolean isMultiLocalized = LOCALIZED_MULTIVALUED_TYPE.isSubtypeOf(targetType);
+    boolean isSingleLocalized = LOCALIZED_SINGLEVALUED_TYPE.isSubtypeOf(targetType);
+    boolean isMultiValued = MULTIVALUED_TYPE.isSubtypeOf(targetType);
+    boolean isSingleValued = SINGLEVALUED_TYPE.isSubtypeOf(targetType);
     boolean isTemplated = binding.valueTemplate().length() > 0;
 
     if (isTemplated && !(isSingleValued || isSingleLocalized)) {
       // Templates are only allowed on single valued return fields
       throw new XPathMappingException(String.format(
-          "Templated binding methods must have a single %s or %s argument type",
+          "Templated binding methods must have a single %s or %s target type",
           SINGLEVALUED_TYPE, LOCALIZED_SINGLEVALUED_TYPE));
     }
 
     if (!isMultiLocalized && !isSingleLocalized && !isSingleValued && !isMultiValued) {
       throw new XPathMappingException(String.format(
-          "Binding method has illegal argument type, must be one of %s, %s, %s or %s",
+          "Binding method has illegal target type, must be one of %s, %s, %s or %s",
           SINGLEVALUED_TYPE, MULTIVALUED_TYPE, LOCALIZED_SINGLEVALUED_TYPE,
           LOCALIZED_MULTIVALUED_TYPE));
     }
