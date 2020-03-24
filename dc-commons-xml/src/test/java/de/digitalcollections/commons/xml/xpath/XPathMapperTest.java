@@ -27,7 +27,15 @@ public class XPathMapperTest {
       new XPathMapperFixture<>(WrongFieldTestMapper.class);
   XPathMapperFixture<WrongArgumentTestMapper> wrongArgumentTestMapperFixture =
       new XPathMapperFixture<>(WrongArgumentTestMapper.class);
-  XPathMapperFixture<HierarchicalMapper> hierarchivalMapperFixture =
+  XPathMapperFixture<WrongMutivalueFieldTestMapper> wrongMultivalueFieldTestMapperFixture =
+      new XPathMapperFixture<>(WrongMutivalueFieldTestMapper.class);
+  XPathMapperFixture<WrongMultivalueArgumentTestMapper> wrongMultivalueArgumentTestMapperFixture =
+      new XPathMapperFixture<>(WrongMultivalueArgumentTestMapper.class);
+  XPathMapperFixture<WrongMutilanguageFieldTestMapper> wrongMultilanguageFieldTestMapperFixture =
+      new XPathMapperFixture<>(WrongMutilanguageFieldTestMapper.class);
+  XPathMapperFixture<WrongMultilanguageArgumentTestMapper> wrongMultilanguageArgumentTestMapperFixture =
+      new XPathMapperFixture<>(WrongMultilanguageArgumentTestMapper.class);
+  XPathMapperFixture<HierarchicalMapper> hierarchicalMapperFixture =
       new XPathMapperFixture<>(HierarchicalMapper.class);
   XPathMapperFixture<BrokenHierarchicalMapper> brokenHierarchivalMapperFixture =
       new XPathMapperFixture<>(BrokenHierarchicalMapper.class);
@@ -129,7 +137,7 @@ public class XPathMapperTest {
   public void testWrongTypeOfSingleValuedFieldsThrowsException() {
     assertThatThrownBy(
         () -> wrongFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal return type");
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
   }
 
   @DisplayName("shall throw an exception, when the type of a single valued setter argument is wrong")
@@ -138,41 +146,55 @@ public class XPathMapperTest {
   public void testWrongTypeOfSingleValuedArgumentsThrowsException() {
     assertThatThrownBy(
         () -> wrongArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal return type");
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
   }
 
-  /*
-  @DisplayName("shall throw an exception, when the return type of a multivalued field is wrong")
+  @DisplayName("shall throw an exception, when the type of a multivalued field is wrong")
   @Test
-  public void testWrongReturnTypeOfMultiValuedFieldsThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeMultivalued).isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal return type");
+  @Disabled("Does not work yet")
+  public void testWrongTypeOfMultiValuedFieldsThrowsException() {
+    assertThatThrownBy(
+        () -> wrongMultivalueFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
   }
 
-  @DisplayName("shall throw an exception, when the return type of a multilanguage field is wrong")
+  @DisplayName("shall throw an exception, when the type of a multivalued setter argument is wrong")
   @Test
-  public void testWrongReturnTypeOfMultilanguageFieldsThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal return type");
+  public void testWrongTypeOfMultiValuedArgumentsThrowsException() {
+    assertThatThrownBy(
+        () -> wrongMultivalueArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
   }
 
-  @DisplayName("shall throw an exception, when the return type of a multilanguage field is wrong in templated context")
+  @DisplayName("shall throw an exception, when the type of a multilanguage field is wrong")
   @Test
-  public void testWrongReturnTypeOfMultilanguageFieldsInTemplatesThrowsException() {
-    assertThatThrownBy(mapper::wrongReturnTypeTemplatedMultiLanguage).isInstanceOf(XPathMappingException.class).hasMessageContaining("Templated binding methods must have a java.lang.String");
+  @Disabled("Does not work yet")
+  public void testWrongTypeOfMultilanguageFieldsThrowsException() {
+    assertThatThrownBy(
+        () -> wrongMultilanguageFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
   }
 
-  @DisplayName("shall throw an exception, when embedded mappers lack @XPathBinding annotations")
+  @DisplayName("shall throw an exception, when the type of a multilanguage setter argument is wrong")
   @Test
-  public void testInvalidHierarchy() {
-    assertThatThrownBy(brokenHierarchicalMapper::getInnerMapper)
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining(
-        "Childs must contain at least one method with @XPathBinding annotation");
+  public void testWrongTypeOfMultilanguageArgumentsThrowsException() {
+    assertThatThrownBy(
+        () -> wrongMultilanguageArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
   }
-   */
+
+  @DisplayName("returns a nullpointer, when embedded mappers lack @XPathBinding annotations")
+  @Test
+  public void testInvalidHierarchy() throws XPathMappingException {
+    HierarchicalMapper mapper = hierarchicalMapperFixture.setUpMapperWithResource("simple.xml");
+    assertThat(mapper.getUnaccessibleInnerMapper()).isNull();
+  }
+
 
   @DisplayName("shall pass down root path definitions on hierarchies on class mappers")
   @Test
   public void shallPassDownRootPathsOnInterfaceHierarchies() throws XPathMappingException {
-    HierarchicalMapper mapper = hierarchivalMapperFixture.setUpMapperWithResource("simple.xml");
+    HierarchicalMapper mapper = hierarchicalMapperFixture.setUpMapperWithResource("simple.xml");
     assertThat(mapper.getInnerMapper().getAuthor()).isEqualTo("Chuck Norris");
   }
 
@@ -340,6 +362,47 @@ public class XPathMapperTest {
   }
 
   @XPathRoot(
+      defaultNamespace = "http://www.tei-c.org/ns/1.0"
+  )
+  public static class WrongMutivalueFieldTestMapper {
+    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id")
+    List<Integer> wrongFieldTypeMultiValued;
+  }
+
+
+  @XPathRoot(
+      defaultNamespace = "http://www.tei-c.org/ns/1.0"
+  )
+  public static class WrongMultivalueArgumentTestMapper {
+    List<Integer> wrongArgumentTypeMultiValued;
+    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
+    void setWrongArgumentMultiMultiValued(List<Integer> wrongArgumentTypeMultiValued) {
+      this.wrongArgumentTypeMultiValued = wrongArgumentTypeMultiValued;
+    }
+  }
+
+  @XPathRoot(
+      defaultNamespace = "http://www.tei-c.org/ns/1.0"
+  )
+  public static class WrongMutilanguageFieldTestMapper {
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
+    Map<Locale, Integer> wrongFieldTypeMultiLanguage;
+  }
+
+
+  @XPathRoot(
+      defaultNamespace = "http://www.tei-c.org/ns/1.0"
+  )
+  public static class WrongMultilanguageArgumentTestMapper {
+    Map<Locale, Integer> wrongArgumentTypeMultiLanguage;
+    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
+    void setWrongArgumentTypeMultiLanguage(Map<Locale, Integer> wrongArgumentTypeMultiLanguage) {
+      this.wrongArgumentTypeMultiLanguage = wrongArgumentTypeMultiLanguage;
+    }
+  }
+
+
+  @XPathRoot(
       value = "/outer",
       defaultNamespace = "http://www.tei-c.org/ns/1.0"
   )
@@ -351,7 +414,20 @@ public class XPathMapperTest {
       return innerMapper;
     }
 
+    UnaccessibleInnerMapper unaccessibleInnerMapper;
+    UnaccessibleInnerMapper getUnaccessibleInnerMapper() {
+      return unaccessibleInnerMapper;
+    }
+
     public static class InnerMapper {
+      @XPathBinding("/author")
+      String author;
+      String getAuthor() {
+        return author;
+      }
+    }
+
+    public static class UnaccessibleInnerMapper {
       @XPathBinding("/author")
       String author;
       String getAuthor() {
