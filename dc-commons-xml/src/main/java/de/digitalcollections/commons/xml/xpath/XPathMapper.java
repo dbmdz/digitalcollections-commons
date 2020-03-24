@@ -94,17 +94,19 @@ public class XPathMapper implements InvocationHandler {
       XPathMapper xPathMapper = new XPathMapper(doc, determineRootPaths(rootAnnotation, rootPaths),
           determineDefaultRootNamespace(rootAnnotation));
 
+      // Evaluate all methods, which carry the @XPathBinding annotation
       List<Method> methodsWithAnnotation = ReflectionUtils.getMethodsAnnotatedWith(bindMapperClass, XPathBinding.class);
       for (Method m : methodsWithAnnotation) {
-        ReflectionUtils.ensureAccess(m);
+        m.setAccessible(true);
         m.invoke(bindMapper, xPathMapper.invoke(bindMapper, m, null));
       }
 
-      Set<Field> fieldsWithMapper = ReflectionUtils.findFields(bindMapperClass, XPathRoot.class);
+      // Evaluate all fields, which carry the @XPathRoot annotation and process them recursively
+      Set<Field> fieldsWithMapper = ReflectionUtils.getFieldsAnnotatedWith(bindMapperClass, XPathRoot.class);
       for (Field f: fieldsWithMapper) {
         XPathRoot rootBinding = f.getAnnotation(XPathRoot.class);
 
-        // For the embedded mappers, we have to contactenate the root paths
+        // For the embedded mappers, we have to concatenate the root paths
         String[] subMapperRootPaths = determineRootPaths(rootAnnotation, rootPaths);
         if (rootBinding != null && rootBinding.value().length == 1) {
           for (int i = 0; i < subMapperRootPaths.length; i++) {
@@ -113,16 +115,16 @@ public class XPathMapper implements InvocationHandler {
         }
 
         Object subMapper = readDocument(doc, f.getType(), subMapperRootPaths);
-        ReflectionUtils.ensureAccess(f);
+        f.setAccessible(true);
         f.set(bindMapper, subMapper);
       }
 
-      Set<Field> fieldsWithAnnotation = ReflectionUtils.findFields(bindMapperClass, XPathBinding.class);
+      // Evaluate all fields, which carry the @XPathBinding annotation
+      Set<Field> fieldsWithAnnotation = ReflectionUtils.getFieldsAnnotatedWith(bindMapperClass, XPathBinding.class);
       for (Field f : fieldsWithAnnotation) {
         XPathBinding fieldAnnotation = f.getAnnotation(XPathBinding.class);
-        ReflectionUtils.ensureAccess(f);
+        f.setAccessible(true);
 
-        Object value;
         Set<String> variables = xPathMapper.getVariables(fieldAnnotation.valueTemplate());
         Set<String> expressions = new HashSet<>(Arrays.asList(fieldAnnotation.value()));
         f.set(bindMapper, xPathMapper.evaluateXPathBinding(f.getType(), fieldAnnotation, variables, expressions));
@@ -136,31 +138,29 @@ public class XPathMapper implements InvocationHandler {
   }
 
   private static String determineDefaultRootNamespace(XPathRoot rootAnnotation) {
-    String defaultRootNamespace = "";
     if (rootAnnotation != null && !rootAnnotation.defaultNamespace().isEmpty()) {
-      defaultRootNamespace = rootAnnotation.defaultNamespace();
+      return rootAnnotation.defaultNamespace();
     }
-    return defaultRootNamespace;
+    return "";
   }
 
   private static String[] determineRootPaths(XPathRoot rootAnnotation, String[] rootPaths) {
-    List<String> rootPathsList = new ArrayList<>();
     if (rootPaths != null && rootPaths.length > 0) {
-      rootPathsList = Arrays.asList(rootPaths);
-    } else if (rootAnnotation != null && rootAnnotation.value() != null && rootAnnotation.value().length > 0) {
-      rootPathsList = Arrays.asList(rootAnnotation.value());
+      return rootPaths;
+    } else if (rootAnnotation != null && rootAnnotation.value().length > 0) {
+      return rootAnnotation.value();
+    } else {
+      return new String[0];
     }
-    return rootPathsList.toArray(new String[rootPathsList.size()]);
   }
 
   private static void ensureValidRootPaths(XPathRoot rootAnnotation, String[] rootPaths)
       throws XPathMappingException {
     // Sanity check: We must not allow two clashing root paths
-    if (rootAnnotation != null
-        && rootAnnotation.value() != null && rootAnnotation.value().length > 0
+    if (rootAnnotation != null && rootAnnotation.value().length > 0
         && rootPaths != null && rootPaths.length > 0) {
       throw new XPathMappingException(
-          "XPathRoot is not allowed on class level and customizing field at the same time!");
+          "XPathRoot must not be declared on classes that are embedded in other mapping classes.");
     }
   }
 
@@ -197,20 +197,15 @@ public class XPathMapper implements InvocationHandler {
     // Sanity checks
     if (method.getReturnType().equals(Void.TYPE)) {
       verifyArgumentType(method, binding);
-      if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()
-          && !isEmptyOrBlankStringSet(expressions)) {
-        throw new XPathMappingException(
-            "Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
-      }
+    } else {
+      verifyReturnType(method,binding);
     }
-    if (!method.getReturnType().equals(Void.TYPE)) {
-      verifyReturnType(method, binding);
-      if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()
-          && !isEmptyOrBlankStringSet(expressions)) {
-        throw new XPathMappingException(
-            "Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
-      }
+    if (!isEmptyOrBlankStringSet(variables) && !binding.valueTemplate().isEmpty()
+        && !isEmptyOrBlankStringSet(expressions)) {
+      throw new XPathMappingException(
+          "Only one XPath evaluation type, either variables or expressions, is allowed, not both at the same time!");
     }
+
     if (isEmptyOrBlankStringSet(variables) && binding.valueTemplate().isEmpty() && isEmptyOrBlankStringSet(expressions)) {
       throw new XPathMappingException("Either variables or expressions must be used, not none of them!");
     }
@@ -546,6 +541,10 @@ public class XPathMapper implements InvocationHandler {
 
 
   private void verifyArgumentType(Method method, XPathBinding binding) throws XPathMappingException {
+    if (method.getParameterTypes().length == 0) {
+      return;
+    }
+
     final Type argumentType = method.getParameterTypes()[0];
     boolean isMultiLocalized = LOCALIZED_MULTIVALUED_RETURN_TYPE.isSubtypeOf(argumentType);
     boolean isSingleLocalized = LOCALIZED_SINGLEVALUED_RETURN_TYPE.isSubtypeOf(argumentType);
