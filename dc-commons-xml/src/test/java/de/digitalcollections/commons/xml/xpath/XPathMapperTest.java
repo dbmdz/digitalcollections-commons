@@ -171,9 +171,8 @@ public class XPathMapperTest {
 
   @DisplayName("shall pass down root path definitions on hierarchies on class mappers")
   @Test
-  @Disabled("Does not work yet")
   public void shallPassDownRootPathsOnInterfaceHierarchies() throws XPathMappingException {
-    HierarchicalMapper mapper = hierarchivalMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    HierarchicalMapper mapper = hierarchivalMapperFixture.setUpMapperWithResource("simple.xml");
     assertThat(mapper.getInnerMapper().getAuthor()).isEqualTo("Chuck Norris");
   }
 
