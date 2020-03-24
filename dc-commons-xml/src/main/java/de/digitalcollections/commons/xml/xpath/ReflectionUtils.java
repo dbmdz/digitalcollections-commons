@@ -20,6 +20,7 @@ public class ReflectionUtils {
    * @param annotation the annotation class
    * @return a list of all methods (including inherited ones), which carry the given annotation
    */
+  //TODO: Evaluate argument types
   public static List<Method> getMethodsAnnotatedWith(final Class<?> type, final Class<? extends Annotation> annotation) {
     final List<Method> methods = new ArrayList<Method>();
     Class<?> c = type;
@@ -28,9 +29,7 @@ public class ReflectionUtils {
       final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(c.getDeclaredMethods()));
       Arrays.stream(c.getDeclaredMethods())
           .filter(m -> m.isAnnotationPresent(annotation))
-          .forEach(m -> {
-            methods.add(m);
-          });
+          .forEach(methods::add);
       c = c.getSuperclass();
     }
     return methods;
@@ -48,7 +47,7 @@ public class ReflectionUtils {
     while (c != null) {
       Arrays.stream(c.getDeclaredFields())
           .filter(f -> f.isAnnotationPresent(annotation))
-          .forEach(f -> set.add(f));
+          .forEach(set::add);
       c = c.getSuperclass();
     }
     return set;
