@@ -128,7 +128,8 @@ public class XPathMapper {
         throw new XPathMappingException("Invalid XPathExpression for field=" + f.getName()
             + " on " + targetType.getName() + ": " + e);
       } catch (IllegalArgumentException e) {
-        throw new XPathMappingException(e.getMessage());
+        throw new XPathMappingException("Invalid structure for field=" + f.getName()
+            + " on " + targetType.getName() + ": " + e.getCause());
       }
     }
 
