@@ -110,7 +110,8 @@ public class XPathMapperTest {
   public void testMissingVariableThrows() {
     assertThatThrownBy(
         () -> brokenTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Could not resolve variable");
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("Could not resolve template due to missing variables: broken");
   }
 
   @DisplayName("shall throw an exception, when templates and expressions are used at the same time")

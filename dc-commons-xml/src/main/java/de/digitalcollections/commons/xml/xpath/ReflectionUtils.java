@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Some helper methods to deal with reflection
  */
-public class ReflectionUtils {
+class ReflectionUtils {
 
   /**
    * @param type The type to be evaluated
