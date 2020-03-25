@@ -191,9 +191,9 @@ class DocumentReader {
 
   private Map<Locale,String> resolveVariable(String[] paths) throws XPathMappingException {
     return resolveVariable(paths, false).entrySet().stream()
-        .collect(Collectors.toMap(
-            Entry::getKey,
-            var -> var.getValue().get(0)));
+      .collect(Collectors.toMap(
+        Entry::getKey,
+        var -> var.getValue().get(0)));
   }
 
   private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued) throws XPathMappingException {
