@@ -1,6 +1,7 @@
 package de.digitalcollections.commons.xml.xpath;
 
 import com.google.common.reflect.TypeToken;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -8,10 +9,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 
@@ -76,7 +79,7 @@ public class XPathMapper<T> {
 
     this.fields = new ArrayList<>();
     // Determine setters and fields annotated with @XPathBinding
-    for (Method m : ReflectionUtils.getSettersAnnotatedWith(targetType, XPathBinding.class)) {
+    for (Method m : getSettersAnnotatedWith(targetType, XPathBinding.class)) {
       XPathBinding binding = m.getDeclaredAnnotation(XPathBinding.class);
       validateBinding(binding);
       if (!binding.valueTemplate().isEmpty()) {
@@ -85,7 +88,7 @@ public class XPathMapper<T> {
         fields.add(new SimpleField(m, binding.value()));
       }
     }
-    for (Field fl : ReflectionUtils.getFieldsAnnotatedWith(targetType, XPathBinding.class)) {
+    for (Field fl : getFieldsAnnotatedWith(targetType, XPathBinding.class)) {
       XPathBinding binding = fl.getDeclaredAnnotation(XPathBinding.class);
       validateBinding(binding);
       if (!binding.valueTemplate().isEmpty()) {
@@ -96,13 +99,13 @@ public class XPathMapper<T> {
     }
 
     // Determine all setters and fields that map nested types, i.e. that are annotated with @XPathRoot
-    for (Method m : ReflectionUtils.getSettersAnnotatedWith(targetType, XPathRoot.class)) {
+    for (Method m : getSettersAnnotatedWith(targetType, XPathRoot.class)) {
       XPathRoot nestedRoot = m.getDeclaredAnnotation(XPathRoot.class);
       fields.add(new NestedField(
           m, prependWithRootPaths(nestedRoot.value()),
           determineNamespace(this.defaultRootNamespace, nestedRoot)));
     }
-    for (Field fl : ReflectionUtils.getFieldsAnnotatedWith(targetType, XPathRoot.class)) {
+    for (Field fl : getFieldsAnnotatedWith(targetType, XPathRoot.class)) {
       XPathRoot nestedRoot = fl.getDeclaredAnnotation(XPathRoot.class);
       fields.add(new NestedField(
           fl, prependWithRootPaths(nestedRoot.value()),
@@ -180,6 +183,32 @@ public class XPathMapper<T> {
     return Arrays.stream(vals).filter(Objects::nonNull).allMatch(String::isEmpty);
   }
 
+  static Set<Method> getSettersAnnotatedWith(Class<?> type, final Class<? extends Annotation> annotation) {
+    Set<Method> methods = new HashSet<>();
+    // Iterate through hierarchy to get inherited methods, too
+    while (type != Object.class) {
+      Arrays.stream(type.getDeclaredMethods())
+          .filter(m -> m.getName().startsWith("set"))
+          .filter(m -> m.getParameterTypes().length == 1)
+          .filter(m -> m.isAnnotationPresent(annotation))
+          .forEach(methods::add);
+      type = type.getSuperclass();
+    }
+    return methods;
+  }
+
+  static Set<Field> getFieldsAnnotatedWith(Class<?> type, final Class<? extends Annotation> annotation) {
+    Set<Field> set = new HashSet<>();
+    // Iterate through hierarchy to get inherited fields, too
+    while (type != null) {
+      Arrays.stream(type.getDeclaredFields())
+          .filter(f -> f.isAnnotationPresent(annotation))
+          .forEach(set::add);
+      type = type.getSuperclass();
+    }
+    return set;
+  }
+
   /** Base class for mapped fields, takes care of setting the value on the target object. */
   public abstract static class MappedField {
     private final boolean isField;
@@ -219,7 +248,6 @@ public class XPathMapper<T> {
         setter.invoke(target, val);
       }
     }
-
   }
 
   /** Simple, non-templated field  binding, can be localized and/or multi-valued. */
