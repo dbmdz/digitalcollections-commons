@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Maps XML documents to Java POJOs.
@@ -35,8 +36,10 @@ public class XPathMapper<T> {
 
   // Various Guava type tokens to help with reflection
   private static final TypeToken<String> SINGLEVALUED_TYPE = new TypeToken<String>() {};
-  private static final TypeToken<List<String>> MULTIVALUED_TYPE =
+  private static final TypeToken<List<String>> MULTIVALUED_STRING_TYPE =
       new TypeToken<List<String>>() {};
+  private static final TypeToken<List<Element>> MULTIVALUED_ELEMENT_TYPE =
+      new TypeToken<List<Element>>() {};
   private static final TypeToken<Map<Locale, String>> LOCALIZED_SINGLEVALUED_TYPE =
       new TypeToken<Map<Locale, String>>() {};
   private static final TypeToken<Map<Locale, List<String>>> LOCALIZED_MULTIVALUED_TYPE =
@@ -254,6 +257,7 @@ public class XPathMapper<T> {
   public static final class SimpleField extends MappedField {
     private boolean multiValued;
     private boolean multiLanguage;
+    private boolean multiValuedElements;
     private final List<String> paths;
 
     public SimpleField(Method m, String[] paths) throws XPathMappingException {
@@ -272,21 +276,25 @@ public class XPathMapper<T> {
       Type targetType = this.getTargetType();
       boolean isMultiLocalized = LOCALIZED_MULTIVALUED_TYPE.isSubtypeOf(targetType);
       boolean isSingleLocalized = LOCALIZED_SINGLEVALUED_TYPE.isSubtypeOf(targetType);
-      boolean isMultiValued = MULTIVALUED_TYPE.isSubtypeOf(targetType);
+      boolean isMultiValued = MULTIVALUED_STRING_TYPE.isSubtypeOf(targetType);
       boolean isSingleValued = SINGLEVALUED_TYPE.isSubtypeOf(targetType);
       this.multiLanguage = isMultiLocalized || isSingleLocalized;
       this.multiValued = isMultiValued || isMultiLocalized;
-      if (!multiLanguage && !multiValued && !isSingleValued) {
+      this.multiValuedElements = MULTIVALUED_ELEMENT_TYPE.isSubtypeOf(targetType);
+      if (!multiLanguage && !multiValued && !multiValuedElements && !isSingleValued) {
         throw new XPathMappingException(String.format(
-            "Binding method has illegal target type, must be one of %s, %s, %s or %s",
-            SINGLEVALUED_TYPE, MULTIVALUED_TYPE, LOCALIZED_SINGLEVALUED_TYPE,
+            "Binding method has illegal target type %s, must be one of %s, %s, %s, %s or %s",
+            targetType,
+            SINGLEVALUED_TYPE, MULTIVALUED_STRING_TYPE, MULTIVALUED_ELEMENT_TYPE, LOCALIZED_SINGLEVALUED_TYPE,
             LOCALIZED_MULTIVALUED_TYPE));
       }
     }
 
     @Override
     protected Object determineValue(DocumentReader r) throws XPathMappingException {
-      if (multiValued && multiLanguage) {
+      if (multiValuedElements) {
+        return r.readElementList(paths);
+      } else if (multiValued && multiLanguage) {
         return r.readLocalizedValues(paths);
       } else if (multiValued) {
         return r.readValues(paths);

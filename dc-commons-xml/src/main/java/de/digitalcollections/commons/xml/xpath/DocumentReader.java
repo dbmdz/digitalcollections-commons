@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /** Helper class to read simple or templated values from an XML document. */
@@ -52,6 +53,10 @@ class DocumentReader {
 
   public Map<Locale, List<String>> readLocalizedValues(List<String> expressions) throws XPathMappingException {
     return resolveVariable(expressions.toArray(new String[]{}), true);
+  }
+
+  public List<Element> readElementList(List<String> expressions) throws XPathMappingException {
+    return resolveVariableAsElements(expressions.toArray(new String[]{}));
   }
 
   public String readTemplateValue(String template, List<XPathVariable> variables)
@@ -239,6 +244,25 @@ class DocumentReader {
       // If we only want a single value and the first path yielded a value, no need to look at the other paths
       if (!multiValued && !result.isEmpty()) {
         break;
+      }
+    }
+    return result;
+  }
+
+  private List<Element> resolveVariableAsElements(String[] paths) throws XPathMappingException {
+    paths = prependWithRootPaths(paths);
+    List<Element> result = new ArrayList<>();
+    for (String path : paths) {
+      List<Node> nodes;
+      try {
+        nodes = xpw.asListOfNodes(path);
+      } catch (IllegalArgumentException e) {
+        throw new XPathMappingException("Failed to resolve XPath: " + path, e);
+      }
+      for (Node node : nodes) {
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+          result.add((Element) node);
+        }
       }
     }
     return result;
