@@ -256,7 +256,7 @@ class DocumentReader {
       return Arrays.stream(paths)
           .flatMap(path -> xpw.asListOfNodes(path).stream())
           .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
-          .map(n -> (Element) n)
+          .map(Element.class::cast)
           .collect(Collectors.toList());
     } catch (IllegalArgumentException e) {
       throw new XPathMappingException("Failed to resolve XPath", e);
