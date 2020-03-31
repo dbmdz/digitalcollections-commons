@@ -251,21 +251,16 @@ class DocumentReader {
 
   private List<Element> resolveVariableAsElements(String[] paths) throws XPathMappingException {
     paths = prependWithRootPaths(paths);
-    List<Element> result = new ArrayList<>();
-    for (String path : paths) {
-      List<Node> nodes;
-      try {
-        nodes = xpw.asListOfNodes(path);
-      } catch (IllegalArgumentException e) {
-        throw new XPathMappingException("Failed to resolve XPath: " + path, e);
-      }
-      for (Node node : nodes) {
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-          result.add((Element) node);
-        }
-      }
+
+    try {
+      return Arrays.stream(paths)
+          .flatMap(path -> xpw.asListOfNodes(path).stream())
+          .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
+          .map(n -> (Element) n)
+          .collect(Collectors.toList());
+    } catch (IllegalArgumentException e) {
+      throw new XPathMappingException("Failed to resolve XPath", e);
     }
-    return result;
   }
 
   protected static Locale determineLocaleFromCode(String localeCode) {
