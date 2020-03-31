@@ -211,11 +211,11 @@ class DocumentReader {
         if (node.hasAttributes()) {
           Node langCode = node.getAttributes().getNamedItem("xml:lang");
           if (langCode != null) {
-            locale = Locale.forLanguageTag(langCode.getNodeValue());
+            locale = determineLocaleFromCode(langCode.getNodeValue());
           }
         }
         if (locale == null || locale.getLanguage().isEmpty()) {
-          locale = Locale.forLanguageTag("");
+          locale = determineLocaleFromCode("");
         }
         // For single valued: Only register value if we don't have one for the current locale
         String value = node.getTextContent()
@@ -242,6 +242,29 @@ class DocumentReader {
       }
     }
     return result;
+  }
+
+  protected static Locale determineLocaleFromCode(String localeCode) {
+    if (localeCode == null) {
+      return null;
+    }
+
+    Locale locale = Locale.forLanguageTag(localeCode);
+    if (!locale.getLanguage().isEmpty()) {
+      return locale;
+    }
+
+    // For cases, in which the language could not be determined
+    // (e.g. for "und"), we have to re-build the locale manually
+    String[] localeCodeParts = localeCode.split("-");
+    if (localeCodeParts.length == 1) {
+      // We only have a language, probably "und"
+      return new Locale.Builder().setLanguage(localeCodeParts[0]).build();
+    } else {
+      // We have language and script
+      return new Locale.Builder().setLanguage(localeCodeParts[0])
+          .setScript(localeCodeParts[1]).build();
+    }
   }
 
   private String[] prependWithRootPaths(String[] paths) {
