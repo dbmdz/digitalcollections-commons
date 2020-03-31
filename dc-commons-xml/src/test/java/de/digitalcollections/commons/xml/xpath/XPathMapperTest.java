@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Element;
 
 @DisplayName("The XPath Mapper")
 public class XPathMapperTest {
@@ -75,6 +76,14 @@ public class XPathMapperTest {
     assertThat(mapper.getAuthorFromExpression().get(Locale.GERMAN)).isEqualTo("Kugelmann, Hans");
     assertThat(mapper.getAuthorFromExpression().get(Locale.ENGLISH)).isEqualTo("Name, English");
   }
+
+  @DisplayName("shall evaluate setter with an argument list of elements")
+  @Test
+  public void testElementArgumentList() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.getAuthorElements()).hasSize(2);
+  }
+
 
   @DisplayName("shall evaluate a single value expression without template")
   @Test
@@ -212,6 +221,17 @@ public class XPathMapperTest {
     Map<Locale, String> getAuthor() {
       return author;
     };
+
+    List<Element> authorElements;
+    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
+    void setAuthorElement(List<Element> authorElements) {
+      this.authorElements = authorElements;
+    }
+
+    List<Element> getAuthorElements() {
+      return authorElements;
+    }
+
     String germanAuthor;
 
     @XPathBinding(
