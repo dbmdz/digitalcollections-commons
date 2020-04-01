@@ -15,7 +15,7 @@
   
   <properties>
     <version.dc-model>4.0.3-SNAPSHOT</version.dc-model>
-    <version.feign-core>10.7.0</version.feign-core>
+    <version.feign-core>10.9</version.feign-core>
   </properties>
 
   <dependencies>
