@@ -1,13 +1,13 @@
 package de.digitalcollections.commons.yaml;
 
+import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
+import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.commons.yaml.examples.Person;
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static de.digitalcollections.commons.yaml.StringRepresentations.fromStringRepresetation;
-import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringRepresentationsTest {
 
@@ -25,6 +25,7 @@ public class StringRepresentationsTest {
 
   @Test
   public void shouldSerializeAndDeserialize() {
-    assertThat(fromStringRepresetation(stringRepresentationOf(boris))).isEqualToComparingFieldByField(boris);
+    assertThat(fromStringRepresetation(stringRepresentationOf(boris)))
+        .isEqualToComparingFieldByField(boris);
   }
 }

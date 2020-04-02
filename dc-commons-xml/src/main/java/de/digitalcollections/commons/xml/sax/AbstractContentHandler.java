@@ -16,9 +16,7 @@ public class AbstractContentHandler implements ContentHandler {
   /** The namespace context. */
   private NamespaceContext namespaceContext;
 
-  /**
-   * Instantiates a new abstract content handler.
-   */
+  /** Instantiates a new abstract content handler. */
   public AbstractContentHandler() {
     this.namespaceContext = new DigitalCollectionsNamespaceContext();
   }
@@ -113,7 +111,8 @@ public class AbstractContentHandler implements ContentHandler {
    * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
    */
   @Override
-  public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+  public void startElement(String uri, String localName, String qName, Attributes attributes)
+      throws SAXException {
     this.handler.startElement(uri, localName, qName, attributes);
   }
 
@@ -156,5 +155,4 @@ public class AbstractContentHandler implements ContentHandler {
   public void skippedEntity(String name) throws SAXException {
     this.handler.skippedEntity(name);
   }
-
 }

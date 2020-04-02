@@ -1,8 +1,8 @@
 package de.digitalcollections.commons.yaml.examples;
 
-import org.joda.time.LocalDateTime;
-
 import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
+
+import org.joda.time.LocalDateTime;
 
 public class Person {
 
@@ -12,8 +12,7 @@ public class Person {
 
   private LocalDateTime bornAt;
 
-  private Person() {
-  }
+  private Person() {}
 
   public Person(String firstName, String lastName, LocalDateTime bornAt) {
     this.firstName = firstName;
@@ -49,5 +48,4 @@ public class Person {
   public String toString() {
     return stringRepresentationOf(this);
   }
-
 }

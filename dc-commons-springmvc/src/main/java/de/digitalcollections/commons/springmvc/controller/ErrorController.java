@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ErrorController {
 
   /*
-     * Delivers the timestamp and error code to the error page.
+   * Delivers the timestamp and error code to the error page.
    */
   @RequestMapping({"/error/{errorCode}"})
   public String getErrorPage(@PathVariable String errorCode, Model model) {
@@ -23,7 +23,7 @@ public class ErrorController {
   }
 
   /*
-     * Delivers the timestamp and error code to the error page.
+   * Delivers the timestamp and error code to the error page.
    */
   @RequestMapping({"/error"})
   public String getErrorPage(Model model) {

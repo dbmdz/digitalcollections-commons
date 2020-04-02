@@ -7,6 +7,4 @@ import de.digitalcollections.prosemirror.model.jackson.mixin.AttributesMixIn;
 
 @JsonDeserialize(as = IFrameImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface IFrameMixIn extends AttributesMixIn {
-
-}
+public interface IFrameMixIn extends AttributesMixIn {}

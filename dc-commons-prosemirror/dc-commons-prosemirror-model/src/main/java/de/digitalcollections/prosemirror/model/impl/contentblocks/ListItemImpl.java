@@ -5,8 +5,7 @@ import de.digitalcollections.prosemirror.model.impl.NodeContentBlockImpl;
 
 public class ListItemImpl extends NodeContentBlockImpl implements ListItem {
 
-  public ListItemImpl() {
-  }
+  public ListItemImpl() {}
 
   public ListItemImpl(String text) {
     addContentBlock(new ParagraphImpl(text));

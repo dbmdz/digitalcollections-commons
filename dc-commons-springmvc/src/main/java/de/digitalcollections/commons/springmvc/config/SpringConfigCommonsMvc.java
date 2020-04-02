@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-/**
- * Commons Spring MVC configuration.
- */
+/** Commons Spring MVC configuration. */
 @Configuration
 public class SpringConfigCommonsMvc {
 

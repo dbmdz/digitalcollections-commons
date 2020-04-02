@@ -6,49 +6,59 @@ import java.util.Map;
 
 public class TestMapperClass {
 
-  static final String BIBLSTRUCT_PATH = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct";
+  static final String BIBLSTRUCT_PATH =
+      "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct";
 
   @XPathBinding(
       valueTemplate = "{author}",
       variables = {
-          @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
-      }
-  )
+        @XPathVariable(
+            name = "author",
+            paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+      })
   Map<Locale, String> author;
 
   Map<Locale, String> getAuthor() {
     return author;
   };
 
-
   @XPathBinding(
       valueTemplate = "{author}",
       variables = {
-          @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author[@type=\"ChuckNorris\"]/tei:persName/tei:name"})
-      }
-  )
+        @XPathVariable(
+            name = "author",
+            paths = {
+              BIBLSTRUCT_PATH
+                  + "/tei:monogr/tei:author[@type=\"ChuckNorris\"]/tei:persName/tei:name"
+            })
+      })
   String noAuthor;
 
   String getNoAuthor() {
     return noAuthor;
   }
 
-
   @XPathBinding(
       valueTemplate = "{title}<: {subtitle}>< [. {partNumber}<, {partTitle}>]>",
       variables = {
-          @XPathVariable(name = "title", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"main\"]"}),
-          @XPathVariable(name = "subtitle", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"sub\"]"}),
-          @XPathVariable(name = "partNumber", paths = {BIBLSTRUCT_PATH + "/tei:series/tei:biblScope[@ana=\"#norm\"]"}),
-          @XPathVariable(name = "partTitle", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"part\"]"})
-      }
-  )
+        @XPathVariable(
+            name = "title",
+            paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"main\"]"}),
+        @XPathVariable(
+            name = "subtitle",
+            paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"sub\"]"}),
+        @XPathVariable(
+            name = "partNumber",
+            paths = {BIBLSTRUCT_PATH + "/tei:series/tei:biblScope[@ana=\"#norm\"]"}),
+        @XPathVariable(
+            name = "partTitle",
+            paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"part\"]"})
+      })
   String title;
 
   String getTitle() {
     return title;
   }
-
 
   /*
   @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"alt\" and @subtype=\"main\"]")
@@ -59,7 +69,6 @@ public class TestMapperClass {
   }
 
    */
-
 
   /*
   @XPathBinding(valueTemplate = "{broken}", variables = {})
@@ -80,7 +89,6 @@ public class TestMapperClass {
   }
    */
 
-
   /*
   @XPathBinding(
       valueTemplate = "{author}",
@@ -97,8 +105,7 @@ public class TestMapperClass {
 
    */
 
-  @XPathBinding()
-  String nothing;
+  @XPathBinding() String nothing;
 
   String getNothing() {
     return nothing;
@@ -149,5 +156,5 @@ public class TestMapperClass {
 
    */
 
-  //TODO test setters
+  // TODO test setters
 }

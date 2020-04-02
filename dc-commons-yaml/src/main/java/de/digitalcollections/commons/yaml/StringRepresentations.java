@@ -53,5 +53,4 @@ public class StringRepresentations {
   public static <T> T fromStringRepresetation(Class<T> type, String string) {
     return YAML.loadAs(string, type);
   }
-
 }

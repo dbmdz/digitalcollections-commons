@@ -1,5 +1,7 @@
 package de.digitalcollections.prosemirror.model.jackson.contentblocks;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.prosemirror.model.api.contentblocks.CodeBlock;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Paragraph;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Text;
@@ -8,8 +10,6 @@ import de.digitalcollections.prosemirror.model.impl.contentblocks.ParagraphImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.TextImpl;
 import de.digitalcollections.prosemirror.model.jackson.BaseProseMirrorObjectMapperTest;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class CodeBlockTest extends BaseProseMirrorObjectMapperTest {
 
@@ -32,7 +32,8 @@ public class CodeBlockTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithContents() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "      \"type\": \"code_block\",\n"
             + "      \"content\": [\n"
             + "        {\n"
@@ -57,5 +58,4 @@ public class CodeBlockTest extends BaseProseMirrorObjectMapperTest {
 
     assertThat(codeBlock.getContentBlocks()).containsExactly(paragraph);
   }
-
 }

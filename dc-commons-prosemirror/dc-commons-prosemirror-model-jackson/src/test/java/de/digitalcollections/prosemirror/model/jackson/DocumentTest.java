@@ -1,5 +1,7 @@
 package de.digitalcollections.prosemirror.model.jackson;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.prosemirror.model.api.ContentBlock;
 import de.digitalcollections.prosemirror.model.api.Document;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Text;
@@ -9,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class DocumentTest extends BaseProseMirrorObjectMapperTest {
 
-  private static final String JSON = "{      \"type\": \"doc\",\n"
+  private static final String JSON =
+      "{      \"type\": \"doc\",\n"
           + "  \"content\": [\n"
           + "    {\n"
           + "      \"type\": \"text\",\n"

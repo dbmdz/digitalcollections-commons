@@ -17,13 +17,16 @@ public class XPathBenchmarkTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathBenchmarkTest.class);
 
-  private static final String TEST_PATH = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title";
+  private static final String TEST_PATH =
+      "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title";
 
-  public static XPathWrapper getWrapper() throws ParserConfigurationException, IOException, SAXException {
+  public static XPathWrapper getWrapper()
+      throws ParserConfigurationException, IOException, SAXException {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setNamespaceAware(true);
     DocumentBuilder db = dbf.newDocumentBuilder();
-    InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("bsbstruc.xml");
+    InputStream is =
+        Thread.currentThread().getContextClassLoader().getResourceAsStream("bsbstruc.xml");
     Document doc = db.parse(is);
     return new XPathWrapper(doc);
   }

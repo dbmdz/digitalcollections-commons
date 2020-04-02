@@ -9,8 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
- * Adds current request url as model attribute "currentUrl" for usage in views. Also deletes given params from query
- * string.
+ * Adds current request url as model attribute "currentUrl" for usage in views. Also deletes given
+ * params from query string.
  */
 public class CurrentUrlAsModelAttributeHandlerInterceptor extends HandlerInterceptorAdapter {
 
@@ -23,8 +23,12 @@ public class CurrentUrlAsModelAttributeHandlerInterceptor extends HandlerInterce
   }
 
   @Override
-  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
-          throws Exception {
+  public void postHandle(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Object handler,
+      ModelAndView modelAndView)
+      throws Exception {
     if (modelAndView != null) {
       String currentUrl = getCurrentUrl(request);
       modelAndView.addObject("currentUrl", currentUrl);
@@ -52,9 +56,16 @@ public class CurrentUrlAsModelAttributeHandlerInterceptor extends HandlerInterce
       if (paramValue == null) {
         paramValue = "";
       }
-      currentUrl = currentUrl.replaceAll("&" + paramName + "=" + paramValue, ""); // there are other params before given param
-      currentUrl = currentUrl.replaceAll("\\?" + paramName + "=" + paramValue + "&", "?"); // there are other params after given param
-      currentUrl = currentUrl.replaceAll("\\?" + paramName + "=" + paramValue, ""); // given param was the only param
+      currentUrl =
+          currentUrl.replaceAll(
+              "&" + paramName + "=" + paramValue, ""); // there are other params before given param
+      currentUrl =
+          currentUrl.replaceAll(
+              "\\?" + paramName + "=" + paramValue + "&",
+              "?"); // there are other params after given param
+      currentUrl =
+          currentUrl.replaceAll(
+              "\\?" + paramName + "=" + paramValue, ""); // given param was the only param
     }
     return currentUrl;
   }

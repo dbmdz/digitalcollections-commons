@@ -1,5 +1,10 @@
 package de.digitalcollections.commons.file.backend.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import de.digitalcollections.commons.file.business.api.FileResourceService;
 import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
 import de.digitalcollections.model.api.identifiable.resource.FileResource;
@@ -26,45 +31,42 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {SpringConfigCommonsFile.class})
 @ActiveProfiles("TEST")
 public class FileResourceRepositoryImplTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(FileResourceRepositoryImplTest.class);
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(FileResourceRepositoryImplTest.class);
 
-  @Autowired
-  private ResourceLoader resourceLoader;
+  @Autowired private ResourceLoader resourceLoader;
 
-  @Autowired
-  private FileResourceRepositoryImpl resourceRepository;
+  @Autowired private FileResourceRepositoryImpl resourceRepository;
 
-  @Autowired
-  private FileResourceService resourceService;
+  @Autowired private FileResourceService resourceService;
 
   @Test
   public void assertNonexistingFile() {
-    assertThatThrownBy(() -> {
-      FileResource nonexistingResource = new FileResourceImpl();
-      nonexistingResource.setUri(new URI("file:/tmp/nonexistant"));
-      nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
-      resourceRepository.assertReadability(nonexistingResource);
-    }).isInstanceOf(ResourceNotFoundException.class);
+    assertThatThrownBy(
+            () -> {
+              FileResource nonexistingResource = new FileResourceImpl();
+              nonexistingResource.setUri(new URI("file:/tmp/nonexistant"));
+              nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
+              resourceRepository.assertReadability(nonexistingResource);
+            })
+        .isInstanceOf(ResourceNotFoundException.class);
   }
 
   @Test
   public void assertZeroByteFile() {
-    assertThatThrownBy(() -> {
-      FileResource zeroByteLengthResource = new FileResourceImpl();
-      zeroByteLengthResource.setUri(new URI("file:/proc/uptime"));
-      zeroByteLengthResource.setMimeType(MimeType.MIME_WILDCARD);
-      resourceRepository.assertReadability(zeroByteLengthResource);
-    }).isInstanceOf(ResourceIOException.class);
+    assertThatThrownBy(
+            () -> {
+              FileResource zeroByteLengthResource = new FileResourceImpl();
+              zeroByteLengthResource.setUri(new URI("file:/proc/uptime"));
+              zeroByteLengthResource.setMimeType(MimeType.MIME_WILDCARD);
+              resourceRepository.assertReadability(zeroByteLengthResource);
+            })
+        .isInstanceOf(ResourceIOException.class);
   }
 
   @Test
@@ -86,9 +88,13 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void testCreateUri() throws Exception {
-    FileResource resource = resourceRepository.create("a30cf362-5992-4f5a-8de0-61938134e721", MimeType.MIME_APPLICATION_XML);
+    FileResource resource =
+        resourceRepository.create(
+            "a30cf362-5992-4f5a-8de0-61938134e721", MimeType.MIME_APPLICATION_XML);
     URI result = resource.getUri();
-    URI expResult = URI.create("file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721.xml");
+    URI expResult =
+        URI.create(
+            "file:///src/test/resources/repository/dico/a30c/f362/5992/4f5a/8de0/6193/8134/e721/a30cf362-5992-4f5a-8de0-61938134e721.xml");
     assertThat(expResult).isEqualTo(result);
   }
 
@@ -116,7 +122,8 @@ public class FileResourceRepositoryImplTest {
 
   @Test
   public void testGetUrisAsStringsForCustomResolver() throws Exception {
-    List<String> urisAsString = resourceRepository.getUrisAsString("identifier_resolved_by_custom_resolver");
+    List<String> urisAsString =
+        resourceRepository.getUrisAsString("identifier_resolved_by_custom_resolver");
     assertThat(urisAsString).isNotEmpty();
   }
 
@@ -134,20 +141,28 @@ public class FileResourceRepositoryImplTest {
     @SuppressWarnings("unchecked")
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {
-      Paths.get(URI.create("file:///bavstorage/objects/ASM/OBJ/000000000000/bav-ASM-OBJ-0000000000000736/image/D_2014-196_Wittislingen.jpg"))
+      Paths.get(
+          URI.create(
+              "file:///bavstorage/objects/ASM/OBJ/000000000000/bav-ASM-OBJ-0000000000000736/image/D_2014-196_Wittislingen.jpg"))
     };
     LOGGER.debug("Path = " + mockFiles[0].toAbsolutePath().toString());
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
 
-    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
-    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("^(?:bav:)?([A-Z]{3})-([A-Z]{3})-(\\w{12})(\\w{4})$", "file:/bavstorage/objects/$1/$2/$3/bav-$1-$2-$3$4/image/*\\.jpg");
+    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig =
+        new IdentifierPatternToFileResourceUriResolvingConfig();
+    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl =
+        new IdentifierPatternToFileResourceUriResolverImpl(
+            "^(?:bav:)?([A-Z]{3})-([A-Z]{3})-(\\w{12})(\\w{4})$",
+            "file:/bavstorage/objects/$1/$2/$3/bav-$1-$2-$3$4/image/*\\.jpg");
     resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
 
-    FileResourceRepositoryImpl fileResourceRepository = new FileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
+    FileResourceRepositoryImpl fileResourceRepository =
+        new FileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
     fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
     // find with given mimetype
-    FileResource f = fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.fromExtension("jpg"));
+    FileResource f =
+        fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.fromExtension("jpg"));
     assertThat(f.getFilename()).isEqualTo("D_2014-196_Wittislingen.jpg");
 
     // find with unknown mimetype
@@ -163,19 +178,27 @@ public class FileResourceRepositoryImplTest {
     @SuppressWarnings("unchecked")
     DirectoryStream<Path> mockDirectoryStream = mock(DirectoryStream.class);
     Path[] mockFiles = {
-      Paths.get(URI.create("file:///bavstorage/objects/ASM/OBJ/000000000000/bav-ASM-OBJ-0000000000000736/image/D_2014-196_Wittislingen"))
+      Paths.get(
+          URI.create(
+              "file:///bavstorage/objects/ASM/OBJ/000000000000/bav-ASM-OBJ-0000000000000736/image/D_2014-196_Wittislingen"))
     };
     LOGGER.debug("Path = " + mockFiles[0].toAbsolutePath().toString());
     when(mockDirectoryStream.spliterator()).then(invocation -> Arrays.spliterator(mockFiles));
 
-    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig = new IdentifierPatternToFileResourceUriResolvingConfig();
-    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl = new IdentifierPatternToFileResourceUriResolverImpl("^(?:bav:)?([A-Z]{3})-([A-Z]{3})-(\\w{12})(\\w{4})$", "file:/bavstorage/objects/$1/$2/$3/bav-$1-$2-$3$4/image/*");
+    IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig =
+        new IdentifierPatternToFileResourceUriResolvingConfig();
+    IdentifierPatternToFileResourceUriResolverImpl patternFileNameResolverImpl =
+        new IdentifierPatternToFileResourceUriResolverImpl(
+            "^(?:bav:)?([A-Z]{3})-([A-Z]{3})-(\\w{12})(\\w{4})$",
+            "file:/bavstorage/objects/$1/$2/$3/bav-$1-$2-$3$4/image/*");
     resolvedFileResourcesConfig.setPatterns(Arrays.asList(patternFileNameResolverImpl));
 
-    FileResourceRepositoryImpl fileResourceRepository = new FileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
+    FileResourceRepositoryImpl fileResourceRepository =
+        new FileResourceRepositoryImpl(resolvedFileResourcesConfig, null, resourceLoader);
     fileResourceRepository.overrideDirectoryStream(mockDirectoryStream);
 
-    FileResource f = fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.MIME_WILDCARD);
+    FileResource f =
+        fileResourceRepository.find("bav:ASM-OBJ-0000000000000736", MimeType.MIME_WILDCARD);
     assertThat(f.getFilename()).isEqualTo("D_2014-196_Wittislingen");
   }
 }

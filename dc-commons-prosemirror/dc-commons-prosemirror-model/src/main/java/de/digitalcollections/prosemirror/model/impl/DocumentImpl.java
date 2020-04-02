@@ -8,8 +8,7 @@ public class DocumentImpl implements Document {
 
   List<ContentBlock> contentBlocks;
 
-  public DocumentImpl() {
-  }
+  public DocumentImpl() {}
 
   @Override
   public List<ContentBlock> getContentBlocks() {

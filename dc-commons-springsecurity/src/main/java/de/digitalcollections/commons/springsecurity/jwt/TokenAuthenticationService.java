@@ -22,7 +22,7 @@ public class TokenAuthenticationService {
   private PrivateKey privateKey;
   private PublicKey publicKey;
 
-  private long expirationTime = 1000 * 60 * 60 * 24 * 7;  // By default a week
+  private long expirationTime = 1000 * 60 * 60 * 24 * 7; // By default a week
 
   /**
    * Configure the service with a string secret.
@@ -34,8 +34,9 @@ public class TokenAuthenticationService {
   }
 
   /**
-   * Configure the service with a public/private key pair. The pair must have been generated with the RSA cipher, e.g.
-   * with `keytool`: $ keytool -keyalg RSA -keystore my-keystore.jks -genkeypair
+   * Configure the service with a public/private key pair. The pair must have been generated with
+   * the RSA cipher, e.g. with `keytool`: $ keytool -keyalg RSA -keystore my-keystore.jks
+   * -genkeypair
    *
    * @param privateKey the private key
    * @param publicKey the public key
@@ -46,9 +47,9 @@ public class TokenAuthenticationService {
   }
 
   /**
-   * Configure the service with a public key. This has the effect that the service can no longer issue tokens, but only
-   * verify them. Can be useful in scenarios where a single entity is issuing tokens and services that wish to
-   * authenticate users do not have access to the secret key.
+   * Configure the service with a public key. This has the effect that the service can no longer
+   * issue tokens, but only verify them. Can be useful in scenarios where a single entity is issuing
+   * tokens and services that wish to authenticate users do not have access to the secret key.
    *
    * @param publicKey the public key
    */
@@ -62,17 +63,20 @@ public class TokenAuthenticationService {
   }
 
   public boolean canIssueTokens() {
-    return (privateKey != null && privateKey.getAlgorithm().equals("RSA")) || (secret != null && !secret.isEmpty());
+    return (privateKey != null && privateKey.getAlgorithm().equals("RSA"))
+        || (secret != null && !secret.isEmpty());
   }
 
   public void addAuthentication(HttpServletResponse response, String username) {
     if (privateKey != null && !privateKey.getAlgorithm().equals("RSA")) {
-      throw new RuntimeException(String.format("Private Key must use RSA cipher, but uses %s", privateKey.getAlgorithm()));
+      throw new RuntimeException(
+          String.format("Private Key must use RSA cipher, but uses %s", privateKey.getAlgorithm()));
     }
     if ((secret == null || secret.isEmpty()) && privateKey == null) {
       throw new RuntimeException("Cannot issue tokens due to missing secret or private key.");
     }
-    JwtBuilder builder = Jwts.builder()
+    JwtBuilder builder =
+        Jwts.builder()
             .setSubject(username)
             .setExpiration(Date.from(Instant.now().plusMillis(expirationTime)));
     if (privateKey != null) {
@@ -97,10 +101,7 @@ public class TokenAuthenticationService {
       } else {
         parser.setSigningKey(secret);
       }
-      username = parser
-              .parseClaimsJws(token)
-              .getBody()
-              .getSubject();
+      username = parser.parseClaimsJws(token).getBody().getSubject();
     } catch (ExpiredJwtException ignored) {
       // ignore exception
     }

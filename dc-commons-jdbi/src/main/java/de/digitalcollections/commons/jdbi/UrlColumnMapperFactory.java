@@ -13,15 +13,15 @@ public class UrlColumnMapperFactory implements ColumnMapperFactory {
   @Override
   public Optional<ColumnMapper<?>> build(Type type, ConfigRegistry config) {
     if (type == URL.class) {
-      return Optional.of((r, i, c) -> {
-        try {
-          return new URL(r.getString(i));
-        } catch (MalformedURLException ex) {
-          return null;
-        }
-      });
+      return Optional.of(
+          (r, i, c) -> {
+            try {
+              return new URL(r.getString(i));
+            } catch (MalformedURLException ex) {
+              return null;
+            }
+          });
     }
     return Optional.empty();
   }
-
 }

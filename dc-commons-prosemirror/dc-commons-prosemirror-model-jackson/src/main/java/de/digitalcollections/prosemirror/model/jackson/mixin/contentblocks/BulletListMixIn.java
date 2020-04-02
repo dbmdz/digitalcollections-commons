@@ -7,6 +7,4 @@ import de.digitalcollections.prosemirror.model.jackson.mixin.NodeContentBlockMix
 
 @JsonDeserialize(as = BulletListImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface BulletListMixIn extends NodeContentBlockMixin {
-
-}
+public interface BulletListMixIn extends NodeContentBlockMixin {}

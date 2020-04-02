@@ -28,11 +28,11 @@ public class AuthenticatedUserFilter implements Filter {
   }
 
   @Override
-  public void init(FilterConfig fc) throws ServletException {
-  }
+  public void init(FilterConfig fc) throws ServletException {}
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
     final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
       Object principal = authentication.getPrincipal();
@@ -55,7 +55,5 @@ public class AuthenticatedUserFilter implements Filter {
   }
 
   @Override
-  public void destroy() {
-  }
-
+  public void destroy() {}
 }

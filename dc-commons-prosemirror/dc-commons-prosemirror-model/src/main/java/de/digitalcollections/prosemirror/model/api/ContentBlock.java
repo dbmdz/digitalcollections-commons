@@ -1,4 +1,3 @@
 package de.digitalcollections.prosemirror.model.api;
 
-public interface ContentBlock {
-}
+public interface ContentBlock {}

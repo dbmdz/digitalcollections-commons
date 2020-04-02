@@ -13,10 +13,10 @@ import org.w3c.dom.Element;
 @DisplayName("The XPath Mapper")
 public class XPathMapperTest {
 
-  public static final String BIBLSTRUCT_PATH = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct";
+  public static final String BIBLSTRUCT_PATH =
+      "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct";
 
-  XPathMapperFixture<TestMapper> testMapperFixture =
-      new XPathMapperFixture<>(TestMapper.class);
+  XPathMapperFixture<TestMapper> testMapperFixture = new XPathMapperFixture<>(TestMapper.class);
   XPathMapperFixture<BrokenTestMapper> brokenTestMapperFixture =
       new XPathMapperFixture<>(BrokenTestMapper.class);
   XPathMapperFixture<BrokenStructuredTestMapper> brokenStructuredTestMapperFixture =
@@ -33,8 +33,9 @@ public class XPathMapperTest {
       new XPathMapperFixture<>(WrongMultivalueArgumentTestMapper.class);
   XPathMapperFixture<WrongMutilanguageFieldTestMapper> wrongMultilanguageFieldTestMapperFixture =
       new XPathMapperFixture<>(WrongMutilanguageFieldTestMapper.class);
-  XPathMapperFixture<WrongMultilanguageArgumentTestMapper> wrongMultilanguageArgumentTestMapperFixture =
-      new XPathMapperFixture<>(WrongMultilanguageArgumentTestMapper.class);
+  XPathMapperFixture<WrongMultilanguageArgumentTestMapper>
+      wrongMultilanguageArgumentTestMapperFixture =
+          new XPathMapperFixture<>(WrongMultilanguageArgumentTestMapper.class);
   XPathMapperFixture<HierarchicalMapper> hierarchicalMapperFixture =
       new XPathMapperFixture<>(HierarchicalMapper.class);
   XPathMapperFixture<BrokenHierarchicalMapper> brokenHierarchivalMapperFixture =
@@ -84,7 +85,6 @@ public class XPathMapperTest {
     assertThat(mapper.getAuthorElements()).hasSize(2);
   }
 
-
   @DisplayName("shall evaluate a single value expression without template")
   @Test
   public void testSingleValueExpression() throws Exception {
@@ -96,15 +96,17 @@ public class XPathMapperTest {
   @Test
   public void testMultivaluedFieldsAndTheirOrder() throws Exception {
     TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
-    assertThat(mapper.getPlaces()).containsExactly("Augsburg","München","Aachen");
+    assertThat(mapper.getPlaces()).containsExactly("Augsburg", "München", "Aachen");
   }
 
   @DisplayName("shall return multivalued, multilanguage contents in correct order")
   @Test
   public void testMultivaluedMultilanguageFieldsAndTheirOrder() throws Exception {
     TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
-    assertThat(mapper.getMultlangAlternativeTitles().get(Locale.GERMAN)).containsExactly("Chuck Norris Biographie","Fakten");
-    assertThat(mapper.getMultlangAlternativeTitles().get(Locale.ENGLISH)).containsExactly("Chuck Norris Biography","Facts");
+    assertThat(mapper.getMultlangAlternativeTitles().get(Locale.GERMAN))
+        .containsExactly("Chuck Norris Biographie", "Fakten");
+    assertThat(mapper.getMultlangAlternativeTitles().get(Locale.ENGLISH))
+        .containsExactly("Chuck Norris Biography", "Facts");
   }
 
   @DisplayName("shall return null for a non matching single value expression")
@@ -117,8 +119,7 @@ public class XPathMapperTest {
   @DisplayName("shall throw an exception, when a template variable is missing")
   @Test
   public void testMissingVariableThrows() {
-    assertThatThrownBy(
-        () -> brokenTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+    assertThatThrownBy(() -> brokenTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
         .isInstanceOf(XPathMappingException.class)
         .hasMessageContaining("Could not resolve template due to missing variables: broken");
   }
@@ -127,65 +128,74 @@ public class XPathMapperTest {
   @Test
   public void testTemplatesAndExpressionsThrowException() {
     assertThatThrownBy(
-        () -> brokenStructuredTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("An @XPathBinding must have one of `variables` or `expressions`, but both were set!");
+            () -> brokenStructuredTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining(
+            "An @XPathBinding must have one of `variables` or `expressions`, but both were set!");
   }
 
   @DisplayName("shall throw an exception, when neither templates nor expressions are defined")
   @Test
   public void testNoTemplatesAndExpressionsThrowException() {
-    assertThatThrownBy(
-        () -> incompleteTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+    assertThatThrownBy(() -> incompleteTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
         .isInstanceOf(XPathMappingException.class)
-        .hasMessageContaining("An @XPathBinding must have one of `variables` or `expressions`, but neither were set!");
+        .hasMessageContaining(
+            "An @XPathBinding must have one of `variables` or `expressions`, but neither were set!");
   }
 
   @DisplayName("shall throw an exception, when the type of a single valued field is wrong")
   @Test
   public void testWrongTypeOfSingleValuedFieldsThrowsException() {
-    assertThatThrownBy(
-        () -> wrongFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
+    assertThatThrownBy(() -> wrongFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("Binding method has illegal target type");
   }
 
-  @DisplayName("shall throw an exception, when the type of a single valued setter argument is wrong")
+  @DisplayName(
+      "shall throw an exception, when the type of a single valued setter argument is wrong")
   @Test
   public void testWrongTypeOfSingleValuedArgumentsThrowsException() {
-    assertThatThrownBy(
-        () -> wrongArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
+    assertThatThrownBy(() -> wrongArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("Binding method has illegal target type");
   }
 
   @DisplayName("shall throw an exception, when the type of a multivalued field is wrong")
   @Test
   public void testWrongTypeOfMultiValuedFieldsThrowsException() {
     assertThatThrownBy(
-        () -> wrongMultivalueFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
+            () -> wrongMultivalueFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("Binding method has illegal target type");
   }
 
   @DisplayName("shall throw an exception, when the type of a multivalued setter argument is wrong")
   @Test
   public void testWrongTypeOfMultiValuedArgumentsThrowsException() {
     assertThatThrownBy(
-        () -> wrongMultivalueArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
+            () -> wrongMultivalueArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("Binding method has illegal target type");
   }
 
   @DisplayName("shall throw an exception, when the type of a multilanguage field is wrong")
   @Test
   public void testWrongTypeOfMultilanguageFieldsThrowsException() {
     assertThatThrownBy(
-        () -> wrongMultilanguageFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
+            () -> wrongMultilanguageFieldTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("Binding method has illegal target type");
   }
 
-  @DisplayName("shall throw an exception, when the type of a multilanguage setter argument is wrong")
+  @DisplayName(
+      "shall throw an exception, when the type of a multilanguage setter argument is wrong")
   @Test
   public void testWrongTypeOfMultilanguageArgumentsThrowsException() {
     assertThatThrownBy(
-        () -> wrongMultilanguageArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
-        .isInstanceOf(XPathMappingException.class).hasMessageContaining("Binding method has illegal target type");
+            () ->
+                wrongMultilanguageArgumentTestMapperFixture.setUpMapperWithResource("bsbstruc.xml"))
+        .isInstanceOf(XPathMappingException.class)
+        .hasMessageContaining("Binding method has illegal target type");
   }
 
   @DisplayName("returns a nullpointer, when embedded mappers lack @XPathBinding annotations")
@@ -195,7 +205,6 @@ public class XPathMapperTest {
     assertThat(mapper.getUnaccessibleInnerMapper()).isNull();
   }
 
-
   @DisplayName("shall pass down root path definitions on hierarchies on class mappers")
   @Test
   public void shallPassDownRootPathsOnInterfaceHierarchies() throws XPathMappingException {
@@ -204,25 +213,24 @@ public class XPathMapperTest {
   }
   // ---------------------------------------------------------------------------------------------
 
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class TestMapper {
-
-
 
     @XPathBinding(
         valueTemplate = "{author}",
         variables = {
-            @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
-        }
-    )
+          @XPathVariable(
+              name = "author",
+              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+        })
     Map<Locale, String> author;
+
     Map<Locale, String> getAuthor() {
       return author;
     };
 
     List<Element> authorElements;
+
     @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
     void setAuthorElement(List<Element> authorElements) {
       this.authorElements = authorElements;
@@ -237,22 +245,30 @@ public class XPathMapperTest {
     @XPathBinding(
         valueTemplate = "{author}",
         variables = {
-            @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
-        }
-    )
+          @XPathVariable(
+              name = "author",
+              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+        })
     void setLocalizedAuthors(Map<Locale, String> localizedAuthors) {
       this.germanAuthor = localizedAuthors.get(Locale.GERMAN);
     }
+
     String getGermanAuthor() {
       return germanAuthor;
     }
 
     @XPathBinding(
         valueTemplate = "{author}",
-        variables = {@XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author[@type=\"ChuckNorris\"]/tei:persName/tei:name"})
-        }
-    )
+        variables = {
+          @XPathVariable(
+              name = "author",
+              paths = {
+                BIBLSTRUCT_PATH
+                    + "/tei:monogr/tei:author[@type=\"ChuckNorris\"]/tei:persName/tei:name"
+              })
+        })
     String noAuthor;
+
     String getNoAuthor() {
       return noAuthor;
     }
@@ -260,164 +276,163 @@ public class XPathMapperTest {
     @XPathBinding(
         valueTemplate = "{title}<: {subtitle}>< [. {partNumber}<, {partTitle}>]>",
         variables = {
-          @XPathVariable(name = "title", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"main\"]"}),
-          @XPathVariable(name = "subtitle", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"sub\"]"}),
-          @XPathVariable(name = "partNumber", paths = {BIBLSTRUCT_PATH + "/tei:series/tei:biblScope[@ana=\"#norm\"]"}),
-          @XPathVariable(name = "partTitle", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"part\"]"})
-        }
-    )
+          @XPathVariable(
+              name = "title",
+              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"main\"]"}),
+          @XPathVariable(
+              name = "subtitle",
+              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"sub\"]"}),
+          @XPathVariable(
+              name = "partNumber",
+              paths = {BIBLSTRUCT_PATH + "/tei:series/tei:biblScope[@ana=\"#norm\"]"}),
+          @XPathVariable(
+              name = "partTitle",
+              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"part\"]"})
+        })
     String title;
+
     String getTitle() {
       return title;
     }
 
     Map<Locale, String> authorFromExpression;
+
     @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
     void setAuthorFromExpression(Map<Locale, String> authorFromExpression) {
       this.authorFromExpression = authorFromExpression;
     }
+
     Map<Locale, String> getAuthorFromExpression() {
       return authorFromExpression;
     }
 
     @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace[1]")
     String firstPlace;
+
     String getFirstPlace() {
       return firstPlace;
     }
 
     @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace")
     List<String> places;
+
     List<String> getPlaces() {
       return places;
     }
 
     @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"alt\" and @subtype=\"main\"]")
-    Map<Locale,List<String>> multilangAlternativeTitles;
-    Map<Locale,List<String>> getMultlangAlternativeTitles() {
+    Map<Locale, List<String>> multilangAlternativeTitles;
+
+    Map<Locale, List<String>> getMultlangAlternativeTitles() {
       return multilangAlternativeTitles;
     }
 
     @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:noPlace[1]")
     String noPlace;
+
     String getNoPlace() {
       return noPlace;
     }
   }
 
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class BrokenTestMapper {
-    @XPathBinding(valueTemplate = "{broken}", variables = {})
+    @XPathBinding(
+        valueTemplate = "{broken}",
+        variables = {})
     String broken;
+
     String getBroken() {
       return broken;
     }
   }
 
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class BrokenStructuredTestMapper {
     @XPathBinding(
         valueTemplate = "{author}",
         variables = {
-            @XPathVariable(name = "author", paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+          @XPathVariable(
+              name = "author",
+              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
         },
-        value = BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"
-    )
+        value = BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
     Map<Locale, String> authorFromExpressionAndVariables;
+
     Map<Locale, String> getAuthorFromExpressionAndVariables() {
       return authorFromExpressionAndVariables;
     }
   }
 
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class IncompleteTestMapper {
-    @XPathBinding()
-    String nothing;
+    @XPathBinding() String nothing;
+
     String getNothing() {
       return nothing;
     }
   }
 
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongFieldTestMapper {
     @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
     Integer wrongFieldTypeSingleValued;
   }
 
-
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongArgumentTestMapper {
     Integer wrongArgumentTypeSingleValued;
+
     @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
     void setWrongArgumentTypeSingleValued(Integer wrongArgumentTypeSingleValued) {
       this.wrongArgumentTypeSingleValued = wrongArgumentTypeSingleValued;
     }
   }
 
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMutivalueFieldTestMapper {
     @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id")
     List<Integer> wrongFieldTypeMultiValued;
   }
 
-
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMultivalueArgumentTestMapper {
     List<Integer> wrongArgumentTypeMultiValued;
+
     @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
     void setWrongArgumentMultiMultiValued(List<Integer> wrongArgumentTypeMultiValued) {
       this.wrongArgumentTypeMultiValued = wrongArgumentTypeMultiValued;
     }
   }
 
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMutilanguageFieldTestMapper {
     @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
     Map<Locale, Integer> wrongFieldTypeMultiLanguage;
   }
 
-
-  @XPathRoot(
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMultilanguageArgumentTestMapper {
     Map<Locale, Integer> wrongArgumentTypeMultiLanguage;
+
     @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
     void setWrongArgumentTypeMultiLanguage(Map<Locale, Integer> wrongArgumentTypeMultiLanguage) {
       this.wrongArgumentTypeMultiLanguage = wrongArgumentTypeMultiLanguage;
     }
   }
 
-
-  @XPathRoot(
-      value = "/outer",
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(value = "/outer", defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class HierarchicalMapper {
 
     @XPathRoot("/inner")
     InnerMapper innerMapper;
+
     InnerMapper getInnerMapper() {
       return innerMapper;
     }
 
     UnaccessibleInnerMapper unaccessibleInnerMapper;
+
     UnaccessibleInnerMapper getUnaccessibleInnerMapper() {
       return unaccessibleInnerMapper;
     }
@@ -425,6 +440,7 @@ public class XPathMapperTest {
     public static class InnerMapper {
       @XPathBinding("/author")
       String author;
+
       String getAuthor() {
         return author;
       }
@@ -433,20 +449,19 @@ public class XPathMapperTest {
     public static class UnaccessibleInnerMapper {
       @XPathBinding("/author")
       String author;
+
       String getAuthor() {
         return author;
       }
     }
   }
 
-  @XPathRoot(
-      value = "/outer",
-      defaultNamespace = "http://www.tei-c.org/ns/1.0"
-  )
+  @XPathRoot(value = "/outer", defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class BrokenHierarchicalMapper {
 
     @XPathRoot("/inner")
     InnerMapper innerMapper;
+
     InnerMapper getInnerMapper() {
       return innerMapper;
     }
@@ -455,11 +470,10 @@ public class XPathMapperTest {
     public static class InnerMapper {
       @XPathBinding("/author")
       String author;
+
       String getAuthor() {
         return author;
       }
     }
   }
-
-
 }

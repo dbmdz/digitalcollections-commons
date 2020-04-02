@@ -1,12 +1,12 @@
 package de.digitalcollections.prosemirror.model.jackson;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.prosemirror.model.api.Mark;
 import de.digitalcollections.prosemirror.model.impl.MarkImpl;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class MarkTest extends BaseProseMirrorObjectMapperTest {
 
@@ -36,9 +36,7 @@ public class MarkTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserialization() throws Exception {
-    String jsonString = "{\n"
-        + "          \"type\": \"em\"\n"
-        + "        }";
+    String jsonString = "{\n" + "          \"type\": \"em\"\n" + "        }";
 
     Mark mark = mapper.readValue(jsonString, Mark.class);
     assertThat(mark).isNotNull();
@@ -47,21 +45,21 @@ public class MarkTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithAttributes() throws Exception {
-    String jsonString = "{\n"
-        + "          \"type\": \"link\",\n"
-        + "          \"attrs\": {\n"
-        + "             \"href\": \"https://www.km.bayern.de/\",\n"
-        + "             \"title\": null\n"
-        + "          }\n"
-        + "        }";
+    String jsonString =
+        "{\n"
+            + "          \"type\": \"link\",\n"
+            + "          \"attrs\": {\n"
+            + "             \"href\": \"https://www.km.bayern.de/\",\n"
+            + "             \"title\": null\n"
+            + "          }\n"
+            + "        }";
 
     Mark mark = mapper.readValue(jsonString, Mark.class);
     assertThat(mark).isNotNull();
     assertThat(mark.getType()).isEqualTo("link");
     Map<String, Object> expectedAttributes = new HashMap<>();
-    expectedAttributes.put("href","https://www.km.bayern.de/");
+    expectedAttributes.put("href", "https://www.km.bayern.de/");
     expectedAttributes.put("title", null);
     assertThat(mark.getAttributes()).isEqualTo(expectedAttributes);
   }
-
 }

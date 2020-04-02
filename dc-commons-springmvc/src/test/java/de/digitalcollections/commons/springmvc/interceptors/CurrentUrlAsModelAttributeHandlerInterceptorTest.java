@@ -1,12 +1,13 @@
 package de.digitalcollections.commons.springmvc.interceptors;
 
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 
 public class CurrentUrlAsModelAttributeHandlerInterceptorTest {
 
-  CurrentUrlAsModelAttributeHandlerInterceptor instance = new CurrentUrlAsModelAttributeHandlerInterceptor();
+  CurrentUrlAsModelAttributeHandlerInterceptor instance =
+      new CurrentUrlAsModelAttributeHandlerInterceptor();
 
   @Test
   public void testDeleteLanguageParam() {

@@ -8,7 +8,8 @@ import javax.xml.namespace.NamespaceContext;
 import org.w3c.dom.Document;
 
 /**
- * Namespace context that uses the document's declared namespaces, in addition to user-defined prefixes.
+ * Namespace context that uses the document's declared namespaces, in addition to user-defined
+ * prefixes.
  */
 public class UniversalNamespaceContext implements NamespaceContext {
   private final Document doc;
@@ -21,6 +22,7 @@ public class UniversalNamespaceContext implements NamespaceContext {
 
   /**
    * Add a user-defined namespace. Takes precedence over the document's declared namespaces.
+   *
    * @param prefix the namespace prefix
    * @param uri the namespace uri
    */

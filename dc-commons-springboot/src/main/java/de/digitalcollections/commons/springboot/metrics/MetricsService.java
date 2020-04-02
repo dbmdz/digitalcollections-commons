@@ -26,6 +26,7 @@ public class MetricsService {
 
   /**
    * Sets the value of a gauge
+   *
    * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param value Value of the gauge
    */
@@ -35,6 +36,7 @@ public class MetricsService {
 
   /**
    * Sets the value of a gauge
+   *
    * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param tag Name of the tag (key is <code>type</code>)
    * @param value Value of the gauge
@@ -45,6 +47,7 @@ public class MetricsService {
 
   /**
    * Sets the value of a gauge
+   *
    * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param tagKey Name of the tag
    * @param tagValue Value of the tag
@@ -56,6 +59,7 @@ public class MetricsService {
 
   /**
    * Increases the gauge counter by one
+   *
    * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param tag Name of the tag
    */
@@ -65,6 +69,7 @@ public class MetricsService {
 
   /**
    * Increases the gauge counter with a custom increment
+   *
    * @param name Name of the gauge, postfixed with <code>.amount</code>
    * @param tag Name of the tag
    * @param increment Increment value
@@ -75,7 +80,9 @@ public class MetricsService {
 
   /**
    * Increases the gauge counter and logs its accompanied duration
-   * @param name Name of the gauge, postfixed with <code>.amount</code> and name of the timer, postfixed with <code>.duration</code>
+   *
+   * @param name Name of the gauge, postfixed with <code>.amount</code> and name of the timer,
+   *     postfixed with <code>.duration</code>
    * @param tag Name of the tag
    * @param durationMillis Duration in milliseconds
    */
@@ -84,16 +91,27 @@ public class MetricsService {
   }
 
   /**
-   * Increases the gauge counter and logs its accompanied duration including percentiles (0.5 and 0.95) and histogram
-   * @param name Name of the gauge, postfixed with <code>.amount</code> and name of the timer, postfixed with <code>.duration</code>
+   * Increases the gauge counter and logs its accompanied duration including percentiles (0.5 and
+   * 0.95) and histogram
+   *
+   * @param name Name of the gauge, postfixed with <code>.amount</code> and name of the timer,
+   *     postfixed with <code>.duration</code>
    * @param tag Name of the tag (must not be null)
    * @param durationMillis Duration in milliseconds
    */
-  public void increaseCounterWithDurationAndPercentiles(String name, String tag, Long durationMillis) {
+  public void increaseCounterWithDurationAndPercentiles(
+      String name, String tag, Long durationMillis) {
     handleCounter(name, "type", tag, 1L, null, durationMillis, true);
   }
 
-  private void handleCounter(String name, String tagKey, String tagValue, Long increment, Long absoluteValue, Long durationMillis, Boolean publishPercentiles) {
+  private void handleCounter(
+      String name,
+      String tagKey,
+      String tagValue,
+      Long increment,
+      Long absoluteValue,
+      Long durationMillis,
+      Boolean publishPercentiles) {
     String key = name + ((tagKey != null && tagValue != null) ? "." + tagValue : "");
 
     if (increment != null) {
@@ -117,16 +135,13 @@ public class MetricsService {
     if (durationMillis != null && tagKey != null && tagValue != null) {
       // Register Timer
       if (timers.get(key) == null) {
-        Timer.Builder timerBuilder = Timer.builder(name + ".duration")
-                .tag(tagKey, tagValue);
+        Timer.Builder timerBuilder = Timer.builder(name + ".duration").tag(tagKey, tagValue);
 
         if (publishPercentiles) {
-          timerBuilder = timerBuilder.publishPercentiles(0.5, 0.95)
-                  .publishPercentileHistogram();
+          timerBuilder = timerBuilder.publishPercentiles(0.5, 0.95).publishPercentileHistogram();
         }
 
-        Timer timer = timerBuilder
-                .register(meterRegistry);
+        Timer timer = timerBuilder.register(meterRegistry);
 
         timers.put(key, timer);
       }

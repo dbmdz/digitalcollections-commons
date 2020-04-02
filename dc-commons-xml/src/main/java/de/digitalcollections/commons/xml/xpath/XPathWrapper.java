@@ -27,10 +27,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Provides a lightweight wrapper around the Document class to make XPath queries less painful and verbose.
+ * Provides a lightweight wrapper around the Document class to make XPath queries less painful and
+ * verbose.
  */
 public class XPathWrapper {
-  private static XPathExpressionCache GLOBAL_CACHE = new XPathExpressionCache(new DigitalCollectionsNamespaceContext());
+  private static XPathExpressionCache GLOBAL_CACHE =
+      new XPathExpressionCache(new DigitalCollectionsNamespaceContext());
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathWrapper.class);
   private Document document;
   private XPathExpressionCache expressionCache;
@@ -53,8 +55,8 @@ public class XPathWrapper {
   }
 
   /**
-   * Gets a fraction of the document by a xPath-Expression xpath as Node. If the xPath results in more than one Node,
-   * the first one is returned.
+   * Gets a fraction of the document by a xPath-Expression xpath as Node. If the xPath results in
+   * more than one Node, the first one is returned.
    *
    * @param xpath the xpath
    * @return the node
@@ -71,7 +73,8 @@ public class XPathWrapper {
    * @return the node
    */
   public Node asNode(String xpath, int index) {
-    NodeList nodeList = (NodeList) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NODESET);
+    NodeList nodeList =
+        (NodeList) this.evaluateXpath(this.getDocument(), xpath, XPathConstants.NODESET);
     return nodeList.item(index);
   }
 
@@ -162,7 +165,8 @@ public class XPathWrapper {
    * @return the string
    */
   public String asString(String xpath) {
-    final String rawString = (String) evaluateXpath(this.getDocument(), xpath, XPathConstants.STRING);
+    final String rawString =
+        (String) evaluateXpath(this.getDocument(), xpath, XPathConstants.STRING);
     if (rawString == null) {
       return "";
     }
@@ -209,14 +213,20 @@ public class XPathWrapper {
 
   public List<Node> getRelativeNodes(Node node, String relativeXpath) {
     if (!relativeXpath.startsWith(".")) {
-      throw new IllegalArgumentException(String.format("Relative node '%s' below '%s' must start with a period! ", relativeXpath, getFullXPath(node)));
+      throw new IllegalArgumentException(
+          String.format(
+              "Relative node '%s' below '%s' must start with a period! ",
+              relativeXpath, getFullXPath(node)));
     }
 
     List<Node> nodes = asListOfNodes(node, relativeXpath);
 
     if (nodes == null || nodes.isEmpty()) {
       if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("No relative node found for {} and relative path={}", getFullXPath(node), relativeXpath);
+        LOGGER.debug(
+            "No relative node found for {} and relative path={}",
+            getFullXPath(node),
+            relativeXpath);
       }
       return null;
     }
@@ -343,8 +353,7 @@ public class XPathWrapper {
             Node prevSibling = node.getPreviousSibling();
             while (null != prevSibling) {
               if (prevSibling.getNodeType() == node.getNodeType()) {
-                if (prevSibling.getNodeName().equalsIgnoreCase(
-                        node.getNodeName())) {
+                if (prevSibling.getNodeName().equalsIgnoreCase(node.getNodeName())) {
                   prevSiblings++;
                 }
               }
@@ -361,5 +370,4 @@ public class XPathWrapper {
     // return buffer
     return buffer.toString();
   }
-
 }

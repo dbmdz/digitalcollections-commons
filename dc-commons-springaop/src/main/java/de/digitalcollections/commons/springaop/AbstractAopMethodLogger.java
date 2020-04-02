@@ -13,9 +13,7 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-/**
- * Aspect: Logging method calls. Log all public service calls and all public repository calls.
- */
+/** Aspect: Logging method calls. Log all public service calls and all public repository calls. */
 @Aspect
 @Component
 public abstract class AbstractAopMethodLogger {
@@ -28,11 +26,13 @@ public abstract class AbstractAopMethodLogger {
   public abstract void methodsToBeLogged();
 
   /**
-   * Logs the execution of a join point and of its parameters. Parameters are only logged if not null.
+   * Logs the execution of a join point and of its parameters. Parameters are only logged if not
+   * null.
    *
-   * <p>In aspect-oriented programming a set of join points is called a pointcut. A join point is a specification of when,
-   * in the corresponding main program, the aspect code should be executed. The join point is a point of execution in
-   * the base code where the advice specified in a corresponding pointcut is applied.</p>
+   * <p>In aspect-oriented programming a set of join points is called a pointcut. A join point is a
+   * specification of when, in the corresponding main program, the aspect code should be executed.
+   * The join point is a point of execution in the base code where the advice specified in a
+   * corresponding pointcut is applied.
    *
    * @param joinPoint the event of the advice
    */
@@ -91,7 +91,8 @@ public abstract class AbstractAopMethodLogger {
   }
 
   /**
-   * Logs duration of join points. Logging is only active if {@link #LOGGER} is at minimum debug level.
+   * Logs duration of join points. Logging is only active if {@link #LOGGER} is at minimum debug
+   * level.
    *
    * @param call a proceeding joinpoint
    * @return the next advice or target method invocation
@@ -112,8 +113,7 @@ public abstract class AbstractAopMethodLogger {
           returnValue = call.proceed();
         } finally {
           clock.stop();
-          String msg = createMsgForLogMethodDuration(targetMethodName,
-                  clock.getTotalTimeMillis());
+          String msg = createMsgForLogMethodDuration(targetMethodName, clock.getTotalTimeMillis());
           targetLog.debug(msg);
         }
       } else {

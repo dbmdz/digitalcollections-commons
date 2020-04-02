@@ -1,8 +1,8 @@
 package de.digitalcollections.commons.yaml.examples;
 
-import org.joda.time.LocalDateTime;
-
 import static de.digitalcollections.commons.yaml.StringRepresentations.stringRepresentationOf;
+
+import org.joda.time.LocalDateTime;
 
 public class Book {
 
@@ -12,8 +12,7 @@ public class Book {
 
   private LocalDateTime published;
 
-  private Book() {
-  }
+  private Book() {}
 
   public Book(Person author, String title, LocalDateTime published) {
     this.author = author;
@@ -49,5 +48,4 @@ public class Book {
   public String toString() {
     return stringRepresentationOf(this);
   }
-
 }

@@ -36,7 +36,8 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+  public void assertReadability(FileResource resource)
+      throws ResourceIOException, ResourceNotFoundException {
     repository.assertReadability(resource);
   }
 
@@ -51,12 +52,14 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
+  public FileResource find(String identifier, MimeType mimeType)
+      throws ResourceIOException, ResourceNotFoundException {
     return repository.find(identifier, mimeType);
   }
 
   @Override
-  public FileResource findOrCreate(String identifier, MimeType mimeType) throws ResourceIOException {
+  public FileResource findOrCreate(String identifier, MimeType mimeType)
+      throws ResourceIOException {
     try {
       return find(identifier, mimeType);
       // find() returns a ResourceIOException, if a resource does not exist!
@@ -66,7 +69,8 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public byte[] getAsBytes(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+  public byte[] getAsBytes(FileResource resource)
+      throws ResourceIOException, ResourceNotFoundException {
     try {
       return IOUtils.toByteArray(getInputStream(resource));
     } catch (IOException ex) {
@@ -77,7 +81,8 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public Document getAsDocument(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+  public Document getAsDocument(FileResource resource)
+      throws ResourceIOException, ResourceNotFoundException {
     Document doc = null;
     try {
       // get InputStream on resource
@@ -93,13 +98,15 @@ public class FileResourceServiceImpl implements FileResourceService {
         LOGGER.debug("Got document: " + doc);
       }
     } catch (IOException | ParserConfigurationException | SAXException ex) {
-      throw new ResourceIOException("Cannot read document from resolved resource '" + resource.getUri().toString() + "'", ex);
+      throw new ResourceIOException(
+          "Cannot read document from resolved resource '" + resource.getUri().toString() + "'", ex);
     }
     return doc;
   }
 
   @Override
-  public String getAsString(FileResource fileResource, Charset charset) throws ResourceIOException, ResourceNotFoundException {
+  public String getAsString(FileResource fileResource, Charset charset)
+      throws ResourceIOException, ResourceNotFoundException {
     try (InputStream is = getInputStream(fileResource)) {
       return IOUtils.toString(is, charset);
     } catch (IOException e) {
@@ -108,17 +115,20 @@ public class FileResourceServiceImpl implements FileResourceService {
   }
 
   @Override
-  public InputStream getInputStream(FileResource fileResource) throws ResourceIOException, ResourceNotFoundException {
+  public InputStream getInputStream(FileResource fileResource)
+      throws ResourceIOException, ResourceNotFoundException {
     return repository.getInputStream(fileResource);
   }
 
   @Override
-  public InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException {
+  public InputStream getInputStream(URI resourceUri)
+      throws ResourceIOException, ResourceNotFoundException {
     return repository.getInputStream(resourceUri);
   }
 
   @Override
-  public Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+  public Reader getReader(FileResource resource)
+      throws ResourceIOException, ResourceNotFoundException {
     return repository.getReader(resource);
   }
 }

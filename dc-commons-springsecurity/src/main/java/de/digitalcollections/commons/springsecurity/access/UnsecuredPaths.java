@@ -33,7 +33,8 @@ public class UnsecuredPaths {
     if (unsecuredPathsConfig.getUnsecured() != null) {
       unsecuredPaths = unsecuredPathsConfig.getUnsecured();
     } else {
-      unsecuredPaths.addAll(Arrays.asList(
+      unsecuredPaths.addAll(
+          Arrays.asList(
               "/health",
               "/info",
               "/javamelody",
@@ -48,8 +49,7 @@ public class UnsecuredPaths {
               "/monitoring/prometheus/**",
               "/monitoring/version",
               "/resources/**",
-              "/version"
-      ));
+              "/version"));
     }
 
     LOGGER.info("Unsecured paths=" + unsecuredPaths);

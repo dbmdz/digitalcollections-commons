@@ -28,17 +28,18 @@ public class JsonbColumnMapperFactory<T> implements ColumnMapperFactory {
     if (!clz.equals(type)) {
       return Optional.empty();
     }
-    return Optional.of((r, i, c) -> {
-      String jsonb = r.getString(i);
-      if (jsonb == null) {
-        return null;
-      }
-      try {
-        return objectMapper.readValue(jsonb, (Class) type);
-      } catch (IOException ex) {
-        LOGGER.error("Error deserializing JSON", ex);
-        return null;
-      }
-    });
+    return Optional.of(
+        (r, i, c) -> {
+          String jsonb = r.getString(i);
+          if (jsonb == null) {
+            return null;
+          }
+          try {
+            return objectMapper.readValue(jsonb, (Class) type);
+          } catch (IOException ex) {
+            LOGGER.error("Error deserializing JSON", ex);
+            return null;
+          }
+        });
   }
 }

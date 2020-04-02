@@ -5,11 +5,9 @@ import de.digitalcollections.prosemirror.model.impl.NodeContentBlockWithAttribut
 
 public class OrderedListImpl extends NodeContentBlockWithAttributesImpl implements OrderedList {
 
-  public OrderedListImpl() {
-  }
+  public OrderedListImpl() {}
 
   public OrderedListImpl(int order) {
     addAttribute("order", 1);
   }
-
 }

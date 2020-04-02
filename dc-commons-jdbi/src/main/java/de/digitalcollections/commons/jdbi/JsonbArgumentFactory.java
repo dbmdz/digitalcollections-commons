@@ -41,8 +41,6 @@ public class JsonbArgumentFactory<T> implements ArgumentFactory {
     if (!clz.equals(type)) {
       return Optional.empty();
     }
-    return Optional.of(value == null
-            ? new NullArgument(Types.OTHER)
-            : build((T) value, config));
+    return Optional.of(value == null ? new NullArgument(Types.OTHER) : build((T) value, config));
   }
 }

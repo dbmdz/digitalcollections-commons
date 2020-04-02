@@ -7,6 +7,4 @@ import de.digitalcollections.prosemirror.model.jackson.mixin.NodeContentBlockMix
 
 @JsonDeserialize(as = BlockquoteImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface BlockquoteMixIn extends NodeContentBlockMixin {
-
-}
+public interface BlockquoteMixIn extends NodeContentBlockMixin {}

@@ -1,5 +1,7 @@
 package de.digitalcollections.commons.yaml;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.commons.yaml.joda.JodaTimeConstructor;
 import de.digitalcollections.commons.yaml.joda.JodaTimeRepresenter;
 import org.joda.time.DateTime;
@@ -8,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class YamlTest {
 
@@ -34,5 +34,4 @@ public class YamlTest {
     LocalDateTime dateTime = LocalDateTime.now();
     assertThat((LocalDateTime) yaml.load(yaml.dump(dateTime))).isEqualTo(dateTime);
   }
-
 }

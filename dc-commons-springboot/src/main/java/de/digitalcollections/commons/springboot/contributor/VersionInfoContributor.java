@@ -9,12 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class VersionInfoContributor implements InfoContributor {
 
-  @Autowired
-  VersionInfo versionInfo;
+  @Autowired VersionInfo versionInfo;
 
   @Override
   public void contribute(Info.Builder bldr) {
     bldr.withDetail("version", versionInfo.getArtifactVersions());
   }
-
 }

@@ -17,18 +17,18 @@ public class XPathMapperFixture<T> {
   }
 
   private Document readDocumentFromResource(String resourceName) {
-    try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName)) {
+    try (InputStream is =
+        Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName)) {
       DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
       dbf.setNamespaceAware(true);
       DocumentBuilder db = dbf.newDocumentBuilder();
       return db.parse(is);
     } catch (IOException | ParserConfigurationException | SAXException ex) {
-        throw new RuntimeException("Cannot read test resource from " + resourceName + ": " + ex);
+      throw new RuntimeException("Cannot read test resource from " + resourceName + ": " + ex);
     }
   }
 
   public T setUpMapperWithResource(String resourceName) throws XPathMappingException {
     return XPathMapper.readDocument(readDocumentFromResource(resourceName), xPathMapperClass);
   }
-
 }

@@ -1,5 +1,7 @@
 package de.digitalcollections.prosemirror.model.jackson.contentblocks;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.prosemirror.model.api.contentblocks.BulletList;
 import de.digitalcollections.prosemirror.model.api.contentblocks.ListItem;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Paragraph;
@@ -10,8 +12,6 @@ import de.digitalcollections.prosemirror.model.impl.contentblocks.ParagraphImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.TextImpl;
 import de.digitalcollections.prosemirror.model.jackson.BaseProseMirrorObjectMapperTest;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class BulletListTest extends BaseProseMirrorObjectMapperTest {
 
@@ -45,7 +45,8 @@ public class BulletListTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithContents() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "  \"type\": \"bullet_list\",\n"
             + "  \"content\": [\n"
             + "    {\n"
@@ -112,5 +113,4 @@ public class BulletListTest extends BaseProseMirrorObjectMapperTest {
 
     assertThat(bulletList.getContentBlocks()).containsExactly(item1, item2, item3);
   }
-
 }

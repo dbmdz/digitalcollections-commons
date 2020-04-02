@@ -23,5 +23,4 @@ public interface OrderedListMixIn extends NodeContentBlockMixin {
 
   @JsonIgnore
   Object getAttribute(String key);
-
 }

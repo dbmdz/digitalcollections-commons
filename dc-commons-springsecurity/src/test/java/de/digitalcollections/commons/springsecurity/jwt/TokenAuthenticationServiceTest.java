@@ -1,5 +1,10 @@
 package de.digitalcollections.commons.springsecurity.jwt;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -11,11 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class TokenAuthenticationServiceTest {
 
@@ -41,7 +41,8 @@ public class TokenAuthenticationServiceTest {
 
   @Test
   public void testTimedOutAuthentication() throws InterruptedException {
-    TokenAuthenticationService service = new TokenAuthenticationService("this.is.a.test.secret", 50);
+    TokenAuthenticationService service =
+        new TokenAuthenticationService("this.is.a.test.secret", 50);
     String token = obtainToken(service);
     HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
     when(mockRequest.getHeader(anyString())).thenReturn(token);
@@ -58,7 +59,8 @@ public class TokenAuthenticationServiceTest {
     PrivateKey privateKey = (PrivateKey) keyStore.getKey("jwtkey", KEYSTORE_PASSWORD);
     PublicKey publicKey = keyStore.getCertificate("jwtkey").getPublicKey();
 
-    TokenAuthenticationService issuingService = new TokenAuthenticationService(privateKey, publicKey);
+    TokenAuthenticationService issuingService =
+        new TokenAuthenticationService(privateKey, publicKey);
     TokenAuthenticationService authenticatingService = new TokenAuthenticationService(publicKey);
 
     assertThat(issuingService.canIssueTokens()).isTrue();

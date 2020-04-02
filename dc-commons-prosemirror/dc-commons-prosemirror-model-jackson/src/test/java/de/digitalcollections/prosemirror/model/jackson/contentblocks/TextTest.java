@@ -1,13 +1,13 @@
 package de.digitalcollections.prosemirror.model.jackson.contentblocks;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.prosemirror.model.api.Mark;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Text;
 import de.digitalcollections.prosemirror.model.impl.MarkImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.TextImpl;
 import de.digitalcollections.prosemirror.model.jackson.BaseProseMirrorObjectMapperTest;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class TextTest extends BaseProseMirrorObjectMapperTest {
 
@@ -52,9 +52,7 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithEmptyText() throws Exception {
-    String jsonString = "{\n"
-            + "          \"type\": \"text\"\n"
-            + "        }";
+    String jsonString = "{\n" + "          \"type\": \"text\"\n" + "        }";
 
     Text text = mapper.readValue(jsonString, Text.class);
     assertThat(text).isNotNull();
@@ -63,7 +61,8 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithText() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "          \"type\": \"text\",\n"
             + "          \"text\": \"Impressum\"\n"
             + "        }";
@@ -76,7 +75,8 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithMarksOnly() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "      \"type\": \"text\",\n"
             + "      \"marks\": [\n"
             + "        {\"type\":\"strong\"},\n"
@@ -95,7 +95,8 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithTextAndMarks() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "      \"type\": \"text\",\n"
             + "      \"marks\": [\n"
             + "        {\"type\":\"strong\"},\n"
@@ -111,5 +112,4 @@ public class TextTest extends BaseProseMirrorObjectMapperTest {
     Mark em = new MarkImpl("em");
     assertThat(text.getMarks()).containsExactly(strong, em);
   }
-
 }

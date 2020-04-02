@@ -1,5 +1,7 @@
 package de.digitalcollections.prosemirror.model.jackson.contentblocks;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.prosemirror.model.api.contentblocks.ListItem;
 import de.digitalcollections.prosemirror.model.api.contentblocks.OrderedList;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Paragraph;
@@ -12,8 +14,6 @@ import de.digitalcollections.prosemirror.model.jackson.BaseProseMirrorObjectMapp
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class OrderedListTest extends BaseProseMirrorObjectMapperTest {
 
@@ -48,7 +48,8 @@ public class OrderedListTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithContents() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "  \"type\": \"ordered_list\",\n"
             + "  \"attrs\": {\"order\": 1},\n"
             + "  \"content\": [\n"
@@ -119,5 +120,4 @@ public class OrderedListTest extends BaseProseMirrorObjectMapperTest {
     attributes.put("order", 1);
     assertThat(orderedList.getAttributes()).isEqualTo(attributes);
   }
-
 }

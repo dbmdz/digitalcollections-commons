@@ -1,5 +1,7 @@
 package de.digitalcollections.prosemirror.model.jackson;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -10,11 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public abstract class BaseProseMirrorObjectMapperTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BaseProseMirrorObjectMapperTest.class);
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(BaseProseMirrorObjectMapperTest.class);
 
   public ObjectMapper mapper;
 
@@ -50,7 +51,15 @@ public abstract class BaseProseMirrorObjectMapperTest {
     try {
       assertThat(objectOut).usingRecursiveComparison().isEqualTo(objectIn);
     } catch (Throwable e) {
-      LOGGER.error("ERR: IN=" + dump(objectIn) + "\n    OUT=" + dump(objectOut) + "\n\nERROR=" + e.getClass() + "=" + e.getMessage());
+      LOGGER.error(
+          "ERR: IN="
+              + dump(objectIn)
+              + "\n    OUT="
+              + dump(objectOut)
+              + "\n\nERROR="
+              + e.getClass()
+              + "="
+              + e.getMessage());
       throw e;
     }
   }
@@ -66,5 +75,4 @@ public abstract class BaseProseMirrorObjectMapperTest {
   private String dump(Object o) throws JsonProcessingException {
     return mapper.writeValueAsString(o);
   }
-
 }

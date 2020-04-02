@@ -14,7 +14,8 @@ public class BenchmarkTest {
   @Test
   public void benchmark() {
     Person arkadiStrugatzki = new Person("Arkadi", "Strugatzki", LocalDateTime.parse("1925-08-28"));
-    Book roadsidePicknic = new Book(arkadiStrugatzki, "Roadside Picknic", LocalDateTime.parse("1971"));
+    Book roadsidePicknic =
+        new Book(arkadiStrugatzki, "Roadside Picknic", LocalDateTime.parse("1971"));
 
     int repeats = 3;
     int numberOfIterations = 5000;
@@ -43,5 +44,4 @@ public class BenchmarkTest {
     }
     LOGGER.info(output);
   }
-
 }

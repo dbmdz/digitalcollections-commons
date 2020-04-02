@@ -5,12 +5,10 @@ import de.digitalcollections.prosemirror.model.impl.NodeContentBlockWithAttribut
 
 public class HeadingImpl extends NodeContentBlockWithAttributesImpl implements Heading {
 
-  public HeadingImpl() {
-  }
+  public HeadingImpl() {}
 
   public HeadingImpl(int level, String text) {
     addContentBlock(new TextImpl(text));
     addAttribute("level", level);
   }
-
 }

@@ -14,26 +14,25 @@ import org.springframework.stereotype.Component;
 @Endpoint(id = "version")
 public class VersionActuatorEndpoint {
 
-  @Autowired
-  VersionInfo versionInfo;
+  @Autowired VersionInfo versionInfo;
 
   @ReadOperation
   public VersionResponse getVersion() {
-    return new VersionResponse(versionInfo.getApplicationName(), versionInfo.getVersionInfo(), versionInfo.getBuildDetails());
+    return new VersionResponse(
+        versionInfo.getApplicationName(),
+        versionInfo.getVersionInfo(),
+        versionInfo.getBuildDetails());
   }
 
   @JsonInclude(Include.NON_NULL)
   @JsonPropertyOrder({"name", "version", "details"})
   public static class VersionResponse {
 
-    @JsonProperty
-    private String name;
+    @JsonProperty private String name;
 
-    @JsonProperty
-    private String version;
+    @JsonProperty private String version;
 
-    @JsonProperty
-    private String details;
+    @JsonProperty private String details;
 
     public VersionResponse(String name, String version, String details) {
       this.name = name;
