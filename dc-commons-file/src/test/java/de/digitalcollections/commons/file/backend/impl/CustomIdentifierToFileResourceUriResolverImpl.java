@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomIdentifierToFileResourceUriResolverImpl implements IdentifierToFileResourceUriResolver {
+public class CustomIdentifierToFileResourceUriResolverImpl
+    implements IdentifierToFileResourceUriResolver {
 
   @Override
   public List<String> getUrisAsStrings(String identifier) {
@@ -20,5 +21,4 @@ public class CustomIdentifierToFileResourceUriResolverImpl implements Identifier
     }
     return Boolean.FALSE;
   }
-
 }

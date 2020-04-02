@@ -1,5 +1,7 @@
 package de.digitalcollections.commons.springboot.monitoring;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +12,6 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = VersionInfo.class)
 @SpringBootConfiguration()
@@ -20,8 +20,7 @@ public class VersionInfoTest {
   @Value("${junit.version}")
   private String junitVersion;
 
-  @Autowired
-  VersionInfo versionInfo;
+  @Autowired VersionInfo versionInfo;
 
   @Test
   @DisplayName("Testing application info from application.yml")

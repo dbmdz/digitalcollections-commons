@@ -19,10 +19,10 @@ import de.digitalcollections.prosemirror.model.impl.contentblocks.TextImpl;
 import java.util.List;
 
 @JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type",
-        visible = true)
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type",
+    visible = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSubTypes({
   @JsonSubTypes.Type(value = BlockquoteImpl.class, name = "blockquote"),
@@ -46,5 +46,4 @@ public interface ContentBlockMixIn {
 
   @JsonIgnore
   void addContent(ContentBlock content);
-
 }

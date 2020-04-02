@@ -1,5 +1,7 @@
 package de.digitalcollections.commons.springboot.actuator;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.digitalcollections.commons.springboot.monitoring.VersionInfo;
@@ -11,15 +13,12 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {VersionInfo.class, VersionActuatorEndpoint.class})
 @SpringBootConfiguration()
 public class VersionActuatorEndpointTest {
 
-  @Autowired
-  VersionActuatorEndpoint versionActuatorEndpoint;
+  @Autowired VersionActuatorEndpoint versionActuatorEndpoint;
 
   @Test
   @DisplayName("Test for return value of the /version endpoint")
@@ -28,6 +27,8 @@ public class VersionActuatorEndpointTest {
 
     String jsonResult = mapper.writeValueAsString(versionActuatorEndpoint.getVersion());
 
-    assertThat(jsonResult).isEqualTo("{\"name\":\"dc-commons-springboot-example\",\"version\":\"1.2.3\",\"details\":\"build by foo@bar.com\"}");
+    assertThat(jsonResult)
+        .isEqualTo(
+            "{\"name\":\"dc-commons-springboot-example\",\"version\":\"1.2.3\",\"details\":\"build by foo@bar.com\"}");
   }
 }

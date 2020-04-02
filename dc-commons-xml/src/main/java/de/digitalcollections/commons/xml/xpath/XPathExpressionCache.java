@@ -25,19 +25,20 @@ public class XPathExpressionCache {
     cache = new ConcurrentHashMap<>();
     xpath = xPathFactory.newXPath();
     xpath.setNamespaceContext(namespaceCtx);
-
   }
 
   public XPathExpression get(String expression) {
-    return cache.computeIfAbsent(expression, (x) -> {
-      XPathExpression result = null;
-      try {
-        result = xpath.compile(x);
-      } catch (XPathExpressionException exception) {
-        throw new IllegalArgumentException(exception);
-      }
-      return result;
-    });
+    return cache.computeIfAbsent(
+        expression,
+        (x) -> {
+          XPathExpression result = null;
+          try {
+            result = xpath.compile(x);
+          } catch (XPathExpressionException exception) {
+            throw new IllegalArgumentException(exception);
+          }
+          return result;
+        });
   }
 
   public int getSize() {
@@ -51,8 +52,8 @@ public class XPathExpressionCache {
   /**
    * Change the default namespace for all XPath expressions.
    *
-   * <strong>CAREFUL:</strong> If the new default namespace is different from the current one, the complete cache will be
-   * reset, so use with caution in performance-sensitive areas.
+   * <p><strong>CAREFUL:</strong> If the new default namespace is different from the current one,
+   * the complete cache will be reset, so use with caution in performance-sensitive areas.
    *
    * @param namespaceUri The new default namespace URI
    */

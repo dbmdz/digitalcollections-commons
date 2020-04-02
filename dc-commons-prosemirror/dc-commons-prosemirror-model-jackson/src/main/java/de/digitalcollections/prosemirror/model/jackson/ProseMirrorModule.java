@@ -35,7 +35,8 @@ public class ProseMirrorModule extends Module {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProseMirrorModule.class);
 
-  protected static ResourceBundle rb = ResourceBundle.getBundle("dc-commons-prosemirror-model-jackson-version");
+  protected static ResourceBundle rb =
+      ResourceBundle.getBundle("dc-commons-prosemirror-model-jackson-version");
 
   @Override
   public String getModuleName() {
@@ -64,9 +65,8 @@ public class ProseMirrorModule extends Module {
   @Override
   public Version version() {
     return VersionUtil.parseVersion(
-            rb.getString("project.version"),
-            rb.getString("project.groupId"),
-            rb.getString("project.artifactId"));
+        rb.getString("project.version"),
+        rb.getString("project.groupId"),
+        rb.getString("project.artifactId"));
   }
-
 }

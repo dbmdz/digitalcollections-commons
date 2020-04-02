@@ -1,5 +1,15 @@
 package de.digitalcollections.commons.springboot.metrics;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import io.micrometer.core.instrument.ImmutableTag;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.MeterRegistry.Config;
@@ -15,20 +25,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 public class MetricsServiceTest {
 
-  @Mock
-  MeterRegistry meterRegistry;
+  @Mock MeterRegistry meterRegistry;
 
   MetricsService metricsService;
 
@@ -42,7 +41,6 @@ public class MetricsServiceTest {
     metricsService = new MetricsService(meterRegistry);
   }
 
-
   @Test
   @DisplayName("Initial call registers the counter")
   @SuppressWarnings("unchecked")
@@ -50,7 +48,8 @@ public class MetricsServiceTest {
     metricsService.increaseCounter("foo", "bar");
     Set<Tag> expectedTags = new HashSet<>();
     expectedTags.add(new ImmutableTag("type", "bar"));
-    verify(meterRegistry, times(1)).gauge(eq("foo.amount"), eq(expectedTags), eq("foo.bar"), any(ToDoubleFunction.class));
+    verify(meterRegistry, times(1))
+        .gauge(eq("foo.amount"), eq(expectedTags), eq("foo.bar"), any(ToDoubleFunction.class));
   }
 
   @Test
@@ -60,18 +59,20 @@ public class MetricsServiceTest {
     metricsService.increaseCounter("foo", "bar");
     Set<Tag> expectedTags = new HashSet<>();
     expectedTags.add(new ImmutableTag("type", "bar"));
-    verify(meterRegistry, times(1)).gauge(eq("foo.amount"), eq(expectedTags), eq("foo.bar"), any(ToDoubleFunction.class));
+    verify(meterRegistry, times(1))
+        .gauge(eq("foo.amount"), eq(expectedTags), eq("foo.bar"), any(ToDoubleFunction.class));
     reset(meterRegistry);
     metricsService.increaseCounter("foo", "bar");
-    verify(meterRegistry, never()).gauge(any(String.class), any(Set.class), any(String.class), any(ToDoubleFunction.class));
+    verify(meterRegistry, never())
+        .gauge(any(String.class), any(Set.class), any(String.class), any(ToDoubleFunction.class));
     assertThat(metricsService.getCounters().get("foo.bar")).isEqualTo(2);
   }
 
   @Test
   @DisplayName("Increments can be different to 1")
   void differentIncrements() {
-    metricsService.increaseCounter("foo", "bar");    // Start with 1
-    metricsService.increaseCounter("foo", "bar", 2);    // add 2
+    metricsService.increaseCounter("foo", "bar"); // Start with 1
+    metricsService.increaseCounter("foo", "bar", 2); // add 2
     metricsService.increaseCounter("foo", "bar", 20); // add 20
     assertThat(metricsService.getCounters().get("foo.bar")).isEqualTo(23);
   }
@@ -116,11 +117,11 @@ public class MetricsServiceTest {
     Set<Tag> expectedTags = new HashSet<>();
     expectedTags.add(new ImmutableTag("type", "bar"));
 
-    metricsService.increaseCounterWithDuration("foo","bar", 123L);
-    metricsService.increaseCounterWithDuration("foo","bar", 234L);
+    metricsService.increaseCounterWithDuration("foo", "bar", 123L);
+    metricsService.increaseCounterWithDuration("foo", "bar", 234L);
 
-    verify(meterRegistry, times(1)).gauge(eq("foo.amount"), eq(expectedTags), eq("foo.bar"), any(ToDoubleFunction.class));
+    verify(meterRegistry, times(1))
+        .gauge(eq("foo.amount"), eq(expectedTags), eq("foo.bar"), any(ToDoubleFunction.class));
     verify(meterRegistry, times(1)).timer(any(), any(), any());
   }
-
 }

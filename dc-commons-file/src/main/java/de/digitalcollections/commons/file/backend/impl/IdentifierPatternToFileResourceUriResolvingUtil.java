@@ -25,20 +25,27 @@ import org.springframework.util.StringUtils;
 @Component
 public class IdentifierPatternToFileResourceUriResolvingUtil {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(IdentifierPatternToFileResourceUriResolvingUtil.class);
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(IdentifierPatternToFileResourceUriResolvingUtil.class);
 
   private final IdentifierPatternToFileResourceUriResolvingConfig config;
-  private DirectoryStream<Path> overriddenDirectoryStream;      // only for testing purposes
+  private DirectoryStream<Path> overriddenDirectoryStream; // only for testing purposes
 
   @Autowired
-  public IdentifierPatternToFileResourceUriResolvingUtil(IdentifierPatternToFileResourceUriResolvingConfig config) {
+  public IdentifierPatternToFileResourceUriResolvingUtil(
+      IdentifierPatternToFileResourceUriResolvingConfig config) {
     this.config = config;
   }
 
   public Set<String> findKeys(String keyPattern) throws ResourceIOException {
-    // The pattern for valid keys is the original pattern without any brackets inside, but surrounded with one bracket.
+    // The pattern for valid keys is the original pattern without any brackets inside, but
+    // surrounded with one bracket.
     // news_(\\d{8}) -> (news_\\d{8})
-    Pattern validKeysPattern = Pattern.compile("(" + keyPattern.replace("(", "").replace(")", "").replace("^", "").replace("$", "") + ")");
+    Pattern validKeysPattern =
+        Pattern.compile(
+            "("
+                + keyPattern.replace("(", "").replace(")", "").replace("^", "").replace("$", "")
+                + ")");
 
     Set<String> keys = new HashSet<>();
 
@@ -46,9 +53,10 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
     Set<Path> paths = getPathsByPattern(keyPattern);
 
     for (Path p : paths) {
-      Path basePath = p.getParent();    // Only in this directory, we search for the matching keys
+      Path basePath = p.getParent(); // Only in this directory, we search for the matching keys
 
-      // The pattern for valid filenames is the filename of the path, where all backreferences are replaced by a wildcard regexp.
+      // The pattern for valid filenames is the filename of the path, where all backreferences are
+      // replaced by a wildcard regexp.
       // The whole pattern is finally surrounded by start and end regexp characters.
       String filenameAsKeyWithWildcards = p.getFileName().toString().replaceAll("\\$\\d+", ".*");
       Pattern validFilenamesPattern = Pattern.compile("^" + filenameAsKeyWithWildcards + "$");
@@ -59,7 +67,8 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
 
       // We must stay within the given path. So, no path substitutions outside are allowed!
       if (basePath.normalize().toString().contains("$")) {
-        throw new ResourceIOException("Cannot find keys for substitutions with references in paths");
+        throw new ResourceIOException(
+            "Cannot find keys for substitutions with references in paths");
       }
 
       // Ensure, the basePath does not start with "file:"
@@ -71,11 +80,13 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
       // "Matching" means, match the filename of the substitution and match the key pattern
       // Finally map them onto the keys
       try (Stream<Path> stream = getFilesInDirectory(basePath).stream()) {
-        keys.addAll(stream.map(path -> path.getFileName().normalize().toString())
-          .filter(filename -> matchesPattern(validFilenamesPattern, filename))
-          .filter(filename -> matchesPattern(validKeysPattern, filename))
-          .map(filename -> mapToPattern(validKeysPattern, filename))
-          .collect(Collectors.toSet()));
+        keys.addAll(
+            stream
+                .map(path -> path.getFileName().normalize().toString())
+                .filter(filename -> matchesPattern(validFilenamesPattern, filename))
+                .filter(filename -> matchesPattern(validKeysPattern, filename))
+                .map(filename -> mapToPattern(validKeysPattern, filename))
+                .collect(Collectors.toSet()));
       } catch (IOException e) {
         LOGGER.error("Cannot traverse directory " + basePath + ": " + e, e);
       }
@@ -98,7 +109,10 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
     List<Path> ret = new ArrayList<>();
 
     // The overriddenDirectoryStream is only used for testing
-    try (DirectoryStream<Path> directoryStream = overriddenDirectoryStream == null ? Files.newDirectoryStream(basePath) : overriddenDirectoryStream) {
+    try (DirectoryStream<Path> directoryStream =
+        overriddenDirectoryStream == null
+            ? Files.newDirectoryStream(basePath)
+            : overriddenDirectoryStream) {
       Iterator<Path> it = directoryStream.iterator();
       if (it != null) {
         while (it.hasNext()) {
@@ -140,7 +154,7 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
    */
   public static String[] splitEqually(String text, int partLength) {
     if (StringUtils.isEmpty(text) || partLength == 0) {
-      return new String[]{text};
+      return new String[] {text};
     }
 
     int textLength = text.length();
@@ -162,8 +176,9 @@ public class IdentifierPatternToFileResourceUriResolvingUtil {
   }
 
   /**
-  @param uuid an uuid, e.g. "a30cf362-5992-4f5a-8de0-61938134e721"
-  @return filepath with uuid splitted in 4 character junks as directories, e.g. "a30c/f362/5992/4f5a/8de0/6193/8134/e721"
+   * @param uuid an uuid, e.g. "a30cf362-5992-4f5a-8de0-61938134e721"
+   * @return filepath with uuid splitted in 4 character junks as directories, e.g.
+   *     "a30c/f362/5992/4f5a/8de0/6193/8134/e721"
    */
   public static String getSplittedUuid(String uuid) {
     String uuidWithoutDashes = uuid.replaceAll("-", "");

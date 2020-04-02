@@ -13,8 +13,7 @@ public class TextImpl extends ContentBlockImpl implements Text {
   private String text;
   private List<Mark> marks;
 
-  public TextImpl() {
-  }
+  public TextImpl() {}
 
   public TextImpl(String text) {
     this.text = text;
@@ -28,7 +27,6 @@ public class TextImpl extends ContentBlockImpl implements Text {
         addMark(mark);
       }
     }
-
   }
 
   @Override
@@ -69,8 +67,7 @@ public class TextImpl extends ContentBlockImpl implements Text {
       return false;
     }
     TextImpl text1 = (TextImpl) o;
-    return Objects.equals(text, text1.text)
-            && Objects.equals(marks, text1.marks);
+    return Objects.equals(text, text1.text) && Objects.equals(marks, text1.marks);
   }
 
   @Override
@@ -82,9 +79,14 @@ public class TextImpl extends ContentBlockImpl implements Text {
   @Override
   public String toString() {
     return "TextImpl{"
-            + "text='" + text + "\', "
-            + "marks=" + marks + ", "
-            + "hashCode=" + hashCode()
-            + '}';
+        + "text='"
+        + text
+        + "\', "
+        + "marks="
+        + marks
+        + ", "
+        + "hashCode="
+        + hashCode()
+        + '}';
   }
 }

@@ -37,8 +37,7 @@ public class SpacesDialect extends AbstractProcessorDialect {
   @Override
   public Set<IProcessor> getProcessors(String dialectPrefix) {
     return ImmutableSet.of(
-            new EmptyTextProcessor(templateMode, getDialectProcessorPrecedence()),
-            new AttributesInnerWhitespacesProcessor(templateMode, getDialectProcessorPrecedence()));
+        new EmptyTextProcessor(templateMode, getDialectProcessorPrecedence()),
+        new AttributesInnerWhitespacesProcessor(templateMode, getDialectProcessorPrecedence()));
   }
-
 }

@@ -8,5 +8,4 @@ public class NestedInnerClass {
   String getAuthor() {
     return author;
   }
-
 }

@@ -18,8 +18,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @ControllerAdvice
 /**
- * Usage: register it as interceptor in your Spring config and add it as ControllerAdvice to Spring context, e.g. by
- * instantiating it through ComponentScan:
+ * Usage: register it as interceptor in your Spring config and add it as ControllerAdvice to Spring
+ * context, e.g. by instantiating it through ComponentScan:
+ *
  * <pre>
  * @ComponentScan(basePackages = {
  *   "de.digitalcollections.commons.springmvc.interceptors"
@@ -35,13 +36,22 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * }
  * </pre>
  */
-public class RequestProcessingTimeInterceptor extends HandlerInterceptorAdapter implements ResponseBodyAdvice<Object> {
+public class RequestProcessingTimeInterceptor extends HandlerInterceptorAdapter
+    implements ResponseBodyAdvice<Object> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RequestProcessingTimeInterceptor.class);
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(RequestProcessingTimeInterceptor.class);
 
   @Override
-  public Object beforeBodyWrite(Object body, MethodParameter mp, MediaType mt, Class<? extends HttpMessageConverter<?>> type, ServerHttpRequest request, ServerHttpResponse response) {
-    long startTime = (Long) ((ServletServerHttpRequest) request).getServletRequest().getAttribute("startTime");
+  public Object beforeBodyWrite(
+      Object body,
+      MethodParameter mp,
+      MediaType mt,
+      Class<? extends HttpMessageConverter<?>> type,
+      ServerHttpRequest request,
+      ServerHttpResponse response) {
+    long startTime =
+        (Long) ((ServletServerHttpRequest) request).getServletRequest().getAttribute("startTime");
     final long duration = System.currentTimeMillis() - startTime;
     response.getHeaders().add("x-execution-duration", duration + " ms");
     return body;
@@ -49,36 +59,49 @@ public class RequestProcessingTimeInterceptor extends HandlerInterceptorAdapter 
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-          throws Exception {
+      throws Exception {
     long startTime = System.currentTimeMillis();
-    LOGGER.debug("request URL={} :: Start Time={}",
-            request.getRequestURL().toString(), System.currentTimeMillis());
+    LOGGER.debug(
+        "request URL={} :: Start Time={}",
+        request.getRequestURL().toString(),
+        System.currentTimeMillis());
     request.setAttribute("startTime", startTime);
     return true;
   }
 
   @Override
-  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
-          throws Exception {
-    LOGGER.debug("request URL={} :: Sent to Handler :: Current Time={}",
-            request.getRequestURL().toString(), System.currentTimeMillis());
+  public void postHandle(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Object handler,
+      ModelAndView modelAndView)
+      throws Exception {
+    LOGGER.debug(
+        "request URL={} :: Sent to Handler :: Current Time={}",
+        request.getRequestURL().toString(),
+        System.currentTimeMillis());
   }
 
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-          throws Exception {
+  public void afterCompletion(
+      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+      throws Exception {
     // Don't log HEAD requests
     if (request.getMethod().equals("HEAD")) {
       return;
     }
     try {
       long startTime = (Long) request.getAttribute("startTime");
-      LOGGER.debug("request URL={} :: End Time={}", request.getRequestURL().toString(), System.currentTimeMillis());
+      LOGGER.debug(
+          "request URL={} :: End Time={}",
+          request.getRequestURL().toString(),
+          System.currentTimeMillis());
 
       final long duration = System.currentTimeMillis() - startTime;
       MDC.put("request_url", request.getRequestURL().toString());
       MDC.put("processing_time", String.valueOf(duration));
-      LOGGER.info("request URL={} :: processing time={} ms", request.getRequestURL().toString(), duration);
+      LOGGER.info(
+          "request URL={} :: processing time={} ms", request.getRequestURL().toString(), duration);
     } finally {
       MDC.clear();
     }
@@ -88,5 +111,4 @@ public class RequestProcessingTimeInterceptor extends HandlerInterceptorAdapter 
   public boolean supports(MethodParameter mp, Class<? extends HttpMessageConverter<?>> type) {
     return true;
   }
-
 }

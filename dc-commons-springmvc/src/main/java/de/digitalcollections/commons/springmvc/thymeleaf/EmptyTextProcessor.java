@@ -29,11 +29,11 @@ public class EmptyTextProcessor extends AbstractTextProcessor {
   }
 
   @Override
-  public void doProcess(ITemplateContext context, IText text, ITextStructureHandler structureHandler) {
+  public void doProcess(
+      ITemplateContext context, IText text, ITextStructureHandler structureHandler) {
     String content = text.getText();
     if (!StringUtils.hasText(content)) {
       structureHandler.removeText();
     }
   }
-
 }

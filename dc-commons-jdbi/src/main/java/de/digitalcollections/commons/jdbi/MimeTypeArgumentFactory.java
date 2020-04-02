@@ -14,7 +14,7 @@ public class MimeTypeArgumentFactory extends AbstractArgumentFactory<MimeType> {
 
   @Override
   protected Argument build(MimeType mimeType, ConfigRegistry config) {
-    return (position, preparedStatement, statementContext) -> preparedStatement.setObject(position, mimeType.getTypeName(), Types.VARCHAR);
+    return (position, preparedStatement, statementContext) ->
+        preparedStatement.setObject(position, mimeType.getTypeName(), Types.VARCHAR);
   }
-
 }

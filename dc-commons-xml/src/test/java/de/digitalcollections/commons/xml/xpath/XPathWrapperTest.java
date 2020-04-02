@@ -1,5 +1,7 @@
 package de.digitalcollections.commons.xml.xpath;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.InputStream;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -10,8 +12,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class XPathWrapperTest {
 
   private XPathWrapper wrapper;
@@ -21,7 +21,8 @@ public class XPathWrapperTest {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setNamespaceAware(true);
     DocumentBuilder db = dbf.newDocumentBuilder();
-    InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("bsbstruc.xml");
+    InputStream is =
+        Thread.currentThread().getContextClassLoader().getResourceAsStream("bsbstruc.xml");
     Document doc = db.parse(is);
     this.wrapper = new XPathWrapper(doc);
   }
@@ -68,12 +69,12 @@ public class XPathWrapperTest {
 
   @Test
   public void testAsNumber() throws Exception {
-    assertThat(this.wrapper.asNumber("//tei:classCode[@scheme='mdzProject']/tei:idno").intValue()).isEqualTo(1328176523);
+    assertThat(this.wrapper.asNumber("//tei:classCode[@scheme='mdzProject']/tei:idno").intValue())
+        .isEqualTo(1328176523);
   }
 
   @Test
   public void testGetDocument() throws Exception {
     assertThat(this.wrapper.getDocument().getDocumentElement().getTagName()).isEqualTo("TEI");
   }
-
 }

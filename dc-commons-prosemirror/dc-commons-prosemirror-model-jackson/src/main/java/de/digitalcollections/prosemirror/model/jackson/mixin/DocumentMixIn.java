@@ -12,14 +12,13 @@ import java.util.List;
 @JsonDeserialize(as = DocumentImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type",
-        visible = true)
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type",
+    visible = true)
 @JsonTypeName("doc")
 public interface DocumentMixIn {
 
   @JsonProperty("content")
   public List<ContentBlock> getContentBlocks();
-
 }

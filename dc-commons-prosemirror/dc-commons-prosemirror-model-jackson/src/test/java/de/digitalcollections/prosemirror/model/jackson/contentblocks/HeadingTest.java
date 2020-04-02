@@ -1,13 +1,13 @@
 package de.digitalcollections.prosemirror.model.jackson.contentblocks;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.prosemirror.model.api.contentblocks.Heading;
 import de.digitalcollections.prosemirror.model.api.contentblocks.Text;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.HeadingImpl;
 import de.digitalcollections.prosemirror.model.impl.contentblocks.TextImpl;
 import de.digitalcollections.prosemirror.model.jackson.BaseProseMirrorObjectMapperTest;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class HeadingTest extends BaseProseMirrorObjectMapperTest {
 
@@ -37,9 +37,7 @@ public class HeadingTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithEmptyContentAndEmptyAttributes() throws Exception {
-    String jsonString = "{\n"
-            + "          \"type\": \"heading\"\n"
-            + "        }";
+    String jsonString = "{\n" + "          \"type\": \"heading\"\n" + "        }";
 
     Heading heading = mapper.readValue(jsonString, Heading.class);
     assertThat(heading).isNotNull();
@@ -49,7 +47,8 @@ public class HeadingTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithAttributesOnly() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "      \"type\": \"heading\",\n"
             + "      \"attrs\": {\n"
             + "        \"level\": 3\n"
@@ -65,7 +64,8 @@ public class HeadingTest extends BaseProseMirrorObjectMapperTest {
 
   @Test
   public void testDeserializationWithAttributesAndContent() throws Exception {
-    String jsonString = "{\n"
+    String jsonString =
+        "{\n"
             + "      \"type\": \"heading\",\n"
             + "      \"attrs\": {\n"
             + "        \"level\": 3\n"
@@ -87,5 +87,4 @@ public class HeadingTest extends BaseProseMirrorObjectMapperTest {
     Text impressum = new TextImpl("Impressum");
     assertThat(heading.getContentBlocks().get(0)).isEqualTo(impressum);
   }
-
 }

@@ -32,10 +32,10 @@ public class HttpLoggingUtilities {
       return false; // assuming no logging, exception handling required
     }
     return !(address.isSiteLocalAddress()
-            || address.isAnyLocalAddress()
-            || address.isLinkLocalAddress()
-            || address.isLoopbackAddress()
-            || address.isMulticastAddress());
+        || address.isAnyLocalAddress()
+        || address.isLinkLocalAddress()
+        || address.isLoopbackAddress()
+        || address.isMulticastAddress());
   }
 
   protected static String anonymizeIp(String ip) {
@@ -43,12 +43,12 @@ public class HttpLoggingUtilities {
   }
 
   /**
-   * Puts http request infos (client infos) to MDC logging context. Make sure to
-   * clear MDC after logging! Using MDC instead of LogstashMarker, because
-   * otherwise we drag in logging implementation logstash as dependency. We care
-   * for having no other logging dependency than slf4j.
+   * Puts http request infos (client infos) to MDC logging context. Make sure to clear MDC after
+   * logging! Using MDC instead of LogstashMarker, because otherwise we drag in logging
+   * implementation logstash as dependency. We care for having no other logging dependency than
+   * slf4j.
    *
-   * <p>Usage example:</p>
+   * <p>Usage example:
    *
    * <pre>
    * <b>HttpLoggingUtilities.addRequestClientInfoToMDC(request);
@@ -89,7 +89,8 @@ public class HttpLoggingUtilities {
     if (LOOKUP_LOCATION) {
       if (GEO_IP_DATABASE == null) {
         try {
-          InputStream dbStream = HttpLoggingUtilities.class.getResourceAsStream("/geolite2/GeoLite2-City.mmdb");
+          InputStream dbStream =
+              HttpLoggingUtilities.class.getResourceAsStream("/geolite2/GeoLite2-City.mmdb");
           GEO_IP_DATABASE = new DatabaseReader.Builder(dbStream).build();
         } catch (Throwable e) {
           LOOKUP_LOCATION = false;

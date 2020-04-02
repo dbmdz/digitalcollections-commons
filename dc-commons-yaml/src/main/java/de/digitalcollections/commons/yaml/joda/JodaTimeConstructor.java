@@ -28,5 +28,4 @@ public class JodaTimeConstructor extends Constructor {
       return LocalDateTime.parse(scalarNode.getValue());
     }
   }
-
 }

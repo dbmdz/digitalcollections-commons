@@ -64,24 +64,48 @@ public class DigitalCollectionsNamespaceContext implements NamespaceContext {
     map.put(XMLConstants.DEFAULT_NS_PREFIX, defaultURI);
     map.put(XMLConstants.XMLNS_ATTRIBUTE, XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
     map.put(XMLConstants.XML_NS_PREFIX, XMLConstants.XML_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.TEI_NS_PREFIX, DigitalCollectionsNamespaceContext.TEI_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.DC_NS_PREFIX, DigitalCollectionsNamespaceContext.DC_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.OAI_DC_NS_PREFIX, DigitalCollectionsNamespaceContext.OAI_DC_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.OAI_NS_PREFIX, DigitalCollectionsNamespaceContext.OAI_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.XSI_NS_PREFIX, DigitalCollectionsNamespaceContext.XSI_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.ATOM_NS_PREFIX, DigitalCollectionsNamespaceContext.ATOM_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.FOXML_NS_PREFIX, DigitalCollectionsNamespaceContext.FOXML_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.SVG_NS_PREFIX, DigitalCollectionsNamespaceContext.SVG_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.XLINK_NS_PREFIX, DigitalCollectionsNamespaceContext.XLINK_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.MDZ2_NS_PREFIX, DigitalCollectionsNamespaceContext.MDZ2_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.BAV_NS_PREFIX, DigitalCollectionsNamespaceContext.BAV_NS_URI);
-    map.put(DigitalCollectionsNamespaceContext.RDF_NS_PREFIX, DigitalCollectionsNamespaceContext.RDF_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.TEI_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.TEI_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.DC_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.DC_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.OAI_DC_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.OAI_DC_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.OAI_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.OAI_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.XSI_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.XSI_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.ATOM_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.ATOM_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.FOXML_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.FOXML_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.SVG_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.SVG_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.XLINK_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.XLINK_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.MDZ2_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.MDZ2_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.BAV_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.BAV_NS_URI);
+    map.put(
+        DigitalCollectionsNamespaceContext.RDF_NS_PREFIX,
+        DigitalCollectionsNamespaceContext.RDF_NS_URI);
 
     this.namespaces = Collections.unmodifiableMap(map);
   }
 
   /* (non-Javadoc)
-     * @see javax.xml.namespace.NamespaceContext#getNamespaceURI(java.lang.String)
+   * @see javax.xml.namespace.NamespaceContext#getNamespaceURI(java.lang.String)
    */
   @Override
   public String getNamespaceURI(String prefix) {
@@ -96,7 +120,7 @@ public class DigitalCollectionsNamespaceContext implements NamespaceContext {
   }
 
   /* (non-Javadoc)
-     * @see javax.xml.namespace.NamespaceContext#getPrefix(java.lang.String)
+   * @see javax.xml.namespace.NamespaceContext#getPrefix(java.lang.String)
    */
   @Override
   public String getPrefix(String namespaceURI) {
@@ -112,7 +136,7 @@ public class DigitalCollectionsNamespaceContext implements NamespaceContext {
   }
 
   /* (non-Javadoc)
-     * @see javax.xml.namespace.NamespaceContext#getPrefixes(java.lang.String)
+   * @see javax.xml.namespace.NamespaceContext#getPrefixes(java.lang.String)
    */
   @Override
   public Iterator<String> getPrefixes(String namespaceURI) {
@@ -127,5 +151,4 @@ public class DigitalCollectionsNamespaceContext implements NamespaceContext {
     }
     return Collections.unmodifiableList(prefixes).iterator();
   }
-
 }

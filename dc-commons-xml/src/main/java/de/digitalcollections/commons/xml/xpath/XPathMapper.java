@@ -22,11 +22,11 @@ import org.w3c.dom.Element;
 /**
  * Maps XML documents to Java POJOs.
  *
- * An XPathMapper is usually constructed once for every mapped type, avoid constructing it in a loop, since there's a
- * lot of expensive reflection going on during construction.
+ * <p>An XPathMapper is usually constructed once for every mapped type, avoid constructing it in a
+ * loop, since there's a lot of expensive reflection going on during construction.
  *
  * @param <T> the target type to map XML documents to
- * */
+ */
 @SuppressWarnings("UnstableApiUsage")
 public class XPathMapper<T> {
   private final Class<T> targetType;
@@ -48,30 +48,34 @@ public class XPathMapper<T> {
   /**
    * Convenience method to construct a temporary mapper and read a single document with it.
    *
-   * @deprecated Construct a {@link XPathMapper} that you can reuse and call {@link XPathMapper#readDocument(Document)}!
-   *
+   * @deprecated Construct a {@link XPathMapper} that you can reuse and call {@link
+   *     XPathMapper#readDocument(Document)}!
    * @param doc source XML document to retrieve mapping values from
-   * @param targetType the target type, e.g. a class with fields/setters annotated with &#64{@link XPathBinding} and/or
-   *                   &#64;{@link XPathRoot}
-   * @param rootPaths optional array of root paths, to override the root paths parsed from the target type.
+   * @param targetType the target type, e.g. a class with fields/setters annotated with &#64{@link
+   *     XPathBinding} and/or &#64;{@link XPathRoot}
+   * @param rootPaths optional array of root paths, to override the root paths parsed from the
+   *     target type.
    * @return an instance of the target type, with annotated fields filled from the XML document.
    */
   @Deprecated
-  public static <T> T readDocument(Document doc, Class<T> targetType, String... rootPaths) throws XPathMappingException {
+  public static <T> T readDocument(Document doc, Class<T> targetType, String... rootPaths)
+      throws XPathMappingException {
     return new XPathMapper<>(targetType, rootPaths, null).readDocument(doc);
   }
 
   /** Create a new mapper for a given type. */
   public XPathMapper(Class<T> targetType) throws XPathMappingException {
-    this(targetType, new String[]{}, null);
+    this(targetType, new String[] {}, null);
   }
 
-  /** Create a new mapper for a given type, with custom root paths and a default namespace.
+  /**
+   * Create a new mapper for a given type, with custom root paths and a default namespace.
    *
-   * Use this constructor if you want to override the root paths and/or the default namespace read from the
-   * {@link XPathRoot} annotation on the target type.
-   * */
-  public XPathMapper(Class<T> targetType, String[] rootPaths, String defaultRootNamespace) throws XPathMappingException {
+   * <p>Use this constructor if you want to override the root paths and/or the default namespace
+   * read from the {@link XPathRoot} annotation on the target type.
+   */
+  public XPathMapper(Class<T> targetType, String[] rootPaths, String defaultRootNamespace)
+      throws XPathMappingException {
     this.targetType = targetType;
 
     XPathRoot rootAnnotation = targetType.getAnnotation(XPathRoot.class);
@@ -86,7 +90,8 @@ public class XPathMapper<T> {
       XPathBinding binding = m.getDeclaredAnnotation(XPathBinding.class);
       validateBinding(binding);
       if (!binding.valueTemplate().isEmpty()) {
-        fields.add(new TemplateField(m, binding.valueTemplate(), Arrays.asList(binding.variables())));
+        fields.add(
+            new TemplateField(m, binding.valueTemplate(), Arrays.asList(binding.variables())));
       } else {
         fields.add(new SimpleField(m, binding.value()));
       }
@@ -95,24 +100,30 @@ public class XPathMapper<T> {
       XPathBinding binding = fl.getDeclaredAnnotation(XPathBinding.class);
       validateBinding(binding);
       if (!binding.valueTemplate().isEmpty()) {
-        fields.add(new TemplateField(fl, binding.valueTemplate(), Arrays.asList(binding.variables())));
+        fields.add(
+            new TemplateField(fl, binding.valueTemplate(), Arrays.asList(binding.variables())));
       } else {
         fields.add(new SimpleField(fl, binding.value()));
       }
     }
 
-    // Determine all setters and fields that map nested types, i.e. that are annotated with @XPathRoot
+    // Determine all setters and fields that map nested types, i.e. that are annotated with
+    // @XPathRoot
     for (Method m : getSettersAnnotatedWith(targetType, XPathRoot.class)) {
       XPathRoot nestedRoot = m.getDeclaredAnnotation(XPathRoot.class);
-      fields.add(new NestedField(
-          m, prependWithRootPaths(nestedRoot.value()),
-          determineNamespace(this.defaultRootNamespace, nestedRoot)));
+      fields.add(
+          new NestedField(
+              m,
+              prependWithRootPaths(nestedRoot.value()),
+              determineNamespace(this.defaultRootNamespace, nestedRoot)));
     }
     for (Field fl : getFieldsAnnotatedWith(targetType, XPathRoot.class)) {
       XPathRoot nestedRoot = fl.getDeclaredAnnotation(XPathRoot.class);
-      fields.add(new NestedField(
-          fl, prependWithRootPaths(nestedRoot.value()),
-          determineNamespace(this.defaultRootNamespace, nestedRoot)));
+      fields.add(
+          new NestedField(
+              fl,
+              prependWithRootPaths(nestedRoot.value()),
+              determineNamespace(this.defaultRootNamespace, nestedRoot)));
     }
   }
 
@@ -122,10 +133,15 @@ public class XPathMapper<T> {
     T val;
     try {
       val = targetType.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+    } catch (InstantiationException
+        | IllegalAccessException
+        | InvocationTargetException
+        | NoSuchMethodException e) {
       throw new XPathMappingException(
-          String.format("Cannot create an instance of %s, does the type have a public default constructor?",
-              targetType.getName()), e);
+          String.format(
+              "Cannot create an instance of %s, does the type have a public default constructor?",
+              targetType.getName()),
+          e);
     }
 
     // Map the fields for the current document
@@ -134,7 +150,7 @@ public class XPathMapper<T> {
       try {
         field.setValue(docReader, val);
       } catch (InvocationTargetException | IllegalAccessException e) {
-        throw new XPathMappingException("Mapping failed: " +  e.getMessage(), e);
+        throw new XPathMappingException("Mapping failed: " + e.getMessage(), e);
       } catch (XPathExpressionException e) {
         throw new XPathMappingException("Mapping failed due to illegal XPath expression", e);
       }
@@ -168,7 +184,7 @@ public class XPathMapper<T> {
     } else if (root != null) {
       return root.value();
     } else {
-      return new String[]{};
+      return new String[] {};
     }
   }
 
@@ -177,8 +193,7 @@ public class XPathMapper<T> {
       return paths;
     }
     return Arrays.stream(paths)
-        .flatMap(e -> rootPaths.stream()
-            .map(r -> r + e))
+        .flatMap(e -> rootPaths.stream().map(r -> r + e))
         .toArray(String[]::new);
   }
 
@@ -186,7 +201,8 @@ public class XPathMapper<T> {
     return Arrays.stream(vals).filter(Objects::nonNull).allMatch(String::isEmpty);
   }
 
-  static Set<Method> getSettersAnnotatedWith(Class<?> type, final Class<? extends Annotation> annotation) {
+  static Set<Method> getSettersAnnotatedWith(
+      Class<?> type, final Class<? extends Annotation> annotation) {
     Set<Method> methods = new HashSet<>();
     // Iterate through hierarchy to get inherited methods, too
     while (type != Object.class) {
@@ -200,7 +216,8 @@ public class XPathMapper<T> {
     return methods;
   }
 
-  static Set<Field> getFieldsAnnotatedWith(Class<?> type, final Class<? extends Annotation> annotation) {
+  static Set<Field> getFieldsAnnotatedWith(
+      Class<?> type, final Class<? extends Annotation> annotation) {
     Set<Field> set = new HashSet<>();
     // Iterate through hierarchy to get inherited fields, too
     while (type != null) {
@@ -230,7 +247,9 @@ public class XPathMapper<T> {
       this.targetType = field.getGenericType();
     }
 
-    /** To be implemented by subclasses, determine the value for the field from the given document. */
+    /**
+     * To be implemented by subclasses, determine the value for the field from the given document.
+     */
     protected abstract Object determineValue(DocumentReader r)
         throws XPathMappingException, XPathExpressionException;
 
@@ -239,7 +258,8 @@ public class XPathMapper<T> {
     }
 
     public void setValue(DocumentReader r, Object target)
-        throws InvocationTargetException, IllegalAccessException, XPathMappingException, XPathExpressionException {
+        throws InvocationTargetException, IllegalAccessException, XPathMappingException,
+            XPathExpressionException {
       Object val = determineValue(r);
       if (isField) {
         Field fl = (Field) member;
@@ -253,7 +273,7 @@ public class XPathMapper<T> {
     }
   }
 
-  /** Simple, non-templated field  binding, can be localized and/or multi-valued. */
+  /** Simple, non-templated field binding, can be localized and/or multi-valued. */
   public static final class SimpleField extends MappedField {
     private boolean multiValued;
     private boolean multiLanguage;
@@ -282,11 +302,15 @@ public class XPathMapper<T> {
       this.multiValued = isMultiValued || isMultiLocalized;
       this.multiValuedElements = MULTIVALUED_ELEMENT_TYPE.isSubtypeOf(targetType);
       if (!multiLanguage && !multiValued && !multiValuedElements && !isSingleValued) {
-        throw new XPathMappingException(String.format(
-            "Binding method has illegal target type %s, must be one of %s, %s, %s, %s or %s",
-            targetType,
-            SINGLEVALUED_TYPE, MULTIVALUED_STRING_TYPE, MULTIVALUED_ELEMENT_TYPE, LOCALIZED_SINGLEVALUED_TYPE,
-            LOCALIZED_MULTIVALUED_TYPE));
+        throw new XPathMappingException(
+            String.format(
+                "Binding method has illegal target type %s, must be one of %s, %s, %s, %s or %s",
+                targetType,
+                SINGLEVALUED_TYPE,
+                MULTIVALUED_STRING_TYPE,
+                MULTIVALUED_ELEMENT_TYPE,
+                LOCALIZED_SINGLEVALUED_TYPE,
+                LOCALIZED_MULTIVALUED_TYPE));
       }
     }
 
@@ -312,14 +336,16 @@ public class XPathMapper<T> {
     List<XPathVariable> variables;
     String template;
 
-    public TemplateField(Method m, String template, List<XPathVariable> vars) throws XPathMappingException {
+    public TemplateField(Method m, String template, List<XPathVariable> vars)
+        throws XPathMappingException {
       super(m);
       this.variables = vars;
       this.template = template;
       this.analyzeTargetType();
     }
 
-    public TemplateField(Field fl, String template, List<XPathVariable> vars) throws XPathMappingException {
+    public TemplateField(Field fl, String template, List<XPathVariable> vars)
+        throws XPathMappingException {
       super(fl);
       this.variables = vars;
       this.template = template;
@@ -331,14 +357,16 @@ public class XPathMapper<T> {
       this.multiLanguage = LOCALIZED_SINGLEVALUED_TYPE.isSubtypeOf(targetType);
       boolean isSingle = SINGLEVALUED_TYPE.isSubtypeOf(targetType);
       if (!multiLanguage && !isSingle) {
-        throw new XPathMappingException(String.format(
-            "Templated binding fields must have a %s or %s type",
-            SINGLEVALUED_TYPE, LOCALIZED_SINGLEVALUED_TYPE));
+        throw new XPathMappingException(
+            String.format(
+                "Templated binding fields must have a %s or %s type",
+                SINGLEVALUED_TYPE, LOCALIZED_SINGLEVALUED_TYPE));
       }
     }
 
     @Override
-    protected Object determineValue(DocumentReader r) throws XPathMappingException, XPathExpressionException {
+    protected Object determineValue(DocumentReader r)
+        throws XPathMappingException, XPathExpressionException {
       if (multiLanguage) {
         return r.readLocalizedTemplateValue(template, variables);
       } else {
@@ -352,17 +380,20 @@ public class XPathMapper<T> {
   public static final class NestedField extends MappedField {
     XPathMapper mapper;
 
-    public NestedField(Method setter, String[] paths, String rootNamespace) throws XPathMappingException {
+    public NestedField(Method setter, String[] paths, String rootNamespace)
+        throws XPathMappingException {
       super(setter);
       this.mapper = createMapper(paths, rootNamespace);
     }
 
-    public NestedField(Field field, String[] paths, String rootNamespace) throws XPathMappingException {
+    public NestedField(Field field, String[] paths, String rootNamespace)
+        throws XPathMappingException {
       super(field);
       this.mapper = createMapper(paths, rootNamespace);
     }
 
-    private XPathMapper createMapper(String[] paths, String rootNamespace) throws XPathMappingException {
+    private XPathMapper createMapper(String[] paths, String rootNamespace)
+        throws XPathMappingException {
       return new XPathMapper((Class<?>) getTargetType(), paths, rootNamespace);
     }
 

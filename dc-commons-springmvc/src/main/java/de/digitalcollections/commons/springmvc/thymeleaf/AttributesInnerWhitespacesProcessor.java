@@ -25,20 +25,28 @@ import org.thymeleaf.processor.element.MatchingAttributeName;
 import org.thymeleaf.processor.element.MatchingElementName;
 import org.thymeleaf.templatemode.TemplateMode;
 
-public class AttributesInnerWhitespacesProcessor extends AbstractProcessor implements IElementTagProcessor {
+public class AttributesInnerWhitespacesProcessor extends AbstractProcessor
+    implements IElementTagProcessor {
 
   AttributesInnerWhitespacesProcessor(TemplateMode templateMode, int precedence) {
     super(templateMode, precedence);
   }
 
   @Override
-  public void process(ITemplateContext context, IProcessableElementTag tag, IElementTagStructureHandler structureHandler) {
+  public void process(
+      ITemplateContext context,
+      IProcessableElementTag tag,
+      IElementTagStructureHandler structureHandler) {
     IAttribute[] attributes = tag.getAllAttributes();
     for (int i = attributes.length - 1; i >= 0; --i) {
       structureHandler.removeAttribute(attributes[i].getAttributeDefinition().getAttributeName());
     }
     for (IAttribute attribute : attributes) {
-      structureHandler.replaceAttribute(attribute.getAttributeDefinition().getAttributeName(), attribute.getAttributeCompleteName(), attribute.getValue(), attribute.getValueQuotes());
+      structureHandler.replaceAttribute(
+          attribute.getAttributeDefinition().getAttributeName(),
+          attribute.getAttributeCompleteName(),
+          attribute.getValue(),
+          attribute.getValueQuotes());
     }
   }
 
@@ -51,5 +59,4 @@ public class AttributesInnerWhitespacesProcessor extends AbstractProcessor imple
   public MatchingAttributeName getMatchingAttributeName() {
     return MatchingAttributeName.forAllAttributes(getTemplateMode());
   }
-
 }

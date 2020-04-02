@@ -5,8 +5,7 @@ import de.digitalcollections.prosemirror.model.impl.ContentBlockWithAttributesIm
 
 public class IFrameImpl extends ContentBlockWithAttributesImpl implements IFrame {
 
-  public IFrameImpl() {
-  }
+  public IFrameImpl() {}
 
   public IFrameImpl(String src, String width, String height) {
     super();
@@ -14,5 +13,4 @@ public class IFrameImpl extends ContentBlockWithAttributesImpl implements IFrame
     addAttribute("width", width);
     addAttribute("height", height);
   }
-
 }

@@ -15,5 +15,4 @@ public interface NodeContentBlock extends ContentBlock {
     }
     getContentBlocks().add(contentBlock);
   }
-
 }

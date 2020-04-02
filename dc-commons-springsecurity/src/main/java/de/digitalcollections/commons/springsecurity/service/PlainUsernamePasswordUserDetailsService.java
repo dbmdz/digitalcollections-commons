@@ -21,9 +21,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
-public class PlainUsernamePasswordUserDetailsService implements UserDetailsService, InitializingBean {
+public class PlainUsernamePasswordUserDetailsService
+    implements UserDetailsService, InitializingBean {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(PlainUsernamePasswordUserDetailsService.class);
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(PlainUsernamePasswordUserDetailsService.class);
 
   @Value("${security.userproperties.location:classpath:/users.properties}")
   private String userpropertiesLocation;
@@ -53,8 +55,16 @@ public class PlainUsernamePasswordUserDetailsService implements UserDetailsServi
 
     repository = new InMemoryUserDetailsManager(userProperties);
 
-    LOGGER.info("Load users=" + userProperties.entrySet().stream().map(user -> user.getKey() + ":["
-            + ((String) user.getValue()).replaceFirst(".*?,", "") + "]").collect(Collectors.joining(", ")));
+    LOGGER.info(
+        "Load users="
+            + userProperties.entrySet().stream()
+                .map(
+                    user ->
+                        user.getKey()
+                            + ":["
+                            + ((String) user.getValue()).replaceFirst(".*?,", "")
+                            + "]")
+                .collect(Collectors.joining(", ")));
   }
 
   @Override

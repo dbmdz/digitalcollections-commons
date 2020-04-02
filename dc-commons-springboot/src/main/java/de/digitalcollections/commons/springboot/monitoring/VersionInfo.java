@@ -36,13 +36,15 @@ public class VersionInfo implements InitializingBean {
   @Value("${info.app.project.name:}")
   private String projectName;
 
-  @Autowired
-  private AbstractEnvironment env;
+  @Autowired private AbstractEnvironment env;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(VersionInfo.class);
   private static final Pattern JAR_PATTERN = Pattern.compile(".*/(.*?)!");
-  private static final Pattern VERSION_FROM_FILENAME_PATTERN = Pattern.compile("(.*)-([^SR].*)\\.jar$");
-  private static final String[] VERSION_KEYS = {"Implementation-Version", "Bundle-Version", "Version"};
+  private static final Pattern VERSION_FROM_FILENAME_PATTERN =
+      Pattern.compile("(.*)-([^SR].*)\\.jar$");
+  private static final String[] VERSION_KEYS = {
+    "Implementation-Version", "Bundle-Version", "Version"
+  };
   Map<String, String> versions = new TreeMap<>();
 
   @Override
@@ -113,5 +115,4 @@ public class VersionInfo implements InitializingBean {
 
     return "unknown (tried everything)";
   }
-
 }

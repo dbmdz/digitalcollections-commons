@@ -44,11 +44,14 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 
 /**
- * Repository for reading files by using an unique identifier and a mimetype specifying the file resource. Identifier and mimetype are the source for determining the access-uri to the file resource
- * via (in this order):
+ * Repository for reading files by using an unique identifier and a mimetype specifying the file
+ * resource. Identifier and mimetype are the source for determining the access-uri to the file
+ * resource via (in this order):
+ *
  * <ul>
- * <li>configurable identifier to uri resolving using regex-patterns</li>
- * <li>custom @see IdentifierToFileResourceUriResolver beans put onto the spring application context</li>
+ *   <li>configurable identifier to uri resolving using regex-patterns
+ *   <li>custom @see IdentifierToFileResourceUriResolver beans put onto the spring application
+ *       context
  * </ul>
  */
 @Repository
@@ -59,10 +62,13 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
   private final List<IdentifierToFileResourceUriResolver> identifierToFileresourceUriResolvers;
   private final IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig;
   private final ResourceLoader resourceLoader;
-  private DirectoryStream<Path> overriddenDirectoryStream;      // only for testing purposes
+  private DirectoryStream<Path> overriddenDirectoryStream; // only for testing purposes
 
   @Autowired
-  public FileResourceRepositoryImpl(IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig, List<IdentifierToFileResourceUriResolver> identifierToFileresourceUriResolvers, ResourceLoader resourceLoader) {
+  public FileResourceRepositoryImpl(
+      IdentifierPatternToFileResourceUriResolvingConfig resolvedFileResourcesConfig,
+      List<IdentifierToFileResourceUriResolver> identifierToFileresourceUriResolvers,
+      ResourceLoader resourceLoader) {
     this.resolvedFileResourcesConfig = resolvedFileResourcesConfig;
     this.identifierToFileresourceUriResolvers = identifierToFileresourceUriResolvers;
     this.resourceLoader = resourceLoader;
@@ -73,17 +79,20 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
   }
 
   @Override
-  public void assertReadability(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+  public void assertReadability(FileResource resource)
+      throws ResourceIOException, ResourceNotFoundException {
     try (InputStream is = getInputStream(resource)) {
       if (is.available() <= 0) {
         throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
       }
     } catch (ResourceIOException e) {
-      throw new ResourceIOException("Cannot read " + resource.getFilename() + ": " + e.getMessage());
+      throw new ResourceIOException(
+          "Cannot read " + resource.getFilename() + ": " + e.getMessage());
     } catch (ResourceNotFoundException e) {
       throw e;
     } catch (Exception e) {
-      throw new ResourceIOException("Cannot read " + resource.getFilename() + ": " + e.getMessage());
+      throw new ResourceIOException(
+          "Cannot read " + resource.getFilename() + ": " + e.getMessage());
     }
   }
 
@@ -103,7 +112,10 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
 
     List<URI> uris = getUris(identifier, mimeType);
     if (uris.isEmpty()) {
-      throw new ResourceIOException(String.format("FileResource with identifier %s and MimeType %s is not resolvable.", identifier, mimeType));
+      throw new ResourceIOException(
+          String.format(
+              "FileResource with identifier %s and MimeType %s is not resolvable.",
+              identifier, mimeType));
     }
     URI uri = uris.get(0);
     resource.setUri(uri);
@@ -149,19 +161,22 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
             DirectoryStream<Path> directoryStream = overriddenDirectoryStream;
             if (directoryStream == null) {
               Path directory = Paths.get(absolutePath.substring(0, absolutePath.lastIndexOf("/")));
-              final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + filenamePattern);
+              final PathMatcher matcher =
+                  FileSystems.getDefault().getPathMatcher("glob:" + filenamePattern);
               DirectoryStream.Filter<Path> filter = matcher::matches;
               directoryStream = Files.newDirectoryStream(directory, filter);
             }
-            List<URI> uris = StreamSupport.stream(directoryStream.spliterator(), false)
-              .map(Path::toUri)
-              .collect(Collectors.toList());
+            List<URI> uris =
+                StreamSupport.stream(directoryStream.spliterator(), false)
+                    .map(Path::toUri)
+                    .collect(Collectors.toList());
             result.addAll(uris);
             continue;
           } catch (MalformedURLException ex) {
             throw new ResourceIOException("Invalid URL " + candidate.toString(), ex);
           } catch (IOException ex) {
-            throw new ResourceIOException("Invalid file system access for " + candidate.toString(), ex);
+            throw new ResourceIOException(
+                "Invalid file system access for " + candidate.toString(), ex);
           }
         }
       }
@@ -171,7 +186,8 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
   }
 
   @Override
-  public FileResource find(String identifier, MimeType mimeType) throws ResourceIOException, ResourceNotFoundException {
+  public FileResource find(String identifier, MimeType mimeType)
+      throws ResourceIOException, ResourceNotFoundException {
     if (mimeType == null) {
       throw new ResourceIOException("missing mimetype");
     }
@@ -181,7 +197,12 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
 
     List<URI> candidates = getUris(identifier, mimeType);
     if (candidates.isEmpty()) {
-      throw new ResourceIOException("Could not resolve identifier " + identifier + " with MIME type " + mimeType.getTypeName() + " to an URI");
+      throw new ResourceIOException(
+          "Could not resolve identifier "
+              + identifier
+              + " with MIME type "
+              + mimeType.getTypeName()
+              + " to an URI");
     }
     final List<URI> expandedCandidates = expandWildcardFilenames(candidates);
 
@@ -191,23 +212,36 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
       uriCandidate = expandedCandidates.get(0);
       resource.setUri(uriCandidate);
     } else {
-      uriCandidate = expandedCandidates.stream()
-        .filter(u -> (resourceLoader.getResource(u.toString()).isReadable() || u.toString().startsWith("http")))
-        .findFirst()
-        .orElseThrow(() -> new ResourceIOException("Could not resolve identifier " + identifier
-                                                   + " with MIME type " + mimeType.getTypeName()
-                                                   + " to a readable Resource. Attempted URIs were " + candidates));
+      uriCandidate =
+          expandedCandidates.stream()
+              .filter(
+                  u ->
+                      (resourceLoader.getResource(u.toString()).isReadable()
+                          || u.toString().startsWith("http")))
+              .findFirst()
+              .orElseThrow(
+                  () ->
+                      new ResourceIOException(
+                          "Could not resolve identifier "
+                              + identifier
+                              + " with MIME type "
+                              + mimeType.getTypeName()
+                              + " to a readable Resource. Attempted URIs were "
+                              + candidates));
       resource.setUri(uriCandidate);
 
       // test if resource exists
       Resource springResource = resourceLoader.getResource(uriCandidate.toString());
       if (!uriCandidate.getScheme().startsWith("http") && !springResource.exists()) {
-        throw new ResourceNotFoundException("Resource not found at location '" + uriCandidate.toString() + "'");
+        throw new ResourceNotFoundException(
+            "Resource not found at location '" + uriCandidate.toString() + "'");
       }
       long lastModified = getLastModified(springResource);
       if (lastModified != 0) {
-        // lastmodified by code in java.io.File#lastModified (is also used in Spring's core.io.Resource) is in milliseconds!
-        resource.setLastModified(Instant.ofEpochMilli(lastModified).atOffset(ZoneOffset.UTC).toLocalDateTime());
+        // lastmodified by code in java.io.File#lastModified (is also used in Spring's
+        // core.io.Resource) is in milliseconds!
+        resource.setLastModified(
+            Instant.ofEpochMilli(lastModified).atOffset(ZoneOffset.UTC).toLocalDateTime());
       } else {
         resource.setLastModified(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
       }
@@ -223,12 +257,14 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
   }
 
   @Override
-  public InputStream getInputStream(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+  public InputStream getInputStream(FileResource resource)
+      throws ResourceIOException, ResourceNotFoundException {
     return getInputStream(resource.getUri());
   }
 
   @Override
-  public InputStream getInputStream(URI resourceUri) throws ResourceIOException, ResourceNotFoundException {
+  public InputStream getInputStream(URI resourceUri)
+      throws ResourceIOException, ResourceNotFoundException {
     try {
       String location = resourceUri.toString();
       if (LOGGER.isDebugEnabled()) {
@@ -256,7 +292,8 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
   }
 
   @Override
-  public Reader getReader(FileResource resource) throws ResourceIOException, ResourceNotFoundException {
+  public Reader getReader(FileResource resource)
+      throws ResourceIOException, ResourceNotFoundException {
     return new InputStreamReader(this.getInputStream(resource));
   }
 
@@ -272,10 +309,13 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
 
   private List<URI> getUris(String identifier, MimeType mimeType) throws ResourceIOException {
     // first: try to resolve by patterns (if configured)
-    List<IdentifierPatternToFileResourceUriResolverImpl> patterns = resolvedFileResourcesConfig.getPatterns();
-    Optional<IdentifierPatternToFileResourceUriResolverImpl> patternFileNameResolverImpl = patterns.stream()
-      .filter(r -> r.isResolvable(identifier))
-      .findFirst(); // TODO: why only the first? See below method collectiong from all resolvers...
+    List<IdentifierPatternToFileResourceUriResolverImpl> patterns =
+        resolvedFileResourcesConfig.getPatterns();
+    Optional<IdentifierPatternToFileResourceUriResolverImpl> patternFileNameResolverImpl =
+        patterns.stream()
+            .filter(r -> r.isResolvable(identifier))
+            .findFirst(); // TODO: why only the first? See below method collectiong from all
+                          // resolvers...
     if (patternFileNameResolverImpl.isPresent()) {
       return patternFileNameResolverImpl.get().getUris(identifier, mimeType);
     }
@@ -286,21 +326,26 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
         return resolver.getUris(identifier, mimeType);
       }
     }
-    throw new ResourceIOException(String.format("identifier %s with mimetype %s is not resolvable!", identifier, mimeType.getTypeName()));
+    throw new ResourceIOException(
+        String.format(
+            "identifier %s with mimetype %s is not resolvable!",
+            identifier, mimeType.getTypeName()));
   }
 
   public List<String> getUrisAsString(String identifier) throws ResourceIOException {
-    List<String> uris = resolvedFileResourcesConfig.getPatterns().stream()
-      .filter(r -> r.isResolvable(identifier))
-      .map(r -> r.getUrisAsStrings(identifier))
-      .flatMap(Collection::stream)
-      .collect(Collectors.toList());
+    List<String> uris =
+        resolvedFileResourcesConfig.getPatterns().stream()
+            .filter(r -> r.isResolvable(identifier))
+            .map(r -> r.getUrisAsStrings(identifier))
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
 
     identifierToFileresourceUriResolvers.stream()
-      .filter(r -> r.isResolvable(identifier))
-      .forEachOrdered(r -> {
-        uris.addAll(r.getUrisAsStrings(identifier));
-      });
+        .filter(r -> r.isResolvable(identifier))
+        .forEachOrdered(
+            r -> {
+              uris.addAll(r.getUrisAsStrings(identifier));
+            });
     return uris;
   }
 

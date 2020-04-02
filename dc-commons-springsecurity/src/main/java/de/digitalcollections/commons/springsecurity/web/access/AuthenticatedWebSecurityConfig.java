@@ -17,29 +17,35 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthenticatedWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticatedWebSecurityConfig.class);
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(AuthenticatedWebSecurityConfig.class);
 
-  @Autowired
-  PlainUsernamePasswordUserDetailsService userDetailsService;
+  @Autowired PlainUsernamePasswordUserDetailsService userDetailsService;
 
-  @Autowired
-  private UnsecuredPaths unsecuredPaths;
+  @Autowired private UnsecuredPaths unsecuredPaths;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.antMatcher("/**").csrf().disable();
 
-    http
-        .authorizeRequests()
-        .antMatchers(unsecuredPaths.getUnsecuredPaths().toArray(new String[unsecuredPaths.getUnsecuredPaths().size()]))
+    http.authorizeRequests()
+        .antMatchers(
+            unsecuredPaths
+                .getUnsecuredPaths()
+                .toArray(new String[unsecuredPaths.getUnsecuredPaths().size()]))
         .permitAll()
-        .anyRequest().authenticated()
-        .and().userDetailsService(userDetailsService)
+        .anyRequest()
+        .authenticated()
+        .and()
+        .userDetailsService(userDetailsService)
         .httpBasic()
         .and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .csrf().disable()
-        .headers().disable();
+        .csrf()
+        .disable()
+        .headers()
+        .disable();
   }
 }

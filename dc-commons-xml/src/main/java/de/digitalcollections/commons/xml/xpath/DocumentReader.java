@@ -39,40 +39,49 @@ class DocumentReader {
   }
 
   public String readValue(List<String> expressions) throws XPathMappingException {
-    return resolveVariable(expressions.toArray(new String[]{})).values().stream().findFirst().orElse(null);
+    return resolveVariable(expressions.toArray(new String[] {})).values().stream()
+        .findFirst()
+        .orElse(null);
   }
 
   public List<String> readValues(List<String> expressions) throws XPathMappingException {
     return readLocalizedValues(expressions).values().stream()
-        .flatMap(List::stream).collect(Collectors.toList());
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
   }
 
-  public Map<Locale, String> readLocalizedValue(List<String> expressions) throws XPathMappingException {
-    return resolveVariable(expressions.toArray(new String[]{}));
+  public Map<Locale, String> readLocalizedValue(List<String> expressions)
+      throws XPathMappingException {
+    return resolveVariable(expressions.toArray(new String[] {}));
   }
 
-  public Map<Locale, List<String>> readLocalizedValues(List<String> expressions) throws XPathMappingException {
-    return resolveVariable(expressions.toArray(new String[]{}), true);
+  public Map<Locale, List<String>> readLocalizedValues(List<String> expressions)
+      throws XPathMappingException {
+    return resolveVariable(expressions.toArray(new String[] {}), true);
   }
 
   public List<Element> readElementList(List<String> expressions) throws XPathMappingException {
-    return resolveVariableAsElements(expressions.toArray(new String[]{}));
+    return resolveVariableAsElements(expressions.toArray(new String[] {}));
   }
 
   public String readTemplateValue(String template, List<XPathVariable> variables)
       throws XPathMappingException, XPathExpressionException {
-    return readLocalizedTemplateValue(template, variables).values().stream().findFirst().orElse(null);
+    return readLocalizedTemplateValue(template, variables).values().stream()
+        .findFirst()
+        .orElse(null);
   }
 
-  public Map<Locale, String> readLocalizedTemplateValue(String template, List<XPathVariable> givenVariables)
+  public Map<Locale, String> readLocalizedTemplateValue(
+      String template, List<XPathVariable> givenVariables)
       throws XPathMappingException, XPathExpressionException {
     Set<String> requiredVariables = getVariables(template);
-    Map<String, XPathVariable> givenVariablesByName = givenVariables.stream()
-        .collect(Collectors.toMap(XPathVariable::name,  v -> v));
+    Map<String, XPathVariable> givenVariablesByName =
+        givenVariables.stream().collect(Collectors.toMap(XPathVariable::name, v -> v));
     if (!givenVariablesByName.keySet().containsAll(requiredVariables)) {
       requiredVariables.removeAll(givenVariablesByName.keySet());
       throw new XPathMappingException(
-          "Could not resolve template due to missing variables: " + String.join(", ", requiredVariables));
+          "Could not resolve template due to missing variables: "
+              + String.join(", ", requiredVariables));
     }
     Map<String, Map<Locale, String>> resolvedVariables = new HashMap<>();
     for (String requiredVariable : requiredVariables) {
@@ -91,12 +100,16 @@ class DocumentReader {
     return variables;
   }
 
-  private Map<Locale, String> executeTemplate(String templateString, Map<String, Map<Locale, String>> resolvedVariables) throws XPathExpressionException {
-    Set<Locale> langs = resolvedVariables.values()
-        .stream()
-        .map(Map::keySet)  // Get set of languages for each resolved variable
-        .flatMap(Collection::stream)  // Flatten these sets into a single stream
-        .collect(Collectors.toCollection(LinkedHashSet::new));  // Store the stream in a set (thereby pruning duplicates)
+  private Map<Locale, String> executeTemplate(
+      String templateString, Map<String, Map<Locale, String>> resolvedVariables)
+      throws XPathExpressionException {
+    Set<Locale> langs =
+        resolvedVariables.values().stream()
+            .map(Map::keySet) // Get set of languages for each resolved variable
+            .flatMap(Collection::stream) // Flatten these sets into a single stream
+            .collect(
+                Collectors.toCollection(
+                    LinkedHashSet::new)); // Store the stream in a set (thereby pruning duplicates)
 
     Map<Locale, String> out = new LinkedHashMap<>();
     // Resolve the <...> contexts
@@ -104,9 +117,9 @@ class DocumentReader {
       String stringRepresentation = templateString;
       String context = extractContext(stringRepresentation);
       while (context != null) {
-        stringRepresentation = stringRepresentation.replace(
-            "<" + context + ">",
-            resolveVariableContext(lang, context, resolvedVariables));
+        stringRepresentation =
+            stringRepresentation.replace(
+                "<" + context + ">", resolveVariableContext(lang, context, resolvedVariables));
         context = extractContext(stringRepresentation);
       }
 
@@ -123,7 +136,9 @@ class DocumentReader {
         } else {
           langToResolve = resolvedVariables.get(varName).entrySet().iterator().next().getKey();
         }
-        stringRepresentation = stringRepresentation.replace(matcher.group(), resolvedVariables.get(varName).get(langToResolve));
+        stringRepresentation =
+            stringRepresentation.replace(
+                matcher.group(), resolvedVariables.get(varName).get(langToResolve));
         matcher = VARIABLE_PATTERN.matcher(stringRepresentation);
       }
 
@@ -173,14 +188,16 @@ class DocumentReader {
       }
     }
     if (wasOpened) {
-      throw new XPathExpressionException(String.format(
-          "Mismatched context delimiters, %s were unclosed at the end of parsing.", numOpen));
+      throw new XPathExpressionException(
+          String.format(
+              "Mismatched context delimiters, %s were unclosed at the end of parsing.", numOpen));
     } else {
       return null;
     }
   }
 
-  private String resolveVariableContext(Locale language, String variableContext, Map<String, Map<Locale, String>> resolvedVariables) {
+  private String resolveVariableContext(
+      Locale language, String variableContext, Map<String, Map<Locale, String>> resolvedVariables) {
     Matcher varMatcher = VARIABLE_PATTERN.matcher(variableContext);
     varMatcher.find();
     String variableName = varMatcher.group(1);
@@ -190,18 +207,18 @@ class DocumentReader {
     } else if (resolvedValues.containsKey(language)) {
       return variableContext.replace(varMatcher.group(), resolvedValues.get(language));
     } else {
-      return variableContext.replace(varMatcher.group(), resolvedValues.entrySet().iterator().next().getValue());
+      return variableContext.replace(
+          varMatcher.group(), resolvedValues.entrySet().iterator().next().getValue());
     }
   }
 
-  private Map<Locale,String> resolveVariable(String[] paths) throws XPathMappingException {
+  private Map<Locale, String> resolveVariable(String[] paths) throws XPathMappingException {
     return resolveVariable(paths, false).entrySet().stream()
-      .collect(Collectors.toMap(
-        Entry::getKey,
-        var -> var.getValue().get(0)));
+        .collect(Collectors.toMap(Entry::getKey, var -> var.getValue().get(0)));
   }
 
-  private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued) throws XPathMappingException {
+  private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued)
+      throws XPathMappingException {
     paths = prependWithRootPaths(paths);
     Map<Locale, List<String>> result = new LinkedHashMap<>();
     for (String path : paths) {
@@ -223,9 +240,7 @@ class DocumentReader {
           locale = determineLocaleFromCode("");
         }
         // For single valued: Only register value if we don't have one for the current locale
-        String value = node.getTextContent()
-            .replace("<", "\\<")
-            .replace(">", "\\>");
+        String value = node.getTextContent().replace("<", "\\<").replace(">", "\\>");
         if (!multiValued) {
           if (!result.containsKey(locale)) {
             result.put(locale, Arrays.asList(value));
@@ -241,7 +256,8 @@ class DocumentReader {
           result.put(locale, valuesForLocale);
         }
       }
-      // If we only want a single value and the first path yielded a value, no need to look at the other paths
+      // If we only want a single value and the first path yielded a value, no need to look at the
+      // other paths
       if (!multiValued && !result.isEmpty()) {
         break;
       }
@@ -281,8 +297,10 @@ class DocumentReader {
       return new Locale.Builder().setLanguage(localeCodeParts[0]).build();
     } else {
       // We have language and script
-      return new Locale.Builder().setLanguage(localeCodeParts[0])
-          .setScript(localeCodeParts[1]).build();
+      return new Locale.Builder()
+          .setLanguage(localeCodeParts[0])
+          .setScript(localeCodeParts[1])
+          .build();
     }
   }
 
@@ -292,8 +310,7 @@ class DocumentReader {
     }
 
     return Arrays.stream(paths)
-        .flatMap(e -> rootPaths.stream()
-            .map(r -> r + e))
+        .flatMap(e -> rootPaths.stream().map(r -> r + e))
         .toArray(String[]::new);
   }
 }

@@ -7,6 +7,4 @@ import de.digitalcollections.prosemirror.model.jackson.mixin.NodeContentBlockMix
 
 @JsonDeserialize(as = ListItemImpl.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public interface ListItemMixIn extends NodeContentBlockMixin {
-
-}
+public interface ListItemMixIn extends NodeContentBlockMixin {}
