@@ -315,7 +315,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
         patterns.stream()
             .filter(r -> r.isResolvable(identifier))
             .findFirst(); // TODO: why only the first? See below method collectiong from all
-                          // resolvers...
+    // resolvers...
     if (patternFileNameResolverImpl.isPresent()) {
       return patternFileNameResolverImpl.get().getUris(identifier, mimeType);
     }
