@@ -260,7 +260,6 @@ public class XPathMapper<T> {
 
   /** Base class for mapped fields, takes care of setting the value on the target object. */
   public abstract static class MappedField {
-
     private final boolean isField;
     private final AccessibleObject member;
     private final Type targetType;
@@ -305,7 +304,6 @@ public class XPathMapper<T> {
 
   /** Simple, non-templated field binding, can be localized and/or multi-valued. */
   public static final class SimpleField extends MappedField {
-
     private boolean multiValued;
     private boolean multiLanguage;
     private boolean multiValuedElements;
@@ -363,7 +361,6 @@ public class XPathMapper<T> {
 
   /** Templated field, can be localized, but not multi-valued. */
   public static final class TemplateField extends MappedField {
-
     boolean multiLanguage;
     List<XPathVariable> variables;
     String template;
@@ -410,7 +407,6 @@ public class XPathMapper<T> {
   /** Nested type. */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static final class NestedField extends MappedField {
-
     XPathMapper mapper;
 
     public NestedField(Method setter, String[] paths, String rootNamespace)
