@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
 public class XPathMapperTest {
 
   public static final String BIBLSTRUCT_PATH =
-      "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listBibl/tei:biblStruct";
+      "/TEI/teiHeader/fileDesc/sourceDesc/listBibl/biblStruct";
 
   XPathMapperFixture<TestMapper> testMapperFixture = new XPathMapperFixture<>(TestMapper.class);
   XPathMapperFixture<BrokenTestMapper> brokenTestMapperFixture =
@@ -221,7 +221,7 @@ public class XPathMapperTest {
         variables = {
           @XPathVariable(
               name = "author",
-              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+              paths = {BIBLSTRUCT_PATH + "/monogr/author/persName/name"})
         })
     Map<Locale, String> author;
 
@@ -231,7 +231,7 @@ public class XPathMapperTest {
 
     List<Element> authorElements;
 
-    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/author/persName/name")
     void setAuthorElement(List<Element> authorElements) {
       this.authorElements = authorElements;
     }
@@ -247,7 +247,7 @@ public class XPathMapperTest {
         variables = {
           @XPathVariable(
               name = "author",
-              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+              paths = {BIBLSTRUCT_PATH + "/monogr/author/persName/name"})
         })
     void setLocalizedAuthors(Map<Locale, String> localizedAuthors) {
       this.germanAuthor = localizedAuthors.get(Locale.GERMAN);
@@ -262,10 +262,7 @@ public class XPathMapperTest {
         variables = {
           @XPathVariable(
               name = "author",
-              paths = {
-                BIBLSTRUCT_PATH
-                    + "/tei:monogr/tei:author[@type=\"ChuckNorris\"]/tei:persName/tei:name"
-              })
+              paths = {BIBLSTRUCT_PATH + "/monogr/author[@type=\"ChuckNorris\"]/persName/name"})
         })
     String noAuthor;
 
@@ -278,16 +275,16 @@ public class XPathMapperTest {
         variables = {
           @XPathVariable(
               name = "title",
-              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"main\"]"}),
+              paths = {BIBLSTRUCT_PATH + "/monogr/title[@type=\"main\"]"}),
           @XPathVariable(
               name = "subtitle",
-              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"sub\"]"}),
+              paths = {BIBLSTRUCT_PATH + "/monogr/title[@type=\"sub\"]"}),
           @XPathVariable(
               name = "partNumber",
-              paths = {BIBLSTRUCT_PATH + "/tei:series/tei:biblScope[@ana=\"#norm\"]"}),
+              paths = {BIBLSTRUCT_PATH + "/series/biblScope[@ana=\"#norm\"]"}),
           @XPathVariable(
               name = "partTitle",
-              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"part\"]"})
+              paths = {BIBLSTRUCT_PATH + "/monogr/title[@type=\"part\"]"})
         })
     String title;
 
@@ -297,7 +294,7 @@ public class XPathMapperTest {
 
     Map<Locale, String> authorFromExpression;
 
-    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/author/persName/name")
     void setAuthorFromExpression(Map<Locale, String> authorFromExpression) {
       this.authorFromExpression = authorFromExpression;
     }
@@ -306,28 +303,28 @@ public class XPathMapperTest {
       return authorFromExpression;
     }
 
-    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace[1]")
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/imprint/pubPlace[1]")
     String firstPlace;
 
     String getFirstPlace() {
       return firstPlace;
     }
 
-    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:pubPlace")
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/imprint/pubPlace")
     List<String> places;
 
     List<String> getPlaces() {
       return places;
     }
 
-    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:title[@type=\"alt\" and @subtype=\"main\"]")
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/title[@type=\"alt\" and @subtype=\"main\"]")
     Map<Locale, List<String>> multilangAlternativeTitles;
 
     Map<Locale, List<String>> getMultlangAlternativeTitles() {
       return multilangAlternativeTitles;
     }
 
-    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:imprint/tei:noPlace[1]")
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/imprint/noPlace[1]")
     String noPlace;
 
     String getNoPlace() {
@@ -337,6 +334,7 @@ public class XPathMapperTest {
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class BrokenTestMapper {
+
     @XPathBinding(
         valueTemplate = "{broken}",
         variables = {})
@@ -349,14 +347,15 @@ public class XPathMapperTest {
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class BrokenStructuredTestMapper {
+
     @XPathBinding(
         valueTemplate = "{author}",
         variables = {
           @XPathVariable(
               name = "author",
-              paths = {BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name"})
+              paths = {BIBLSTRUCT_PATH + "/monogr/author/persName/name"})
         },
-        value = BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
+        value = BIBLSTRUCT_PATH + "/monogr/author/persName/name")
     Map<Locale, String> authorFromExpressionAndVariables;
 
     Map<Locale, String> getAuthorFromExpressionAndVariables() {
@@ -366,6 +365,7 @@ public class XPathMapperTest {
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class IncompleteTestMapper {
+
     @XPathBinding() String nothing;
 
     String getNothing() {
@@ -375,15 +375,17 @@ public class XPathMapperTest {
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongFieldTestMapper {
-    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
+
+    @XPathBinding("/TEI/facsimile/surface/@xml:id[1]")
     Integer wrongFieldTypeSingleValued;
   }
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongArgumentTestMapper {
+
     Integer wrongArgumentTypeSingleValued;
 
-    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
+    @XPathBinding("/TEI/facsimile/surface/@xml:id[1]")
     void setWrongArgumentTypeSingleValued(Integer wrongArgumentTypeSingleValued) {
       this.wrongArgumentTypeSingleValued = wrongArgumentTypeSingleValued;
     }
@@ -391,15 +393,17 @@ public class XPathMapperTest {
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMutivalueFieldTestMapper {
-    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id")
+
+    @XPathBinding("/TEI/facsimile/surface/@xml:id")
     List<Integer> wrongFieldTypeMultiValued;
   }
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMultivalueArgumentTestMapper {
+
     List<Integer> wrongArgumentTypeMultiValued;
 
-    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
+    @XPathBinding("/TEI/facsimile/surface/@xml:id[1]")
     void setWrongArgumentMultiMultiValued(List<Integer> wrongArgumentTypeMultiValued) {
       this.wrongArgumentTypeMultiValued = wrongArgumentTypeMultiValued;
     }
@@ -407,21 +411,23 @@ public class XPathMapperTest {
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMutilanguageFieldTestMapper {
-    @XPathBinding(BIBLSTRUCT_PATH + "/tei:monogr/tei:author/tei:persName/tei:name")
+
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/author/persName/name")
     Map<Locale, Integer> wrongFieldTypeMultiLanguage;
   }
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
   public static class WrongMultilanguageArgumentTestMapper {
+
     Map<Locale, Integer> wrongArgumentTypeMultiLanguage;
 
-    @XPathBinding("/tei:TEI/tei:facsimile/tei:surface/@xml:id[1]")
+    @XPathBinding("/TEI/facsimile/surface/@xml:id[1]")
     void setWrongArgumentTypeMultiLanguage(Map<Locale, Integer> wrongArgumentTypeMultiLanguage) {
       this.wrongArgumentTypeMultiLanguage = wrongArgumentTypeMultiLanguage;
     }
   }
 
-  @XPathRoot(value = "/outer", defaultNamespace = "http://www.tei-c.org/ns/1.0")
+  @XPathRoot(value = "/outer")
   public static class HierarchicalMapper {
 
     @XPathRoot("/inner")
@@ -438,6 +444,7 @@ public class XPathMapperTest {
     }
 
     public static class InnerMapper {
+
       @XPathBinding("/author")
       String author;
 
@@ -447,6 +454,7 @@ public class XPathMapperTest {
     }
 
     public static class UnaccessibleInnerMapper {
+
       @XPathBinding("/author")
       String author;
 
@@ -468,6 +476,7 @@ public class XPathMapperTest {
 
     @XPathRoot("/broken")
     public static class InnerMapper {
+
       @XPathBinding("/author")
       String author;
 
