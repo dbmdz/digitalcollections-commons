@@ -1,12 +1,16 @@
 package de.digitalcollections.commons.xml.xpath;
 
 import com.google.common.reflect.TypeToken;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -15,9 +19,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * Maps XML documents to Java POJOs.
@@ -33,6 +41,12 @@ public class XPathMapper<T> {
   private final List<String> rootPaths;
   private final String defaultRootNamespace;
   private final List<MappedField> fields;
+
+  private static final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+  static {
+    dbf.setNamespaceAware(true);
+  }
 
   // Various Guava type tokens to help with reflection
   private static final TypeToken<String> SINGLEVALUED_TYPE = new TypeToken<String>() {};
@@ -125,6 +139,24 @@ public class XPathMapper<T> {
               prependWithRootPaths(nestedRoot.value()),
               determineNamespace(this.defaultRootNamespace, nestedRoot)));
     }
+  }
+
+  /**
+   * Create a new instance of the target type from the given XML document located at pathToXmlFile.
+   */
+  public T readDocument(Path pathToXmlFile)
+      throws XPathMappingException, IOException, ParserConfigurationException, SAXException {
+    try (InputStream inputStream = Files.newInputStream(pathToXmlFile)) {
+      return readDocument(inputStream);
+    }
+  }
+
+  /** Create a new instance of the target type from the given XML document by its InputStream. */
+  public T readDocument(InputStream inputStream)
+      throws XPathMappingException, ParserConfigurationException, IOException, SAXException {
+    DocumentBuilder db = dbf.newDocumentBuilder();
+    Document document = db.parse(inputStream);
+    return readDocument(document);
   }
 
   /** Create a new instance of the target type from the given XML document. */
