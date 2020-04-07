@@ -37,7 +37,6 @@ import org.xml.sax.SAXException;
  */
 @SuppressWarnings("UnstableApiUsage")
 public class XPathMapper<T> {
-
   private final Class<T> targetType;
   private final List<String> rootPaths;
   private final String defaultRootNamespace;
