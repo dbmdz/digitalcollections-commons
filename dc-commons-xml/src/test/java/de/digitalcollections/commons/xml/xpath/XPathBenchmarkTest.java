@@ -17,8 +17,7 @@ public class XPathBenchmarkTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XPathBenchmarkTest.class);
 
-  private static final String TEST_PATH =
-      "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title";
+  private static final String TEST_PATH = "/TEI/teiHeader/fileDesc/titleStmt/title";
 
   public static XPathWrapper getWrapper()
       throws ParserConfigurationException, IOException, SAXException {
@@ -38,7 +37,7 @@ public class XPathBenchmarkTest {
 
     Instant start = Instant.now();
     for (int i = 0; i < 100000; i++) {
-      xpw.asString("/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title");
+      xpw.asString("/TEI/teiHeader/fileDesc/titleStmt/title");
     }
     Instant end = Instant.now();
     return Duration.between(start, end);
