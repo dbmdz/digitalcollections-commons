@@ -4,11 +4,13 @@ import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceC
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import net.sf.saxon.xpath.XPathEvaluator;
 import net.sf.saxon.xpath.XPathFactoryImpl;
 
 public class XPathExpressionCache {
@@ -25,6 +27,9 @@ public class XPathExpressionCache {
     cache = new ConcurrentHashMap<>();
     xpath = xPathFactory.newXPath();
     xpath.setNamespaceContext(namespaceCtx);
+    ((XPathEvaluator) xpath)
+        .getStaticContext()
+        .setDefaultElementNamespace(namespaceCtx.getNamespaceURI(XMLConstants.DEFAULT_NS_PREFIX));
   }
 
   public XPathExpression get(String expression) {
@@ -60,7 +65,12 @@ public class XPathExpressionCache {
   public void setDefaultNamespace(String namespaceUri) {
     if (!xpath.getNamespaceContext().getNamespaceURI("").equals(namespaceUri)) {
       this.cache.clear();
-      xpath.setNamespaceContext(new DigitalCollectionsNamespaceContext(namespaceUri));
+      final DigitalCollectionsNamespaceContext namespaceCtx =
+          new DigitalCollectionsNamespaceContext(namespaceUri);
+      xpath.setNamespaceContext(namespaceCtx);
+      ((XPathEvaluator) xpath)
+          .getStaticContext()
+          .setDefaultElementNamespace(namespaceCtx.getNamespaceURI(XMLConstants.DEFAULT_NS_PREFIX));
     }
   }
 }
