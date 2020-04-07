@@ -42,6 +42,12 @@ public class XPathMapper<T> {
   private final String defaultRootNamespace;
   private final List<MappedField> fields;
 
+  private static final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+  static {
+    dbf.setNamespaceAware(true);
+  }
+
   // Various Guava type tokens to help with reflection
   private static final TypeToken<String> SINGLEVALUED_TYPE = new TypeToken<String>() {};
   private static final TypeToken<List<String>> MULTIVALUED_STRING_TYPE =
@@ -148,8 +154,6 @@ public class XPathMapper<T> {
   /** Create a new instance of the target type from the given XML document by its InputStream. */
   public T readDocument(InputStream inputStream)
       throws XPathMappingException, ParserConfigurationException, IOException, SAXException {
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    dbf.setNamespaceAware(true);
     DocumentBuilder db = dbf.newDocumentBuilder();
     Document document = db.parse(inputStream);
     return readDocument(document);
