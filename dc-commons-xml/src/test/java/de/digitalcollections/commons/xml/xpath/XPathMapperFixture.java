@@ -29,6 +29,7 @@ public class XPathMapperFixture<T> {
   }
 
   public T setUpMapperWithResource(String resourceName) throws XPathMappingException {
-    return XPathMapper.readDocument(readDocumentFromResource(resourceName), xPathMapperClass);
+    XPathMapper<T> xPathMapper = new XPathMapper<>(xPathMapperClass);
+    return xPathMapper.readDocument(readDocumentFromResource(resourceName));
   }
 }
