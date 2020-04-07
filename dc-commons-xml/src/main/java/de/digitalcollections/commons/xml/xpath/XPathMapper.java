@@ -1,12 +1,16 @@
 package de.digitalcollections.commons.xml.xpath;
 
 import com.google.common.reflect.TypeToken;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -15,9 +19,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * Maps XML documents to Java POJOs.
@@ -29,6 +37,7 @@ import org.w3c.dom.Element;
  */
 @SuppressWarnings("UnstableApiUsage")
 public class XPathMapper<T> {
+
   private final Class<T> targetType;
   private final List<String> rootPaths;
   private final String defaultRootNamespace;
@@ -125,6 +134,26 @@ public class XPathMapper<T> {
               prependWithRootPaths(nestedRoot.value()),
               determineNamespace(this.defaultRootNamespace, nestedRoot)));
     }
+  }
+
+  /**
+   * Create a new instance of the target type from the given XML document located at pathToXmlFile.
+   */
+  public T readDocument(Path pathToXmlFile)
+      throws XPathMappingException, IOException, ParserConfigurationException, SAXException {
+    try (InputStream inputStream = Files.newInputStream(pathToXmlFile)) {
+      return readDocument(inputStream);
+    }
+  }
+
+  /** Create a new instance of the target type from the given XML document by its InputStream. */
+  public T readDocument(InputStream inputStream)
+      throws XPathMappingException, ParserConfigurationException, IOException, SAXException {
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setNamespaceAware(true);
+    DocumentBuilder db = dbf.newDocumentBuilder();
+    Document document = db.parse(inputStream);
+    return readDocument(document);
   }
 
   /** Create a new instance of the target type from the given XML document. */
@@ -231,6 +260,7 @@ public class XPathMapper<T> {
 
   /** Base class for mapped fields, takes care of setting the value on the target object. */
   public abstract static class MappedField {
+
     private final boolean isField;
     private final AccessibleObject member;
     private final Type targetType;
@@ -275,6 +305,7 @@ public class XPathMapper<T> {
 
   /** Simple, non-templated field binding, can be localized and/or multi-valued. */
   public static final class SimpleField extends MappedField {
+
     private boolean multiValued;
     private boolean multiLanguage;
     private boolean multiValuedElements;
@@ -332,6 +363,7 @@ public class XPathMapper<T> {
 
   /** Templated field, can be localized, but not multi-valued. */
   public static final class TemplateField extends MappedField {
+
     boolean multiLanguage;
     List<XPathVariable> variables;
     String template;
@@ -378,6 +410,7 @@ public class XPathMapper<T> {
   /** Nested type. */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static final class NestedField extends MappedField {
+
     XPathMapper mapper;
 
     public NestedField(Method setter, String[] paths, String rootNamespace)
