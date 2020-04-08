@@ -27,12 +27,12 @@ public class XPathMapperTest {
       new XPathMapperFixture<>(WrongFieldTestMapper.class);
   XPathMapperFixture<WrongArgumentTestMapper> wrongArgumentTestMapperFixture =
       new XPathMapperFixture<>(WrongArgumentTestMapper.class);
-  XPathMapperFixture<WrongMutivalueFieldTestMapper> wrongMultivalueFieldTestMapperFixture =
-      new XPathMapperFixture<>(WrongMutivalueFieldTestMapper.class);
+  XPathMapperFixture<WrongMultivalueFieldTestMapper> wrongMultivalueFieldTestMapperFixture =
+      new XPathMapperFixture<>(WrongMultivalueFieldTestMapper.class);
   XPathMapperFixture<WrongMultivalueArgumentTestMapper> wrongMultivalueArgumentTestMapperFixture =
       new XPathMapperFixture<>(WrongMultivalueArgumentTestMapper.class);
-  XPathMapperFixture<WrongMutilanguageFieldTestMapper> wrongMultilanguageFieldTestMapperFixture =
-      new XPathMapperFixture<>(WrongMutilanguageFieldTestMapper.class);
+  XPathMapperFixture<WrongMultilanguageFieldTestMapper> wrongMultilanguageFieldTestMapperFixture =
+      new XPathMapperFixture<>(WrongMultilanguageFieldTestMapper.class);
   XPathMapperFixture<WrongMultilanguageArgumentTestMapper>
       wrongMultilanguageArgumentTestMapperFixture =
           new XPathMapperFixture<>(WrongMultilanguageArgumentTestMapper.class);
@@ -392,7 +392,7 @@ public class XPathMapperTest {
   }
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
-  public static class WrongMutivalueFieldTestMapper {
+  public static class WrongMultivalueFieldTestMapper {
 
     @XPathBinding("/TEI/facsimile/surface/@xml:id")
     List<Integer> wrongFieldTypeMultiValued;
@@ -410,7 +410,7 @@ public class XPathMapperTest {
   }
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
-  public static class WrongMutilanguageFieldTestMapper {
+  public static class WrongMultilanguageFieldTestMapper {
 
     @XPathBinding(BIBLSTRUCT_PATH + "/monogr/author/persName/name")
     Map<Locale, Integer> wrongFieldTypeMultiLanguage;
