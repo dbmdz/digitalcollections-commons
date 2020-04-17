@@ -1,5 +1,6 @@
 package de.digitalcollections.commons.xml.xpath;
 
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,6 +49,24 @@ class DocumentReader {
     return readLocalizedValues(expressions).values().stream()
         .flatMap(List::stream)
         .collect(Collectors.toList());
+  }
+
+  public Map<String, String> readValueMap(List<String> expressions, String keyPath)
+      throws XPathMappingException {
+
+    LinkedHashMap<String,String> valueMap = new LinkedHashMap<>();
+    Map<Object, List<Object>> multiValueMap = resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, false, keyPath);
+    multiValueMap.forEach((k, v) -> valueMap.put((String)k, v.isEmpty() ? null : ((String)v.get(0)).trim()));
+    return valueMap;
+  }
+
+  public Map<String, Element> readElementValueMap(List<String> expressions, String keyPath)
+      throws XPathMappingException {
+
+    LinkedHashMap<String,Element> valueMap = new LinkedHashMap<>();
+    Map<Object, List<Object>> multiValueMap = resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, true, keyPath);
+    multiValueMap.forEach((k, v) -> valueMap.put((String)k, v.isEmpty() ? null : (Element)v.get(0)));
+    return valueMap;
   }
 
   public Map<Locale, String> readLocalizedValue(List<String> expressions)
@@ -219,8 +238,20 @@ class DocumentReader {
 
   private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued)
       throws XPathMappingException {
+    Map<Locale, List<String>> ret = new LinkedHashMap<>();
+    resolveVariableWithKeyPath(paths, multiValued, false,null).forEach(
+        (k, v) -> ret.put((Locale)k,
+            new ArrayList<String>(v.stream().map(String.class::cast)
+                                .collect(Collectors.toList()))
+        )
+    );
+    return ret;
+  }
+
+  private Map<Object, List<Object>> resolveVariableWithKeyPath(String[] paths, boolean multiValued, boolean returnNode, String keyPath)
+      throws XPathMappingException {
     paths = prependWithRootPaths(paths);
-    Map<Locale, List<String>> result = new LinkedHashMap<>();
+    Map<Object, List<Object>> result = new LinkedHashMap<>();
     for (String path : paths) {
       List<Node> nodes;
       try {
@@ -229,31 +260,42 @@ class DocumentReader {
         throw new XPathMappingException("Failed to resolve XPath: " + path, e);
       }
       for (Node node : nodes) {
-        Locale locale = null;
-        if (node.hasAttributes()) {
-          Node langCode = node.getAttributes().getNamedItem("xml:lang");
-          if (langCode != null) {
-            locale = determineLocaleFromCode(langCode.getNodeValue());
+        Object key=null;
+        if (keyPath == null) {
+          if (node.hasAttributes()) {
+            Node langCode = node.getAttributes().getNamedItem("xml:lang");
+            if (langCode != null) {
+              key = determineLocaleFromCode(langCode.getNodeValue());
+            }
           }
-        }
-        if (locale == null || locale.getLanguage().isEmpty()) {
-          locale = determineLocaleFromCode("");
-        }
-        // For single valued: Only register value if we don't have one for the current locale
-        String value = node.getTextContent().replace("<", "\\<").replace(">", "\\>");
-        if (!multiValued) {
-          if (!result.containsKey(locale)) {
-            result.put(locale, Arrays.asList(value));
+          if (key == null || ((Locale)key).getLanguage().isEmpty()) {
+            key = determineLocaleFromCode("");
           }
         } else {
-          List<String> valuesForLocale = result.get(locale);
-          if (valuesForLocale == null) {
-            valuesForLocale = new ArrayList<>();
+          Node keyNode = xpw.asNode(node, keyPath);
+          key = keyNode.getNodeValue();
+        }
+
+        Object value;
+        if (returnNode) {
+          value = node;
+        } else {
+          // For single valued: Only register value if we don't have one for the current key
+          value = node.getTextContent().replace("<", "\\<").replace(">", "\\>");
+        }
+        if (!multiValued) {
+          if (!result.containsKey(key)) {
+            result.put(key, Arrays.asList(value));
           }
-          if (!valuesForLocale.contains(value)) {
-            valuesForLocale.add(value);
+        } else {
+          List<Object> valuesForKey = result.get(key);
+          if (valuesForKey == null) {
+            valuesForKey = new ArrayList<>();
           }
-          result.put(locale, valuesForLocale);
+          if (!valuesForKey.contains(value)) {
+            valuesForKey.add(value);
+          }
+          result.put(key, valuesForKey);
         }
       }
       // If we only want a single value and the first path yielded a value, no need to look at the

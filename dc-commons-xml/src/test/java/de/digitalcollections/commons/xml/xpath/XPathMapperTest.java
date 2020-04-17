@@ -41,6 +41,7 @@ public class XPathMapperTest {
   XPathMapperFixture<BrokenHierarchicalMapper> brokenHierarchivalMapperFixture =
       new XPathMapperFixture<>(BrokenHierarchicalMapper.class);
 
+  /*
   @DisplayName("shall evaluate a template with a single variable for a field")
   @Test
   public void testClassTemplateWithSingleVariableForField() throws Exception {
@@ -114,6 +115,23 @@ public class XPathMapperTest {
   public void testNonmatchingExpressionReturnsNull() throws Exception {
     TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
     assertThat(mapper.getNoPlace()).isNull();
+  }
+  */
+
+  @DisplayName("shall use keys from anchestor node in return maps with simple types")
+  @Test
+  public void testKeysFromAnchestorNode() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    Map<String, String> sequenceNumbers = mapper.getSequenceNumbersForSurface();
+    assertThat(sequenceNumbers.get("bsb00050852_00467")).isEqualTo("467");
+  }
+
+  @DisplayName("shall use keys from anchestor node in return maps with Elements as values")
+  @Test
+  public void testKeysFromAnchestorNodeInElements() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    Map<String, Element> sequenceNumbers = mapper.getSequenceNumberElementsForSurface();
+    assertThat(sequenceNumbers.get("bsb00050852_00467")).isNotNull();
   }
 
   @DisplayName("shall throw an exception, when a template variable is missing")
@@ -329,6 +347,26 @@ public class XPathMapperTest {
 
     String getNoPlace() {
       return noPlace;
+    }
+
+    @XPathBinding(
+        value="/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
+        keyPath="../../../@xml:id"
+    )
+    Map<String, String> sequenceNumbersForSurface;
+
+    Map<String, String> getSequenceNumbersForSurface() {
+      return sequenceNumbersForSurface;
+    }
+
+    @XPathBinding(
+        value="/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
+        keyPath="../../../@xml:id"
+    )
+    Map<String, Element> sequenceNumberElementsForSurface;
+
+    Map<String, Element> getSequenceNumberElementsForSurface() {
+      return sequenceNumberElementsForSurface;
     }
   }
 

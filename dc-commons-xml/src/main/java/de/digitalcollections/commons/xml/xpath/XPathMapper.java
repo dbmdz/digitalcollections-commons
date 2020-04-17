@@ -1,6 +1,7 @@
 package de.digitalcollections.commons.xml.xpath;
 
 import com.google.common.reflect.TypeToken;
+import de.digitalcollections.commons.xml.xpath.XPathMapper.MappedField;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -58,6 +59,10 @@ public class XPathMapper<T> {
       new TypeToken<Map<Locale, String>>() {};
   private static final TypeToken<Map<Locale, List<String>>> LOCALIZED_MULTIVALUED_TYPE =
       new TypeToken<Map<Locale, List<String>>>() {};
+  private static final TypeToken<Map<String, String>> KEYPATH_STRING_MAP_TYPE =
+      new TypeToken<Map<String, String>>() {};
+  private static final TypeToken<Map<String, Element>> KEYPATH_ELEMENT_MAP_TYPE =
+      new TypeToken<Map<String, Element>>() {};
 
   /**
    * Convenience method to construct a temporary mapper and read a single document with it.
@@ -107,7 +112,7 @@ public class XPathMapper<T> {
         fields.add(
             new TemplateField(m, binding.valueTemplate(), Arrays.asList(binding.variables())));
       } else {
-        fields.add(new SimpleField(m, binding.value()));
+        fields.add(new SimpleField(m, binding.value(), binding.keyPath()));
       }
     }
     for (Field fl : getFieldsAnnotatedWith(targetType, XPathBinding.class)) {
@@ -117,7 +122,7 @@ public class XPathMapper<T> {
         fields.add(
             new TemplateField(fl, binding.valueTemplate(), Arrays.asList(binding.variables())));
       } else {
-        fields.add(new SimpleField(fl, binding.value()));
+        fields.add(new SimpleField(fl, binding.value(), binding.keyPath()));
       }
     }
 
@@ -307,21 +312,28 @@ public class XPathMapper<T> {
 
   /** Simple, non-templated field binding, can be localized and/or multi-valued. */
   public static final class SimpleField extends MappedField {
+
     private boolean multiValued;
     private boolean multiLanguage;
     private boolean multiValuedElements;
+    private boolean keyPathStringMap;
+    private boolean keyPathElementMap;
     private final List<String> paths;
+    private final String keyPath;
 
-    public SimpleField(Method m, String[] paths) throws XPathMappingException {
+
+    public SimpleField(Method m, String[] paths, String keyPath) throws XPathMappingException {
       super(m);
       this.paths = Arrays.asList(paths);
       this.analyzeTargetType();
+      this.keyPath = keyPath;
     }
 
-    public SimpleField(Field fl, String[] paths) throws XPathMappingException {
+    public SimpleField(Field fl, String[] paths, String keyPath) throws XPathMappingException {
       super(fl);
       this.paths = Arrays.asList(paths);
       this.analyzeTargetType();
+      this.keyPath = keyPath;
     }
 
     private void analyzeTargetType() throws XPathMappingException {
@@ -330,17 +342,21 @@ public class XPathMapper<T> {
       boolean isSingleLocalized = LOCALIZED_SINGLEVALUED_TYPE.isSubtypeOf(targetType);
       boolean isMultiValued = MULTIVALUED_STRING_TYPE.isSubtypeOf(targetType);
       boolean isSingleValued = SINGLEVALUED_TYPE.isSubtypeOf(targetType);
+      keyPathStringMap = KEYPATH_STRING_MAP_TYPE.isSubtypeOf(targetType);
+      keyPathElementMap = KEYPATH_ELEMENT_MAP_TYPE.isSubtypeOf(targetType);
       this.multiLanguage = isMultiLocalized || isSingleLocalized;
-      this.multiValued = isMultiValued || isMultiLocalized;
+      this.multiValued = isMultiValued || isMultiLocalized || keyPathStringMap || keyPathElementMap;
       this.multiValuedElements = MULTIVALUED_ELEMENT_TYPE.isSubtypeOf(targetType);
-      if (!multiLanguage && !multiValued && !multiValuedElements && !isSingleValued) {
+      if (!multiLanguage && !multiValued && !multiValuedElements && !isSingleValued && !keyPathStringMap && !keyPathElementMap) {
         throw new XPathMappingException(
             String.format(
-                "Binding method has illegal target type %s, must be one of %s, %s, %s, %s or %s",
+                "Binding method has illegal target type %s, must be one of %s, %s, %s, %s, %s, %s or %s",
                 targetType,
                 SINGLEVALUED_TYPE,
                 MULTIVALUED_STRING_TYPE,
                 MULTIVALUED_ELEMENT_TYPE,
+                KEYPATH_STRING_MAP_TYPE,
+                KEYPATH_ELEMENT_MAP_TYPE,
                 LOCALIZED_SINGLEVALUED_TYPE,
                 LOCALIZED_MULTIVALUED_TYPE));
       }
@@ -352,6 +368,10 @@ public class XPathMapper<T> {
         return r.readElementList(paths);
       } else if (multiValued && multiLanguage) {
         return r.readLocalizedValues(paths);
+      } else if (multiValued && keyPathStringMap) {
+        return r.readValueMap(paths, keyPath);
+      } else if (multiValued && keyPathElementMap) {
+        return r.readElementValueMap(paths, keyPath);
       } else if (multiValued) {
         return r.readValues(paths);
       } else if (multiLanguage) {

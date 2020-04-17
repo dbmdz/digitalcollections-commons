@@ -33,4 +33,9 @@ public @interface XPathBinding {
    *     must define the variables.
    */
   XPathVariable[] variables() default {};
+
+  /**
+   * @Return an XPath expression (optional), whose value is used as key for a result map
+   */
+  String keyPath() default "";
 }
