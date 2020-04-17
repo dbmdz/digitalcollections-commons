@@ -1,6 +1,5 @@
 package de.digitalcollections.commons.xml.xpath;
 
-import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,18 +53,22 @@ class DocumentReader {
   public Map<String, String> readValueMap(List<String> expressions, String keyPath)
       throws XPathMappingException {
 
-    LinkedHashMap<String,String> valueMap = new LinkedHashMap<>();
-    Map<Object, List<Object>> multiValueMap = resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, false, keyPath);
-    multiValueMap.forEach((k, v) -> valueMap.put((String)k, v.isEmpty() ? null : ((String)v.get(0)).trim()));
+    LinkedHashMap<String, String> valueMap = new LinkedHashMap<>();
+    Map<Object, List<Object>> multiValueMap =
+        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, false, keyPath);
+    multiValueMap.forEach(
+        (k, v) -> valueMap.put((String) k, v.isEmpty() ? null : ((String) v.get(0)).trim()));
     return valueMap;
   }
 
   public Map<String, Element> readElementValueMap(List<String> expressions, String keyPath)
       throws XPathMappingException {
 
-    LinkedHashMap<String,Element> valueMap = new LinkedHashMap<>();
-    Map<Object, List<Object>> multiValueMap = resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, true, keyPath);
-    multiValueMap.forEach((k, v) -> valueMap.put((String)k, v.isEmpty() ? null : (Element)v.get(0)));
+    LinkedHashMap<String, Element> valueMap = new LinkedHashMap<>();
+    Map<Object, List<Object>> multiValueMap =
+        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, true, keyPath);
+    multiValueMap.forEach(
+        (k, v) -> valueMap.put((String) k, v.isEmpty() ? null : (Element) v.get(0)));
     return valueMap;
   }
 
@@ -239,16 +242,18 @@ class DocumentReader {
   private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued)
       throws XPathMappingException {
     Map<Locale, List<String>> ret = new LinkedHashMap<>();
-    resolveVariableWithKeyPath(paths, multiValued, false,null).forEach(
-        (k, v) -> ret.put((Locale)k,
-            new ArrayList<String>(v.stream().map(String.class::cast)
-                                .collect(Collectors.toList()))
-        )
-    );
+    resolveVariableWithKeyPath(paths, multiValued, false, null)
+        .forEach(
+            (k, v) ->
+                ret.put(
+                    (Locale) k,
+                    new ArrayList<String>(
+                        v.stream().map(String.class::cast).collect(Collectors.toList()))));
     return ret;
   }
 
-  private Map<Object, List<Object>> resolveVariableWithKeyPath(String[] paths, boolean multiValued, boolean returnNode, String keyPath)
+  private Map<Object, List<Object>> resolveVariableWithKeyPath(
+      String[] paths, boolean multiValued, boolean returnNode, String keyPath)
       throws XPathMappingException {
     paths = prependWithRootPaths(paths);
     Map<Object, List<Object>> result = new LinkedHashMap<>();
@@ -260,7 +265,7 @@ class DocumentReader {
         throw new XPathMappingException("Failed to resolve XPath: " + path, e);
       }
       for (Node node : nodes) {
-        Object key=null;
+        Object key = null;
         if (keyPath == null) {
           if (node.hasAttributes()) {
             Node langCode = node.getAttributes().getNamedItem("xml:lang");
@@ -268,7 +273,7 @@ class DocumentReader {
               key = determineLocaleFromCode(langCode.getNodeValue());
             }
           }
-          if (key == null || ((Locale)key).getLanguage().isEmpty()) {
+          if (key == null || ((Locale) key).getLanguage().isEmpty()) {
             key = determineLocaleFromCode("");
           }
         } else {

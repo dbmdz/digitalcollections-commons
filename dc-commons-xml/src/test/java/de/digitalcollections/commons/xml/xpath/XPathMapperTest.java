@@ -350,9 +350,9 @@ public class XPathMapperTest {
     }
 
     @XPathBinding(
-        value="/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
-        keyPath="../../../@xml:id"
-    )
+        value =
+            "/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
+        keyPath = "../../../@xml:id")
     Map<String, String> sequenceNumbersForSurface;
 
     Map<String, String> getSequenceNumbersForSurface() {
@@ -360,9 +360,9 @@ public class XPathMapperTest {
     }
 
     @XPathBinding(
-        value="/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
-        keyPath="../../../@xml:id"
-    )
+        value =
+            "/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
+        keyPath = "../../../@xml:id")
     Map<String, Element> sequenceNumberElementsForSurface;
 
     Map<String, Element> getSequenceNumberElementsForSurface() {

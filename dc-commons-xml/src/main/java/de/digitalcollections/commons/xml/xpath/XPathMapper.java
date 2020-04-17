@@ -321,7 +321,6 @@ public class XPathMapper<T> {
     private final List<String> paths;
     private final String keyPath;
 
-
     public SimpleField(Method m, String[] paths, String keyPath) throws XPathMappingException {
       super(m);
       this.paths = Arrays.asList(paths);
@@ -347,7 +346,12 @@ public class XPathMapper<T> {
       this.multiLanguage = isMultiLocalized || isSingleLocalized;
       this.multiValued = isMultiValued || isMultiLocalized || keyPathStringMap || keyPathElementMap;
       this.multiValuedElements = MULTIVALUED_ELEMENT_TYPE.isSubtypeOf(targetType);
-      if (!multiLanguage && !multiValued && !multiValuedElements && !isSingleValued && !keyPathStringMap && !keyPathElementMap) {
+      if (!multiLanguage
+          && !multiValued
+          && !multiValuedElements
+          && !isSingleValued
+          && !keyPathStringMap
+          && !keyPathElementMap) {
         throw new XPathMappingException(
             String.format(
                 "Binding method has illegal target type %s, must be one of %s, %s, %s, %s, %s, %s or %s",
