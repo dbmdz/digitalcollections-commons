@@ -1,7 +1,6 @@
 package de.digitalcollections.commons.xml.xpath;
 
 import com.google.common.reflect.TypeToken;
-import de.digitalcollections.commons.xml.xpath.XPathMapper.MappedField;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -63,6 +62,8 @@ public class XPathMapper<T> {
       new TypeToken<Map<String, String>>() {};
   private static final TypeToken<Map<String, Element>> KEYPATH_ELEMENT_MAP_TYPE =
       new TypeToken<Map<String, Element>>() {};
+  private static final TypeToken<Map<String, List<String>>> KEYPATH_MULTIVALUED_MAP_TYPE =
+      new TypeToken<Map<String, List<String>>>() {};
 
   /**
    * Convenience method to construct a temporary mapper and read a single document with it.
@@ -318,6 +319,7 @@ public class XPathMapper<T> {
     private boolean multiValuedElements;
     private boolean keyPathStringMap;
     private boolean keyPathElementMap;
+    private boolean keyPathMultiValuedMap;
     private final List<String> paths;
     private final String keyPath;
 
@@ -343,8 +345,14 @@ public class XPathMapper<T> {
       boolean isSingleValued = SINGLEVALUED_TYPE.isSubtypeOf(targetType);
       keyPathStringMap = KEYPATH_STRING_MAP_TYPE.isSubtypeOf(targetType);
       keyPathElementMap = KEYPATH_ELEMENT_MAP_TYPE.isSubtypeOf(targetType);
+      keyPathMultiValuedMap = KEYPATH_MULTIVALUED_MAP_TYPE.isSubtypeOf(targetType);
       this.multiLanguage = isMultiLocalized || isSingleLocalized;
-      this.multiValued = isMultiValued || isMultiLocalized || keyPathStringMap || keyPathElementMap;
+      this.multiValued =
+          isMultiValued
+              || isMultiLocalized
+              || keyPathStringMap
+              || keyPathElementMap
+              || keyPathMultiValuedMap;
       this.multiValuedElements = MULTIVALUED_ELEMENT_TYPE.isSubtypeOf(targetType);
       if (!multiLanguage
           && !multiValued
@@ -354,12 +362,13 @@ public class XPathMapper<T> {
           && !keyPathElementMap) {
         throw new XPathMappingException(
             String.format(
-                "Binding method has illegal target type %s, must be one of %s, %s, %s, %s, %s, %s or %s",
+                "Binding method has illegal target type %s, must be one of %s, %s, %s, %s, %s, %s, %s or %s",
                 targetType,
                 SINGLEVALUED_TYPE,
                 MULTIVALUED_STRING_TYPE,
                 MULTIVALUED_ELEMENT_TYPE,
                 KEYPATH_STRING_MAP_TYPE,
+                KEYPATH_MULTIVALUED_MAP_TYPE,
                 KEYPATH_ELEMENT_MAP_TYPE,
                 LOCALIZED_SINGLEVALUED_TYPE,
                 LOCALIZED_MULTIVALUED_TYPE));
@@ -372,6 +381,8 @@ public class XPathMapper<T> {
         return r.readElementList(paths);
       } else if (multiValued && multiLanguage) {
         return r.readLocalizedValues(paths);
+      } else if (multiValued && keyPathMultiValuedMap) {
+        return r.readMultiValueMap(paths, keyPath);
       } else if (multiValued && keyPathStringMap) {
         return r.readValueMap(paths, keyPath);
       } else if (multiValued && keyPathElementMap) {

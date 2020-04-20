@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbMult/1.1/bsbMult.odd" type="application/tei+xml" schematypens="http://www.tei-c.org/ns/1.0"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbMult/1.1/bsbMult.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbMult/1.1/bsbMult.rnc" type="application/relax-ng-compact-syntax"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbMult/1.1/bsbMult.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbMult/1.1/bsbMult.dtd" type="application/xml+dtd"?>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="bsbmult000000000">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Der gerade Weg</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Bayerische Staatsbibliothek</publisher>
+        <availability>
+          <p>Öffentlich zugänglich auf den Servern der Digitalen Bibliothek</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <biblStruct>
+          <monogr>
+            <title level="j" type="main">Übergeordneter Titel</title>
+          </monogr>
+        </biblStruct>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div xml:id="bsbmult00000000_h0001">
+        <listBibl ana="#multTitle">
+          <biblStruct>
+            <monogr>
+              <biblScope corresp="bsb00000001" unit="tome"/>
+              <biblScope corresp="bsb00000002" unit="tome"/>
+            </monogr>
+          </biblStruct>
+        </listBibl>
+      </div>
+      <div xml:id="bsbmult00000000_h0002">
+        <listBibl ana="#multTitle">
+          <biblStruct>
+            <monogr>
+              <biblScope corresp="bsb00000003" unit="tome"/>
+              <biblScope corresp="bsb00000004" unit="tome"/>
+              <biblScope corresp="bsb00000005" unit="tome"/>
+            </monogr>
+          </biblStruct>
+        </listBibl>
+      </div>
+    </body>
+  </text>
+</TEI>

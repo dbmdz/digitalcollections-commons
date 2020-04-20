@@ -55,7 +55,7 @@ class DocumentReader {
 
     LinkedHashMap<String, String> valueMap = new LinkedHashMap<>();
     Map<Object, List<Object>> multiValueMap =
-        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, false, keyPath);
+        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), false, false, keyPath);
     multiValueMap.forEach(
         (k, v) -> valueMap.put((String) k, v.isEmpty() ? null : ((String) v.get(0)).trim()));
     return valueMap;
@@ -66,10 +66,23 @@ class DocumentReader {
 
     LinkedHashMap<String, Element> valueMap = new LinkedHashMap<>();
     Map<Object, List<Object>> multiValueMap =
-        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, true, keyPath);
+        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), false, true, keyPath);
     multiValueMap.forEach(
         (k, v) -> valueMap.put((String) k, v.isEmpty() ? null : (Element) v.get(0)));
     return valueMap;
+  }
+
+  public Map<String, List<String>> readMultiValueMap(List<String> expressions, String keyPath)
+      throws XPathMappingException {
+    LinkedHashMap<String, List<String>> valuesMap = new LinkedHashMap<>();
+    Map<Object, List<Object>> multiValueMap =
+        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, false, keyPath);
+    multiValueMap.forEach(
+        (k, v) ->
+            valuesMap.put(
+                (String) k,
+                v.isEmpty() ? null : v.stream().map(String::valueOf).collect(Collectors.toList())));
+    return valuesMap;
   }
 
   public Map<Locale, String> readLocalizedValue(List<String> expressions)
