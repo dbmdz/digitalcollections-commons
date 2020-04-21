@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
-import org.checkerframework.checker.units.qual.K;
 import org.w3c.dom.Node;
 
 public class VariableResolver {
