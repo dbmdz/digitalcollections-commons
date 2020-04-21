@@ -16,8 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.xpath.XPathExpressionException;
-import org.apache.commons.lang3.ObjectUtils.Null;
-import org.apache.commons.lang3.tuple.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,23 +43,28 @@ class DocumentReader {
   }
 
   public String readValue(List<String> expressions) throws XPathMappingException {
-    return variableResolver.resolveVariable(
-        null,
-        expressions,
-        keynode -> null,
-        valuenode -> valuenode.getTextContent().replace("<", "\\<").replace(">", "\\>")
-        ).stream().map(p -> p.getRight())
+    return variableResolver
+        .resolveVariable(
+            null,
+            expressions,
+            keynode -> null,
+            valuenode -> valuenode.getTextContent().replace("<", "\\<").replace(">", "\\>"))
+        .stream()
+        .map(p -> p.getRight())
         .findFirst()
         .orElse(null);
   }
 
   public List<String> readValues(List<String> expressions) throws XPathMappingException {
-    return variableResolver.resolveVariable(
-        null,
-        expressions,
-        keynode -> null,
-        valuenodes -> valuenodes.getTextContent().replace("<", "\\<").replace(">", "\\>"))
-      .stream().map(pair -> pair.getRight()).collect(Collectors.toList());
+    return variableResolver
+        .resolveVariable(
+            null,
+            expressions,
+            keynode -> null,
+            valuenodes -> valuenodes.getTextContent().replace("<", "\\<").replace(">", "\\>"))
+        .stream()
+        .map(pair -> pair.getRight())
+        .collect(Collectors.toList());
   }
 
   public Map<String, String> readValueMap(List<String> expressions, String keyPath)

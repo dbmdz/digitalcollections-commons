@@ -1,18 +1,14 @@
 package de.digitalcollections.commons.xml.xpath;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.checkerframework.checker.units.qual.K;
 import org.w3c.dom.Node;
 
-public class VariableResolver{
+public class VariableResolver {
 
   private final List<String> rootPaths;
   private final XPathWrapper xpw;
@@ -22,11 +18,12 @@ public class VariableResolver{
     this.xpw = xpw;
   }
 
-  public <K,V> List<Pair<K, V>> resolveVariable(
+  public <K, V> List<Pair<K, V>> resolveVariable(
       String keyPath,
       List<String> paths,
       Function<Node, K> keyTransformer,
-      Function<Node, V> valueTransformer) throws XPathMappingException {
+      Function<Node, V> valueTransformer)
+      throws XPathMappingException {
 
     List<Pair<K, V>> resolvedVariables = new ArrayList<>();
 
@@ -54,7 +51,6 @@ public class VariableResolver{
     }
 
     return resolvedVariables;
-
   }
 
   private List<String> prependWithRootPaths(List<String> paths) {
