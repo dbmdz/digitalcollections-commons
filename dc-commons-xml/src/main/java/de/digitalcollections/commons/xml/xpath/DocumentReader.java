@@ -1,20 +1,15 @@
 package de.digitalcollections.commons.xml.xpath;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,11 +17,11 @@ import org.w3c.dom.Node;
 
 /** Helper class to read simple or templated values from an XML document. */
 class DocumentReader {
-  private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)}");
+
   private final List<String> rootPaths;
   private final XPathWrapper xpw;
-
   private final VariableResolver variableResolver;
+  private final TemplateHandler templateHandler;
 
   public DocumentReader(Document doc, List<String> rootPaths, String namespace) {
     this.rootPaths = rootPaths;
@@ -36,12 +31,22 @@ class DocumentReader {
     }
 
     variableResolver = new VariableResolver(rootPaths, xpw);
+
+    templateHandler = new TemplateHandler();
   }
 
   public Document getDocument() {
     return xpw.getDocument();
   }
 
+  /**
+   * Retrieve a single String value for a list of expressions, where the first match is used.
+   *
+   * @param expressions list of XPath expressions
+   * @return one single string for the first matching XPath expression or <code>null</code>, if no
+   *     match was possible.
+   * @throws XPathMappingException in case of a resolving error
+   */
   public String readValue(List<String> expressions) throws XPathMappingException {
     return variableResolver
         .resolveVariable(
@@ -55,6 +60,13 @@ class DocumentReader {
         .orElse(null);
   }
 
+  /**
+   * Retrieve a List of all matching values for the provided list of XPath expressions
+   *
+   * @param expressions list of XPath expressions
+   * @return list of Strings for all matching XPathExpressions
+   * @throws XPathMappingException in case of a resolving error
+   */
   public List<String> readValues(List<String> expressions) throws XPathMappingException {
     return variableResolver
         .resolveVariable(
@@ -67,55 +79,128 @@ class DocumentReader {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Retrieve a LinkedHashMap of all matching values for the provided list of XPath expressions
+   * together with their keys, calculated from its relative XPath expression
+   *
+   * @param expressions list of XPath expressions
+   * @param keyPath XPath expression, relative to the node, where the values are calculated from
+   * @return LinkedHashMap of key/value pairs
+   * @throws XPathMappingException in case of a resolving error
+   */
   public Map<String, String> readValueMap(List<String> expressions, String keyPath)
       throws XPathMappingException {
 
-    LinkedHashMap<String, String> valueMap = new LinkedHashMap<>();
-    Map<Object, List<Object>> multiValueMap =
-        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), false, false, keyPath);
-    multiValueMap.forEach(
-        (k, v) -> valueMap.put((String) k, v.isEmpty() ? null : ((String) v.get(0)).trim()));
-    return valueMap;
+    return variableResolver
+        .resolveVariable(
+            keyPath,
+            expressions,
+            keynode -> keynode.getTextContent(),
+            valuenodes -> valuenodes.getTextContent().replace("<", "\\<").replace(">", "\\>"))
+        .stream()
+        .collect(
+            Collectors.toMap(
+                p -> p.getLeft(), p -> p.getRight().trim(), (e1, e2) -> e1, LinkedHashMap::new));
   }
 
+  /**
+   * Retrieve a LinkedHashMap of all matching DOM Elements for the provided list of XPath
+   * expressions together with their keys, calculated from its relative XPath expression
+   *
+   * @param expressions list of XPath expressions
+   * @param keyPath XPath expression, relative to the DOM element
+   * @return LinkedHashMap of key/value pairs
+   * @throws XPathMappingException in case of a resolving error
+   */
   public Map<String, Element> readElementValueMap(List<String> expressions, String keyPath)
       throws XPathMappingException {
-
-    LinkedHashMap<String, Element> valueMap = new LinkedHashMap<>();
-    Map<Object, List<Object>> multiValueMap =
-        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), false, true, keyPath);
-    multiValueMap.forEach(
-        (k, v) -> valueMap.put((String) k, v.isEmpty() ? null : (Element) v.get(0)));
-    return valueMap;
+    return variableResolver
+        .resolveVariable(
+            keyPath,
+            expressions,
+            keynode -> keynode.getTextContent(),
+            valuenodes -> (Element) valuenodes)
+        .stream()
+        .collect(
+            Collectors.toMap(
+                p -> p.getLeft(), p -> p.getRight(), (e1, e2) -> e1, LinkedHashMap::new));
   }
 
+  /**
+   * Retrieve a LinkedHashMap of all matching values (multivalued) for the provided list of XPath
+   * expressions together with their keys, calculated from its relative XPath expression
+   *
+   * @param expressions list of XPath expressions
+   * @param keyPath XPath expression, relative to the node, where the values are calculated from
+   * @return LinkedHashMap of key/value pairs
+   * @throws XPathMappingException in case of a resolving error
+   */
   public Map<String, List<String>> readMultiValueMap(List<String> expressions, String keyPath)
       throws XPathMappingException {
-    LinkedHashMap<String, List<String>> valuesMap = new LinkedHashMap<>();
-    Map<Object, List<Object>> multiValueMap =
-        resolveVariableWithKeyPath(expressions.toArray(new String[] {}), true, false, keyPath);
-    multiValueMap.forEach(
-        (k, v) ->
-            valuesMap.put(
-                (String) k,
-                v.isEmpty() ? null : v.stream().map(String::valueOf).collect(Collectors.toList())));
-    return valuesMap;
+    return variableResolver
+        .resolveVariable(
+            keyPath,
+            expressions,
+            keynode -> keynode.getTextContent(),
+            valuenode -> variableResolver.extractStringListFromNode(valuenode))
+        .stream()
+        .collect(
+            Collectors.toMap(
+                p -> p.getLeft(),
+                p -> p.getRight(),
+                // We have to join the values for the same key
+                (e1, e2) -> Stream.concat(e1.stream(), e2.stream()).collect(Collectors.toList()),
+                LinkedHashMap::new));
   }
 
+  /**
+   * Retrieve a Map of all matching values for the provided list of XPath expressions together with
+   * their locale (taken from the <code>xml:id</code> attribute, calculated from its relative XPath
+   * expression
+   *
+   * @param expressions list of XPath expressions
+   * @return LinkedHashMap of key/value pairs
+   * @throws XPathMappingException in case of a resolving error
+   */
   public Map<Locale, String> readLocalizedValue(List<String> expressions)
       throws XPathMappingException {
     return resolveVariable(expressions.toArray(new String[] {}));
   }
 
+  /**
+   * Retrieve a Map of all matching values (multivalued) for the provided list of XPath expressions
+   * together with their locale (taken from the <code>xml:id</code> attribute, calculated from its
+   * relative XPath expression
+   *
+   * @param expressions list of XPath expressions
+   * @return LinkedHashMap of key/value pairs
+   * @throws XPathMappingException in case of a resolving error
+   */
   public Map<Locale, List<String>> readLocalizedValues(List<String> expressions)
       throws XPathMappingException {
     return resolveVariable(expressions.toArray(new String[] {}), true);
   }
 
+  /**
+   * Return a list of DOM elements for the provided list of XPath expressions
+   *
+   * @param expressions list of XPath expressions
+   * @return List of resolved DOM elements
+   * @throws XPathMappingException in case of a resolving error
+   */
   public List<Element> readElementList(List<String> expressions) throws XPathMappingException {
     return resolveVariableAsElements(expressions.toArray(new String[] {}));
   }
 
+  /**
+   * Fill a template with the first matching XPath variable
+   *
+   * @param template the template string
+   * @param variables a List of {@link XPathVariable} definitions
+   * @return filled template. Can be null, if no match was found.
+   * @throws XPathMappingException in case of a resolving error
+   * @throws XPathExpressionException if an invalid XPath expression was provided
+   */
   public String readTemplateValue(String template, List<XPathVariable> variables)
       throws XPathMappingException, XPathExpressionException {
     return readLocalizedTemplateValue(template, variables).values().stream()
@@ -123,10 +208,20 @@ class DocumentReader {
         .orElse(null);
   }
 
+  /**
+   * Fill a localized map of templates with the first matching XPath variable each.
+   *
+   * @param template the template string
+   * @param givenVariables a List of {@link XPathVariable} definitions
+   * @return Map with Locale as key and filled template as value. Can be null, if no match was
+   *     found.
+   * @throws XPathMappingException in case of a resolving error
+   * @throws XPathExpressionException if an invalid XPath expression was provided
+   */
   public Map<Locale, String> readLocalizedTemplateValue(
       String template, List<XPathVariable> givenVariables)
       throws XPathMappingException, XPathExpressionException {
-    Set<String> requiredVariables = getVariables(template);
+    Set<String> requiredVariables = templateHandler.getVariables(template);
     Map<String, XPathVariable> givenVariablesByName =
         givenVariables.stream().collect(Collectors.toMap(XPathVariable::name, v -> v));
     if (!givenVariablesByName.keySet().containsAll(requiredVariables)) {
@@ -140,128 +235,7 @@ class DocumentReader {
       XPathVariable var = givenVariablesByName.get(requiredVariable);
       resolvedVariables.put(var.name(), this.resolveVariable(var.paths()));
     }
-    return this.executeTemplate(template, resolvedVariables);
-  }
-
-  private Set<String> getVariables(String templateString) {
-    Matcher matcher = VARIABLE_PATTERN.matcher(templateString);
-    Set<String> variables = new HashSet<>();
-    while (matcher.find()) {
-      variables.add(matcher.group(1));
-    }
-    return variables;
-  }
-
-  private Map<Locale, String> executeTemplate(
-      String templateString, Map<String, Map<Locale, String>> resolvedVariables)
-      throws XPathExpressionException {
-    Set<Locale> langs =
-        resolvedVariables.values().stream()
-            .map(Map::keySet) // Get set of languages for each resolved variable
-            .flatMap(Collection::stream) // Flatten these sets into a single stream
-            .collect(
-                Collectors.toCollection(
-                    LinkedHashSet::new)); // Store the stream in a set (thereby pruning duplicates)
-
-    Map<Locale, String> out = new LinkedHashMap<>();
-    // Resolve the <...> contexts
-    for (Locale lang : langs) {
-      String stringRepresentation = templateString;
-      String context = extractContext(stringRepresentation);
-      while (context != null) {
-        stringRepresentation =
-            stringRepresentation.replace(
-                "<" + context + ">", resolveVariableContext(lang, context, resolvedVariables));
-        context = extractContext(stringRepresentation);
-      }
-
-      // Now we just need to resolve top-level variables
-      Matcher matcher = VARIABLE_PATTERN.matcher(stringRepresentation);
-      while (matcher.find()) {
-        String varName = matcher.group(1);
-        if (resolvedVariables.get(varName).isEmpty()) {
-          return null;
-        }
-        Locale langToResolve;
-        if (resolvedVariables.get(varName).containsKey(lang)) {
-          langToResolve = lang;
-        } else {
-          langToResolve = resolvedVariables.get(varName).entrySet().iterator().next().getKey();
-        }
-        stringRepresentation =
-            stringRepresentation.replace(
-                matcher.group(), resolvedVariables.get(varName).get(langToResolve));
-        matcher = VARIABLE_PATTERN.matcher(stringRepresentation);
-      }
-
-      // And un-escape the pointy brackets
-      out.put(lang, stringRepresentation.replace("\\<", "<").replace("\\>", ">"));
-    }
-    return out;
-  }
-
-  private String extractContext(String template) throws XPathExpressionException {
-    StringBuilder ctx = new StringBuilder();
-    boolean isEscaped = false;
-    boolean wasOpened = false;
-    int numOpen = 0;
-    for (char c : template.toCharArray()) {
-      if (c == '\\') {
-        isEscaped = true;
-        if (numOpen > 0) {
-          ctx.append(c);
-        }
-      } else if (c == '<') {
-        if (numOpen > 0) {
-          ctx.append(c);
-        }
-        if (!isEscaped) {
-          numOpen++;
-          if (!wasOpened) {
-            wasOpened = true;
-          }
-        } else {
-          isEscaped = false;
-        }
-      } else if (c == '>') {
-        if ((numOpen > 0 && isEscaped) || numOpen > 1) {
-          ctx.append(c);
-        }
-        if (!isEscaped) {
-          numOpen--;
-          if (numOpen == 0) {
-            return ctx.toString();
-          }
-        } else {
-          isEscaped = false;
-        }
-      } else if (wasOpened) {
-        ctx.append(c);
-      }
-    }
-    if (wasOpened) {
-      throw new XPathExpressionException(
-          String.format(
-              "Mismatched context delimiters, %s were unclosed at the end of parsing.", numOpen));
-    } else {
-      return null;
-    }
-  }
-
-  private String resolveVariableContext(
-      Locale language, String variableContext, Map<String, Map<Locale, String>> resolvedVariables) {
-    Matcher varMatcher = VARIABLE_PATTERN.matcher(variableContext);
-    varMatcher.find();
-    String variableName = varMatcher.group(1);
-    Map<Locale, String> resolvedValues = resolvedVariables.get(variableName);
-    if (resolvedValues == null || resolvedValues.isEmpty()) {
-      return "";
-    } else if (resolvedValues.containsKey(language)) {
-      return variableContext.replace(varMatcher.group(), resolvedValues.get(language));
-    } else {
-      return variableContext.replace(
-          varMatcher.group(), resolvedValues.entrySet().iterator().next().getValue());
-    }
+    return templateHandler.execute(template, resolvedVariables);
   }
 
   private Map<Locale, String> resolveVariable(String[] paths) throws XPathMappingException {
@@ -271,75 +245,21 @@ class DocumentReader {
 
   private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued)
       throws XPathMappingException {
-    Map<Locale, List<String>> ret = new LinkedHashMap<>();
-    resolveVariableWithKeyPath(paths, multiValued, false, null)
-        .forEach(
-            (k, v) ->
-                ret.put(
-                    (Locale) k,
-                    new ArrayList<String>(
-                        v.stream().map(String.class::cast).collect(Collectors.toList()))));
-    return ret;
-  }
 
-  private Map<Object, List<Object>> resolveVariableWithKeyPath(
-      String[] paths, boolean multiValued, boolean returnNode, String keyPath)
-      throws XPathMappingException {
-    paths = prependWithRootPaths(paths);
-    Map<Object, List<Object>> result = new LinkedHashMap<>();
-    for (String path : paths) {
-      List<Node> nodes;
-      try {
-        nodes = xpw.asListOfNodes(path);
-      } catch (IllegalArgumentException e) {
-        throw new XPathMappingException("Failed to resolve XPath: " + path, e);
-      }
-      for (Node node : nodes) {
-        Object key = null;
-        if (keyPath == null) {
-          if (node.hasAttributes()) {
-            Node langCode = node.getAttributes().getNamedItem("xml:lang");
-            if (langCode != null) {
-              key = determineLocaleFromCode(langCode.getNodeValue());
-            }
-          }
-          if (key == null || ((Locale) key).getLanguage().isEmpty()) {
-            key = determineLocaleFromCode("");
-          }
-        } else {
-          Node keyNode = xpw.asNode(node, keyPath);
-          key = keyNode.getNodeValue();
-        }
-
-        Object value;
-        if (returnNode) {
-          value = node;
-        } else {
-          // For single valued: Only register value if we don't have one for the current key
-          value = node.getTextContent().replace("<", "\\<").replace(">", "\\>");
-        }
-        if (!multiValued) {
-          if (!result.containsKey(key)) {
-            result.put(key, Arrays.asList(value));
-          }
-        } else {
-          List<Object> valuesForKey = result.get(key);
-          if (valuesForKey == null) {
-            valuesForKey = new ArrayList<>();
-          }
-          if (!valuesForKey.contains(value)) {
-            valuesForKey.add(value);
-          }
-          result.put(key, valuesForKey);
-        }
-      }
-      // If we only want a single value and the first path yielded a value, no need to look at the
-      // other paths
-      if (!multiValued && !result.isEmpty()) {
-        break;
-      }
-    }
-    return result;
+    return variableResolver
+        .resolveVariable(
+            ".", // Since we extract the locale from the current node, the keyPath is "."
+            List.of(paths),
+            node -> variableResolver.extractLocaleFromNode(node),
+            valuenode -> variableResolver.extractStringListFromNode(valuenode))
+        .stream()
+        .collect(
+            Collectors.toMap(
+                p -> p.getLeft(),
+                p -> p.getRight(),
+                // We have to join the values for the same key
+                (e1, e2) -> Stream.concat(e1.stream(), e2.stream()).collect(Collectors.toList()),
+                LinkedHashMap::new));
   }
 
   private List<Element> resolveVariableAsElements(String[] paths) throws XPathMappingException {
@@ -353,31 +273,6 @@ class DocumentReader {
           .collect(Collectors.toList());
     } catch (IllegalArgumentException e) {
       throw new XPathMappingException("Failed to resolve XPath", e);
-    }
-  }
-
-  protected static Locale determineLocaleFromCode(String localeCode) {
-    if (localeCode == null) {
-      return null;
-    }
-
-    Locale locale = Locale.forLanguageTag(localeCode);
-    if (!locale.getLanguage().isEmpty()) {
-      return locale;
-    }
-
-    // For cases, in which the language could not be determined
-    // (e.g. for "und"), we have to re-build the locale manually
-    String[] localeCodeParts = localeCode.split("-");
-    if (localeCodeParts.length == 1) {
-      // We only have a language, probably "und"
-      return new Locale.Builder().setLanguage(localeCodeParts[0]).build();
-    } else {
-      // We have language and script
-      return new Locale.Builder()
-          .setLanguage(localeCodeParts[0])
-          .setScript(localeCodeParts[1])
-          .build();
     }
   }
 

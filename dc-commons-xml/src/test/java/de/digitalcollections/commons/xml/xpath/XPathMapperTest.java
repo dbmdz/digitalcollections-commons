@@ -134,7 +134,7 @@ public class XPathMapperTest {
     assertThat(sequenceNumbers.get("bsb00050852_00467")).isNotNull();
   }
 
-  @DisplayName("shall use keys from anchester node in return maps with lists")
+  @DisplayName("shall use keys from anchestor node in return maps with lists")
   @Test
   public void testKeysFromAnchestorNodeInLists() throws Exception {
     MultTestMapper mapper = multTestMapperFixture.setUpMapperWithResource("bsbmult.xml");
@@ -362,8 +362,7 @@ public class XPathMapperTest {
     }
 
     @XPathBinding(
-        value =
-            "/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
+        value = "/TEI/facsimile[@ana='#facsScan']/surface/desc/list/item[@ana='#sequenceNo']",
         keyPath = "../../../@xml:id")
     Map<String, String> sequenceNumbersForSurface;
 
@@ -372,8 +371,7 @@ public class XPathMapperTest {
     }
 
     @XPathBinding(
-        value =
-            "/tei:TEI/tei:facsimile[@ana='#facsScan']/tei:surface/tei:desc/tei:list/tei:item[@ana='#sequenceNo']",
+        value = "/TEI/facsimile[@ana='#facsScan']/surface/desc/list/item[@ana='#sequenceNo']",
         keyPath = "../../../@xml:id")
     Map<String, Element> sequenceNumberElementsForSurface;
 
@@ -386,7 +384,7 @@ public class XPathMapperTest {
   public static class MultTestMapper {
     @XPathBinding(
         value =
-            "/tei:TEI/tei:text/tei:body/tei:div/tei:listBibl[@ana='#multTitle']/tei:biblStruct/tei:monogr/tei:biblScope[@unit='tome']/@corresp",
+            "/TEI/text/body/div/listBibl[@ana='#multTitle']/biblStruct/monogr/biblScope[@unit='tome']/@corresp",
         keyPath = "../../../../../@xml:id")
     Map<String, List<String>> bindIdsForTitle;
 

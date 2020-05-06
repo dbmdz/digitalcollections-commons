@@ -7,18 +7,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("The document reader")
-class DocumentReaderTest {
+class VariableResolverTest {
 
   @DisplayName("returns null for a locale with code null")
   @Test
   public void testNullLocale() {
-    assertThat(DocumentReader.determineLocaleFromCode(null)).isNull();
+    assertThat(VariableResolver.determineLocaleFromCode(null)).isNull();
   }
 
   @DisplayName("returns a locale with language and without script when only the language is given")
   @Test
   public void testLanguageOnlyLocale() {
-    Locale loc = DocumentReader.determineLocaleFromCode("de");
+    Locale loc = VariableResolver.determineLocaleFromCode("de");
     assertThat(loc.getLanguage()).isEqualTo("de");
     assertThat(loc.getScript()).isEmpty();
   }
@@ -26,7 +26,7 @@ class DocumentReaderTest {
   @DisplayName("handles unknown languages properly")
   @Test
   public void testUnknownLanguages() {
-    Locale loc = DocumentReader.determineLocaleFromCode("und");
+    Locale loc = VariableResolver.determineLocaleFromCode("und");
     assertThat(loc.getLanguage()).isEqualTo("und");
     assertThat(loc.getScript()).isEmpty();
   }
@@ -34,7 +34,7 @@ class DocumentReaderTest {
   @DisplayName("returns a locale with language and script for known locale codes")
   @Test
   public void testKnownLocaleCodes() {
-    Locale loc = DocumentReader.determineLocaleFromCode("zh-Hani");
+    Locale loc = VariableResolver.determineLocaleFromCode("zh-Hani");
     assertThat(loc.getLanguage()).isEqualTo("zh");
     assertThat(loc.getScript()).isEqualTo("Hani");
   }
@@ -42,7 +42,7 @@ class DocumentReaderTest {
   @DisplayName("returns a locale with language and script for unknown locale codes")
   @Test
   public void testUnknownLocaleCodes() {
-    Locale loc = DocumentReader.determineLocaleFromCode("und-Latn");
+    Locale loc = VariableResolver.determineLocaleFromCode("und-Latn");
     assertThat(loc.getLanguage()).isEqualTo("und");
     assertThat(loc.getScript()).isEqualTo("Latn");
   }
