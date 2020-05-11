@@ -24,7 +24,7 @@ public class PageableConverter {
   }
 
   public static PageRequest convert(
-          Pageable pageable, int defaultPageSize, String defaultSortField) {
+      Pageable pageable, int defaultPageSize, String defaultSortField) {
     PageRequest pageRequest = convert(pageable);
     if (pageRequest.getPageSize() == -1 && defaultPageSize != -1) {
       pageRequest.setPageSize(defaultPageSize);
