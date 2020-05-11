@@ -13,12 +13,12 @@
   <packaging>jar</packaging>
 
   <properties>
-    <version.assertj>3.15.0</version.assertj>
+    <version.assertj>3.16.1</version.assertj>
     <version.commons-beanutils>1.9.4</version.commons-beanutils>
-    <version.jackson-annotations>2.10.3</version.jackson-annotations>
-    <version.jackson-core>2.10.3</version.jackson-core>
-    <version.jackson-databind>2.10.3</version.jackson-databind>
-    <version.junit>5.6.1</version.junit>
+    <version.jackson-annotations>2.11.0</version.jackson-annotations>
+    <version.jackson-core>2.11.0</version.jackson-core>
+    <version.jackson-databind>2.11.0</version.jackson-databind>
+    <version.junit>5.6.2</version.junit>
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.maven-resources-plugin>3.1.0</version.maven-resources-plugin>
   </properties>

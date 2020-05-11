@@ -12,8 +12,10 @@ import de.digitalcollections.model.api.identifiable.resource.MimeType;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
 import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
 import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +49,11 @@ public class FileResourceRepositoryImplTest {
   @Autowired private FileResourceService resourceService;
 
   @Test
-  public void assertNonexistingFile() {
+  public void assertNonexistingFile(@TempDir Path tempDir) {
     assertThatThrownBy(
             () -> {
               FileResource nonexistingResource = new FileResourceImpl();
-              nonexistingResource.setUri(new URI("file:/tmp/nonexistant"));
+              nonexistingResource.setUri(tempDir.resolve("nonexistant").toUri());
               nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
               resourceRepository.assertReadability(nonexistingResource);
             })
@@ -58,11 +61,13 @@ public class FileResourceRepositoryImplTest {
   }
 
   @Test
-  public void assertZeroByteFile() {
+  public void assertZeroByteFile(@TempDir Path tempDir) throws IOException {
+    Path file = tempDir.resolve("zerolengthFile");
+    Path createdFile = Files.createFile(file);
     assertThatThrownBy(
             () -> {
               FileResource zeroByteLengthResource = new FileResourceImpl();
-              zeroByteLengthResource.setUri(new URI("file:/proc/uptime"));
+              zeroByteLengthResource.setUri(createdFile.toUri());
               zeroByteLengthResource.setMimeType(MimeType.MIME_WILDCARD);
               resourceRepository.assertReadability(zeroByteLengthResource);
             })
