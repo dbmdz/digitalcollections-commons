@@ -17,6 +17,8 @@ public class XPathMapperTest {
       "/TEI/teiHeader/fileDesc/sourceDesc/listBibl/biblStruct";
 
   XPathMapperFixture<TestMapper> testMapperFixture = new XPathMapperFixture<>(TestMapper.class);
+  XPathMapperFixture<MultTestMapper> multTestMapperFixture =
+      new XPathMapperFixture<>(MultTestMapper.class);
   XPathMapperFixture<BrokenTestMapper> brokenTestMapperFixture =
       new XPathMapperFixture<>(BrokenTestMapper.class);
   XPathMapperFixture<BrokenStructuredTestMapper> brokenStructuredTestMapperFixture =
@@ -114,6 +116,34 @@ public class XPathMapperTest {
   public void testNonmatchingExpressionReturnsNull() throws Exception {
     TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
     assertThat(mapper.getNoPlace()).isNull();
+  }
+
+  @DisplayName("shall use keys from anchestor node in return maps with simple types")
+  @Test
+  public void testKeysFromAnchestorNode() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    Map<String, String> sequenceNumbers = mapper.getSequenceNumbersForSurface();
+    assertThat(sequenceNumbers.get("bsb00050852_00467")).isEqualTo("467");
+  }
+
+  @DisplayName("shall use keys from anchestor node in return maps with Elements as values")
+  @Test
+  public void testKeysFromAnchestorNodeInElements() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    Map<String, Element> sequenceNumbers = mapper.getSequenceNumberElementsForSurface();
+    assertThat(sequenceNumbers.get("bsb00050852_00467")).isNotNull();
+  }
+
+  @DisplayName("shall use keys from anchestor node in return maps with lists")
+  @Test
+  public void testKeysFromAnchestorNodeInLists() throws Exception {
+    MultTestMapper mapper = multTestMapperFixture.setUpMapperWithResource("bsbmult.xml");
+    Map<String, List<String>> bindIdsForTitle = mapper.getBindIdsForTitle();
+    assertThat(bindIdsForTitle).hasSize(2);
+    assertThat(bindIdsForTitle.get("bsbmult00000000_h0001"))
+        .containsExactly("bsb00000001", "bsb00000002");
+    assertThat(bindIdsForTitle.get("bsbmult00000000_h0002"))
+        .containsExactly("bsb00000003", "bsb00000004", "bsb00000005");
   }
 
   @DisplayName("shall throw an exception, when a template variable is missing")
@@ -329,6 +359,37 @@ public class XPathMapperTest {
 
     String getNoPlace() {
       return noPlace;
+    }
+
+    @XPathBinding(
+        value = "/TEI/facsimile[@ana='#facsScan']/surface/desc/list/item[@ana='#sequenceNo']",
+        keyPath = "../../../@xml:id")
+    Map<String, String> sequenceNumbersForSurface;
+
+    Map<String, String> getSequenceNumbersForSurface() {
+      return sequenceNumbersForSurface;
+    }
+
+    @XPathBinding(
+        value = "/TEI/facsimile[@ana='#facsScan']/surface/desc/list/item[@ana='#sequenceNo']",
+        keyPath = "../../../@xml:id")
+    Map<String, Element> sequenceNumberElementsForSurface;
+
+    Map<String, Element> getSequenceNumberElementsForSurface() {
+      return sequenceNumberElementsForSurface;
+    }
+  }
+
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
+  public static class MultTestMapper {
+    @XPathBinding(
+        value =
+            "/TEI/text/body/div/listBibl[@ana='#multTitle']/biblStruct/monogr/biblScope[@unit='tome']/@corresp",
+        keyPath = "../../../../../@xml:id")
+    Map<String, List<String>> bindIdsForTitle;
+
+    Map<String, List<String>> getBindIdsForTitle() {
+      return bindIdsForTitle;
     }
   }
 
