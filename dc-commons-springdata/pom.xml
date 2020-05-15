@@ -10,7 +10,7 @@
   
   <name>DigitalCollections: Commons Spring Data</name>
   <artifactId>dc-commons-springdata</artifactId>
-  <version>4.1.2-SNAPSHOT</version>
+  <version>4.1.2</version>
   <packaging>jar</packaging>
   
   <properties>
