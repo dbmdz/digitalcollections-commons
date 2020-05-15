@@ -10,7 +10,7 @@
 
   <name>DigitalCollections: Commons File</name>
   <artifactId>dc-commons-file</artifactId>
-  <version>5.0.0</version>
+  <version>5.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
