@@ -211,6 +211,30 @@ public class XPathMapperTest {
     HierarchicalMapper mapper = hierarchicalMapperFixture.setUpMapperWithResource("simple.xml");
     assertThat(mapper.getInnerMapper().getAuthor()).isEqualTo("Chuck Norris");
   }
+
+  @DisplayName("shall handle collections of nested types")
+  @Test
+  public void testNestedTypeCollections() throws XPathMappingException {
+    MultiNestedInnerRoot innerMapper =
+        new XPathMapperFixture<>(MultiNestedInnerRoot.class)
+            .setUpMapperWithResource("nested-multi.xml");
+    assertThat(innerMapper.persons).hasSize(3);
+    assertThat(innerMapper.persons.get(0))
+        .hasFieldOrPropertyWithValue("name", "Chuck Norris")
+        .hasFieldOrPropertyWithValue("id", "1337");
+    assertThat(innerMapper.persons.get(1))
+        .hasFieldOrPropertyWithValue("name", "Frank Zappa")
+        .hasFieldOrPropertyWithValue("id", "42");
+    assertThat(innerMapper.persons.get(2))
+        .hasFieldOrPropertyWithValue("name", "Bobby Brown")
+        .hasFieldOrPropertyWithValue("id", "1970");
+    MultiNestedOuterRoot outerMapper =
+        new XPathMapperFixture<>(MultiNestedOuterRoot.class)
+            .setUpMapperWithResource("nested-multi.xml");
+    assertThat(outerMapper.persons.get(2))
+        .hasFieldOrPropertyWithValue("name", "Bobby Brown")
+        .hasFieldOrPropertyWithValue("id", "1970");
+  }
   // ---------------------------------------------------------------------------------------------
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
@@ -483,6 +507,33 @@ public class XPathMapperTest {
       String getAuthor() {
         return author;
       }
+    }
+  }
+
+  public static class MultiNestedInnerRoot {
+    @XPathRoot({"/outer/author", "/outer/character"})
+    public List<Person> persons;
+
+    public static class Person {
+      @XPathBinding("/name")
+      public String name;
+
+      @XPathBinding("/id")
+      public String id;
+    }
+  }
+
+  @XPathRoot("/outer")
+  public static class MultiNestedOuterRoot {
+    @XPathRoot({"/author", "/character"})
+    public List<Person> persons;
+
+    public static class Person {
+      @XPathBinding("/name")
+      public String name;
+
+      @XPathBinding("/id")
+      public String id;
     }
   }
 }

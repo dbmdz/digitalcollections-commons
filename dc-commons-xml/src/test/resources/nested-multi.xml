@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<outer>
+  <author>
+    <id>1337</id>
+    <name>Chuck Norris</name>
+  </author>
+  <author>
+    <id>42</id>
+    <name>Frank Zappa</name>
+  </author>
+  <character>
+    <id>1970</id>
+    <name>Bobby Brown</name>
+  </character>
+</outer>

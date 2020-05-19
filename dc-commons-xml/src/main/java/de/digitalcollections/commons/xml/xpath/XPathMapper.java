@@ -8,6 +8,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,15 +50,14 @@ public class XPathMapper<T> {
   }
 
   // Various Guava type tokens to help with reflection
-  private static final TypeToken<String> SINGLEVALUED_TYPE = new TypeToken<String>() {};
-  private static final TypeToken<List<String>> MULTIVALUED_STRING_TYPE =
-      new TypeToken<List<String>>() {};
-  private static final TypeToken<List<Element>> MULTIVALUED_ELEMENT_TYPE =
-      new TypeToken<List<Element>>() {};
+  private static final TypeToken<String> SINGLEVALUED_TYPE = new TypeToken<>() {};
+  private static final TypeToken<List<?>> MULTIVALUED_TYPE = new TypeToken<>() {};
+  private static final TypeToken<List<String>> MULTIVALUED_STRING_TYPE = new TypeToken<>() {};
+  private static final TypeToken<List<Element>> MULTIVALUED_ELEMENT_TYPE = new TypeToken<>() {};
   private static final TypeToken<Map<Locale, String>> LOCALIZED_SINGLEVALUED_TYPE =
-      new TypeToken<Map<Locale, String>>() {};
+      new TypeToken<>() {};
   private static final TypeToken<Map<Locale, List<String>>> LOCALIZED_MULTIVALUED_TYPE =
-      new TypeToken<Map<Locale, List<String>>>() {};
+      new TypeToken<>() {};
 
   /**
    * Convenience method to construct a temporary mapper and read a single document with it.
@@ -135,9 +135,7 @@ public class XPathMapper<T> {
       XPathRoot nestedRoot = fl.getDeclaredAnnotation(XPathRoot.class);
       fields.add(
           new NestedField(
-              fl,
-              prependWithRootPaths(nestedRoot.value()),
-              determineNamespace(this.defaultRootNamespace, nestedRoot)));
+              fl, nestedRoot.value(), determineNamespace(this.defaultRootNamespace, nestedRoot)));
     }
   }
 
@@ -159,8 +157,7 @@ public class XPathMapper<T> {
     return readDocument(document);
   }
 
-  /** Create a new instance of the target type from the given XML document. */
-  public T readDocument(Document doc) throws XPathMappingException {
+  public T readDocument(DocumentReader docReader) throws XPathMappingException {
     // Instantiate an empty target object
     T val;
     try {
@@ -176,8 +173,6 @@ public class XPathMapper<T> {
           e);
     }
 
-    // Map the fields for the current document
-    DocumentReader docReader = new DocumentReader(doc, rootPaths, defaultRootNamespace);
     for (MappedField field : fields) {
       try {
         field.setValue(docReader, val);
@@ -188,6 +183,13 @@ public class XPathMapper<T> {
       }
     }
     return val;
+  }
+
+  /** Create a new instance of the target type from the given XML document. */
+  public T readDocument(Document doc) throws XPathMappingException {
+    // Map the fields for the current document
+    DocumentReader docReader = new DocumentReader(doc, rootPaths, defaultRootNamespace);
+    return this.readDocument(docReader);
   }
 
   private void validateBinding(XPathBinding binding) throws XPathMappingException {
@@ -410,28 +412,67 @@ public class XPathMapper<T> {
   /** Nested type. */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static final class NestedField extends MappedField {
-    XPathMapper mapper;
+    private final XPathMapper mapper;
+    private boolean isMultiValued;
+    private List<String> rootPaths;
 
     public NestedField(Method setter, String[] paths, String rootNamespace)
         throws XPathMappingException {
       super(setter);
+      this.analyzeTargetType();
       this.mapper = createMapper(paths, rootNamespace);
     }
 
     public NestedField(Field field, String[] paths, String rootNamespace)
         throws XPathMappingException {
       super(field);
+      this.analyzeTargetType();
       this.mapper = createMapper(paths, rootNamespace);
+    }
+
+    private void analyzeTargetType() {
+      this.isMultiValued = MULTIVALUED_TYPE.isSupertypeOf(getTargetType());
     }
 
     private XPathMapper createMapper(String[] paths, String rootNamespace)
         throws XPathMappingException {
-      return new XPathMapper((Class<?>) getTargetType(), paths, rootNamespace);
+      Type targetType = getTargetType();
+      if (isMultiValued) {
+        targetType = ((ParameterizedType) targetType).getActualTypeArguments()[0];
+      }
+      this.rootPaths = Arrays.asList(paths);
+      return new XPathMapper((Class<?>) targetType, paths, rootNamespace);
     }
 
     @Override
     protected Object determineValue(DocumentReader r) throws XPathMappingException {
-      return mapper.readDocument(r.getDocument());
+      // Map the fields for the current document
+      List<Object> vals = new ArrayList<>();
+      DocumentBuilder db;
+      try {
+        db = dbf.newDocumentBuilder();
+      } catch (ParserConfigurationException e) {
+        // Should not happen
+        throw new RuntimeException(e);
+      }
+      for (Element elem : r.readElementList(rootPaths)) {
+        Document subDoc = db.newDocument();
+        subDoc.appendChild(subDoc.adoptNode(elem.cloneNode(true)));
+        DocumentReader tempReader =
+            new DocumentReader(
+                subDoc, List.of("/" + elem.getTagName()), mapper.defaultRootNamespace);
+        Object val = mapper.readDocument(tempReader);
+        if (!isMultiValued && val != null) {
+          return val;
+        }
+        vals.add(val);
+      }
+
+      if (isMultiValued) {
+        return vals;
+      } else {
+        return null;
+      }
     }
   }
 }
