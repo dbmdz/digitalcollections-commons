@@ -235,6 +235,17 @@ public class XPathMapperTest {
         .hasFieldOrPropertyWithValue("name", "Bobby Brown")
         .hasFieldOrPropertyWithValue("id", "1970");
   }
+
+  @DisplayName("shall handle nested empty root paths")
+  @Test
+  public void testNestedEmptyRootPaths() throws XPathMappingException {
+    EmptyXPathRootOuterRoot outerMapper =
+        new XPathMapperFixture<>(EmptyXPathRootOuterRoot.class)
+            .setUpMapperWithResource("bsbstruc.xml");
+
+    assertThat(outerMapper.getEmptyXPathRootInnerRoot()).isNotNull();
+    assertThat(outerMapper.getEmptyXPathRootInnerRoot().getXmlId()).isEqualTo("bsb00050852");
+  }
   // ---------------------------------------------------------------------------------------------
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
@@ -534,6 +545,27 @@ public class XPathMapperTest {
 
       @XPathBinding("/id")
       public String id;
+    }
+  }
+
+  @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
+  public static class EmptyXPathRootOuterRoot {
+
+    @XPathRoot() EmptyXPathRootInnerRoot emptyXPathRootInnerRoot;
+
+    public EmptyXPathRootInnerRoot getEmptyXPathRootInnerRoot() {
+      return emptyXPathRootInnerRoot;
+    }
+
+    @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
+    public static class EmptyXPathRootInnerRoot {
+
+      @XPathBinding("/TEI/@xml:id")
+      String xmlId;
+
+      public String getXmlId() {
+        return xmlId;
+      }
     }
   }
 }
