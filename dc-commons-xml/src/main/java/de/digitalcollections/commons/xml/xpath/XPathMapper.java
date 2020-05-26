@@ -456,7 +456,8 @@ public class XPathMapper<T> {
         throw new RuntimeException(e);
       }
 
-      // No nested root for our type, we can assume single-valued and a shared root with the parent, i.e. we can
+      // No nested root for our type, we can assume single-valued and a shared root with the parent,
+      // i.e. we can
       // reuse the reader
       if (this.rootPaths.isEmpty()) {
         return mapper.readDocument(r);
