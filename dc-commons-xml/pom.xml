@@ -10,7 +10,7 @@
 
   <name>DigitalCollections: Commons XML</name>
   <artifactId>dc-commons-xml</artifactId>
-  <version>5.1.1</version>
+  <version>5.1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   
   <properties>
