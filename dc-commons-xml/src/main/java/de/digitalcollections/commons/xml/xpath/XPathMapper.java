@@ -65,8 +65,8 @@ public class XPathMapper<T> {
    * @deprecated Construct a {@link XPathMapper} that you can reuse and call {@link
    *     XPathMapper#readDocument(Document)}!
    * @param doc source XML document to retrieve mapping values from
-   * @param targetType the target type, e.g. a class with fields/setters annotated with &#64{@link
-   *     XPathBinding} and/or &#64;{@link XPathRoot}
+   * @param targetType the target type, e.g. a class with fields/setters annotated with
+   *     {@literal @}{@link XPathBinding} and/or {@literal @}{@link XPathRoot}
    * @param rootPaths optional array of root paths, to override the root paths parsed from the
    *     target type.
    * @return an instance of the target type, with annotated fields filled from the XML document.
