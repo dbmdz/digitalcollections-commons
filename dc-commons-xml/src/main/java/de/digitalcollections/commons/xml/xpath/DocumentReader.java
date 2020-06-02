@@ -25,6 +25,7 @@ class DocumentReader {
   private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)}");
   private final List<String> rootPaths;
   private final XPathWrapper xpw;
+  private static final Locale EMPTY_LOCALE = determineLocaleFromCode("");
 
   public DocumentReader(Document doc, List<String> rootPaths, String namespace) {
     this.rootPaths = rootPaths;
@@ -220,7 +221,10 @@ class DocumentReader {
   private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued)
       throws XPathMappingException {
     paths = prependWithRootPaths(paths);
-    Map<Locale, List<String>> result = new LinkedHashMap<>();
+    Map<Locale, LinkedHashSet<String>> result = new LinkedHashMap<>();
+
+    LinkedHashSet<String> noLocaleResult = new LinkedHashSet<>();
+
     for (String path : paths) {
       List<Node> nodes;
       try {
@@ -237,23 +241,27 @@ class DocumentReader {
           }
         }
         if (locale == null || locale.getLanguage().isEmpty()) {
-          locale = determineLocaleFromCode("");
+          locale = EMPTY_LOCALE;
         }
         // For single valued: Only register value if we don't have one for the current locale
         String value = node.getTextContent().replace("<", "\\<").replace(">", "\\>");
         if (!multiValued) {
           if (!result.containsKey(locale)) {
-            result.put(locale, Arrays.asList(value));
+            LinkedHashSet<String> valSet = new LinkedHashSet<>();
+            valSet.add(value);
+            result.put(locale, valSet);
           }
         } else {
-          List<String> valuesForLocale = result.get(locale);
-          if (valuesForLocale == null) {
-            valuesForLocale = new ArrayList<>();
-          }
-          if (!valuesForLocale.contains(value)) {
+          if (locale == EMPTY_LOCALE) {
+            noLocaleResult.add(value);
+          } else {
+            LinkedHashSet<String> valuesForLocale = new LinkedHashSet<>();
+            if (result.get(locale) != null) {
+              valuesForLocale.addAll(result.get(locale));
+            }
             valuesForLocale.add(value);
+            result.put(locale, valuesForLocale);
           }
-          result.put(locale, valuesForLocale);
         }
       }
       // If we only want a single value and the first path yielded a value, no need to look at the
@@ -262,7 +270,20 @@ class DocumentReader {
         break;
       }
     }
-    return result;
+
+    LinkedHashSet emptyLocaleSet = result.get(EMPTY_LOCALE);
+    if (emptyLocaleSet != null) {
+      emptyLocaleSet.addAll(noLocaleResult);
+    } else {
+      emptyLocaleSet = new LinkedHashSet(noLocaleResult);
+    }
+
+    if (!emptyLocaleSet.isEmpty()) {
+      result.put(EMPTY_LOCALE, emptyLocaleSet);
+    }
+
+    return result.entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> new ArrayList(e.getValue())));
   }
 
   private List<Element> resolveVariableAsElements(String[] paths) throws XPathMappingException {
