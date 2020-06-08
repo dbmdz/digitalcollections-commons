@@ -4,6 +4,7 @@ import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceC
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import javax.xml.namespace.NamespaceContext;
@@ -109,6 +110,18 @@ public class XPathWrapper {
       list.add(nodeList.item(i));
     }
     return list;
+  }
+
+  public List<Object> asListOfObjects(String xpath) {
+    List<Object> ret = new LinkedList<>();
+    ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.STRING));
+    ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.NUMBER));
+    ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.BOOLEAN));
+    try {
+      ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.NODESET));
+    } catch (Exception ignore) {
+    }
+    return ret;
   }
 
   /**

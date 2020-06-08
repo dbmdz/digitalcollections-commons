@@ -92,6 +92,13 @@ public class XPathMapperTest {
     assertThat(mapper.getFirstPlace()).isEqualTo("Augsburg");
   }
 
+  @DisplayName("shall evaluate a single valued expression with a function")
+  @Test
+  public void testSingleValueExpressionWithFunction() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.getDateScan()).isEqualTo("2019-11-19");
+  }
+
   @DisplayName("shall return multivalued contents in the same order as in the bind")
   @Test
   public void testMultivaluedFieldsAndTheirOrder() throws Exception {
@@ -364,6 +371,14 @@ public class XPathMapperTest {
 
     String getNoPlace() {
       return noPlace;
+    }
+
+    @XPathBinding(
+        "substring(/TEI/teiHeader/fileDesc/notesStmt/note[@type=\"digDate\"]/date[@ana=\"#scan\"]/@when,1,10)")
+    String dateScan;
+
+    public String getDateScan() {
+      return dateScan;
     }
   }
 

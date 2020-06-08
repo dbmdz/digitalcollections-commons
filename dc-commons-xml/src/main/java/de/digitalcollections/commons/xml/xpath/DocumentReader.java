@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.xpath.XPathExpressionException;
+import net.sf.saxon.dom.DOMNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,25 +42,23 @@ class DocumentReader {
   }
 
   public String readValue(List<String> expressions) throws XPathMappingException {
-    return resolveVariable(expressions.toArray(new String[] {})).values().stream()
+    return resolveVariablesAsStrings(expressions.toArray(new String[] {}), false).stream()
         .findFirst()
         .orElse(null);
   }
 
   public List<String> readValues(List<String> expressions) throws XPathMappingException {
-    return readLocalizedValues(expressions).values().stream()
-        .flatMap(List::stream)
-        .collect(Collectors.toList());
+    return resolveVariablesAsStrings(expressions.toArray(new String[] {}), true);
   }
 
   public Map<Locale, String> readLocalizedValue(List<String> expressions)
       throws XPathMappingException {
-    return resolveVariable(expressions.toArray(new String[] {}));
+    return resolveLocalizedVariable(expressions.toArray(new String[] {}));
   }
 
   public Map<Locale, List<String>> readLocalizedValues(List<String> expressions)
       throws XPathMappingException {
-    return resolveVariable(expressions.toArray(new String[] {}), true);
+    return resolveLocalizedVariable(expressions.toArray(new String[] {}), true);
   }
 
   public List<Element> readElementList(List<String> expressions) throws XPathMappingException {
@@ -87,7 +87,7 @@ class DocumentReader {
     Map<String, Map<Locale, String>> resolvedVariables = new HashMap<>();
     for (String requiredVariable : requiredVariables) {
       XPathVariable var = givenVariablesByName.get(requiredVariable);
-      resolvedVariables.put(var.name(), this.resolveVariable(var.paths()));
+      resolvedVariables.put(var.name(), this.resolveLocalizedVariable(var.paths()));
     }
     return this.executeTemplate(template, resolvedVariables);
   }
@@ -213,12 +213,13 @@ class DocumentReader {
     }
   }
 
-  private Map<Locale, String> resolveVariable(String[] paths) throws XPathMappingException {
-    return resolveVariable(paths, false).entrySet().stream()
+  private Map<Locale, String> resolveLocalizedVariable(String[] paths)
+      throws XPathMappingException {
+    return resolveLocalizedVariable(paths, false).entrySet().stream()
         .collect(Collectors.toMap(Entry::getKey, var -> var.getValue().get(0)));
   }
 
-  private Map<Locale, List<String>> resolveVariable(String[] paths, boolean multiValued)
+  private Map<Locale, List<String>> resolveLocalizedVariable(String[] paths, boolean multiValued)
       throws XPathMappingException {
     paths = prependWithRootPaths(paths);
     Map<Locale, LinkedHashSet<String>> result = new LinkedHashMap<>();
@@ -298,6 +299,34 @@ class DocumentReader {
     } catch (IllegalArgumentException e) {
       throw new XPathMappingException("Failed to resolve XPath", e);
     }
+  }
+
+  private List<String> resolveVariablesAsStrings(String[] paths, boolean multiValued) {
+    List<String> result = new LinkedList<>();
+    paths = prependWithRootPaths(paths);
+
+    for (String path : paths) {
+      for (Object resolvedObject : xpw.asListOfObjects(path)) {
+        if (resolvedObject instanceof String && !((String) resolvedObject).isEmpty()) {
+          result.add((String) resolvedObject);
+        }
+        if (multiValued && resolvedObject instanceof DOMNodeList) {
+          DOMNodeList nodeList = ((DOMNodeList) resolvedObject);
+          for (int i = 0, l = nodeList.getLength(); i < l; i++) {
+            String textContent = nodeList.item(i).getTextContent();
+            if (textContent == null) {
+              textContent = "";
+            }
+            textContent = textContent.trim();
+            if (!result.contains(textContent)) {
+              result.add(textContent);
+            }
+          }
+        }
+      }
+    }
+
+    return result;
   }
 
   protected static Locale determineLocaleFromCode(String localeCode) {
