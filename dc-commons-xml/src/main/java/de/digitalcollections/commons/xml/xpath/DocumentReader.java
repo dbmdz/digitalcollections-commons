@@ -313,6 +313,7 @@ class DocumentReader {
           continue;
         }
         if (resolvedObject instanceof Integer) {
+          result.add(((Integer) resolvedObject).toString());
           continue;
         }
         if (resolvedObject instanceof DOMNodeList) {
