@@ -4,6 +4,7 @@ import de.digitalcollections.commons.xml.namespaces.DigitalCollectionsNamespaceC
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import javax.xml.namespace.NamespaceContext;
@@ -109,6 +110,31 @@ public class XPathWrapper {
       list.add(nodeList.item(i));
     }
     return list;
+  }
+
+  /**
+   * Evaluate every possible type, an XPathExpression can return
+   *
+   * @param xpath the xPath expression
+   * @return all possible xPath evaluations as a list of Objects
+   */
+  public List<Object> asListOfObjects(String xpath) {
+    List<Object> ret = new LinkedList<>();
+    try {
+      ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.NODESET));
+    } catch (Exception noNodeset) {
+      // We have no NodeSet as return type, so we continue with the "flat" types
+      ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.STRING));
+      ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.NUMBER));
+      ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.BOOLEAN));
+      // ... and finally, we check, if the evaluation returns a single XPath node
+      try {
+        ret.add(evaluateXpath(getDocument(), xpath, XPathConstants.NODE));
+      } catch (Exception noNode) {
+        // to be ignored
+      }
+    }
+    return ret;
   }
 
   /**

@@ -25,6 +25,11 @@
           </p>
         </availability>
       </publicationStmt>
+      <notesStmt>
+        <note type="digDate">
+          <date when="2019-11-19T20:51:49" ana="#scan"/>
+        </note>
+      </notesStmt>
       <sourceDesc>
         <listBibl type="source">
           <biblStruct ana="#bsbStandard">

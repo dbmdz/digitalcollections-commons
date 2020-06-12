@@ -92,6 +92,13 @@ public class XPathMapperTest {
     assertThat(mapper.getFirstPlace()).isEqualTo("Augsburg");
   }
 
+  @DisplayName("shall evaluate a single valued expression with a function")
+  @Test
+  public void testSingleValueExpressionWithFunction() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.getDateScan()).isEqualTo("2019-11-19");
+  }
+
   @DisplayName("shall return multivalued contents in the same order as in the bind")
   @Test
   public void testMultivaluedFieldsAndTheirOrder() throws Exception {
@@ -246,6 +253,23 @@ public class XPathMapperTest {
     assertThat(outerMapper.getEmptyXPathRootInnerRoot()).isNotNull();
     assertThat(outerMapper.getEmptyXPathRootInnerRoot().getXmlId()).isEqualTo("bsb00050852");
   }
+
+  @DisplayName(
+      "shall be able to evaluate statements, which return integer values by returning their string representation")
+  @Test
+  public void testStatementsWithIntegerResult() throws XPathMappingException {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.getAmountPlaces()).isEqualTo(3);
+  }
+
+  @DisplayName(
+      "shall be able to evaluate statements, which return a node by returning its string representation")
+  @Test
+  public void testStatementsWithReturnNode() throws XPathMappingException {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.getFirstPersNameNode()).contains("Kugelmann, Hans");
+    assertThat(mapper.getFirstPersNameNode()).contains("Name, English");
+  }
   // ---------------------------------------------------------------------------------------------
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
@@ -364,6 +388,32 @@ public class XPathMapperTest {
 
     String getNoPlace() {
       return noPlace;
+    }
+
+    @XPathBinding(
+        "substring(/TEI/teiHeader/fileDesc/notesStmt/note[@type=\"digDate\"]/date[@ana=\"#scan\"]/@when,1,10)")
+    String dateScan;
+
+    public String getDateScan() {
+      return dateScan;
+    }
+
+    @XPathBinding("count(" + BIBLSTRUCT_PATH + "/monogr/imprint/pubPlace)")
+    void setAmountPlaces(String strAmountPlaces) {
+      this.amountPlaces = Integer.parseInt(strAmountPlaces);
+    }
+
+    int amountPlaces;
+
+    public int getAmountPlaces() {
+      return amountPlaces;
+    }
+
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/author/persName[1]")
+    String firstPersNameNode;
+
+    public String getFirstPersNameNode() {
+      return firstPersNameNode;
     }
   }
 
