@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -301,25 +300,31 @@ class DocumentReader {
     }
   }
 
+  // TODO Don't restrict to string lists
   private List<String> resolveVariablesAsStrings(String[] paths, boolean multiValued) {
-    List<String> result = new LinkedList<>();
+    List<String> result = new ArrayList<>();
     paths = prependWithRootPaths(paths);
 
     for (String path : paths) {
       for (Object resolvedObject : xpw.asListOfObjects(path)) {
+
         if (resolvedObject instanceof String && !((String) resolvedObject).isEmpty()) {
           result.add((String) resolvedObject);
+          continue;
         }
-        if (multiValued && resolvedObject instanceof DOMNodeList) {
+        if (resolvedObject instanceof Integer) {
+          continue;
+        }
+        if (resolvedObject instanceof DOMNodeList) {
           DOMNodeList nodeList = ((DOMNodeList) resolvedObject);
           for (int i = 0, l = nodeList.getLength(); i < l; i++) {
             String textContent = nodeList.item(i).getTextContent();
             if (textContent == null) {
               textContent = "";
             }
-            textContent = textContent.trim();
-            if (!result.contains(textContent)) {
-              result.add(textContent);
+            result.add(textContent.trim());
+            if (!multiValued) {
+              break;
             }
           }
         }

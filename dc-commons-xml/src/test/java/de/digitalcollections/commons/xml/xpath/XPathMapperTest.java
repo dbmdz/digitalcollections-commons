@@ -253,6 +253,23 @@ public class XPathMapperTest {
     assertThat(outerMapper.getEmptyXPathRootInnerRoot()).isNotNull();
     assertThat(outerMapper.getEmptyXPathRootInnerRoot().getXmlId()).isEqualTo("bsb00050852");
   }
+
+  @DisplayName(
+      "shall be able to evaluate statements, which return integer values by returning their string representation")
+  @Test
+  public void testStatementsWithIntegerResult() throws XPathMappingException {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.getAmountPlaces()).isEqualTo(3);
+  }
+
+  @DisplayName(
+      "shall be able to evaluate statements, which return a node by returning its string representation")
+  @Test
+  public void testStatementsWithReturnNode() throws XPathMappingException {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.getFirstPersNameNode()).contains("Kugelmann, Hans");
+    assertThat(mapper.getFirstPersNameNode()).contains("Name, English");
+  }
   // ---------------------------------------------------------------------------------------------
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")
@@ -379,6 +396,24 @@ public class XPathMapperTest {
 
     public String getDateScan() {
       return dateScan;
+    }
+
+    @XPathBinding("count(" + BIBLSTRUCT_PATH + "/monogr/imprint/pubPlace)")
+    void setAmountPlaces(String strAmountPlaces) {
+      this.amountPlaces = Integer.parseInt(strAmountPlaces);
+    }
+
+    int amountPlaces;
+
+    public int getAmountPlaces() {
+      return amountPlaces;
+    }
+
+    @XPathBinding(BIBLSTRUCT_PATH + "/monogr/author/persName[1]")
+    String firstPersNameNode;
+
+    public String getFirstPersNameNode() {
+      return firstPersNameNode;
     }
   }
 
