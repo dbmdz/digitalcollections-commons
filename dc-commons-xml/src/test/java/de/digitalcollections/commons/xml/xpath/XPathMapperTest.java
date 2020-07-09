@@ -286,7 +286,7 @@ public class XPathMapperTest {
 
     Map<Locale, String> getAuthor() {
       return author;
-    };
+    }
 
     List<Element> authorElements;
 

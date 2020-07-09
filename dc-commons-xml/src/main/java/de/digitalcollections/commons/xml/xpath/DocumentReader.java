@@ -16,10 +16,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.xpath.XPathExpressionException;
-import net.sf.saxon.dom.DOMNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /** Helper class to read simple or templated values from an XML document. */
 class DocumentReader {
@@ -316,8 +316,8 @@ class DocumentReader {
           result.add(((Integer) resolvedObject).toString());
           continue;
         }
-        if (resolvedObject instanceof DOMNodeList) {
-          DOMNodeList nodeList = ((DOMNodeList) resolvedObject);
+        if (resolvedObject instanceof NodeList) {
+          NodeList nodeList = ((NodeList) resolvedObject);
           for (int i = 0, l = nodeList.getLength(); i < l; i++) {
             String textContent = nodeList.item(i).getTextContent();
             if (textContent == null) {
