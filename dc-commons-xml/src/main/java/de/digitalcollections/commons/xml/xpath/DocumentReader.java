@@ -23,10 +23,11 @@ import org.w3c.dom.Node;
 
 /** Helper class to read simple or templated values from an XML document. */
 class DocumentReader {
+
   private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)}");
   private final List<String> rootPaths;
   private final XPathWrapper xpw;
-  private static final Locale EMPTY_LOCALE = determineLocaleFromCode("");
+  private static final Locale EMPTY_LOCALE = Locale.ROOT;
 
   public DocumentReader(Document doc, List<String> rootPaths, String namespace) {
     this.rootPaths = rootPaths;
@@ -111,9 +112,18 @@ class DocumentReader {
                 Collectors.toCollection(
                     LinkedHashSet::new)); // Store the stream in a set (thereby pruning duplicates)
 
+    // just get all languages (not locales) to make following "undefined" language detection easier
+    List<String> languages =
+        langs.stream().map(locale -> locale.getLanguage()).collect(Collectors.toList());
+
     Map<Locale, String> out = new LinkedHashMap<>();
     // Resolve the <...> contexts
     for (Locale lang : langs) {
+      if (Locale.ROOT == lang && languages.contains("und")) {
+        // skip to avoid duplicate entries, as we define that the base locale (with no language) is
+        // also "undefined"
+        continue;
+      }
       String stringRepresentation = templateString;
       String context = extractContext(stringRepresentation);
       while (context != null) {
@@ -346,18 +356,20 @@ class DocumentReader {
     }
 
     // For cases, in which the language could not be determined
-    // (e.g. for "und"), we have to re-build the locale manually
-    String[] localeCodeParts = localeCode.split("-");
-    if (localeCodeParts.length == 1) {
-      // We only have a language, probably "und"
-      return new Locale.Builder().setLanguage(localeCodeParts[0]).build();
-    } else {
-      // We have language and script
-      return new Locale.Builder()
-          .setLanguage(localeCodeParts[0])
-          .setScript(localeCodeParts[1])
-          .build();
+    // (e.g. for "und", "und-Latn"), we have to re-build the locale manually
+    if (!localeCode.contains("-")) {
+      // We only have a language, no script
+      return new Locale.Builder().setLanguage(localeCode).build();
     }
+    Pattern pattern = Pattern.compile("^(.*)-(.*)$");
+    Matcher matcher = pattern.matcher(localeCode);
+    if (matcher.find()) {
+      String language = matcher.group(1);
+      String script = matcher.group(2);
+      // We have language and script
+      return new Locale.Builder().setLanguage(language).setScript(script).build();
+    }
+    return Locale.ROOT; // an undefined locale
   }
 
   private String[] prependWithRootPaths(String[] paths) {

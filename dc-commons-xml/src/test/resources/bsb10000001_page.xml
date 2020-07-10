@@ -1,0 +1,3228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbPage/2.2/bsbpage.odd" type="application/tei+xml" schematypens="http://www.tei-c.org/ns/1.0"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbPage/2.2/bsbPage.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbPage/2.2/bsbPage.rnc" type="application/relax-ng-compact-syntax"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbPage/2.2/bsbPage.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<?xml-model href="http://rest.digitale-sammlungen.de/data/schema/bsbPage/2.2/bsbPage.dtd" type="application/xml+dtd"?>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="bsb10000001" ana="#book">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Bayerische Staatsbibliothek</publisher>
+        <pubPlace>
+          <name>München</name>
+        </pubPlace>
+        <date when="2020-06-18T12:52:48.68+02:00">2020-06-18</date>
+        <availability status="free">
+          <licence ana="#lib" target="http://rest.digitale-sammlungen.de/data/storage/standard/mdz/nutzung.xml">
+            <p>Entsprechend den Bedingungen der Bayerischen Staatsbibliothek verfügbar.</p>
+          </licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="index">
+          <index xml:id="bsb10000001_idx001" indexName="document_type" ana="#single">
+            <term>book</term>
+          </index>
+          <index xml:id="bsb10000001_idx002" indexName="toc_category" ana="#all">
+            <term>binding</term>
+            <term>FRONT_COVER</term>
+            <term>INSIDE_FRONT_COVER</term>
+            <term>section</term>
+            <term>FIRST_CONTENT_CHAPTER_START</term>
+            <term>CHAPTER_START</term>
+            <term>BACK_COVER</term>
+            <term>INSIDE_BACK_COVER</term>
+          </index>
+          <index xml:id="bsb10000001_idx003" indexName="title" ana="#spec">
+            <term type="main" xml:lang="und-Latn" xml:id="bsb10000001_idx003_001">Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben</term>
+          </index>
+          <index xml:id="bsb10000001_idx004" indexName="title_combi_lang" ana="#spec">
+            <term type="main">Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben</term>
+          </index>
+          <index xml:id="bsb10000001_idx005" indexName="title_main_par" ana="#all">
+            <term>Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben</term>
+          </index>
+          <index xml:id="bsb10000001_idx006" indexName="title_main_extended" ana="#spec">
+            <term xml:lang="und-Latn" xml:id="bsb10000001_idx006_001">Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben : Auß allerhand glaubwürdigen Publicis scriptis in eine feine richtige Ordnung zusammen verfasset, jetzo mit fleiß ubersehen, gemehret vnd auffs newe zugerichtet</term>
+          </index>
+          <index xml:id="bsb10000001_idx007" indexName="all_titles_no_tocs_und-Latn" ana="#all">
+            <term>Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben</term>
+            <term>Auß allerhand glaubwürdigen Publicis scriptis in eine feine richtige Ordnung zusammen verfasset, jetzo mit fleiß ubersehen, gemehret vnd auffs newe zugerichtet</term>
+          </index>
+          <index xml:id="bsb10000001_idx008" indexName="all_titles_no_tocs" ana="#all" corresp="#bsb10000001_idx007"/>
+          <index xml:id="bsb10000001_idx009" indexName="all_titles_und-Latn" ana="#all" corresp="#bsb10000001_idx007"/>
+          <index xml:id="bsb10000001_idx010" indexName="all_titles" ana="#all" corresp="#bsb10000001_idx009"/>
+          <index xml:id="bsb10000001_idx011" indexName="all_titles_no_tocs_combi_lang" ana="#all">
+            <term>Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben</term>
+          </index>
+          <index xml:id="bsb10000001_idx012" indexName="all_titles_combi_lang" ana="#all" corresp="#bsb10000001_idx011"/>
+          <index xml:id="bsb10000001_idx013" indexName="id" ana="#spec">
+            <term type="zend">bsb10000001</term>
+            <term type="bsb">9957281</term>
+            <term type="bvb">BV019442452</term>
+            <term type="oclc">219811776</term>
+            <term type="vd17">23:236528Y</term>
+            <term type="isil">DE-12</term>
+            <term type="shelfno">4 Austr. 3-1/3</term>
+            <term type="host_bvb">BV019442441</term>
+          </index>
+          <index xml:id="bsb10000001_idx014" indexName="date_text" ana="#spec">
+            <term type="pub-set" xml:lang="und-Zyyy">1621</term>
+            <term type="pub" xml:lang="und-Latn">1621</term>
+          </index>
+          <index xml:id="bsb10000001_idx015" indexName="date_iso" ana="#spec">
+            <term type="pub-set-when">1621</term>
+          </index>
+          <index xml:id="bsb10000001_idx016" indexName="place" ana="#spec">
+            <term type="publish" xml:lang="und-Latn" xml:id="bsb10000001_idx016_001">[S.l.]</term>
+          </index>
+          <index xml:id="bsb10000001_idx017" indexName="place_combi_lang" ana="#spec">
+            <term type="publish">[S.l.]</term>
+          </index>
+          <index xml:id="bsb10000001_idx018" indexName="owner" ana="#spec">
+            <term type="name">München, Bayerische Staatsbibliothek</term>
+          </index>
+          <index xml:id="bsb10000001_idx019" indexName="language" ana="#spec">
+            <term type="main">de</term>
+          </index>
+          <index xml:id="bsb10000001_idx020" indexName="all_languages" ana="#all">
+            <term>de</term>
+          </index>
+          <index xml:id="bsb10000001_idx021" indexName="extent" ana="#all">
+            <term>[154] Bl.</term>
+          </index>
+          <index xml:id="bsb10000001_idx022" indexName="volume" ana="#spec">
+            <term type="norm">1</term>
+            <term type="pres">1</term>
+          </index>
+          <index xml:id="bsb10000001_idx023" indexName="preview" ana="#all">
+            <term>bsb10000001_00003</term>
+          </index>
+          <index xml:id="bsb10000001_idx024" indexName="other" ana="#all">
+            <term>oe</term>
+            <term>7,41</term>
+            <term>Nicht identisch mit VD17 14:692375H (vgl. Umfang, hier ist auf E4 - E6 die "Copia deß ersten Keyserlichen Schreibens/ an die Böhmischen Stände ..." eingefügt (Kustode auf E4 "in dem"), dort die "Apologia der Böhmischen Stände" (Kustode auf E4 "Innwoh-")</term>
+          </index>
+          <index xml:id="bsb10000001_idx025" indexName="all_metadata" ana="#all" corresp="#bsb10000001_idx010 #bsb10000001_idx013 #bsb10000001_idx014 #bsb10000001_idx015 #bsb10000001_idx016 #bsb10000001_idx018 #bsb10000001_idx019 #bsb10000001_idx021 #bsb10000001_idx022 #bsb10000001_idx023 #bsb10000001_idx024"/>
+        </note>
+      </notesStmt>
+      <sourceDesc>
+        <listBibl type="source">
+          <biblStruct ana="#bsbStandard">
+            <monogr>
+              <title level="m" type="main" xml:lang="und-Latn">Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben</title>
+              <title level="m" type="sub" xml:lang="und-Latn">Auß allerhand glaubwürdigen Publicis scriptis in eine feine richtige Ordnung zusammen verfasset, jetzo mit fleiß ubersehen, gemehret vnd auffs newe zugerichtet</title>
+              <ref type="urn" cRef="urn:nbn:de:bvb:12-bsb10000001-5"/>
+              <ref type="url" ana="#resolving" target="http://mdz-nbn-resolving.de/urn:nbn:de:bvb:12-bsb10000001-5"/>
+              <idno resp="#bsb" type="id">9957281</idno>
+              <idno resp="#bvb" type="id">BV019442452</idno>
+              <idno resp="#oclc" type="id">219811776</idno>
+              <idno resp="#vd17" type="id">23:236528Y</idno>
+              <textLang mainLang="de" ana="#workOrg"/>
+              <imprint>
+                <classCode scheme="#object">
+                  <idno resp="#bvb" type="local">oe</idno>
+                </classCode>
+                <classCode scheme="#object">
+                  <idno resp="#bsb" type="ssg">7,41</idno>
+                </classCode>
+                <pubPlace>
+                  <name xml:lang="und-Latn">[S.l.]</name>
+                </pubPlace>
+                <date type="pub" subtype="set" when="1621">1621</date>
+                <date type="pub" xml:lang="und-Latn">1621</date>
+                <distributor ana="#lib">
+                  <orgName>München, Bayerische Staatsbibliothek</orgName>
+                  <idno resp="#isil" type="id">DE-12</idno>
+                  <idno resp="#lib" type="shelfNo">4 Austr. 3-1/3</idno>
+                </distributor>
+              </imprint>
+              <extent>[154] Bl.</extent>
+            </monogr>
+            <series>
+              <idno resp="#bvb" type="id">BV019442441</idno>
+              <biblScope ana="#norm" unit="vol">1</biblScope>
+              <biblScope ana="#pres" unit="vol">1</biblScope>
+            </series>
+            <note type="general">
+              <p xml:id="bsb10000001_note_gen_01" xml:lang="und-Latn">Nicht identisch mit VD17 14:692375H (vgl. Umfang, hier ist auf E4 - E6 die "Copia deß ersten Keyserlichen Schreibens/ an die Böhmischen Stände ..." eingefügt (Kustode auf E4 "in dem"), dort die "Apologia der Böhmischen Stände" (Kustode auf E4 "Innwoh-")</p>
+            </note>
+          </biblStruct>
+        </listBibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <creation>
+        <listChange>
+          <change when="2017-09-18T09:29:26" ana="#scan"/>
+          <change when="2017-09-18T11:13:33" ana="#text" type="google" subtype="hOCR"/>
+        </listChange>
+      </creation>
+    </profileDesc>
+    <encodingDesc>
+      <refsDecl>
+        <ab type="bsbVocabulary">
+          <listNym type="correspList">
+            <nym xml:id="dfgViewer"/>
+            <nym xml:id="zvdd"/>
+          </listNym>
+          <listNym type="general">
+            <nym xml:id="bsbStandard"/>
+            <nym xml:id="lib"/>
+            <nym xml:id="access"/>
+            <nym xml:id="resolving"/>
+            <nym xml:id="supra"/>
+            <nym xml:id="zend"/>
+          </listNym>
+          <listNym type="analytic">
+            <nym xml:id="article"/>
+            <nym xml:id="issue"/>
+            <nym xml:id="incWork"/>
+          </listNym>
+          <listNym type="change">
+            <nym xml:id="scan"/>
+            <nym xml:id="text"/>
+          </listNym>
+          <listNym type="facsimile">
+            <nym xml:id="facsCoor"/>
+            <nym xml:id="facsMeta"/>
+            <nym xml:id="facsScan"/>
+            <nym xml:id="facsOrig"/>
+          </listNym>
+          <listNym type="fmtXML">
+            <nym xml:id="fmtBibl"/>
+            <nym xml:id="fmtCont"/>
+            <nym xml:id="fmtCoor"/>
+            <nym xml:id="fmtFacs"/>
+            <nym xml:id="fmtMeta"/>
+            <nym xml:id="fmtPage"/>
+            <nym xml:id="fmtProf"/>
+            <nym xml:id="fmtRefs"/>
+            <nym xml:id="fmtSkel"/>
+            <nym xml:id="fmtTags"/>
+            <nym xml:id="fmtWskl"/>
+            <nym xml:id="fmtWord"/>
+          </listNym>
+          <listNym type="itemIdent">
+            <nym xml:id="collation"/>
+            <nym xml:id="foliation"/>
+            <nym xml:id="nativeNo"/>
+            <nym xml:id="ownerID"/>
+            <nym xml:id="rotate"/>
+            <nym xml:id="sequenceNo"/>
+            <nym xml:id="zoom"/>
+          </listNym>
+          <listNym type="language">
+            <nym xml:id="work"/>
+            <nym xml:id="workFrom"/>
+            <nym xml:id="workOrg"/>
+            <nym xml:id="workTrans"/>
+          </listNym>
+          <listNym type="list">
+            <nym xml:id="bsbIdent"/>
+            <nym xml:id="bsbStruc"/>
+            <nym xml:id="bsbWorks"/>
+            <nym xml:id="googleStruc"/>
+          </listNym>
+          <listNym type="pageMeta">
+            <nym xml:id="additional"/>
+            <nym xml:id="annotation"/>
+            <nym xml:id="binding"/>
+            <nym xml:id="blank"/>
+            <nym xml:id="calibration"/>
+            <nym xml:id="colophon"/>
+            <nym xml:id="condition"/>
+            <nym xml:id="corrigenda"/>
+            <nym xml:id="decoLetter"/>
+            <nym xml:id="dedication"/>
+            <nym xml:id="edge"/>
+            <nym xml:id="figure"/>
+            <nym xml:id="formula"/>
+            <nym xml:id="glossary"/>
+            <nym xml:id="holdings"/>
+            <nym xml:id="imprint"/>
+            <nym xml:id="index"/>
+            <nym xml:id="map"/>
+            <nym xml:id="misc"/>
+            <nym xml:id="musicNotation"/>
+            <nym xml:id="printersMark"/>
+            <nym xml:id="section"/>
+            <nym xml:id="table"/>
+            <nym xml:id="textStart"/>
+            <nym xml:id="titlePage"/>
+            <nym xml:id="toc"/>
+            <nym xml:id="verse"/>
+          </listNym>
+          <listNym type="srcCat">
+            <nym xml:id="book"/>
+            <nym xml:id="magazine"/>
+            <nym xml:id="newspaper"/>
+            <nym xml:id="part"/>
+          </listNym>
+          <listNym type="misc">
+            <nym xml:id="bsb"/>
+            <nym xml:id="bvb"/>
+            <nym xml:id="oclc"/>
+            <nym xml:id="object"/>
+            <nym xml:id="isil"/>
+            <nym xml:id="display"/>
+            <nym xml:id="norm"/>
+            <nym xml:id="pres"/>
+            <nym xml:id="gnd"/>
+            <nym xml:id="bsb-hss"/>
+            <nym xml:id="zendStru"/>
+            <nym xml:id="googleMETS"/>
+            <nym xml:id="zdb"/>
+            <nym xml:id="rvk"/>
+            <nym xml:id="vd16"/>
+            <nym xml:id="vd17"/>
+            <nym xml:id="vd18"/>
+            <nym xml:id="gw"/>
+            <nym xml:id="ddc"/>
+            <nym xml:id="istc"/>
+            <nym xml:id="rism"/>
+            <nym xml:id="preview"/>
+            <nym xml:id="all"/>
+            <nym xml:id="single"/>
+            <nym xml:id="spec"/>
+          </listNym>
+          <listNym type="marc-relator">
+            <nym xml:id="aft"/>
+            <nym xml:id="arc"/>
+            <nym xml:id="art"/>
+            <nym xml:id="aui"/>
+            <nym xml:id="aut"/>
+            <nym xml:id="cll"/>
+            <nym xml:id="cmp"/>
+            <nym xml:id="com"/>
+            <nym xml:id="ctb"/>
+            <nym xml:id="col"/>
+            <nym xml:id="dte"/>
+            <nym xml:id="edt"/>
+            <nym xml:id="fmo"/>
+            <nym xml:id="hnr"/>
+            <nym xml:id="ill"/>
+            <nym xml:id="ilu"/>
+            <nym xml:id="isb"/>
+            <nym xml:id="lbt"/>
+            <nym xml:id="oth"/>
+            <nym xml:id="pat"/>
+            <nym xml:id="pbd"/>
+            <nym xml:id="pbl"/>
+            <nym xml:id="prt"/>
+            <nym xml:id="rcp"/>
+            <nym xml:id="trl"/>
+            <nym xml:id="wal"/>
+            <nym xml:id="wat"/>
+            <nym xml:id="wpr"/>
+            <nym xml:id="wst"/>
+          </listNym>
+        </ab>
+        <ab type="googleVocabulary">
+          <listNym type="pageMeta">
+            <nym xml:id="BACK_COVER"/>
+            <nym xml:id="BLANK"/>
+            <nym xml:id="CHAPTER_START"/>
+            <nym xml:id="COPYRIGHT"/>
+            <nym xml:id="FIRST_CONTENT_CHAPTER_START"/>
+            <nym xml:id="FOLDOUT"/>
+            <nym xml:id="FRONT_COVER"/>
+            <nym xml:id="FRONT_COVER_IMAGE_CORRECTION"/>
+            <nym xml:id="IMAGE_ON_PAGE"/>
+            <nym xml:id="IMPLICIT_PAGE_NUMBER"/>
+            <nym xml:id="INDEX"/>
+            <nym xml:id="INSIDE_BACK_COVER"/>
+            <nym xml:id="INSIDE_FRONT_COVER"/>
+            <nym xml:id="MISSING"/>
+            <nym xml:id="MISSING_PAGE"/>
+            <nym xml:id="MULTIWORK_BOUNDARY"/>
+            <nym xml:id="PAGE_TURNBACK"/>
+            <nym xml:id="REFERENCES"/>
+            <nym xml:id="TITLE"/>
+            <nym xml:id="TABLE_OF_CONTENTS"/>
+            <nym xml:id="UNTYPICAL_PAGE"/>
+          </listNym>
+        </ab>
+      </refsDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2020-06-18T12:52:48.786+02:00">
+        <label ana="#fmtPage"/>
+        <name type="resp">bind2idx.xsl, Version 1.0.0</name>
+        <desc>Definition der Indexfelder für mögliche nachträgliche Suchfunktionen</desc>
+      </change>
+      <change when="2020-06-18T12:52:48.68+02:00">
+        <label ana="#fmtPage"/>
+        <name type="resp">mdzstruc.xsl, Version 2.5.7.5</name>
+        <desc>Erstellung aus den Daten der ZEND-Datenbank, MARC21-XML-Daten des BDR, BSB-OPAC und BVB, Google-Daten sowie bsb10000001_stru.xml.</desc>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <facsimile ana="#facsScan" xml:id="bsb10000001_facs">
+    <surface xml:id="bsb10000001_00001">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>1</num></item>
+          <item ana="#ownerID">31525197395743225-1</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00002">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>2</num></item>
+          <item ana="#ownerID">31525197395743225-2</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00003">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>3</num></item>
+          <item ana="#preview">page</item>
+          <item ana="#ownerID">31525197395743225-3</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00004">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>4</num></item>
+          <item ana="#ownerID">31525197395743225-4</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00005">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>5</num></item>
+          <item ana="#ownerID">31525197395743225-5</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00006">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>6</num></item>
+          <item ana="#ownerID">31525197395743225-6</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00007">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>7</num></item>
+          <item ana="#ownerID">31525197395743225-7</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00008">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>8</num></item>
+          <item ana="#ownerID">31525197395743225-8</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00009">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>9</num></item>
+          <item ana="#ownerID">31525197395743225-9</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00010">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>10</num></item>
+          <item ana="#ownerID">31525197395743225-10</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00011">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>11</num></item>
+          <item ana="#ownerID">31525197395743225-11</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00012">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>12</num></item>
+          <item ana="#ownerID">31525197395743225-12</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00013">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>13</num></item>
+          <item ana="#ownerID">31525197395743225-13</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00014">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>14</num></item>
+          <item ana="#ownerID">31525197395743225-14</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00015">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>15</num></item>
+          <item ana="#ownerID">31525197395743225-15</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00016">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>16</num></item>
+          <item ana="#ownerID">31525197395743225-16</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00017">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>17</num></item>
+          <item ana="#ownerID">31525197395743225-17</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00018">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>18</num></item>
+          <item ana="#ownerID">31525197395743225-18</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00019">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>19</num></item>
+          <item ana="#ownerID">31525197395743225-19</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00020">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>20</num></item>
+          <item ana="#ownerID">31525197395743225-20</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00021">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>21</num></item>
+          <item ana="#ownerID">31525197395743225-21</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00022">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>22</num></item>
+          <item ana="#ownerID">31525197395743225-22</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00023">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>23</num></item>
+          <item ana="#ownerID">31525197395743225-23</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00024">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>24</num></item>
+          <item ana="#ownerID">31525197395743225-24</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00025">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>25</num></item>
+          <item ana="#ownerID">31525197395743225-25</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00026">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>26</num></item>
+          <item ana="#ownerID">31525197395743225-26</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00027">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>27</num></item>
+          <item ana="#ownerID">31525197395743225-27</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00028">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>28</num></item>
+          <item ana="#ownerID">31525197395743225-28</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00029">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>29</num></item>
+          <item ana="#ownerID">31525197395743225-29</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00030">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>30</num></item>
+          <item ana="#ownerID">31525197395743225-30</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00031">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>31</num></item>
+          <item ana="#ownerID">31525197395743225-31</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00032">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>32</num></item>
+          <item ana="#ownerID">31525197395743225-32</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00033">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>33</num></item>
+          <item ana="#ownerID">31525197395743225-33</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00034">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>34</num></item>
+          <item ana="#ownerID">31525197395743225-34</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00035">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>35</num></item>
+          <item ana="#ownerID">31525197395743225-35</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00036">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>36</num></item>
+          <item ana="#ownerID">31525197395743225-36</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00037">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>37</num></item>
+          <item ana="#ownerID">31525197395743225-37</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00038">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>38</num></item>
+          <item ana="#ownerID">31525197395743225-38</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00039">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>39</num></item>
+          <item ana="#ownerID">31525197395743225-39</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00040">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>40</num></item>
+          <item ana="#ownerID">31525197395743225-40</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00041">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>41</num></item>
+          <item ana="#ownerID">31525197395743225-41</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00042">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>42</num></item>
+          <item ana="#ownerID">31525197395743225-42</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00043">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>43</num></item>
+          <item ana="#ownerID">31525197395743225-43</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00044">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>44</num></item>
+          <item ana="#ownerID">31525197395743225-44</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00045">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>45</num></item>
+          <item ana="#ownerID">31525197395743225-45</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00046">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>46</num></item>
+          <item ana="#ownerID">31525197395743225-46</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00047">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>47</num></item>
+          <item ana="#ownerID">31525197395743225-47</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00048">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>48</num></item>
+          <item ana="#ownerID">31525197395743225-48</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00049">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>49</num></item>
+          <item ana="#ownerID">31525197395743225-49</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00050">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>50</num></item>
+          <item ana="#ownerID">31525197395743225-50</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00051">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>51</num></item>
+          <item ana="#ownerID">31525197395743225-51</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00052">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>52</num></item>
+          <item ana="#ownerID">31525197395743225-52</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00053">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>53</num></item>
+          <item ana="#ownerID">31525197395743225-53</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00054">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>54</num></item>
+          <item ana="#ownerID">31525197395743225-54</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00055">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>55</num></item>
+          <item ana="#ownerID">31525197395743225-55</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00056">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>56</num></item>
+          <item ana="#ownerID">31525197395743225-56</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00057">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>57</num></item>
+          <item ana="#ownerID">31525197395743225-57</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00058">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>58</num></item>
+          <item ana="#ownerID">31525197395743225-58</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00059">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>59</num></item>
+          <item ana="#ownerID">31525197395743225-59</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00060">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>60</num></item>
+          <item ana="#ownerID">31525197395743225-60</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00061">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>61</num></item>
+          <item ana="#ownerID">31525197395743225-61</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00062">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>62</num></item>
+          <item ana="#ownerID">31525197395743225-62</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00063">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>63</num></item>
+          <item ana="#ownerID">31525197395743225-63</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00064">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>64</num></item>
+          <item ana="#ownerID">31525197395743225-64</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00065">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>65</num></item>
+          <item ana="#ownerID">31525197395743225-65</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00066">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>66</num></item>
+          <item ana="#ownerID">31525197395743225-66</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00067">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>67</num></item>
+          <item ana="#ownerID">31525197395743225-67</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00068">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>68</num></item>
+          <item ana="#ownerID">31525197395743225-68</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00069">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>69</num></item>
+          <item ana="#ownerID">31525197395743225-69</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00070">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>70</num></item>
+          <item ana="#ownerID">31525197395743225-70</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00071">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>71</num></item>
+          <item ana="#ownerID">31525197395743225-71</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00072">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>72</num></item>
+          <item ana="#ownerID">31525197395743225-72</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00073">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>73</num></item>
+          <item ana="#ownerID">31525197395743225-73</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00074">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>74</num></item>
+          <item ana="#ownerID">31525197395743225-74</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00075">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>75</num></item>
+          <item ana="#ownerID">31525197395743225-75</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00076">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>76</num></item>
+          <item ana="#ownerID">31525197395743225-76</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00077">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>77</num></item>
+          <item ana="#ownerID">31525197395743225-77</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00078">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>78</num></item>
+          <item ana="#ownerID">31525197395743225-78</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00079">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>79</num></item>
+          <item ana="#ownerID">31525197395743225-79</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00080">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>80</num></item>
+          <item ana="#ownerID">31525197395743225-80</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00081">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>81</num></item>
+          <item ana="#ownerID">31525197395743225-81</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00082">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>82</num></item>
+          <item ana="#ownerID">31525197395743225-82</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00083">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>83</num></item>
+          <item ana="#ownerID">31525197395743225-83</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00084">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>84</num></item>
+          <item ana="#ownerID">31525197395743225-84</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00085">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>85</num></item>
+          <item ana="#ownerID">31525197395743225-85</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00086">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>86</num></item>
+          <item ana="#ownerID">31525197395743225-86</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00087">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>87</num></item>
+          <item ana="#ownerID">31525197395743225-87</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00088">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>88</num></item>
+          <item ana="#ownerID">31525197395743225-88</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00089">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>89</num></item>
+          <item ana="#ownerID">31525197395743225-89</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00090">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>90</num></item>
+          <item ana="#ownerID">31525197395743225-90</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00091">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>91</num></item>
+          <item ana="#ownerID">31525197395743225-91</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00092">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>92</num></item>
+          <item ana="#ownerID">31525197395743225-92</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00093">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>93</num></item>
+          <item ana="#ownerID">31525197395743225-93</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00094">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>94</num></item>
+          <item ana="#ownerID">31525197395743225-94</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00095">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>95</num></item>
+          <item ana="#ownerID">31525197395743225-95</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00096">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>96</num></item>
+          <item ana="#ownerID">31525197395743225-96</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00097">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>97</num></item>
+          <item ana="#ownerID">31525197395743225-97</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00098">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>98</num></item>
+          <item ana="#ownerID">31525197395743225-98</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00099">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>99</num></item>
+          <item ana="#ownerID">31525197395743225-99</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00100">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>100</num></item>
+          <item ana="#ownerID">31525197395743225-100</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00101">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>101</num></item>
+          <item ana="#ownerID">31525197395743225-101</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00102">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>102</num></item>
+          <item ana="#ownerID">31525197395743225-102</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00103">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>103</num></item>
+          <item ana="#ownerID">31525197395743225-103</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00104">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>104</num></item>
+          <item ana="#ownerID">31525197395743225-104</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00105">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>105</num></item>
+          <item ana="#ownerID">31525197395743225-105</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00106">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>106</num></item>
+          <item ana="#ownerID">31525197395743225-106</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00107">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>107</num></item>
+          <item ana="#ownerID">31525197395743225-107</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00108">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>108</num></item>
+          <item ana="#ownerID">31525197395743225-110</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00109">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>109</num></item>
+          <item ana="#ownerID">31525197395743225-111</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00110">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>110</num></item>
+          <item ana="#ownerID">31525197395743225-112</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00111">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>111</num></item>
+          <item ana="#ownerID">31525197395743225-113</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00112">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>112</num></item>
+          <item ana="#ownerID">31525197395743225-114</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00113">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>113</num></item>
+          <item ana="#ownerID">31525197395743225-115</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00114">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>114</num></item>
+          <item ana="#ownerID">31525197395743225-116</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00115">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>115</num></item>
+          <item ana="#ownerID">31525197395743225-117</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00116">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>116</num></item>
+          <item ana="#ownerID">31525197395743225-118</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00117">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>117</num></item>
+          <item ana="#ownerID">31525197395743225-119</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00118">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>118</num></item>
+          <item ana="#ownerID">31525197395743225-120</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00119">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>119</num></item>
+          <item ana="#ownerID">31525197395743225-121</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00120">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>120</num></item>
+          <item ana="#ownerID">31525197395743225-122</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00121">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>121</num></item>
+          <item ana="#ownerID">31525197395743225-123</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00122">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>122</num></item>
+          <item ana="#ownerID">31525197395743225-124</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00123">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>123</num></item>
+          <item ana="#ownerID">31525197395743225-125</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00124">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>124</num></item>
+          <item ana="#ownerID">31525197395743225-126</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00125">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>125</num></item>
+          <item ana="#ownerID">31525197395743225-127</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00126">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>126</num></item>
+          <item ana="#ownerID">31525197395743225-128</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00127">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>127</num></item>
+          <item ana="#ownerID">31525197395743225-129</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00128">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>128</num></item>
+          <item ana="#ownerID">31525197395743225-130</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00129">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>129</num></item>
+          <item ana="#ownerID">31525197395743225-131</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00130">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>130</num></item>
+          <item ana="#ownerID">31525197395743225-132</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00131">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>131</num></item>
+          <item ana="#ownerID">31525197395743225-133</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00132">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>132</num></item>
+          <item ana="#ownerID">31525197395743225-134</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00133">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>133</num></item>
+          <item ana="#ownerID">31525197395743225-135</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00134">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>134</num></item>
+          <item ana="#ownerID">31525197395743225-136</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00135">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>135</num></item>
+          <item ana="#ownerID">31525197395743225-137</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00136">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>136</num></item>
+          <item ana="#ownerID">31525197395743225-138</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00137">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>137</num></item>
+          <item ana="#ownerID">31525197395743225-139</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00138">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>138</num></item>
+          <item ana="#ownerID">31525197395743225-140</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00139">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>139</num></item>
+          <item ana="#ownerID">31525197395743225-141</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00140">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>140</num></item>
+          <item ana="#ownerID">31525197395743225-142</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00141">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>141</num></item>
+          <item ana="#ownerID">31525197395743225-143</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00142">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>142</num></item>
+          <item ana="#ownerID">31525197395743225-144</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00143">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>143</num></item>
+          <item ana="#ownerID">31525197395743225-145</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00144">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>144</num></item>
+          <item ana="#ownerID">31525197395743225-146</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00145">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>145</num></item>
+          <item ana="#ownerID">31525197395743225-147</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00146">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>146</num></item>
+          <item ana="#ownerID">31525197395743225-148</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00147">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>147</num></item>
+          <item ana="#ownerID">31525197395743225-149</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00148">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>148</num></item>
+          <item ana="#ownerID">31525197395743225-150</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00149">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>149</num></item>
+          <item ana="#ownerID">31525197395743225-151</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00150">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>150</num></item>
+          <item ana="#ownerID">31525197395743225-152</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00151">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>151</num></item>
+          <item ana="#ownerID">31525197395743225-153</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00152">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>152</num></item>
+          <item ana="#ownerID">31525197395743225-154</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00153">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>153</num></item>
+          <item ana="#ownerID">31525197395743225-155</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00154">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>154</num></item>
+          <item ana="#ownerID">31525197395743225-156</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00155">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>155</num></item>
+          <item ana="#ownerID">31525197395743225-157</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00156">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>156</num></item>
+          <item ana="#ownerID">31525197395743225-158</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00157">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>157</num></item>
+          <item ana="#ownerID">31525197395743225-159</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00158">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>158</num></item>
+          <item ana="#ownerID">31525197395743225-160</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00159">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>159</num></item>
+          <item ana="#ownerID">31525197395743225-161</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00160">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>160</num></item>
+          <item ana="#ownerID">31525197395743225-162</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00161">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>161</num></item>
+          <item ana="#ownerID">31525197395743225-163</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00162">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>162</num></item>
+          <item ana="#ownerID">31525197395743225-164</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00163">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>163</num></item>
+          <item ana="#ownerID">31525197395743225-165</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00164">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>164</num></item>
+          <item ana="#ownerID">31525197395743225-166</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00165">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>165</num></item>
+          <item ana="#ownerID">31525197395743225-167</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00166">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>166</num></item>
+          <item ana="#ownerID">31525197395743225-168</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00167">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>167</num></item>
+          <item ana="#ownerID">31525197395743225-169</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00168">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>168</num></item>
+          <item ana="#ownerID">31525197395743225-170</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00169">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>169</num></item>
+          <item ana="#ownerID">31525197395743225-171</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00170">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>170</num></item>
+          <item ana="#ownerID">31525197395743225-172</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00171">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>171</num></item>
+          <item ana="#ownerID">31525197395743225-173</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00172">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>172</num></item>
+          <item ana="#ownerID">31525197395743225-174</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00173">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>173</num></item>
+          <item ana="#ownerID">31525197395743225-175</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00174">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>174</num></item>
+          <item ana="#ownerID">31525197395743225-176</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00175">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>175</num></item>
+          <item ana="#ownerID">31525197395743225-177</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00176">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>176</num></item>
+          <item ana="#ownerID">31525197395743225-178</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00177">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>177</num></item>
+          <item ana="#ownerID">31525197395743225-179</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00178">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>178</num></item>
+          <item ana="#ownerID">31525197395743225-180</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00179">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>179</num></item>
+          <item ana="#ownerID">31525197395743225-181</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00180">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>180</num></item>
+          <item ana="#ownerID">31525197395743225-182</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00181">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>181</num></item>
+          <item ana="#ownerID">31525197395743225-183</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00182">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>182</num></item>
+          <item ana="#ownerID">31525197395743225-184</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00183">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>183</num></item>
+          <item ana="#ownerID">31525197395743225-185</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00184">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>184</num></item>
+          <item ana="#ownerID">31525197395743225-186</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00185">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>185</num></item>
+          <item ana="#ownerID">31525197395743225-187</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00186">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>186</num></item>
+          <item ana="#ownerID">31525197395743225-188</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00187">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>187</num></item>
+          <item ana="#ownerID">31525197395743225-189</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00188">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>188</num></item>
+          <item ana="#ownerID">31525197395743225-190</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00189">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>189</num></item>
+          <item ana="#ownerID">31525197395743225-191</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00190">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>190</num></item>
+          <item ana="#ownerID">31525197395743225-192</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00191">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>191</num></item>
+          <item ana="#ownerID">31525197395743225-193</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00192">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>192</num></item>
+          <item ana="#ownerID">31525197395743225-194</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00193">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>193</num></item>
+          <item ana="#ownerID">31525197395743225-195</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00194">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>194</num></item>
+          <item ana="#ownerID">31525197395743225-196</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00195">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>195</num></item>
+          <item ana="#ownerID">31525197395743225-197</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00196">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>196</num></item>
+          <item ana="#ownerID">31525197395743225-198</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00197">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>197</num></item>
+          <item ana="#ownerID">31525197395743225-199</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00198">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>198</num></item>
+          <item ana="#ownerID">31525197395743225-200</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00199">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>199</num></item>
+          <item ana="#ownerID">31525197395743225-201</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00200">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>200</num></item>
+          <item ana="#ownerID">31525197395743225-202</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00201">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>201</num></item>
+          <item ana="#ownerID">31525197395743225-203</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00202">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>202</num></item>
+          <item ana="#ownerID">31525197395743225-204</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00203">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>203</num></item>
+          <item ana="#ownerID">31525197395743225-205</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00204">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>204</num></item>
+          <item ana="#ownerID">31525197395743225-206</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00205">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>205</num></item>
+          <item ana="#ownerID">31525197395743225-207</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00206">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>206</num></item>
+          <item ana="#ownerID">31525197395743225-208</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00207">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>207</num></item>
+          <item ana="#ownerID">31525197395743225-209</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00208">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>208</num></item>
+          <item ana="#ownerID">31525197395743225-210</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00209">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>209</num></item>
+          <item ana="#ownerID">31525197395743225-211</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00210">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>210</num></item>
+          <item ana="#ownerID">31525197395743225-212</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00211">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>211</num></item>
+          <item ana="#ownerID">31525197395743225-213</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00212">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>212</num></item>
+          <item ana="#ownerID">31525197395743225-214</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00213">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>213</num></item>
+          <item ana="#ownerID">31525197395743225-215</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00214">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>214</num></item>
+          <item ana="#ownerID">31525197395743225-216</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00215">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>215</num></item>
+          <item ana="#ownerID">31525197395743225-217</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00216">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>216</num></item>
+          <item ana="#ownerID">31525197395743225-218</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00217">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>217</num></item>
+          <item ana="#ownerID">31525197395743225-219</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00218">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>218</num></item>
+          <item ana="#ownerID">31525197395743225-220</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00219">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>219</num></item>
+          <item ana="#ownerID">31525197395743225-221</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00220">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>220</num></item>
+          <item ana="#ownerID">31525197395743225-222</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00221">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>221</num></item>
+          <item ana="#ownerID">31525197395743225-223</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00222">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>222</num></item>
+          <item ana="#ownerID">31525197395743225-224</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00223">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>223</num></item>
+          <item ana="#ownerID">31525197395743225-225</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00224">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>224</num></item>
+          <item ana="#ownerID">31525197395743225-226</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00225">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>225</num></item>
+          <item ana="#ownerID">31525197395743225-227</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00226">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>226</num></item>
+          <item ana="#ownerID">31525197395743225-228</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00227">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>227</num></item>
+          <item ana="#ownerID">31525197395743225-229</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00228">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>228</num></item>
+          <item ana="#ownerID">31525197395743225-230</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00229">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>229</num></item>
+          <item ana="#ownerID">31525197395743225-231</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00230">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>230</num></item>
+          <item ana="#ownerID">31525197395743225-232</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00231">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>231</num></item>
+          <item ana="#ownerID">31525197395743225-233</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00232">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>232</num></item>
+          <item ana="#ownerID">31525197395743225-234</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00233">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>233</num></item>
+          <item ana="#ownerID">31525197395743225-235</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00234">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>234</num></item>
+          <item ana="#ownerID">31525197395743225-236</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00235">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>235</num></item>
+          <item ana="#ownerID">31525197395743225-237</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00236">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>236</num></item>
+          <item ana="#ownerID">31525197395743225-238</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00237">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>237</num></item>
+          <item ana="#ownerID">31525197395743225-239</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00238">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>238</num></item>
+          <item ana="#ownerID">31525197395743225-240</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00239">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>239</num></item>
+          <item ana="#ownerID">31525197395743225-241</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00240">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>240</num></item>
+          <item ana="#ownerID">31525197395743225-242</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00241">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>241</num></item>
+          <item ana="#ownerID">31525197395743225-243</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00242">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>242</num></item>
+          <item ana="#ownerID">31525197395743225-244</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00243">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>243</num></item>
+          <item ana="#ownerID">31525197395743225-245</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00244">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>244</num></item>
+          <item ana="#ownerID">31525197395743225-246</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00245">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>245</num></item>
+          <item ana="#ownerID">31525197395743225-247</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00246">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>246</num></item>
+          <item ana="#ownerID">31525197395743225-248</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00247">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>247</num></item>
+          <item ana="#ownerID">31525197395743225-249</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00248">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>248</num></item>
+          <item ana="#ownerID">31525197395743225-250</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00249">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>249</num></item>
+          <item ana="#ownerID">31525197395743225-251</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00250">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>250</num></item>
+          <item ana="#ownerID">31525197395743225-252</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00251">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>251</num></item>
+          <item ana="#ownerID">31525197395743225-253</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00252">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>252</num></item>
+          <item ana="#ownerID">31525197395743225-254</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00253">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>253</num></item>
+          <item ana="#ownerID">31525197395743225-255</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00254">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>254</num></item>
+          <item ana="#ownerID">31525197395743225-256</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00255">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>255</num></item>
+          <item ana="#ownerID">31525197395743225-257</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00256">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>256</num></item>
+          <item ana="#ownerID">31525197395743225-258</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00257">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>257</num></item>
+          <item ana="#ownerID">31525197395743225-259</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00258">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>258</num></item>
+          <item ana="#ownerID">31525197395743225-260</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00259">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>259</num></item>
+          <item ana="#ownerID">31525197395743225-261</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00260">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>260</num></item>
+          <item ana="#ownerID">31525197395743225-262</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00261">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>261</num></item>
+          <item ana="#ownerID">31525197395743225-263</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00262">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>262</num></item>
+          <item ana="#ownerID">31525197395743225-264</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00263">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>263</num></item>
+          <item ana="#ownerID">31525197395743225-265</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00264">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>264</num></item>
+          <item ana="#ownerID">31525197395743225-266</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00265">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>265</num></item>
+          <item ana="#ownerID">31525197395743225-267</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00266">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>266</num></item>
+          <item ana="#ownerID">31525197395743225-268</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00267">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>267</num></item>
+          <item ana="#ownerID">31525197395743225-269</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00268">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>268</num></item>
+          <item ana="#ownerID">31525197395743225-270</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00269">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>269</num></item>
+          <item ana="#ownerID">31525197395743225-271</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00270">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>270</num></item>
+          <item ana="#ownerID">31525197395743225-272</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00271">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>271</num></item>
+          <item ana="#ownerID">31525197395743225-273</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00272">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>272</num></item>
+          <item ana="#ownerID">31525197395743225-274</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00273">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>273</num></item>
+          <item ana="#ownerID">31525197395743225-275</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00274">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>274</num></item>
+          <item ana="#ownerID">31525197395743225-276</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00275">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>275</num></item>
+          <item ana="#ownerID">31525197395743225-277</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00276">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>276</num></item>
+          <item ana="#ownerID">31525197395743225-278</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00277">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>277</num></item>
+          <item ana="#ownerID">31525197395743225-279</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00278">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>278</num></item>
+          <item ana="#ownerID">31525197395743225-280</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00279">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>279</num></item>
+          <item ana="#ownerID">31525197395743225-281</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00280">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>280</num></item>
+          <item ana="#ownerID">31525197395743225-282</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00281">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>281</num></item>
+          <item ana="#ownerID">31525197395743225-283</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00282">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>282</num></item>
+          <item ana="#ownerID">31525197395743225-284</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00283">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>283</num></item>
+          <item ana="#ownerID">31525197395743225-285</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00284">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>284</num></item>
+          <item ana="#ownerID">31525197395743225-286</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00285">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>285</num></item>
+          <item ana="#ownerID">31525197395743225-287</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00286">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>286</num></item>
+          <item ana="#ownerID">31525197395743225-288</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00287">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>287</num></item>
+          <item ana="#ownerID">31525197395743225-289</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00288">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>288</num></item>
+          <item ana="#ownerID">31525197395743225-290</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00289">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>289</num></item>
+          <item ana="#ownerID">31525197395743225-291</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00290">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>290</num></item>
+          <item ana="#ownerID">31525197395743225-292</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00291">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>291</num></item>
+          <item ana="#ownerID">31525197395743225-293</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00292">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>292</num></item>
+          <item ana="#ownerID">31525197395743225-294</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00293">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>293</num></item>
+          <item ana="#ownerID">31525197395743225-295</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00294">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>294</num></item>
+          <item ana="#ownerID">31525197395743225-296</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00295">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>295</num></item>
+          <item ana="#ownerID">31525197395743225-297</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00296">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>296</num></item>
+          <item ana="#ownerID">31525197395743225-298</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00297">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>297</num></item>
+          <item ana="#ownerID">31525197395743225-299</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00298">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>298</num></item>
+          <item ana="#ownerID">31525197395743225-300</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00299">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>299</num></item>
+          <item ana="#ownerID">31525197395743225-301</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00300">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>300</num></item>
+          <item ana="#ownerID">31525197395743225-302</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00301">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>301</num></item>
+          <item ana="#ownerID">31525197395743225-303</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00302">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>302</num></item>
+          <item ana="#ownerID">31525197395743225-304</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00303">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>303</num></item>
+          <item ana="#ownerID">31525197395743225-305</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00304">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>304</num></item>
+          <item ana="#ownerID">31525197395743225-306</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00305">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>305</num></item>
+          <item ana="#ownerID">31525197395743225-307</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00306">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>306</num></item>
+          <item ana="#ownerID">31525197395743225-308</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00307">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>307</num></item>
+          <item ana="#ownerID">31525197395743225-309</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00308">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>308</num></item>
+          <item ana="#ownerID">31525197395743225-310</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00309">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>309</num></item>
+          <item ana="#ownerID">31525197395743225-311</item>
+        </list>
+      </desc>
+    </surface>
+    <surface xml:id="bsb10000001_00310">
+      <desc>
+        <list ana="#bsbIdent">
+          <item ana="#sequenceNo"><num>310</num></item>
+          <item ana="#ownerID">31525197395743225-312</item>
+        </list>
+      </desc>
+    </surface>
+  </facsimile>
+  <facsimile ana="#facsMeta" sameAs="#bsb10000001_facs">
+    <surface sameAs="#bsb10000001_00001">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00001_fs01" ana="#binding">
+            <term>Vorderdeckel</term>
+          </item>
+          <item resp="#googleMETS" xml:id="bsb10000001_00001_fs02" ana="#binding"><term>Vorderdeckel</term>
+            <desc>innen</desc>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00001_fg01" ana="#FRONT_COVER"/>
+          <item xml:id="bsb10000001_00001_fg02" ana="#INSIDE_FRONT_COVER"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00003">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00003_fs01" ana="#section">
+            <desc>Textbeginn</desc>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00003_fg01" ana="#FIRST_CONTENT_CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00029">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00029_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00029_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00039">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00039_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00039_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00069">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00069_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00069_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00072">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00072_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00072_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00076">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00076_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00076_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00162">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00162_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00162_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00166">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00166_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00166_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00168">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00168_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00168_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00170">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00170_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00170_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00172">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00172_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00172_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00176">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00176_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00176_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00180">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00180_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00180_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00182">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00182_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00182_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00184">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00184_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00184_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00186">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00186_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00186_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00188">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00188_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00188_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00190">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00190_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00190_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00194">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00194_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00194_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00202">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00202_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00202_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00205">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00205_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00205_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00207">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00207_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00207_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00214">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00214_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00214_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00218">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00218_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00218_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00220">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00220_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00220_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00249">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00249_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00249_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00255">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00255_fs01" ana="#section">
+            <term>Abschnitt</term>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00255_fg01" ana="#CHAPTER_START"/>
+        </list>
+      </desc>
+    </surface>
+    <surface sameAs="#bsb10000001_00310">
+      <desc>
+        <list ana="#bsbStruc">
+          <item resp="#googleMETS" xml:id="bsb10000001_00310_fs01" ana="#binding">
+            <term>Rückdeckel</term>
+          </item>
+          <item resp="#googleMETS" xml:id="bsb10000001_00310_fs02" ana="#binding">
+            <term>Rückdeckel</term>
+            <desc>innen</desc>
+          </item>
+        </list>
+        <list ana="#googleStruc">
+          <item xml:id="bsb10000001_00310_fg01" ana="#BACK_COVER"/>
+          <item xml:id="bsb10000001_00310_fg02" ana="#INSIDE_BACK_COVER"/>
+        </list>
+      </desc>
+    </surface>
+  </facsimile>
+</TEI>
+  
+    
+      
+      
+      
+        
+      
+      
+        
+      
+    
+    
+    
+      
+    
+    
+  
+  
+  
