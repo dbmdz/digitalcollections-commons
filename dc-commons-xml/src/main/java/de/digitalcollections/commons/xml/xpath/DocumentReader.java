@@ -104,7 +104,7 @@ class DocumentReader {
   private Map<Locale, String> executeTemplate(
       String templateString, Map<String, Map<Locale, String>> resolvedVariables)
       throws XPathExpressionException {
-    Set<Locale> langs =
+    Set<Locale> locales =
         resolvedVariables.values().stream()
             .map(Map::keySet) // Get set of languages for each resolved variable
             .flatMap(Collection::stream) // Flatten these sets into a single stream
@@ -112,16 +112,14 @@ class DocumentReader {
                 Collectors.toCollection(
                     LinkedHashSet::new)); // Store the stream in a set (thereby pruning duplicates)
 
-    // just get all languages (not locales) to make following "undefined" language detection easier
-    List<String> languages =
-        langs.stream().map(locale -> locale.getLanguage()).collect(Collectors.toList());
-
     Map<Locale, String> out = new LinkedHashMap<>();
     // Resolve the <...> contexts
-    for (Locale lang : langs) {
-      if (Locale.ROOT == lang && languages.contains("und")) {
-        // skip to avoid duplicate entries, as we define that the base locale (with no language) is
-        // also "undefined"
+    for (Locale locale : locales) {
+      final String language = locale.getLanguage();
+      if ((language == null || language.isEmpty()) && locales.size() > 1) {
+        // if locale has no language (like "empty" locale Locale.ROOT), skip it,
+        // it should not be added as own language as it is no language of interest to be listed
+        // (this happens if e.g. a language unspecific variable is in template - e.g. number of pages)
         continue;
       }
       String stringRepresentation = templateString;
@@ -129,7 +127,7 @@ class DocumentReader {
       while (context != null) {
         stringRepresentation =
             stringRepresentation.replace(
-                "<" + context + ">", resolveVariableContext(lang, context, resolvedVariables));
+                "<" + context + ">", resolveVariableContext(locale, context, resolvedVariables));
         context = extractContext(stringRepresentation);
       }
 
@@ -141,8 +139,8 @@ class DocumentReader {
           return null;
         }
         Locale langToResolve;
-        if (resolvedVariables.get(varName).containsKey(lang)) {
-          langToResolve = lang;
+        if (resolvedVariables.get(varName).containsKey(locale)) {
+          langToResolve = locale;
         } else {
           langToResolve = resolvedVariables.get(varName).entrySet().iterator().next().getKey();
         }
@@ -153,7 +151,7 @@ class DocumentReader {
       }
 
       // And un-escape the pointy brackets
-      out.put(lang, stringRepresentation.replace("\\<", "<").replace("\\>", ">"));
+      out.put(locale, stringRepresentation.replace("\\<", "<").replace("\\>", ">"));
     }
     return out;
   }
