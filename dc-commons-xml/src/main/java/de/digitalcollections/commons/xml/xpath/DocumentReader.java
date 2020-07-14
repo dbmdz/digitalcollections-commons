@@ -360,11 +360,10 @@ class DocumentReader {
       // We only have a language, no script
       return new Locale.Builder().setLanguage(localeCode).build();
     }
-    Pattern pattern = Pattern.compile("^(.*)-(.*)$");
-    Matcher matcher = pattern.matcher(localeCode);
-    if (matcher.find()) {
-      String language = matcher.group(1);
-      String script = matcher.group(2);
+    String[] parts = localeCode.split("-");
+    if (parts.length == 2) {
+      String language = parts[0];
+      String script = parts[1];
       // We have language and script
       return new Locale.Builder().setLanguage(language).setScript(script).build();
     }
