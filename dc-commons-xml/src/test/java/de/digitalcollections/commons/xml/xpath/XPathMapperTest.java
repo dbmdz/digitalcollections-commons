@@ -70,6 +70,16 @@ public class XPathMapperTest {
     assertThat(mapper.getTitle().values().toArray()[0]).isEqualTo("Ein Titel: Ein Untertitel");
   }
 
+  @DisplayName("shall evaulate boolean expressions")
+  @Test
+  public void testBooleanExpressions() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
+    assertThat(mapper.containsAuthors()).isTrue();
+
+    TestMapper mapper2 = testMapperFixture.setUpMapperWithResource("simple.xml");
+    assertThat(mapper2.containsAuthors()).isFalse();
+  }
+
   @DisplayName("shall evaluate correct title mapping")
   @Test
   public void testPageXmlTitle() throws Exception {
@@ -298,6 +308,13 @@ public class XPathMapperTest {
     Map<Locale, String> getAuthor() {
       return author;
     }
+
+    @XPathBinding("count(" + BIBLSTRUCT_PATH + "/monogr/author)>0")
+    Boolean containsAuthors;
+    public Boolean containsAuthors() {
+      return containsAuthors;
+    }
+
 
     List<Element> authorElements;
 
