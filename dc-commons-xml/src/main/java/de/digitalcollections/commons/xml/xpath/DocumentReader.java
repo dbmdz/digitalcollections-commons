@@ -23,10 +23,11 @@ import org.w3c.dom.Node;
 
 /** Helper class to read simple or templated values from an XML document. */
 class DocumentReader {
+
   private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_-]+?)}");
   private final List<String> rootPaths;
   private final XPathWrapper xpw;
-  private static final Locale EMPTY_LOCALE = determineLocaleFromCode("");
+  private static final Locale EMPTY_LOCALE = Locale.ROOT;
 
   public DocumentReader(Document doc, List<String> rootPaths, String namespace) {
     this.rootPaths = rootPaths;
@@ -103,7 +104,7 @@ class DocumentReader {
   private Map<Locale, String> executeTemplate(
       String templateString, Map<String, Map<Locale, String>> resolvedVariables)
       throws XPathExpressionException {
-    Set<Locale> langs =
+    Set<Locale> locales =
         resolvedVariables.values().stream()
             .map(Map::keySet) // Get set of languages for each resolved variable
             .flatMap(Collection::stream) // Flatten these sets into a single stream
@@ -113,13 +114,21 @@ class DocumentReader {
 
     Map<Locale, String> out = new LinkedHashMap<>();
     // Resolve the <...> contexts
-    for (Locale lang : langs) {
+    for (Locale locale : locales) {
+      final String language = locale.getLanguage();
+      if ((language == null || language.isEmpty()) && locales.size() > 1) {
+        // if locale has no language (like "empty" locale Locale.ROOT), skip it as long there is another language,
+        // it should not be added as own language as it is no language of interest to be listed
+        // (this happens if e.g. a language unspecific variable is in template - e.g. number of
+        // pages; skipping it does no harm as value of variable is in template of other language, too)
+        continue;
+      }
       String stringRepresentation = templateString;
       String context = extractContext(stringRepresentation);
       while (context != null) {
         stringRepresentation =
             stringRepresentation.replace(
-                "<" + context + ">", resolveVariableContext(lang, context, resolvedVariables));
+                "<" + context + ">", resolveVariableContext(locale, context, resolvedVariables));
         context = extractContext(stringRepresentation);
       }
 
@@ -131,8 +140,8 @@ class DocumentReader {
           return null;
         }
         Locale langToResolve;
-        if (resolvedVariables.get(varName).containsKey(lang)) {
-          langToResolve = lang;
+        if (resolvedVariables.get(varName).containsKey(locale)) {
+          langToResolve = locale;
         } else {
           langToResolve = resolvedVariables.get(varName).entrySet().iterator().next().getKey();
         }
@@ -143,7 +152,7 @@ class DocumentReader {
       }
 
       // And un-escape the pointy brackets
-      out.put(lang, stringRepresentation.replace("\\<", "<").replace("\\>", ">"));
+      out.put(locale, stringRepresentation.replace("\\<", "<").replace("\\>", ">"));
     }
     return out;
   }
@@ -346,18 +355,19 @@ class DocumentReader {
     }
 
     // For cases, in which the language could not be determined
-    // (e.g. for "und"), we have to re-build the locale manually
-    String[] localeCodeParts = localeCode.split("-");
-    if (localeCodeParts.length == 1) {
-      // We only have a language, probably "und"
-      return new Locale.Builder().setLanguage(localeCodeParts[0]).build();
-    } else {
-      // We have language and script
-      return new Locale.Builder()
-          .setLanguage(localeCodeParts[0])
-          .setScript(localeCodeParts[1])
-          .build();
+    // (e.g. for "und", "und-Latn"), we have to re-build the locale manually
+    if (!localeCode.contains("-")) {
+      // We only have a language, no script
+      return new Locale.Builder().setLanguage(localeCode).build();
     }
+    String[] parts = localeCode.split("-");
+    if (parts.length == 2) {
+      String language = parts[0];
+      String script = parts[1];
+      // We have language and script
+      return new Locale.Builder().setLanguage(language).setScript(script).build();
+    }
+    return EMPTY_LOCALE;
   }
 
   private String[] prependWithRootPaths(String[] paths) {

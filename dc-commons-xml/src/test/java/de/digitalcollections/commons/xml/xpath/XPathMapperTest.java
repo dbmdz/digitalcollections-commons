@@ -67,7 +67,18 @@ public class XPathMapperTest {
   @Test
   public void testTemplateWithContext() throws Exception {
     TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsbstruc.xml");
-    assertThat(mapper.getTitle()).isEqualTo("Ein Titel: Ein Untertitel");
+    assertThat(mapper.getTitle().values().toArray()[0]).isEqualTo("Ein Titel: Ein Untertitel");
+  }
+
+  @DisplayName("shall evaluate correct title mapping")
+  @Test
+  public void testPageXmlTitle() throws Exception {
+    TestMapper mapper = testMapperFixture.setUpMapperWithResource("bsb10000001_page.xml");
+    final Map<Locale, String> title = mapper.getTitle();
+    assertThat(title.size()).isEqualTo(1);
+    assertThat(title.values().toArray()[0])
+        .isEqualTo(
+            "Actorum Bohemicorum, ... Theil, Das ist: Warhaffte vnd eigentliche Beschreibung aller fürnembsten vnd denckwürdigsten Historien vnd Geschichten, Welche sich im Königreich Böheim vnd dessen incorporirten Ländern ... begeben vnd zugetragen haben: Auß allerhand glaubwürdigen Publicis scriptis in eine feine richtige Ordnung zusammen verfasset, jetzo mit fleiß ubersehen, gemehret vnd auffs newe zugerichtet [. 1]");
   }
 
   @DisplayName("shall evaluate an expression in a setter without template")
@@ -286,7 +297,7 @@ public class XPathMapperTest {
 
     Map<Locale, String> getAuthor() {
       return author;
-    };
+    }
 
     List<Element> authorElements;
 
@@ -345,9 +356,9 @@ public class XPathMapperTest {
               name = "partTitle",
               paths = {BIBLSTRUCT_PATH + "/monogr/title[@type=\"part\"]"})
         })
-    String title;
+    Map<Locale, String> title;
 
-    String getTitle() {
+    Map<Locale, String> getTitle() {
       return title;
     }
 
