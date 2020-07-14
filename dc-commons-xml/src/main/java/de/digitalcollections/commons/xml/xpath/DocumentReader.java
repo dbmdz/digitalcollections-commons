@@ -367,7 +367,7 @@ class DocumentReader {
       // We have language and script
       return new Locale.Builder().setLanguage(language).setScript(script).build();
     }
-    return Locale.ROOT; // an undefined locale
+    return EMPTY_LOCALE;
   }
 
   private String[] prependWithRootPaths(String[] paths) {
