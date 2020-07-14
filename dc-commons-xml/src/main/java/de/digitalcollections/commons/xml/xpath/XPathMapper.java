@@ -51,6 +51,7 @@ public class XPathMapper<T> {
 
   // Various Guava type tokens to help with reflection
   private static final TypeToken<String> SINGLEVALUED_TYPE = new TypeToken<>() {};
+  private static final TypeToken<Boolean> FLAG_TYPE = new TypeToken<>() {};
   private static final TypeToken<List<?>> MULTIVALUED_TYPE = new TypeToken<>() {};
   private static final TypeToken<List<String>> MULTIVALUED_STRING_TYPE = new TypeToken<>() {};
   private static final TypeToken<List<Element>> MULTIVALUED_ELEMENT_TYPE = new TypeToken<>() {};
@@ -312,6 +313,7 @@ public class XPathMapper<T> {
     private boolean multiValued;
     private boolean multiLanguage;
     private boolean multiValuedElements;
+    private boolean flag;
     private final List<String> paths;
 
     public SimpleField(Method m, String[] paths) throws XPathMappingException {
@@ -332,15 +334,17 @@ public class XPathMapper<T> {
       boolean isSingleLocalized = LOCALIZED_SINGLEVALUED_TYPE.isSubtypeOf(targetType);
       boolean isMultiValued = MULTIVALUED_STRING_TYPE.isSubtypeOf(targetType);
       boolean isSingleValued = SINGLEVALUED_TYPE.isSubtypeOf(targetType);
+      this.flag = FLAG_TYPE.isSubtypeOf(targetType);
       this.multiLanguage = isMultiLocalized || isSingleLocalized;
       this.multiValued = isMultiValued || isMultiLocalized;
       this.multiValuedElements = MULTIVALUED_ELEMENT_TYPE.isSubtypeOf(targetType);
-      if (!multiLanguage && !multiValued && !multiValuedElements && !isSingleValued) {
+      if (!multiLanguage && !multiValued && !multiValuedElements && !isSingleValued && !flag) {
         throw new XPathMappingException(
             String.format(
                 "Binding method has illegal target type %s, must be one of %s, %s, %s, %s or %s",
                 targetType,
                 SINGLEVALUED_TYPE,
+                FLAG_TYPE,
                 MULTIVALUED_STRING_TYPE,
                 MULTIVALUED_ELEMENT_TYPE,
                 LOCALIZED_SINGLEVALUED_TYPE,
@@ -358,6 +362,8 @@ public class XPathMapper<T> {
         return r.readValues(paths);
       } else if (multiLanguage) {
         return r.readLocalizedValue(paths);
+      } else if (flag) {
+        return Boolean.valueOf(r.readValue(paths));
       } else {
         return r.readValue(paths);
       }
