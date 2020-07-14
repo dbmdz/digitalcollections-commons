@@ -117,10 +117,12 @@ class DocumentReader {
     for (Locale locale : locales) {
       final String language = locale.getLanguage();
       if ((language == null || language.isEmpty()) && locales.size() > 1) {
-        // if locale has no language (like "empty" locale Locale.ROOT), skip it as long there is another language,
+        // if locale has no language (like "empty" locale Locale.ROOT), skip it as long there is
+        // another language,
         // it should not be added as own language as it is no language of interest to be listed
         // (this happens if e.g. a language unspecific variable is in template - e.g. number of
-        // pages; skipping it does no harm as value of variable is in template of other language, too)
+        // pages; skipping it does no harm as value of variable is in template of other language,
+        // too)
         continue;
       }
       String stringRepresentation = templateString;
