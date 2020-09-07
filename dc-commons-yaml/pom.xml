@@ -14,7 +14,7 @@
   <packaging>jar</packaging>
   
   <properties>
-    <version.assertj>3.17.1</version.assertj>
+    <version.assertj>3.17.2</version.assertj>
     <version.joda-time>2.10.6</version.joda-time>
     <version.junit>5.6.2</version.junit>
     <version.slf4j>1.7.30</version.slf4j>
