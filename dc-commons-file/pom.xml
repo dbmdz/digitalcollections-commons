@@ -17,7 +17,7 @@
     <version.assertj-core>3.17.2</version.assertj-core>
     <version.dc-model>6.1.1</version.dc-model>
     <version.junit>5.7.0</version.junit>
-    <version.mockito-core>3.5.10</version.mockito-core>
+    <version.mockito-core>3.5.11</version.mockito-core>
     <version.slf4j>1.7.30</version.slf4j>
     <version.snakeyaml>1.27</version.snakeyaml>
     <version.spring>5.2.8.RELEASE</version.spring>
