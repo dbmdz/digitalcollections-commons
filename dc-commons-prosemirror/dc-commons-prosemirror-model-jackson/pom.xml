@@ -15,7 +15,7 @@
   <properties>
     <version.assertj>3.17.2</version.assertj>
     <version.commons-beanutils>1.9.4</version.commons-beanutils>
-    <version.jackson-annotations>2.11.2</version.jackson-annotations>
+    <version.jackson-annotations>2.11.3</version.jackson-annotations>
     <version.jackson-core>2.11.2</version.jackson-core>
     <version.jackson-databind>2.11.0</version.jackson-databind>
     <version.junit>5.7.0</version.junit>
