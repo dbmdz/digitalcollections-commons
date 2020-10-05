@@ -311,10 +311,10 @@ public class XPathMapperTest {
 
     @XPathBinding("count(" + BIBLSTRUCT_PATH + "/monogr/author)>0")
     Boolean containsAuthors;
+
     public Boolean containsAuthors() {
       return containsAuthors;
     }
-
 
     List<Element> authorElements;
 
