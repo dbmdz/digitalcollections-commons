@@ -1,6 +1,6 @@
 package de.digitalcollections.commons.jdbi;
 
-import de.digitalcollections.model.api.identifiable.resource.MimeType;
+import de.digitalcollections.model.file.MimeType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import org.jdbi.v3.core.config.ConfigRegistry;
