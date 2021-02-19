@@ -1,9 +1,8 @@
 package de.digitalcollections.commons.springdata.domain;
 
-import de.digitalcollections.model.api.paging.Order;
-import de.digitalcollections.model.api.paging.enums.Direction;
-import de.digitalcollections.model.api.paging.enums.NullHandling;
-import de.digitalcollections.model.impl.paging.OrderImpl;
+import de.digitalcollections.model.paging.Direction;
+import de.digitalcollections.model.paging.NullHandling;
+import de.digitalcollections.model.paging.Order;
 import org.springframework.data.domain.Sort;
 
 public class OrderConverter {
@@ -17,7 +16,7 @@ public class OrderConverter {
 
     Direction dcDirection = convert(direction);
     NullHandling dcNullHandling = convert(nullHandling);
-    Order dcOrder = new OrderImpl(dcDirection, order.getProperty(), dcNullHandling);
+    Order dcOrder = new Order(dcDirection, order.getProperty(), dcNullHandling);
     return dcOrder;
   }
 

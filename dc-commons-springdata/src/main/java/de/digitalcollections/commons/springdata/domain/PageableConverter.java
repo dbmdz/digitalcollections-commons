@@ -1,9 +1,7 @@
 package de.digitalcollections.commons.springdata.domain;
 
-import de.digitalcollections.model.api.paging.PageRequest;
-import de.digitalcollections.model.api.paging.Sorting;
-import de.digitalcollections.model.impl.paging.PageRequestImpl;
-import de.digitalcollections.model.impl.paging.SortingImpl;
+import de.digitalcollections.model.paging.PageRequest;
+import de.digitalcollections.model.paging.Sorting;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -19,7 +17,7 @@ public class PageableConverter {
     final Sort sort = pageable.getSort();
     Sorting sorting = SortConverter.convert(sort);
 
-    PageRequest pageRequest = new PageRequestImpl(pageNumber, pageSize, sorting);
+    PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sorting);
     return pageRequest;
   }
 
@@ -30,7 +28,7 @@ public class PageableConverter {
       pageRequest.setPageSize(defaultPageSize);
     }
     if (pageRequest.getSorting() == null && defaultSortField != null) {
-      Sorting sorting = new SortingImpl(defaultSortField);
+      Sorting sorting = new Sorting(defaultSortField);
       pageRequest.setSorting(sorting);
     }
     return pageRequest;
