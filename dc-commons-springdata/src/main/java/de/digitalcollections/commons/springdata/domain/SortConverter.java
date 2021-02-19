@@ -1,8 +1,7 @@
 package de.digitalcollections.commons.springdata.domain;
 
-import de.digitalcollections.model.api.paging.Order;
-import de.digitalcollections.model.api.paging.Sorting;
-import de.digitalcollections.model.impl.paging.SortingImpl;
+import de.digitalcollections.model.paging.Order;
+import de.digitalcollections.model.paging.Sorting;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +22,7 @@ public class SortConverter {
     if (orders.isEmpty()) {
       return null;
     }
-    Sorting sorting = new SortingImpl(orders);
+    Sorting sorting = new Sorting(orders);
     return sorting;
   }
 
