@@ -21,7 +21,7 @@
     <version.mockito-java8>2.5.0</version.mockito-java8>
     <version.servlet-api>4.0.1</version.servlet-api>
     <version.slf4j>1.7.30</version.slf4j>
-    <version.spring>5.2.9.RELEASE</version.spring>
+    <version.spring>5.3.4</version.spring>
     <version.spring-security>5.4.0</version.spring-security>
     <version.thymeleaf>3.0.11.RELEASE</version.thymeleaf>
   </properties>
