@@ -23,7 +23,7 @@
     <version.micrometer>1.5.5</version.micrometer>
     <version.mockito-core>3.6.0</version.mockito-core>
     <version.slf4j>1.7.30</version.slf4j>
-    <version.snakeyaml>1.27</version.snakeyaml>
+    <version.snakeyaml>1.28</version.snakeyaml>
     <version.spring>5.2.9.RELEASE</version.spring>
     <version.spring-boot>2.3.4.RELEASE</version.spring-boot>
     <version.spring-boot-starter-jsondoc>1.2.22</version.spring-boot-starter-jsondoc>
