@@ -2,10 +2,10 @@ package de.digitalcollections.commons.file.business.impl;
 
 import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
 import de.digitalcollections.commons.file.business.api.FileResourceService;
-import de.digitalcollections.model.api.identifiable.resource.FileResource;
-import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
+import de.digitalcollections.model.exception.ResourceIOException;
+import de.digitalcollections.model.exception.ResourceNotFoundException;
+import de.digitalcollections.model.file.MimeType;
+import de.digitalcollections.model.identifiable.resource.FileResource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
