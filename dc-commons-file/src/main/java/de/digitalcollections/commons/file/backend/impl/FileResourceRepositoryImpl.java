@@ -2,16 +2,15 @@ package de.digitalcollections.commons.file.backend.impl;
 
 import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
 import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
-import de.digitalcollections.model.api.identifiable.resource.FileResource;
-import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
-import de.digitalcollections.model.impl.identifiable.resource.ApplicationFileResourceImpl;
-import de.digitalcollections.model.impl.identifiable.resource.AudioFileResourceImpl;
-import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
-import de.digitalcollections.model.impl.identifiable.resource.ImageFileResourceImpl;
-import de.digitalcollections.model.impl.identifiable.resource.TextFileResourceImpl;
-import de.digitalcollections.model.impl.identifiable.resource.VideoFileResourceImpl;
+import de.digitalcollections.model.exception.ResourceIOException;
+import de.digitalcollections.model.exception.ResourceNotFoundException;
+import de.digitalcollections.model.file.MimeType;
+import de.digitalcollections.model.identifiable.resource.ApplicationFileResource;
+import de.digitalcollections.model.identifiable.resource.AudioFileResource;
+import de.digitalcollections.model.identifiable.resource.FileResource;
+import de.digitalcollections.model.identifiable.resource.ImageFileResource;
+import de.digitalcollections.model.identifiable.resource.TextFileResource;
+import de.digitalcollections.model.identifiable.resource.VideoFileResource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,7 +97,7 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
 
   @Override
   public FileResource create() {
-    return new FileResourceImpl();
+    return new FileResource();
   }
 
   @Override
@@ -126,25 +125,25 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
   @Override
   public FileResource createByMimeType(MimeType mimeType) {
     if (mimeType == null) {
-      return new ApplicationFileResourceImpl();
+      return new ApplicationFileResource();
     }
     FileResource result;
     String primaryType = mimeType.getPrimaryType();
     switch (primaryType) {
       case "audio":
-        result = new AudioFileResourceImpl();
+        result = new AudioFileResource();
         break;
       case "image":
-        result = new ImageFileResourceImpl();
+        result = new ImageFileResource();
         break;
       case "text":
-        result = new TextFileResourceImpl();
+        result = new TextFileResource();
         break;
       case "video":
-        result = new VideoFileResourceImpl();
+        result = new VideoFileResource();
         break;
       default:
-        result = new ApplicationFileResourceImpl();
+        result = new ApplicationFileResource();
     }
     result.setMimeType(mimeType);
     return result;

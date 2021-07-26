@@ -1,8 +1,8 @@
 package de.digitalcollections.commons.file.backend.impl;
 
 import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
-import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.exception.ResourceIOException;
+import de.digitalcollections.model.file.MimeType;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;

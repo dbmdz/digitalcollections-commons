@@ -1,6 +1,6 @@
 package de.digitalcollections.commons.file.backend.impl;
 
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
+import de.digitalcollections.model.exception.ResourceIOException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

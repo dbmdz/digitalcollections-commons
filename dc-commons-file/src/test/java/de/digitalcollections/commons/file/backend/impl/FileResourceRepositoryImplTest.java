@@ -7,11 +7,10 @@ import static org.mockito.Mockito.when;
 
 import de.digitalcollections.commons.file.business.api.FileResourceService;
 import de.digitalcollections.commons.file.config.SpringConfigCommonsFile;
-import de.digitalcollections.model.api.identifiable.resource.FileResource;
-import de.digitalcollections.model.api.identifiable.resource.MimeType;
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceIOException;
-import de.digitalcollections.model.api.identifiable.resource.exceptions.ResourceNotFoundException;
-import de.digitalcollections.model.impl.identifiable.resource.FileResourceImpl;
+import de.digitalcollections.model.exception.ResourceIOException;
+import de.digitalcollections.model.exception.ResourceNotFoundException;
+import de.digitalcollections.model.file.MimeType;
+import de.digitalcollections.model.identifiable.resource.FileResource;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
@@ -52,7 +51,7 @@ public class FileResourceRepositoryImplTest {
   public void assertNonexistingFile(@TempDir Path tempDir) {
     assertThatThrownBy(
             () -> {
-              FileResource nonexistingResource = new FileResourceImpl();
+              FileResource nonexistingResource = new FileResource();
               nonexistingResource.setUri(tempDir.resolve("nonexistant").toUri());
               nonexistingResource.setMimeType(MimeType.MIME_WILDCARD);
               resourceRepository.assertReadability(nonexistingResource);
@@ -66,7 +65,7 @@ public class FileResourceRepositoryImplTest {
     Path createdFile = Files.createFile(file);
     assertThatThrownBy(
             () -> {
-              FileResource zeroByteLengthResource = new FileResourceImpl();
+              FileResource zeroByteLengthResource = new FileResource();
               zeroByteLengthResource.setUri(createdFile.toUri());
               zeroByteLengthResource.setMimeType(MimeType.MIME_WILDCARD);
               resourceRepository.assertReadability(zeroByteLengthResource);
