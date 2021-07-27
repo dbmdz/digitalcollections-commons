@@ -26,7 +26,7 @@
     <version.snakeyaml>1.30</version.snakeyaml>
     <version.spring>5.2.9.RELEASE</version.spring>
     <version.spring-boot>2.3.4.RELEASE</version.spring-boot>
-    <version.spring-boot-starter-jsondoc>1.2.22</version.spring-boot-starter-jsondoc>
+    <version.spring-boot-starter-jsondoc>1.2.23</version.spring-boot-starter-jsondoc>
   </properties>
 
   <dependencies>
