@@ -6,12 +6,12 @@
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
-    <version>4.1.1</version>
+    <version>4.2.0-SNAPSHOT</version>
   </parent>
 
   <name>DigitalCollections: Commons Spring Boot (Spring Boot 2)</name>
   <artifactId>dc-commons-springboot</artifactId>
-  <version>4.1.1</version>
+  <version>4.2.0</version>
   <packaging>jar</packaging>
 
   <properties>
