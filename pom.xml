@@ -4,7 +4,7 @@
 
   <groupId>de.digitalcollections.commons</groupId>
   <artifactId>dc-commons</artifactId>
-  <version>4.1.1</version>
+  <version>4.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -17,6 +17,7 @@
     <module>dc-commons-springdata</module>
     <module>dc-commons-springmvc</module>
     <module>dc-commons-springsecurity</module>
+    <module>dc-commons-web</module>
     <module>dc-commons-validation</module>
     <module>dc-commons-xml</module>
     <module>dc-commons-yaml</module>

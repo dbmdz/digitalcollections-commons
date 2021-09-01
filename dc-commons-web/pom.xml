@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
@@ -9,23 +7,23 @@
     <artifactId>dc-commons</artifactId>
     <version>4.2.0-SNAPSHOT</version>
   </parent>
-
-  <name>DigitalCollections: Commons Validation</name>
-  <artifactId>dc-commons-validation</artifactId>
-  <version>4.1.0</version>
+  
+  <name>DigitalCollections: Commons Web</name>
+  <artifactId>dc-commons-web</artifactId>
+  <version>4.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-
+  
   <properties>
     <version.assertj>3.20.2</version.assertj>
-    <version.commons-lang3>3.11</version.commons-lang3>
+    <version.icu4j>63.1</version.icu4j>
     <version.junit>5.7.2</version.junit>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${version.commons-lang3}</version>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>${version.icu4j}</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
