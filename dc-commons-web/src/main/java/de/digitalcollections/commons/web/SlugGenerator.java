@@ -47,7 +47,7 @@ public class SlugGenerator {
     // All non A-Za-z0-9 characters are replaced by a dash
     slug = slug.replaceAll("[^\\p{IsAlphabetic}\\p{IsDigit}-]", "-");
     // Repeating dashes are removed
-    slug = slug.replaceAll("--", "-");
+    slug = slug.replaceAll("-+", "-");
     // Remove initial and final dashes
     slug = slug.replaceAll("^-", "").replaceAll("-$", "");
     // Transform string to lowercase
