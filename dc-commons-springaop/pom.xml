@@ -10,7 +10,7 @@
   
   <name>DigitalCollections: Commons Spring AOP</name>
   <artifactId>dc-commons-springaop</artifactId>
-  <version>4.2.0</version>
+  <version>4.1.1</version>
   <packaging>jar</packaging>
   
   <properties>

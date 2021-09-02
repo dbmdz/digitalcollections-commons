@@ -11,7 +11,7 @@
 
   <name>DigitalCollections: Commons Spring Boot (Spring Boot 2)</name>
   <artifactId>dc-commons-springboot</artifactId>
-  <version>4.2.0</version>
+  <version>4.1.1</version>
   <packaging>jar</packaging>
 
   <properties>
