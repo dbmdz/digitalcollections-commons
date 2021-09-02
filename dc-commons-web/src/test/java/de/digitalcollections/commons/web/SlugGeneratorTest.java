@@ -57,5 +57,4 @@ class SlugGeneratorTest {
   public void noRepeatingDashes() {
     assertThat(slugGenerator.generateSlug("Paragraph $1")).isEqualTo("paragraph-1");
   }
-
 }

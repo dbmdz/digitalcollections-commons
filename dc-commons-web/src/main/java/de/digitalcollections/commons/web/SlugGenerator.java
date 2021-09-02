@@ -10,17 +10,18 @@ public class SlugGenerator {
 
   private final Transliterator transliterator;
 
-  /**
-   * Default constructor for transliteration of german umlauts and further latin characters
-   */
+  /** Default constructor for transliteration of german umlauts and further latin characters */
   public SlugGenerator() {
     this("Any-Latin; de-ASCII");
   }
 
   /**
-   * Constructor, if other transliteration than german umlauts and further latin characters is required.
+   * Constructor, if other transliteration than german umlauts and further latin characters is
+   * required.
+   *
    * @param transliteratorId the ids for the transliteration charset(s)
-   * @see <a href="https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/com/ibm/icu/text/Transliterator.html">https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/com/ibm/icu/text/Transliterator.html</a>
+   * @see <a
+   *     href="https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/com/ibm/icu/text/Transliterator.html">https://unicode-org.github.io/icu-docs/apidoc/dev/icu4j/com/ibm/icu/text/Transliterator.html</a>
    */
   public SlugGenerator(String transliteratorId) {
     transliterator = Transliterator.getInstance(transliteratorId);
@@ -38,7 +39,7 @@ public class SlugGenerator {
    * @return slug in a web-compatible but human readable form
    */
   public String generateSlug(String string) {
-    if (string==null || string.isBlank()) {
+    if (string == null || string.isBlank()) {
       return string;
     }
 
