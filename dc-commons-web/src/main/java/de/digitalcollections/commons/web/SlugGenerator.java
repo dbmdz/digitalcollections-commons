@@ -49,7 +49,7 @@ public class SlugGenerator {
     // Repeating dashes are removed
     slug = slug.replaceAll("-+", "-");
     // Remove initial and final dashes
-    slug = slug.replaceAll("^-", "").replaceAll("-$", "");
+    slug = slug.replaceAll("^-+", "").replaceAll("-+$", "");
     // Transform string to lowercase
     slug = slug.toLowerCase(Locale.ROOT);
     return slug;
