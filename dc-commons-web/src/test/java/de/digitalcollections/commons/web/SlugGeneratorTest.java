@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @DisplayName("The slug generator")
 class SlugGeneratorTest {
@@ -56,5 +58,38 @@ class SlugGeneratorTest {
   @Test
   public void noRepeatingDashes() {
     assertThat(slugGenerator.generateSlug("Paragraph $1")).isEqualTo("paragraph-1");
+  }
+
+  @DisplayName("does not trim, when the length is lower than the allowed length")
+  @ParameterizedTest
+  @CsvSource(
+      value = {
+          ",",
+          "12345 7890,12345-7890"
+      })
+  public void noTrimWhenShortEnough(String input, String expected) {
+    slugGenerator.setMaxLength(10);
+    assertThat(slugGenerator.generateSlug(input)).isEqualTo(expected);
+  }
+
+  @DisplayName("trims slugs without dashes exactly at maximum allowed length")
+  @Test
+  public void trimNoDashesAtMaximumLength() {
+    slugGenerator.setMaxLength(10);
+    assertThat(slugGenerator.generateSlug("1234567890123")).isEqualTo("1234567890");
+  }
+
+  @DisplayName("trims slugs with dashes at the last dash before reaching allowed length")
+  @ParameterizedTest
+  @CsvSource(
+      value = {
+          "123-567-90,123-567-90",
+          "123-567-901,123-567",
+          "123-5678901,123",
+          "123-56-78-1,123-56-78"
+      })
+  public void trimAtLastDashBeforeLimit(String input, String expected) {
+    slugGenerator.setMaxLength(10);
+    assertThat(slugGenerator.generateSlug(input)).isEqualTo(expected);
   }
 }

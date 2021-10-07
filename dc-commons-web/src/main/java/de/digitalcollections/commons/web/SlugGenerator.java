@@ -9,6 +9,7 @@ import java.util.Locale;
 public class SlugGenerator {
 
   private final Transliterator transliterator;
+  private int maxLength = -1;
 
   /** Default constructor for transliteration of german umlauts and further latin characters */
   public SlugGenerator() {
@@ -25,6 +26,20 @@ public class SlugGenerator {
    */
   public SlugGenerator(String transliteratorId) {
     transliterator = Transliterator.getInstance(transliteratorId);
+  }
+
+  /**
+   * Set the max length, a slug can have. If unset, its length is unlimited.
+   * <br>
+   * If limited, then the slug is stripped according to the following receipt:
+   * <ul>
+   *   <li>If the slug contains no dashes, it is cutted hard at the exact length</li>
+   *   <li>If it contains dashes, it is cutted at the last dash before the maximum allowed length</li>
+   * </ul>
+   * @param maxLength
+   */
+  public void setMaxLength(int maxLength) {
+    this.maxLength = maxLength;
   }
 
   /**
@@ -53,6 +68,24 @@ public class SlugGenerator {
     slug = slug.replaceAll("^-+", "").replaceAll("-+$", "");
     // Transform string to lowercase
     slug = slug.toLowerCase(Locale.ROOT);
+
+    if (maxLength > 0) {
+      slug = limitLength(slug);
+    }
     return slug;
+  }
+
+  private String limitLength(String slug) {
+    if (slug==null || slug.isEmpty() || slug.length() <= maxLength) {
+      return slug;
+    }
+
+    // If no dashes are found, we must just cut it to <maxlength>
+    if (!slug.contains("-")) {
+      return slug.substring(0, maxLength);
+    }
+
+    // otherwise first cut to <maxlength>, then go back to the last dash and strip everything from there on
+    return slug.substring(0, Math.min(maxLength,slug.lastIndexOf("-")));
   }
 }
