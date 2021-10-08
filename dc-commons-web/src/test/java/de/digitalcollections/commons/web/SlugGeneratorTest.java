@@ -87,7 +87,8 @@ class SlugGeneratorTest {
           "123-567-90,123-567-90",
           "123-567-901,123-567",
           "123-5678901,123",
-          "123-56-78-1,123-56-78"
+          "123-56-89-1,123-56-89",
+          "123-56-8-012-45-78,123-56-8"
       })
   public void trimAtLastDashBeforeLimit(String input, String expected) {
     slugGenerator.setMaxLength(10);
