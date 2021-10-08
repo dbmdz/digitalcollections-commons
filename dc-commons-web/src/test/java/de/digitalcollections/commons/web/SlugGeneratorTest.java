@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("The slug generator")
 class SlugGeneratorTest {
@@ -91,5 +92,13 @@ class SlugGeneratorTest {
   public void trimAtLastDashBeforeLimit(String input, String expected) {
     slugGenerator.setMaxLength(10);
     assertThat(slugGenerator.generateSlug(input)).isEqualTo(expected);
+  }
+
+  @DisplayName("does not trim on negative length limits")
+  @ParameterizedTest
+  @ValueSource(strings={"123-567-90","123-567-901","123-5678901","123-56-78-1"})
+  public void noTrimmingOnNegativeLengthLimits(String input) {
+    slugGenerator.setMaxLength(-10);
+    assertThat(slugGenerator.generateSlug(input)).isEqualTo(input);
   }
 }
