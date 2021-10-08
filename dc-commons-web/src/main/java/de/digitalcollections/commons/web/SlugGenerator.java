@@ -86,6 +86,10 @@ public class SlugGenerator {
     }
 
     // otherwise first cut to <maxlength>, then go back to the last dash and strip everything from there on
-    return slug.substring(0, Math.min(maxLength,slug.lastIndexOf("-")));
+    while(slug.length() > maxLength) {
+      slug = slug.substring(0, slug.lastIndexOf("-"));
+    }
+
+    return slug;
   }
 }
