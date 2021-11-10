@@ -17,7 +17,7 @@
   <properties>
     <version.dc-model>9.0.0</version.dc-model>
     <version.jackson-databind>2.11.4</version.jackson-databind>
-    <version.jdbi3>3.21.0</version.jdbi3>
+    <version.jdbi3>3.24.0</version.jdbi3>
   </properties>
 
   <dependencies>
