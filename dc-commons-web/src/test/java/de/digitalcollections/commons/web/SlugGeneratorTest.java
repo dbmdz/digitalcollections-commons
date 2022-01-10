@@ -63,11 +63,7 @@ class SlugGeneratorTest {
 
   @DisplayName("does not trim, when the length is lower than the allowed length")
   @ParameterizedTest
-  @CsvSource(
-      value = {
-          ",",
-          "12345 7890,12345-7890"
-      })
+  @CsvSource(value = {",", "12345 7890,12345-7890"})
   public void noTrimWhenShortEnough(String input, String expected) {
     slugGenerator.setMaxLength(10);
     assertThat(slugGenerator.generateSlug(input)).isEqualTo(expected);
@@ -84,11 +80,11 @@ class SlugGeneratorTest {
   @ParameterizedTest
   @CsvSource(
       value = {
-          "123-567-90,123-567-90",
-          "123-567-901,123-567",
-          "123-5678901,123",
-          "123-56-89-1,123-56-89",
-          "123-56-8-012-45-78,123-56-8"
+        "123-567-90,123-567-90",
+        "123-567-901,123-567",
+        "123-5678901,123",
+        "123-56-89-1,123-56-89",
+        "123-56-8-012-45-78,123-56-8"
       })
   public void trimAtLastDashBeforeLimit(String input, String expected) {
     slugGenerator.setMaxLength(10);
@@ -97,7 +93,7 @@ class SlugGeneratorTest {
 
   @DisplayName("does not trim on negative length limits")
   @ParameterizedTest
-  @ValueSource(strings={"123-567-90","123-567-901","123-5678901","123-56-78-1"})
+  @ValueSource(strings = {"123-567-90", "123-567-901", "123-5678901", "123-56-78-1"})
   public void noTrimmingOnNegativeLengthLimits(String input) {
     slugGenerator.setMaxLength(-10);
     assertThat(slugGenerator.generateSlug(input)).isEqualTo(input);

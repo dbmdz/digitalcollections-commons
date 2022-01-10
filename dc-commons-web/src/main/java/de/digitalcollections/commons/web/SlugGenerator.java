@@ -29,13 +29,14 @@ public class SlugGenerator {
   }
 
   /**
-   * Set the max length, a slug can have. If unset, its length is unlimited.
-   * <br>
+   * Set the max length, a slug can have. If unset, its length is unlimited. <br>
    * If limited, then the slug is stripped according to the following receipt:
+   *
    * <ul>
-   *   <li>If the slug contains no dashes, it is cutted hard at the exact length</li>
-   *   <li>If it contains dashes, it is cutted at the last dash before the maximum allowed length</li>
+   *   <li>If the slug contains no dashes, it is cutted hard at the exact length
+   *   <li>If it contains dashes, it is cutted at the last dash before the maximum allowed length
    * </ul>
+   *
    * @param maxLength
    */
   public void setMaxLength(int maxLength) {
@@ -76,7 +77,7 @@ public class SlugGenerator {
   }
 
   private String limitLength(String slug) {
-    if (slug==null || slug.isEmpty() || slug.length() <= maxLength) {
+    if (slug == null || slug.isEmpty() || slug.length() <= maxLength) {
       return slug;
     }
 
@@ -85,8 +86,9 @@ public class SlugGenerator {
       return slug.substring(0, maxLength);
     }
 
-    // otherwise first cut to <maxlength>, then go back to the last dash and strip everything from there on
-    while(slug.length() > maxLength) {
+    // otherwise first cut to <maxlength>, then go back to the last dash and strip everything from
+    // there on
+    while (slug.length() > maxLength) {
       slug = slug.substring(0, slug.lastIndexOf("-"));
     }
 
