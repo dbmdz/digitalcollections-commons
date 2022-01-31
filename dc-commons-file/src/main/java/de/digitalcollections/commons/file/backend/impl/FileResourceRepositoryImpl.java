@@ -1,5 +1,6 @@
 package de.digitalcollections.commons.file.backend.impl;
 
+import de.digitalcollections.commons.file.backend.FileSystemResourceIOException;
 import de.digitalcollections.commons.file.backend.api.FileResourceRepository;
 import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
 import de.digitalcollections.model.exception.ResourceIOException;
@@ -19,6 +20,7 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystemException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +40,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
@@ -84,11 +87,10 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
       if (is.available() <= 0) {
         throw new ResourceIOException("Cannot read " + resource.getFilename() + ": Empty file");
       }
-    } catch (ResourceIOException e) {
-      throw new ResourceIOException(
-          "Cannot read " + resource.getFilename() + ": " + e.getMessage());
     } catch (ResourceNotFoundException e) {
       throw e;
+    } catch (FileSystemException e) {
+      throw new FileSystemResourceIOException(e);
     } catch (Exception e) {
       throw new ResourceIOException(
           "Cannot read " + resource.getFilename() + ": " + e.getMessage());
@@ -173,6 +175,8 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
             continue;
           } catch (MalformedURLException ex) {
             throw new ResourceIOException("Invalid URL " + candidate.toString(), ex);
+          } catch (FileSystemException e) {
+            throw new FileSystemResourceIOException(e);
           } catch (IOException ex) {
             throw new ResourceIOException(
                 "Invalid file system access for " + candidate.toString(), ex);
@@ -205,36 +209,48 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     }
     final List<URI> expandedCandidates = expandWildcardFilenames(candidates);
 
-    URI uriCandidate;
     if (overriddenDirectoryStream != null) {
       // for testability
-      uriCandidate = expandedCandidates.get(0);
-      resource.setUri(uriCandidate);
+      resource.setUri(expandedCandidates.get(0));
     } else {
-      uriCandidate =
-          expandedCandidates.stream()
-              .filter(
-                  u ->
-                      (resourceLoader.getResource(u.toString()).isReadable()
-                          || u.toString().startsWith("http")))
-              .findFirst()
-              .orElseThrow(
-                  () ->
-                      new ResourceIOException(
-                          "Could not resolve identifier "
-                              + identifier
-                              + " with MIME type "
-                              + mimeType.getTypeName()
-                              + " to a readable Resource. Attempted URIs were "
-                              + candidates));
-      resource.setUri(uriCandidate);
+      for (URI u : expandedCandidates) {
+        if (u.getScheme().startsWith("http")) {
+          resource.setUri(u);
+          break;
+        }
+        Resource res = resourceLoader.getResource(u.toString());
+        if (res.isReadable()) {
+          resource.setUri(u);
+          break;
+        } else if (res instanceof FileSystemResource) {
+          // For resources from the file system 'unreadable' can mean a whole number of things.
+          // We'd like to differentiate between "there's a path with that name, but it's not
+          // readable" and "we can't tell if that path is not readable due to an IO exception".
+          // The former is something that should make us continue looking and the latter should
+          // result in an error. Getting the size gives us an IOException if it's not possible,
+          // contrary to `isReadable()` which just returns `false`.
+          try {
+            res.contentLength();
+          } catch (FileSystemException fsExc) {
+            // Can't determine file size due to low-level IO exception, exit with an error
+            throw new FileSystemResourceIOException(fsExc);
+          } catch (IOException e) {
+            // Other reasons, keep looking for matching candidates
+          }
+        }
+      }
+      if (resource.getUri() == null) {
+        throw new ResourceIOException(
+            "Could not resolve identifier "
+                + identifier
+                + " with MIME type "
+                + mimeType.getTypeName()
+                + " to a readable Resource. Attempted URIs were "
+                + candidates);
+      }
 
       // test if resource exists
-      Resource springResource = resourceLoader.getResource(uriCandidate.toString());
-      if (!uriCandidate.getScheme().startsWith("http") && !springResource.exists()) {
-        throw new ResourceNotFoundException(
-            "Resource not found at location '" + uriCandidate.toString() + "'");
-      }
+      Resource springResource = resourceLoader.getResource(resource.getUri().toString());
       long lastModified = getLastModified(springResource);
       if (lastModified != 0) {
         // lastmodified by code in java.io.File#lastModified (is also used in Spring's
@@ -274,16 +290,24 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
         throw new ResourceNotFoundException("Resource not found at location '" + location + "'");
       }
       return resource.getInputStream();
+    } catch (FileSystemException e) {
+      throw new FileSystemResourceIOException(e);
     } catch (IOException e) {
       throw new ResourceIOException(e);
     }
   }
 
-  protected long getLastModified(Resource springResource) {
+  protected long getLastModified(Resource springResource) throws FileSystemResourceIOException {
     try {
       return springResource.lastModified();
     } catch (FileNotFoundException e) {
-      LOGGER.warn("Resource " + springResource.toString() + " does not exist.");
+      LOGGER.warn("Resource " + springResource + " does not exist.");
+    } catch (FileSystemException e) {
+      LOGGER.error(
+          String.format(
+              "I/O error while trying to read timestamp from filesystem for %s", springResource),
+          e);
+      throw new FileSystemResourceIOException(e);
     } catch (IOException ex) {
       LOGGER.warn("Can not get lastModified for resource " + springResource.toString(), ex);
     }
@@ -296,10 +320,12 @@ public class FileResourceRepositoryImpl implements FileResourceRepository {
     return new InputStreamReader(this.getInputStream(resource));
   }
 
-  private long getSize(Resource springResource) {
+  private long getSize(Resource springResource) throws FileSystemResourceIOException {
     try {
       long length = springResource.contentLength();
       return length;
+    } catch (FileSystemException e) {
+      throw new FileSystemResourceIOException(e);
     } catch (IOException ex) {
       LOGGER.warn("Can not get size for resource " + springResource.toString(), ex);
     }
