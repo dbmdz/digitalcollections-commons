@@ -10,7 +10,6 @@
   <modules>
     <module>dc-commons-file</module>
     <module>dc-commons-jdbi</module>
-    <module>dc-commons-prosemirror</module>
     <module>dc-commons-server</module>
     <module>dc-commons-springaop</module>
     <module>dc-commons-springboot</module>
