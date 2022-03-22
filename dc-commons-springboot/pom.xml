@@ -23,7 +23,6 @@
     <version.micrometer>1.5.5</version.micrometer>
     <version.mockito-core>4.3.1</version.mockito-core>
     <version.slf4j>1.7.36</version.slf4j>
-    <version.snakeyaml>1.27</version.snakeyaml>
     <version.spring>5.2.9.RELEASE</version.spring>
     <version.spring-boot>2.3.4.RELEASE</version.spring-boot>
     <version.spring-boot-starter-jsondoc>1.2.22</version.spring-boot-starter-jsondoc>
@@ -109,12 +108,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-test</artifactId>
       <version>${version.spring-boot}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>${version.snakeyaml}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

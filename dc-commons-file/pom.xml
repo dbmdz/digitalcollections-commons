@@ -19,7 +19,6 @@
     <version.junit>5.8.2</version.junit>
     <version.mockito-core>4.3.1</version.mockito-core>
     <version.slf4j>1.7.36</version.slf4j>
-    <version.snakeyaml>1.27</version.snakeyaml>
     <version.spring>5.2.9.RELEASE</version.spring>
     <version.spring-boot>2.3.4.RELEASE</version.spring-boot>
   </properties>
@@ -81,11 +80,6 @@
       <artifactId>spring-test</artifactId>
       <version>${version.spring}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>${version.snakeyaml}</version>
     </dependency>
   </dependencies>
 </project>
