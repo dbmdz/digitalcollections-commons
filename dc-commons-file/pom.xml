@@ -86,6 +86,7 @@
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
       <version>${version.snakeyaml}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
