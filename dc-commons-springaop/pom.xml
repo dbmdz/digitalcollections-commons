@@ -16,7 +16,7 @@
   <properties>
     <version.aspectjweaver>1.9.8</version.aspectjweaver>
     <version.slf4j>1.7.36</version.slf4j>
-    <version.spring>5.2.9.RELEASE</version.spring>
+    <version.spring>5.3.17</version.spring>
   </properties>
   
   <dependencies>
