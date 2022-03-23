@@ -15,6 +15,7 @@
 
   <properties>
     <version.assertj>3.22.0</version.assertj>
+    <version.dc-model>9.1.1</version.dc-model>
     <version.guava>29.0-jre</version.guava>
     <version.junit>5.8.2</version.junit>
     <version.mockito-core>4.4.0</version.mockito-core>
@@ -31,6 +32,11 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>${version.guava}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.digitalcollections.model</groupId>
+      <artifactId>dc-model</artifactId>
+      <version>${version.dc-model}</version>
     </dependency>
     <dependency>
       <groupId>info.solidsoft.mockito</groupId>
