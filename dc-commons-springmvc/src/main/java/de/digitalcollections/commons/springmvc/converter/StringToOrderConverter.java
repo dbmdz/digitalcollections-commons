@@ -18,7 +18,7 @@ import org.springframework.core.convert.converter.Converter;
 public class StringToOrderConverter implements Converter<String, Order> {
   private final Pattern ORDER_PATTERN =
       Pattern.compile(
-          "^(?<property>[A-Za-z]+)(_(?<subProperty>[A-Za-z]+))?(\\.(?<direction>asc|desc))?(\\.(?<nullHandling>nullsfirst|nullslast))?$");
+          "^(?<property>[A-Za-z]+)(_(?<subProperty>[A-Za-z]+))?(\\.(?<direction>(?i)asc|desc))?(\\.(?<nullHandling>(?i)nullsfirst|nullslast))?$");
 
   @Override
   public Order convert(String source) {
@@ -44,7 +44,7 @@ public class StringToOrderConverter implements Converter<String, Order> {
     }
     String nullHandling = matcher.group("nullHandling");
     if (nullHandling != null) {
-      if ("nullsfirst".equals(nullHandling)) {
+      if ("nullsfirst".equals(nullHandling.toLowerCase())) {
         order.nullHandling(NullHandling.NULLS_FIRST);
       } else {
         order.nullHandling(NullHandling.NULLS_LAST);

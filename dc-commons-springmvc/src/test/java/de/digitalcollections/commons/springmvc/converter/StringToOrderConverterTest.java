@@ -79,4 +79,14 @@ public class StringToOrderConverterTest {
     assertThat(converted.getDirection()).isEqualTo(Direction.ASC);
     assertThat(converted.getNullHandling()).isEqualTo(NullHandling.NULLS_LAST);
   }
+
+  @Test
+  public void testFullConversionIgnoreCase() {
+    String source = "label_en.ASC.NULLSLAST";
+    Order converted = converter.convert(source);
+    assertThat(converted.getProperty()).isEqualTo("label");
+    assertThat(converted.getSubProperty()).isEqualTo(Optional.of("en"));
+    assertThat(converted.getDirection()).isEqualTo(Direction.ASC);
+    assertThat(converted.getNullHandling()).isEqualTo(NullHandling.NULLS_LAST);
+  }
 }
