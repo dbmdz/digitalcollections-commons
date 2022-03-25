@@ -18,7 +18,7 @@ import org.springframework.core.convert.converter.Converter;
 public class StringToOrderConverter implements Converter<String, Order> {
   private final Pattern ORDER_PATTERN =
       Pattern.compile(
-          "^(?<property>[A-Za-z]+)(_(?<subProperty>[A-Za-z]+))?(\\.(?<direction>(?i)asc|desc))?(\\.(?<nullHandling>(?i)nullsfirst|nullslast))?$");
+          "^(?i)(?<property>[a-z]+)(_(?<subProperty>[a-z]+))?(\\.(?<direction>asc|desc))?(\\.(?<nullHandling>nullsfirst|nullslast))?$");
 
   @Override
   public Order convert(String source) {
