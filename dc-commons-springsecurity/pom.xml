@@ -25,7 +25,7 @@
     <version.mockito-core>4.4.0</version.mockito-core>
     <version.slf4j>1.7.36</version.slf4j>
     <version.snakeyaml>1.30</version.snakeyaml>
-    <version.spring>5.2.9.RELEASE</version.spring>
+    <version.spring>5.3.19</version.spring>
     <version.spring-boot>2.3.4.RELEASE</version.spring-boot>
     <version.spring-security>5.4.7</version.spring-security>
   </properties>
