@@ -23,7 +23,7 @@
     <version.servlet-api>4.0.1</version.servlet-api>
     <version.slf4j>1.7.36</version.slf4j>
     <version.spring>5.2.9.RELEASE</version.spring>
-    <version.spring-security>5.4.7</version.spring-security>
+    <version.spring-security>5.6.3</version.spring-security>
     <version.thymeleaf>3.0.15.RELEASE</version.thymeleaf>
   </properties>
 
