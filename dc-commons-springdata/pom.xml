@@ -15,7 +15,7 @@
   
   <properties>
     <version.dc-model>9.2.0</version.dc-model>
-    <version.spring-data-commons>2.2.7.RELEASE</version.spring-data-commons>
+    <version.spring-data-commons>2.6.4</version.spring-data-commons>
   </properties>
   
   <dependencies>
