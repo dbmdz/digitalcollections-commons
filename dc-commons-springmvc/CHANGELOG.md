@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking** Use `digitalcollections-model` version 10, which introduces breaking changes for all builders
+
+
+
 ## [4.2.0](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-springmvc-4.2.0) - 2022-04-12
 
 ### Added
