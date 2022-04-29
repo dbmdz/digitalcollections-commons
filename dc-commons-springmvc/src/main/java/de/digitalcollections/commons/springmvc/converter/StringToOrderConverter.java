@@ -3,7 +3,6 @@ package de.digitalcollections.commons.springmvc.converter;
 import de.digitalcollections.model.paging.Direction;
 import de.digitalcollections.model.paging.NullHandling;
 import de.digitalcollections.model.paging.Order;
-import de.digitalcollections.model.paging.OrderBuilder;
 import de.digitalcollections.model.paging.Sorting;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +28,7 @@ public class StringToOrderConverter implements Converter<String, Order> {
     if (!matcher.matches()) {
       return null;
     }
-    OrderBuilder order = Order.defaultBuilder();
+    Order.Builder order = Order.builder();
     String property = matcher.group("property");
     order.property(property);
     String subProperty = matcher.group("subProperty");
