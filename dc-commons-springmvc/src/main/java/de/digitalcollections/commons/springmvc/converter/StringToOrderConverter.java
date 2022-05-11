@@ -1,9 +1,9 @@
 package de.digitalcollections.commons.springmvc.converter;
 
-import de.digitalcollections.model.paging.Direction;
-import de.digitalcollections.model.paging.NullHandling;
-import de.digitalcollections.model.paging.Order;
-import de.digitalcollections.model.paging.Sorting;
+import de.digitalcollections.model.list.sorting.Direction;
+import de.digitalcollections.model.list.sorting.NullHandling;
+import de.digitalcollections.model.list.sorting.Order;
+import de.digitalcollections.model.list.sorting.Sorting;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.core.convert.converter.Converter;
