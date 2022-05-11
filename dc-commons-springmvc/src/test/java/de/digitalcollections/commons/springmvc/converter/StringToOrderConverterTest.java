@@ -2,10 +2,10 @@ package de.digitalcollections.commons.springmvc.converter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.digitalcollections.model.paging.Direction;
-import de.digitalcollections.model.paging.NullHandling;
-import de.digitalcollections.model.paging.Order;
-import de.digitalcollections.model.paging.Sorting;
+import de.digitalcollections.model.list.sorting.Direction;
+import de.digitalcollections.model.list.sorting.NullHandling;
+import de.digitalcollections.model.list.sorting.Order;
+import de.digitalcollections.model.list.sorting.Sorting;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
