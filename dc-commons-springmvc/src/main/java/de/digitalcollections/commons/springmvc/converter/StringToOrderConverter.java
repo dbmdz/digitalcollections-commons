@@ -11,7 +11,7 @@ import org.springframework.core.convert.converter.Converter;
 /**
  * Converter for converting URL params for Sorting from String to instance of Order. Used in WebController. Fills model object Order.
  *
- * @see de.digitalcollections.model.paging.Order
+ * @see de.digitalcollections.model.list.sorting.Order
  */
 public class StringToOrderConverter implements Converter<String, Order> {
 
