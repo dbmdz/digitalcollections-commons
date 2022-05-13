@@ -9,15 +9,21 @@ import java.util.regex.Pattern;
 import org.springframework.core.convert.converter.Converter;
 
 /**
- * Converter for converting URL params for Sorting from String to instance of Order. Used in
- * WebController. Fills model object Order.
+ * Converter for converting URL params for Sorting from String to instance of Order. Used in WebController. Fills model object Order.
  *
  * @see de.digitalcollections.model.paging.Order
  */
 public class StringToOrderConverter implements Converter<String, Order> {
-  private final Pattern ORDER_PATTERN =
-      Pattern.compile(
-          "^(?i)(?<property>[a-z]+)(_(?<subProperty>[a-z]+))?(\\.(?<direction>asc|desc))?(\\.(?<nullHandling>nullsfirst|nullslast))?$");
+
+  private final Pattern ORDER_PATTERN
+          = Pattern.compile(
+                  "^(?i)"
+                  + "(?<property>[a-z]+)"
+                  + "(_(?<subProperty>[a-z]+))?"
+                  + "(\\.(?<direction>asc|desc))?"
+                  + "(\\.(?<nullHandling>nullsfirst|nullslast))?"
+                  + "(\\.(?<ignoreCase>ignorecase))?"
+                  + "$");
 
   @Override
   public Order convert(String source) {
@@ -28,7 +34,7 @@ public class StringToOrderConverter implements Converter<String, Order> {
     if (!matcher.matches()) {
       return null;
     }
-    Order.Builder order = Order.builder();
+    Order.OrderBuilder<?, ?> order = Order.builder();
     String property = matcher.group("property");
     order.property(property);
     String subProperty = matcher.group("subProperty");
@@ -50,6 +56,12 @@ public class StringToOrderConverter implements Converter<String, Order> {
       }
     } else {
       order.nullHandling(NullHandling.NATIVE);
+    }
+    String ignoreCase = matcher.group("ignoreCase");
+    if (ignoreCase != null) {
+      order.ignoreCase(true);
+    } else {
+      order.ignoreCase(false);
     }
     return order.build();
   }
