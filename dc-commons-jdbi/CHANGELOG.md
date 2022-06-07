@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [5.0.0](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-jdbi-5.0.0) - 2022-06-07
+
+### Changed
+
+- **Breaking**: Bumped `dc-model` dependency to version `10.0.0`
+- Updated other dependencies
+
 ## [4.2.3](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-jdbi-4.2.3) - 2022-04-12
 
 ### Changed
