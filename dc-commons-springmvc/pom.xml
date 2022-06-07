@@ -13,87 +13,75 @@
   <version>5.0.0</version>
   <packaging>jar</packaging>
 
-  <properties>
-    <version.assertj>3.23.1</version.assertj>
-    <version.dc-model>10.0.0</version.dc-model>
-    <version.guava>31.1-jre</version.guava>
-    <version.junit>5.8.2</version.junit>
-    <version.mockito-core>4.6.1</version.mockito-core>
-    <version.mockito-java8>2.5.0</version.mockito-java8>
-    <version.servlet-api>4.0.1</version.servlet-api>
-    <version.slf4j>1.7.36</version.slf4j>
-    <version.spring>5.2.9.RELEASE</version.spring>
-    <version.spring-security>5.4.7</version.spring-security>
-    <version.thymeleaf>3.0.15.RELEASE</version.thymeleaf>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>${version.guava}</version>
+      <version>31.1-jre</version>
     </dependency>
     <dependency>
       <groupId>de.digitalcollections.model</groupId>
       <artifactId>dc-model</artifactId>
-      <version>${version.dc-model}</version>
+      <version>10.0.0</version>
     </dependency>
     <dependency>
       <groupId>info.solidsoft.mockito</groupId>
       <artifactId>mockito-java8</artifactId>
-      <version>${version.mockito-java8}</version>
+      <version>2.5.0</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>${version.servlet-api}</version>
+      <version>4.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${version.assertj}</version>
+      <version>3.23.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>${version.junit}</version>
+      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>${version.mockito-core}</version>
+      <version>4.6.1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${version.slf4j}</version>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>${version.spring}</version>
+      <version>5.2.9.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>${version.spring}</version>
+      <version>5.2.9.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-      <version>${version.spring-security}</version>
+      <version>5.4.7</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
-      <version>${version.spring-security}</version>
+      <version>5.4.7</version>
     </dependency>
     <dependency>
       <groupId>org.thymeleaf</groupId>
       <artifactId>thymeleaf</artifactId>
-      <version>${version.thymeleaf}</version>
+      <version>3.0.15.RELEASE</version>
     </dependency>
   </dependencies>
 </project>

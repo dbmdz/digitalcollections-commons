@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
     <version>4.2.0</version>
   </parent>
-  
+
   <name>DigitalCollections: Commons Server</name>
   <artifactId>dc-commons-server</artifactId>
   <version>4.1.1</version>
   <packaging>jar</packaging>
-  
-  <properties>
-    <version.assertj>3.23.1</version.assertj>
-    <version.geoip>2.14.0</version.geoip>
-    <version.jackson-databind>2.11.0</version.jackson-databind>
-    <version.junit>5.8.2</version.junit>
-    <version.servlet-api>4.0.1</version.servlet-api>
-    <version.slf4j>1.7.36</version.slf4j>
-  </properties>
-    
+
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${version.jackson-databind}</version>
+      <version>2.11.0</version>
     </dependency>
     <dependency>
       <groupId>com.maxmind.geoip2</groupId>
       <artifactId>geoip2</artifactId>
-      <version>${version.geoip}</version>
+      <version>2.14.0</version>
       <exclusions>
         <exclusion>
           <groupId>com.fasterxml.jackson.core</groupId>
@@ -42,29 +33,29 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>${version.servlet-api}</version>
+      <version>4.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${version.assertj}</version>
+      <version>3.23.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>${version.junit}</version>
+      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${version.slf4j}</version>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>${version.slf4j}</version>
+      <version>1.7.36</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

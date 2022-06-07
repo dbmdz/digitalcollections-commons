@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <groupId>de.digitalcollections.commons</groupId>
     <artifactId>dc-commons</artifactId>
     <version>4.2.0</version>
   </parent>
-  
+
   <name>DigitalCollections: Commons Spring AOP</name>
   <artifactId>dc-commons-springaop</artifactId>
   <version>4.1.1</version>
   <packaging>jar</packaging>
-  
-  <properties>
-    <version.aspectjweaver>1.9.9.1</version.aspectjweaver>
-    <version.slf4j>1.7.36</version.slf4j>
-    <version.spring>5.2.9.RELEASE</version.spring>
-  </properties>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <version>${version.aspectjweaver}</version>
+      <version>1.9.9.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${version.slf4j}</version>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>${version.spring}</version>
+      <version>5.2.9.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>${version.spring}</version>
+      <version>5.2.9.RELEASE</version>
     </dependency>
   </dependencies>
 </project>
