@@ -12,9 +12,13 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface XPathVariable {
 
-  /** @return the name of the XPathVariable */
+  /**
+   * @return the name of the XPathVariable
+   */
   String name();
 
-  /** @return an Array of XPath expressions */
+  /**
+   * @return an Array of XPath expressions
+   */
   String[] paths();
 }

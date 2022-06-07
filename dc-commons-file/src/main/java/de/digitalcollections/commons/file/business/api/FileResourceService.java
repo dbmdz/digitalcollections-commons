@@ -26,7 +26,9 @@ public interface FileResourceService {
   void assertReadability(FileResource resource)
       throws ResourceIOException, ResourceNotFoundException;
 
-  /** @return newly created instance of the underlying FileResource implementation. */
+  /**
+   * @return newly created instance of the underlying FileResource implementation.
+   */
   FileResource create();
 
   /**
