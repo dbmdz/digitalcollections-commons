@@ -10,7 +10,7 @@
 
   <name>DigitalCollections: Commons Spring Boot (Spring Boot 2)</name>
   <artifactId>dc-commons-springboot</artifactId>
-  <version>4.1.1</version>
+  <version>4.1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>de.digitalcollections.commons</groupId>
       <artifactId>dc-commons-springsecurity</artifactId>
-      <version>4.1.1</version>
+      <version>4.1.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>io.micrometer</groupId>
