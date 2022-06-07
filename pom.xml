@@ -211,13 +211,13 @@
   </reporting>
 
   <ciManagement>
-    <url>https://travis-ci.org/dbmdz/digitalcollections-commons</url>
-    <system>Travis CI</system>
+    <system>GitHub Actions</system>
+    <url>https://github.com/dbmdz/digitalcollections-commons/actions</url>
   </ciManagement>
 
   <issueManagement>
-    <url>https://github.com/dbmdz/digitalcollections-commons/issues</url>
     <system>GitHub Issues</system>
+    <url>https://github.com/dbmdz/digitalcollections-commons/issues</url>
   </issueManagement>
 
   <scm>
