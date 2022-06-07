@@ -12,47 +12,39 @@
   <artifactId>dc-commons-xml</artifactId>
   <version>5.1.4</version>
   <packaging>jar</packaging>
-  
-  <properties>
-    <version.assertj>3.23.1</version.assertj>
-    <version.guava>31.1-jre</version.guava>
-    <version.junit>5.8.2</version.junit>
-    <version.saxon>10.2</version.saxon>
-    <version.slf4j>1.7.36</version.slf4j>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>${version.guava}</version>
+      <version>31.1-jre</version>
     </dependency>
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
-      <version>${version.saxon}</version>
+      <version>10.2</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${version.assertj}</version>
+      <version>3.23.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>${version.junit}</version>
+      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${version.slf4j}</version>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>${version.slf4j}</version>
+      <version>1.7.36</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
