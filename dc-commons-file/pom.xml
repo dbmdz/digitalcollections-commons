@@ -8,10 +8,12 @@
     <version>4.2.1</version>
   </parent>
 
-  <name>DigitalCollections: Commons File</name>
   <artifactId>dc-commons-file</artifactId>
   <version>5.2.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <name>DigitalCollections: Commons File</name>
+  <url>https://github.com/dbmdz/digitalcollections-commons/tree/main/dc-commons-file</url>
 
   <dependencies>
     <dependency>

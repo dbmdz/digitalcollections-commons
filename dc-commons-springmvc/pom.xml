@@ -8,10 +8,12 @@
     <version>4.2.1</version>
   </parent>
 
-  <name>DigitalCollections: Commons Spring MVC</name>
   <artifactId>dc-commons-springmvc</artifactId>
   <version>5.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <name>DigitalCollections: Commons Spring MVC</name>
+  <url>https://github.com/dbmdz/digitalcollections-commons/tree/main/dc-commons-springmvc</url>
 
   <dependencies>
     <dependency>

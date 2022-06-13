@@ -8,10 +8,12 @@
     <version>4.2.1</version>
   </parent>
 
-  <name>DigitalCollections: Commons YAML</name>
   <artifactId>dc-commons-yaml</artifactId>
   <version>4.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <name>DigitalCollections: Commons YAML</name>
+  <url>https://github.com/dbmdz/digitalcollections-commons/tree/main/dc-commons-yaml</url>
 
   <dependencies>
     <dependency>
