@@ -8,10 +8,12 @@
     <version>4.2.1</version>
   </parent>
 
-  <name>DigitalCollections: Commons Spring AOP</name>
   <artifactId>dc-commons-springaop</artifactId>
   <version>4.1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <name>DigitalCollections: Commons Spring AOP</name>
+  <url>https://github.com/dbmdz/digitalcollections-commons/tree/main/dc-commons-springaop</url>
 
   <dependencies>
     <dependency>
