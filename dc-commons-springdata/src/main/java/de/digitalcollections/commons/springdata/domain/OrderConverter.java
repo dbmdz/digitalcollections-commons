@@ -1,8 +1,8 @@
 package de.digitalcollections.commons.springdata.domain;
 
-import de.digitalcollections.model.paging.Direction;
-import de.digitalcollections.model.paging.NullHandling;
-import de.digitalcollections.model.paging.Order;
+import de.digitalcollections.model.list.sorting.Direction;
+import de.digitalcollections.model.list.sorting.NullHandling;
+import de.digitalcollections.model.list.sorting.Order;
 import org.springframework.data.domain.Sort;
 
 public class OrderConverter {

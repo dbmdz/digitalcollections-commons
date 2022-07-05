@@ -1,7 +1,7 @@
 package de.digitalcollections.commons.springdata.domain;
 
-import de.digitalcollections.model.paging.PageRequest;
-import de.digitalcollections.model.paging.Sorting;
+import de.digitalcollections.model.list.paging.PageRequest;
+import de.digitalcollections.model.list.sorting.Sorting;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
