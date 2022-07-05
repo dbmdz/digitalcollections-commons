@@ -1,7 +1,7 @@
 package de.digitalcollections.commons.springdata.domain;
 
-import de.digitalcollections.model.paging.PageRequest;
-import de.digitalcollections.model.paging.PageResponse;
+import de.digitalcollections.model.list.paging.PageRequest;
+import de.digitalcollections.model.list.paging.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,7 @@ public class PageConverter {
     if (pageResponse == null) {
       return null;
     }
-    return convert(pageResponse, pageResponse.getPageRequest());
+    return convert(pageResponse, (PageRequest) pageResponse.getRequest());
   }
 
   public static Page convert(PageResponse pageResponse, PageRequest pageRequest) {
