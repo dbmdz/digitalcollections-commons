@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dc-commons-server</artifactId>
-  <version>4.1.2-SNAPSHOT</version>
+  <version>4.1.2</version>
   <packaging>jar</packaging>
 
   <name>DigitalCollections: Commons Server</name>
