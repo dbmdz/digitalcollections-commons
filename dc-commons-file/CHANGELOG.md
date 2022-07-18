@@ -8,4 +8,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
-- **Breaking** Use `digitalcollections-model` version 10, which introduces breaking changes for all builders
+- **Breaking** Bumped `dc-model` dependency to version `11`
