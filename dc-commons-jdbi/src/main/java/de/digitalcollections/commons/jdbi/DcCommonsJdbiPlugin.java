@@ -13,11 +13,7 @@ public class DcCommonsJdbiPlugin implements JdbiPlugin {
     db.registerColumnMapper(new MimeTypeColumnMapperFactory());
     db.registerArgument(new UrlArgumentFactory());
     db.registerColumnMapper(new UrlColumnMapperFactory());
-
-    // Register Mappings for Set<Locale>
-    final LocaleSetMapper localeSetMapper = new LocaleSetMapper();
-    System.out.println("Registering LocaleSetMapper");
-    db.registerArgument(localeSetMapper);
-    db.registerColumnMapper(localeSetMapper);
+    db.registerArgument(new LocaleSetArgumentFactory());
+    db.registerColumnMapper(new LocaleColumnMapperFactory());
   }
 }
