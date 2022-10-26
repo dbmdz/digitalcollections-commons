@@ -14,6 +14,8 @@ public class DcCommonsJdbiPlugin implements JdbiPlugin {
     db.registerArgument(new UrlArgumentFactory());
     db.registerColumnMapper(new UrlColumnMapperFactory());
     db.registerArgument(new LocaleSetArgumentFactory());
-    db.registerColumnMapper(new LocaleColumnMapperFactory());
+    db.registerColumnMapper(new LocaleSetColumnMapperFactory());
+    db.registerArgument(new LocaleLinkedHashSetArgumentFactory());
+    db.registerColumnMapper(new LocaleLinkedHashSetColumnMapperFactory());
   }
 }
