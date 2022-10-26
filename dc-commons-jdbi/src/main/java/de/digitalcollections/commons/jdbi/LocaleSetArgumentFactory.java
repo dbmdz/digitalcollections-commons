@@ -3,7 +3,6 @@ package de.digitalcollections.commons.jdbi;
 import java.sql.Types;
 import java.util.Locale;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.jdbi.v3.core.argument.AbstractArgumentFactory;
 import org.jdbi.v3.core.argument.Argument;
 import org.jdbi.v3.core.config.ConfigRegistry;
@@ -21,10 +20,10 @@ public class LocaleSetArgumentFactory extends AbstractArgumentFactory<Set<Locale
     }
 
     return (position, preparedStatement, statementContext) ->
-        preparedStatement.setObject(
+        preparedStatement.setArray(
             position,
-            String.format(
-                "{%s}", value.stream().map(Locale::toString).collect(Collectors.joining(","))),
-            Types.VARCHAR); // heuristically determined - an array is represented by a varchar
+            statementContext
+                .getConnection()
+                .createArrayOf("varchar", value.stream().map(Locale::toLanguageTag).toArray()));
   }
 }
