@@ -51,6 +51,16 @@ public class StringToOrderConverterTest {
   }
 
   @Test
+  public void testConversionPropertySubProperty2() {
+    String source = "label_de-Latn";
+    Order converted = converter.convert(source);
+    assertThat(converted.getProperty()).isEqualTo("label");
+    assertThat(converted.getSubProperty()).isEqualTo(Optional.of("de-Latn"));
+    assertThat(converted.getDirection()).isEqualTo(Sorting.DEFAULT_DIRECTION);
+    assertThat(converted.getNullHandling()).isEqualTo(NullHandling.NATIVE);
+  }
+
+  @Test
   public void testConversionPropertyDirection() {
     String source = "lastModified.desc";
     Order converted = converter.convert(source);

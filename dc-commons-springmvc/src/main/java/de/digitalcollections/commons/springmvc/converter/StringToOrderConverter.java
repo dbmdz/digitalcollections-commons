@@ -20,7 +20,7 @@ public class StringToOrderConverter implements Converter<String, Order> {
       Pattern.compile(
           "^(?i)"
               + "(?<property>[a-z]+)"
-              + "(_(?<subProperty>[a-z]+))?"
+              + "(_(?<subProperty>[a-z\\-]+))?" // subProperty allowing a-z and dash "-"
               + "(\\.(?<direction>asc|desc))?"
               + "(\\.(?<nullHandling>nullsfirst|nullslast))?"
               + "(\\.(?<ignoreCase>ignorecase))?"
