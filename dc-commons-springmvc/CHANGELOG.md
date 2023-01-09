@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- StringToOrderConverter now allows subProperty containing dash "-" (e.g. "label=de-Latn")
+
 ## [6.0.0](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-springmvc-6.0.0) - 2022-07-18
 
 ### Changed
