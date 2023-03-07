@@ -1,6 +1,5 @@
 package de.digitalcollections.commons.file.backend.impl;
 
-
 import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
 import de.digitalcollections.model.exception.ResourceIOException;
 import de.digitalcollections.model.file.MimeType;
