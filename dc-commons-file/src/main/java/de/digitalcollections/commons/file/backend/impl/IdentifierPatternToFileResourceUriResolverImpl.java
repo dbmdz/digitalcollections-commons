@@ -1,6 +1,5 @@
 package de.digitalcollections.commons.file.backend.impl;
 
-import static de.digitalcollections.model.file.MimeType.MIME_APPLICATION_OCTET_STREAM;
 
 import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
 import de.digitalcollections.model.exception.ResourceIOException;
@@ -118,25 +117,6 @@ public class IdentifierPatternToFileResourceUriResolverImpl
   @Override
   public List<URI> getUris(String identifier) throws ResourceIOException {
     return getUrisAsStrings(identifier).stream().map(URI::create).collect(Collectors.toList());
-  }
-
-  /**
-   * Return resolved URIs that match the given MIME type.
-   *
-   * @param identifier file identifier/resolving key
-   * @param mimeType target mimetype (resolving subkey)
-   * @return list of resolved file uris
-   * @throws ResourceIOException in case getUrisAsStrings for key fails
-   */
-  @Override
-  public List<URI> getUris(String identifier, MimeType mimeType) throws ResourceIOException {
-    final List<URI> uris = getUris(identifier);
-    return uris.stream()
-        .filter(
-            u ->
-                (mimeType.matches(MimeType.fromURI(u))
-                    || MimeType.fromURI(u).equals(MIME_APPLICATION_OCTET_STREAM)))
-        .collect(Collectors.toList());
   }
 
   @Override
