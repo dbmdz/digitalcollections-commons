@@ -1,5 +1,7 @@
 package de.digitalcollections.commons.file.backend.impl;
 
+import static de.digitalcollections.model.file.MimeType.MIME_APPLICATION_OCTET_STREAM;
+
 import de.digitalcollections.commons.file.backend.api.IdentifierToFileResourceUriResolver;
 import de.digitalcollections.model.exception.ResourceIOException;
 import de.digitalcollections.model.file.MimeType;
@@ -130,7 +132,10 @@ public class IdentifierPatternToFileResourceUriResolverImpl
   public List<URI> getUris(String identifier, MimeType mimeType) throws ResourceIOException {
     final List<URI> uris = getUris(identifier);
     return uris.stream()
-        .filter(u -> (mimeType.matches(MimeType.fromURI(u)) || MimeType.fromURI(u) == null))
+        .filter(
+            u ->
+                (mimeType.matches(MimeType.fromURI(u))
+                    || MimeType.fromURI(u) == MIME_APPLICATION_OCTET_STREAM))
         .collect(Collectors.toList());
   }
 
