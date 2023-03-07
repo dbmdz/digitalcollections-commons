@@ -64,7 +64,7 @@ public interface IdentifierToFileResourceUriResolver {
         .filter(
             u ->
                 (mimeType.matches(MimeType.fromURI(u))
-                    || MimeType.fromURI(u).equals(MIME_APPLICATION_OCTET_STREAM)))
+                    || MIME_APPLICATION_OCTET_STREAM.equals(MimeType.fromURI(u))))
         .collect(Collectors.toList());
   }
 
