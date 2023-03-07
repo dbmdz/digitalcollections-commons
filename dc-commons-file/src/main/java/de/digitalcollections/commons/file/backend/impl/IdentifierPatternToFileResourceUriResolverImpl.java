@@ -135,7 +135,7 @@ public class IdentifierPatternToFileResourceUriResolverImpl
         .filter(
             u ->
                 (mimeType.matches(MimeType.fromURI(u))
-                    || MimeType.fromURI(u) == MIME_APPLICATION_OCTET_STREAM))
+                    || MimeType.fromURI(u).equals(MIME_APPLICATION_OCTET_STREAM)))
         .collect(Collectors.toList());
   }
 
