@@ -87,7 +87,7 @@ public class SlugGenerator {
   }
 
   /**
-   * Check if the given slug is valid when ignoring the casing.
+   * Check if the given slug is valid when taking care of the case sensitivity.
    *
    * @param slug the slug to check for validity
    * @return indicator if the given slug is valid
