@@ -76,6 +76,26 @@ public class SlugGenerator {
     return slug;
   }
 
+  /**
+   * Check if the given slug is valid.
+   *
+   * @param slug the slug to check for validity
+   * @return indicator if the given slug is valid
+   */
+  public boolean isValidSlug(String slug) {
+    return generateSlug(slug).equalsIgnoreCase(slug);
+  }
+
+  /**
+   * Check if the given slug is valid when ignoring the casing.
+   *
+   * @param slug the slug to check for validity
+   * @return indicator if the given slug is valid
+   */
+  public boolean isValidSlugCaseSensitive(String slug) {
+    return generateSlug(slug).equals(slug);
+  }
+
   private String limitLength(String slug) {
     if (slug == null || slug.isEmpty() || slug.length() <= maxLength) {
       return slug;

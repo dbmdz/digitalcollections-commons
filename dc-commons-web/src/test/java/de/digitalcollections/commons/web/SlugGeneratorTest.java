@@ -98,4 +98,39 @@ class SlugGeneratorTest {
     slugGenerator.setMaxLength(-10);
     assertThat(slugGenerator.generateSlug(input)).isEqualTo(input);
   }
+
+  @DisplayName("validates valid slugs correctly")
+  @ParameterizedTest
+  @ValueSource(strings = {"", "abc-567-0", "101-foo-bar", "foo-bar-123"})
+  public void isValid(String input) {
+    assertThat(slugGenerator.isValidSlug(input)).isTrue();
+  }
+
+  @DisplayName("validates valid slugs correctly with case sensitivity")
+  @ParameterizedTest
+  @ValueSource(strings = {"abC-567-0", "101-FOO-bar", "foo-Bar-123"})
+  public void isValidCaseSensitive(String input) {
+    assertThat(slugGenerator.isValidSlugCaseSensitive(input)).isFalse();
+  }
+
+  @DisplayName("validates invalid slugs correctly")
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "äbc-567-0",
+        "u05d0%0aSet-Cookie:crlf=almaster/7a2f1935-c5b8-40fb-8622-c675de0a6242",
+        "foo--bar",
+        "-example-org-"
+      })
+  public void isInvalid(String input) {
+    assertThat(slugGenerator.isValidSlug(input)).isFalse();
+  }
+
+  @DisplayName("validates invalid slugs correctly with max length")
+  @ParameterizedTest
+  @ValueSource(strings = {"äbc-567-0", "abc-567-0", "101-foo-bar", "foo-bar-123"})
+  public void isInvalidMaxLength(String input) {
+    slugGenerator.setMaxLength(5);
+    assertThat(slugGenerator.isValidSlug(input)).isFalse();
+  }
 }
