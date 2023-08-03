@@ -15,7 +15,6 @@
  */
 package de.digitalcollections.commons.springmvc.thymeleaf;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import org.thymeleaf.dialect.AbstractProcessorDialect;
 import org.thymeleaf.processor.IProcessor;
@@ -36,7 +35,7 @@ public class SpacesDialect extends AbstractProcessorDialect {
 
   @Override
   public Set<IProcessor> getProcessors(String dialectPrefix) {
-    return ImmutableSet.of(
+    return Set.of(
         new EmptyTextProcessor(templateMode, getDialectProcessorPrecedence()),
         new AttributesInnerWhitespacesProcessor(templateMode, getDialectProcessorPrecedence()));
   }

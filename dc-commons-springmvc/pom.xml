@@ -17,11 +17,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>31.1-jre</version>
-    </dependency>
-    <dependency>
       <groupId>de.digitalcollections.model</groupId>
       <artifactId>dc-model</artifactId>
       <version>12.0.1</version>
