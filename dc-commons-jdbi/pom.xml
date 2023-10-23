@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dc-commons-jdbi</artifactId>
-  <version>7.0.3</version>
+  <version>7.0.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>DigitalCollections: Commons JDBI</name>
