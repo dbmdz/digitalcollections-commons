@@ -32,8 +32,8 @@ public class JsonbSetColumnMapperFactory<T> implements ColumnMapperFactory {
       return Optional.empty();
     }
 
-    Type listType = ((ParameterizedType) type).getActualTypeArguments()[0];
-    if (!clz.equals(listType)) {
+    Type setType = ((ParameterizedType) type).getActualTypeArguments()[0];
+    if (!clz.equals(setType)) {
       return Optional.empty();
     }
     return Optional.of(
@@ -45,15 +45,14 @@ public class JsonbSetColumnMapperFactory<T> implements ColumnMapperFactory {
           /* see https://stackoverflow.com/a/11681540 */
           try {
             JavaType javaType =
-                objectMapper.getTypeFactory().constructParametricType(Set.class, (Class) listType);
+                objectMapper.getTypeFactory().constructParametricType(Set.class, (Class) setType);
 
             return objectMapper.readValue(jsonb, javaType);
           } catch (IOException ex) {
-            ex.printStackTrace();
-            LOGGER.error("Error deserializing JSON", ex);
+            LOGGER.error("IO error deserializing JSON: " + ex, ex);
             return null;
-          } catch (Exception e) {
-            e.printStackTrace();
+          } catch (Exception ex) {
+            LOGGER.error("Error deserializing JSON: " + ex, ex);
             return null;
           }
         });
