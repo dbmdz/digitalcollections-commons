@@ -6,10 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [7.0.4](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-jdbi-7.0.3) - 2023-09-15
+
 ### Added
 
 - `JsonbSetColumnMapperFactory` and `JsonbSetArgumentFactory` for JSONB columns
   that contain a set (just an array in JSON though)
+
+### Changed
+
+- Updated `dc-model`
 
 ## [7.0.3](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-jdbi-7.0.3) - 2023-09-15
 
