@@ -291,6 +291,7 @@ public class XPathMapperTest {
     assertThat(mapper.getFirstPersNameNode()).contains("Kugelmann, Hans");
     assertThat(mapper.getFirstPersNameNode()).contains("Name, English");
   }
+
   // ---------------------------------------------------------------------------------------------
 
   @XPathRoot(defaultNamespace = "http://www.tei-c.org/ns/1.0")

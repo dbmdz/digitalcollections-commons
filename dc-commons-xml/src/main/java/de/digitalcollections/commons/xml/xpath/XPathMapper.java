@@ -293,7 +293,9 @@ public class XPathMapper<T> {
     }
 
     public void setValue(DocumentReader r, Object target)
-        throws InvocationTargetException, IllegalAccessException, XPathMappingException,
+        throws InvocationTargetException,
+            IllegalAccessException,
+            XPathMappingException,
             XPathExpressionException {
       Object val = determineValue(r);
       if (isField) {
