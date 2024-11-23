@@ -19,12 +19,12 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>32.1.1-jre</version>
+      <version>33.3.1-jre</version>
     </dependency>
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
-      <version>10.8</version>
+      <version>12.5</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -41,12 +41,12 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.36</version>
+      <version>2.0.16</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <version>2.0.16</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
