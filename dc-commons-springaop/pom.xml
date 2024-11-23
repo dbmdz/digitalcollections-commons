@@ -19,7 +19,7 @@
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <version>1.9.20.1</version>
+      <version>1.9.22.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -29,12 +29,12 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>5.2.22.RELEASE</version>
+      <version>5.3.39</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>5.2.22.RELEASE</version>
+      <version>5.3.39</version>
     </dependency>
   </dependencies>
 </project>
