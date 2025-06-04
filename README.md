@@ -13,10 +13,7 @@ Read module specific documentations:
 
 - [DigitalCollections Commons File](dc-commons-file)
 - [DigitalCollections Commons Server](dc-commons-server)
-- [DigitalCollections Commons Spring AOP](dc-commons-springaop)
 - [DigitalCollections Commons Spring Boot](dc-commons-springboot)
 - [DigitalCollections Commons Spring MVC](dc-commons-springmvc)
 - [DigitalCollections Commons Spring Security](dc-commons-springsecurity)
-- [DigitalCollections Commons Validation](dc-commons-validation)
-- [DigitalCollections Commons YAML](dc-commons-yaml)
 - [DigitalCollections Commons XML](dc-commons-xml)
