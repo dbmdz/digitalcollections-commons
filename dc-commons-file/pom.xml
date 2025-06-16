@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>de.digitalcollections.commons</groupId>
+    <groupId>dev.mdz.commons</groupId>
     <artifactId>dc-commons</artifactId>
-    <version>4.2.1</version>
+    <version>5.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>dc-commons-file</artifactId>
@@ -17,9 +17,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>de.digitalcollections.model</groupId>
+      <groupId>dev.mdz.model</groupId>
       <artifactId>dc-model</artifactId>
-      <version>12.3.0</version>
       <exclusions>
         <exclusion>
           <groupId>org.springframework</groupId>

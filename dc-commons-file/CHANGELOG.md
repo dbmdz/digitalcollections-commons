@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking** Changed groupID
+
 ## [6.0.1](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-file-6.0.1) - 2023-03-08
 
 ### Changed
