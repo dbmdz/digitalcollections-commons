@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking** Changed groupID
+
 ## [7.0.4](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-springmvc-7.0.4) - 2023-11-23
 
 ### Changed

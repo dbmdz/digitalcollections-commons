@@ -16,8 +16,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - **Breaking** Bumped `dc-model` dependency to version `11`
 
-## [5.0.0](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-springdata-5.0.0) - 2022-04-05
-
-## Changed
-
-- **Breaking**: bumped `dc-model` dependency to version `9.1.1`
+## [4.1.3](https://github.com/dbmdz/digitalcollections-commons/releases/tag/dc-commons-springsecurity-4.1.3) - 2022-07-18
