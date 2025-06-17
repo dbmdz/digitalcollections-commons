@@ -35,7 +35,7 @@
       <dependency>
         <groupId>dev.mdz.model</groupId>
         <artifactId>dc-model</artifactId>
-        <version>13.0.0-SNAPSHOT</version>
+        <version>13.0.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
