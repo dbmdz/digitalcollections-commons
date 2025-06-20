@@ -4,7 +4,7 @@
 
   <groupId>dev.mdz.commons</groupId>
   <artifactId>dc-commons</artifactId>
-  <version>5.0.0-SNAPSHOT</version>
+  <version>10.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -146,7 +146,7 @@
         <configuration>
           <publishingServerId>central</publishingServerId>
           <autoPublish>true</autoPublish>
-          <deploymentName>${project.groupId}:digitalcollections-commons:${project.version}</deploymentName>
+          <deploymentName>digitalcollections-commons:${project.version}</deploymentName>
         </configuration>
       </plugin>
     </plugins>
