@@ -36,7 +36,7 @@ jobs:
         run: mvn -B -U clean verify
     strategy:
       matrix:
-        java: [11, 17]
+        java: [17]
   publish:
     if: (github.event_name == 'push' && (contains(github.ref, 'main') || startsWith(github.ref, 'release/'))) || github.event_name == 'release'
     needs: build
@@ -64,7 +64,7 @@ jobs:
         with:
           check-latest: true
           distribution: temurin
-          java-version: 11
+          java-version: 17
           server-id: central
           server-password: MAVEN_PASSWORD
           server-username: MAVEN_USERNAME
@@ -83,7 +83,7 @@ jobs:
           distribution: temurin
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          java-version: 11
+          java-version: 17
           server-id: central
           server-password: MAVEN_PASSWORD
           server-username: MAVEN_USERNAME
