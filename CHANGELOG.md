@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [10.0.0](https://github.com/dbmdz/digitalcollections-commons/releases/tag/10.0.0) - 2025-06-20
+
 ### Changed
 
 - **Breaking** Changed groupID and maven central publishing
 - Using same version number on all modules; starting with `10.0.0` to avoid confusion
+- Dependency updates
 
 ### Removed
 
