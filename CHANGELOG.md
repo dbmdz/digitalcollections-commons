@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Breaking** Changed groupID and maven central publishing
+- Using same version number on all modules; starting with `10.0.0` to avoid confusion
 
 ### Removed
 
