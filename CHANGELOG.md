@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Removed
+
+- **Breaking:** Removed modules `dc-commons-server`, `dc-commons-springdata`, `dc-commons-springmvc` and `dc-commons-web`
+
 ## [10.0.0](https://github.com/dbmdz/digitalcollections-commons/releases/tag/10.0.0) - 2025-06-20
 
 ### Changed
