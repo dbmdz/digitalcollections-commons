@@ -1,4 +1,4 @@
-# Digital Collections Commons Spring Boot
+# Digital Collections: Commons Spring Boot
 
 Offer common used endpoints and contributors for Spring Boot 2 applications as well as monitoring services.
 

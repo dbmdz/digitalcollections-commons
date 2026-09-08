@@ -1,4 +1,4 @@
-# DigitalCollections: Commons File
+# Digital Collections: Commons File
 
 This library ("DC Commons File") contains Services for reading files from configurable paths.
 

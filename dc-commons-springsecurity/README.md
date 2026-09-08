@@ -1,4 +1,4 @@
-# Digital Collections Commons Spring Security
+# Digital Collections: Commons Spring Security
 
 Offers simple username/password authentication for Spring Security 5 projects.
 
