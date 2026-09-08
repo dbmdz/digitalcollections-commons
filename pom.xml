@@ -9,12 +9,8 @@
 
   <modules>
     <module>dc-commons-file</module>
-    <module>dc-commons-server</module>
     <module>dc-commons-springboot</module>
-    <module>dc-commons-springdata</module>
-    <module>dc-commons-springmvc</module>
     <module>dc-commons-springsecurity</module>
-    <module>dc-commons-web</module>
   </modules>
 
   <name>DigitalCollections: Commons (Parent)</name>
