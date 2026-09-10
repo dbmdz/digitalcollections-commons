@@ -117,13 +117,6 @@
           <include>**/application.yml</include>
         </includes>
       </testResource>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <filtering>false</filtering>
-        <includes>
-          <include>**/application.yml</include>
-        </includes>
-      </testResource>
     </testResources>
   </build>
 </project>
