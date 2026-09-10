@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v6
         with:
           check-latest: true
-          distribution: temurin
+          distribution: oracle-openjdk
           java-version: ${{ matrix.java }}
       - name: Set up cache
         uses: actions/cache@v6
